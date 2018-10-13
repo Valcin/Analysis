@@ -23,6 +23,7 @@ import bias_library as BL
 import tempfile
 import expected_CF
 import exp2
+from load_data import ld_data
 from time import time
 from bias_library import halo_bias, bias
 from scipy.optimize import curve_fit
@@ -85,1009 +86,169 @@ for j in xrange(0,len(z)):
 	############# 	0.0 eV Masseless neutrino 
 
 
+	kcamb, Pcamb, k, Pmm, PH1, PH2, PH3 , PH4, errPhh1, errPhh2, errPhh3, errPhh4, bias1, bias2, bias3, bias4, \
+	errb1, errb2, errb3, errb4, Pmono1, Pmono2, Pmono3, Pmono4, errPr1, errPr2, errPr3, errPr4 = ld_data(Mnu, z, j)
+
+
+
 	
-
-
-
-		#~ #----------------------------------------------------------------
-		#~ #----------Tinker, Crocce param bias ----------------------------
-		#~ #----------------------------------------------------------------
-
-		#~ #compute tinker stuff
-		#limM = [5e11,1e12,3e12,1e13, 3.2e15]
-		limM = [4.2e11,1e12,3e12,1e13, 5e15]
-		loglim = [ 11.623, 12., 12.477, 13., 15.698]
-		camb2 = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/CAMB/Pk_cc_z='+str(z[j])+'00.txt')
-		kcamb2 = camb2[:,0]
-		Pcamb2 = camb2[:,1]
-
-		#~ #### get the mass function from simulation
-		massf = np. loadtxt('/home/david/codes/Paco/data2/0.0eV/hmf/hmf_z='+str(z[j])+'.txt')
-		m_middle = massf[:,10]
-		dm = massf[:,11]
-		hmf_temp = np.zeros((len(m_middle),10))
-		for i in xrange(0,10):
-			hmf_temp[:,i]= massf[:,i]
-		
-		#~ M_middle=10**(0.5*(np.log10(m_middle[1:])+np.log10(m_middle[:-1]))) #center of the bin
-		hmf = np.mean(hmf_temp[:,0:11], axis=1)
-		
-		#~ dndM=MFL.Tinker_mass_function(kcamb2,Pcamb2,Omega_m,z[j],limM[0],limM[4],len(m_middle),Masses=m_middle)[1]
-		#~ with open('/home/david/codes/Paco/data2/0.0eV/hmf/thmf_z='+str(z[j])+'.txt', 'w+') as fid_file:
-			#~ for m in xrange(0, len(m_middle)):
-				#~ fid_file.write('%.8g\n' % (dndM[m]))
-		#~ fid_file.close()
-		#~ dndMbis=MFL.Crocce_mass_function(kcamb2,Pcamb2,Omega_m,z[j],limM[0],limM[4],len(m_middle),Masses=m_middle)[1]
-		#~ with open('/home/david/codes/Paco/data2/0.0eV/hmf/chmf_z='+str(z[j])+'.txt', 'w+') as fid_file:
-			#~ for m in xrange(0, len(m_middle)):
-				#~ fid_file.write('%.8g\n' % (dndMbis[m]))
-		#~ fid_file.close()
-		
-		#~ bt=np.empty(len(m_middle),dtype=np.float64)
-		#~ bst=np.empty(len(m_middle),dtype=np.float64)
-		#~ bsmt=np.empty(len(m_middle),dtype=np.float64)
-		#~ for i in range(len(m_middle)):
-			#~ bt[i]=bias(kcamb2,Pcamb2,Omega_m,m_middle[i],'Tinker')
-			#~ bst[i]=bias(kcamb,Pcamb,Omega_m,m_middle[i],'Crocce')
-			#~ bsmt[i]=bias(kcamb,Pcamb,Omega_m,m_middle[i],'SMT01')
-		#~ with open('/home/david/codes/Paco/data2/0.0eV/large_scale/tlb1_z='+str(z[j])+'.txt', 'w+') as fid_file:
-			#~ for m in xrange(0, len(m_middle)):
-				#~ fid_file.write('%.8g\n' % (bt[m]))
-		#~ with open('/home/david/codes/Paco/data2/0.0eV/large_scale/clb1_z='+str(z[j])+'.txt', 'w+') as fid_file:
-			#~ for m in xrange(0, len(m_middle)):
-				#~ fid_file.write('%.8g\n' % (bst[m]))
-		#~ with open('/home/david/codes/Paco/data2/0.0eV/large_scale/clb2_z='+str(z[j])+'.txt', 'w+') as fid_file:
-			#~ for m in xrange(0, len(m_middle)):
-				#~ fid_file.write('%.8g\n' % (bsmt[m]))
-		#~ fid_file.close()
-		
-		#~ dndM = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/hmf/thmf_z='+str(z[j])+'.txt')
-		#~ diff = hmf/dndM
-		#~ bin2 = np.where(m_middle > 1e12 )[0]
-		#~ bin3 = np.where(m_middle > 3e12 )[0]
-		#~ bin4 = np.where(m_middle > 1e13 )[0]
-		#~ sca1 = np.sum(hmf*dm*diff)/np.sum(hmf*dm)
-		#~ sca2 = np.sum(hmf[bin2]*dm[bin2]*diff[bin2])/np.sum(hmf[bin2]*dm[bin2])
-		#~ sca3 = np.sum(hmf[bin3]*dm[bin3]*diff[bin3])/np.sum(hmf[bin3]*dm[bin3])
-		#~ sca4 = np.sum(hmf[bin4]*dm[bin4]*diff[bin4])/np.sum(hmf[bin4]*dm[bin4])
-		#~ print 1/sca1, 1/sca2, 1/sca3, 1/sca4
-
-
-		#### get tinker and crocce hmf
-		#Tb1 = halo_bias('Tinker', z[j], limM[0],limM[4], cname,Omega_c, Omega_b, do_DM=True )
-		#Tb2 = halo_bias('Tinker', z[j], limM[1],limM[4], cname,Omega_c, Omega_b, do_DM=True )
-		#Tb3 = halo_bias('Tinker', z[j], limM[2],limM[4], cname,Omega_c, Omega_b, do_DM=True )
-		#~ #Tb4 = halo_bias('Tinker', z[j], limM[3],limM[4], cname,Omega_c, Omega_b, do_DM=True )
-
-		#~ #print Tb1, Tb2, Tb3, Tb4
-
-
-		#~ #Cb1 = halo_bias('Crocce', z[j], limM[0],limM[1], cname,Omega_c, Omega_b, do_DM=True )
-		#~ #Cb2 = halo_bias('Crocce', z[j], limM[1],limM[2], cname,Omega_c, Omega_b, do_DM=True )
-		#~ #Cb3 = halo_bias('Crocce', z[j], limM[2],limM[3], cname,Omega_c, Omega_b, do_DM=True )
-		#~ #Cb4 = halo_bias('Crocce', z[j], limM[3],limM[4], cname,Omega_c, Omega_b, do_DM=True )
-		#~ Cb1 = halo_bias('Crocce', z[j], limM[0],limM[4], cname,Omega_c, Omega_b, do_DM=True )
-		#~ Cb2 = halo_bias('Crocce', z[j], limM[1],limM[4], cname,Omega_c, Omega_b, do_DM=True )
-		#~ Cb3 = halo_bias('Crocce', z[j], limM[2],limM[4], cname,Omega_c, Omega_b, do_DM=True )
-		#~ Cb4 = halo_bias('Crocce', z[j], limM[3],limM[4], cname,Omega_c, Omega_b, do_DM=True )
-
-		#~ #print Cb1,Cb2,Cb3, Cb4
-		
-		#~ with open('/home/david/codes/Paco/data2/0.0eV/large_scale/bcc_z='+str(z[j])+'_.txt', 'w+') as fid_file:
-			#~ for index_k in xrange(len(k)):
-				#~ fid_file.write('%.8g %.8g %.8g %.8g %.8g\n' % ( k[index_k], bias1[index_k], bias2[index_k], bias3[index_k], bias4[index_k]))
-		#~ fid_file.close()
-		
-		#~ with open('/home/david/codes/Paco/data2/0.0eV/large_scale/LS2_z='+str(z[j])+'_.txt', 'w+') as fid_file:
-			#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (Cb1,Cb2, Cb3, Cb4))
-		#~ fid_file.close()
-		
-		#~ with open('/home/david/codes/Paco/data2/0.0eV/large_scale/LS_z='+str(z[j])+'_.txt', 'w+') as fid_file:
-			#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (Tb1,Tb2, Tb3, Tb4))
-		#~ fid_file.close()
-		
-		#~ with open('/home/david/codes/Paco/data2/0.0eV/large_scale/ccl_z='+str(z[j])+'_.txt', 'w+') as fid_file:
-			#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (lb1,lb2, lb3, lb4))
-		#~ fid_file.close()
-
-		Tb0ev = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/large_scale/LS_z='+str(z[j])+'_.txt')
-		Tb1 = Tb0ev[0]
-		Tb2 = Tb0ev[1]
-		Tb3 = Tb0ev[2]
-		Tb4 = Tb0ev[3]
-		#Cb1 = Tb0ev[4]
-		#Cb2 = Tb0ev[5]
-		#Cb3 = Tb0ev[6]
-		#Cb4 = Tb0ev[7]
-
-		ccl00 = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/large_scale/ccl_z='+str(z[j])+'_.txt')
-		lb1 = ccl00[0]
-		lb2 = ccl00[1]
-		lb3 = ccl00[2]
-		lb4 = ccl00[3]
-		#~ print lb1, lb2, lb3, lb4
-		
-		### Simu hmf #############################################
-		bt = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/large_scale/tlb1_z='+str(z[j])+'.txt')
-		bst = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/large_scale/clb1_z='+str(z[j])+'.txt')
-		bsmt = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/large_scale/clb2_z='+str(z[j])+'.txt')
-		bin1 = np.where(m_middle > 5e11 )[0]
-		bin2 = np.where(m_middle > 1e12 )[0]
-		bin3 = np.where(m_middle > 3e12 )[0]
-		bin4 = np.where(m_middle > 1e13 )[0]
-		#------------------------------
-		bias_eff0_t1=np.sum(hmf[bin1]*dm[bin1]*bt[bin1])/np.sum(dm[bin1]*hmf[bin1])
-		bias_eff0_t2=np.sum(hmf[bin2]*dm[bin2]*bt[bin2])/np.sum(dm[bin2]*hmf[bin2])
-		bias_eff0_t3=np.sum(hmf[bin3]*dm[bin3]*bt[bin3])/np.sum(dm[bin3]*hmf[bin3])
-		bias_eff0_t4=np.sum(hmf[bin4]*dm[bin4]*bt[bin4])/np.sum(dm[bin4]*hmf[bin4])
-		#------------------------------
-		bias_eff0_st1=np.sum(hmf[bin1]*dm[bin1]*bst[bin1])/np.sum(dm[bin1]*hmf[bin1])
-		bias_eff0_st2=np.sum(hmf[bin2]*dm[bin2]*bst[bin2])/np.sum(dm[bin2]*hmf[bin2])
-		bias_eff0_st3=np.sum(hmf[bin3]*dm[bin3]*bst[bin3])/np.sum(dm[bin3]*hmf[bin3])
-		bias_eff0_st4=np.sum(hmf[bin4]*dm[bin4]*bst[bin4])/np.sum(dm[bin4]*hmf[bin4])
-		#------------------------------
-		bias_eff0_smt1=np.sum(hmf[bin1]*dm[bin1]*bsmt[bin1])/np.sum(dm[bin1]*hmf[bin1])
-		bias_eff0_smt2=np.sum(hmf[bin2]*dm[bin2]*bsmt[bin2])/np.sum(dm[bin2]*hmf[bin2])
-		bias_eff0_smt3=np.sum(hmf[bin3]*dm[bin3]*bsmt[bin3])/np.sum(dm[bin3]*hmf[bin3])
-		bias_eff0_smt4=np.sum(hmf[bin4]*dm[bin4]*bsmt[bin4])/np.sum(dm[bin4]*hmf[bin4])
-		
-		### Crocce hmf ############################################
-		#~ bt = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/large_scale/tlb1_z='+str(z[j])+'.txt')
-		#~ bst = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/large_scale/clb1_z='+str(z[j])+'.txt')
-		#~ bsmt = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/large_scale/clb2_z='+str(z[j])+'.txt')
-		#~ #------------------------------
-		#~ Bias_eff0_t1=np.sum(dndM0bis[bin1]*dm[bin1]*bt[bin1])/np.sum(dm[bin1]*dndM0bis[bin1])
-		#~ Bias_eff0_t2=np.sum(dndM0bis[bin2]*dm[bin2]*bt[bin2])/np.sum(dm[bin2]*dndM0bis[bin2])
-		#~ Bias_eff0_t3=np.sum(dndM0bis[bin3]*dm[bin3]*bt[bin3])/np.sum(dm[bin3]*dndM0bis[bin3])
-		#~ Bias_eff0_t4=np.sum(dndM0bis[bin4]*dm[bin4]*bt[bin4])/np.sum(dm[bin4]*dndM0bis[bin4])
-		#------------------------------
-		#~ Bias_eff0_st1=np.sum(dndM0bis[bin1]*dm[bin1]*bst[bin1])/np.sum(dm[bin1]*dndM0bis[bin1])
-		#~ Bias_eff0_st2=np.sum(dndM0bis[bin2]*dm[bin2]*bst[bin2])/np.sum(dm[bin2]*dndM0bis[bin2])
-		#~ Bias_eff0_st3=np.sum(dndM0bis[bin3]*dm[bin3]*bst[bin3])/np.sum(dm[bin3]*dndM0bis[bin3])
-		#~ Bias_eff0_st4=np.sum(dndM0bis[bin4]*dm[bin4]*bst[bin4])/np.sum(dm[bin4]*dndM0bis[bin4])
-		#~ #------------------------------
-		#~ Bias_eff0_smt1=np.sum(dndM0bis[bin1]*dm[bin1]*bsmt[bin1])/np.sum(dm[bin1]*dndM0bis[bin1])
-		#~ Bias_eff0_smt2=np.sum(dndM0bis[bin2]*dm[bin2]*bsmt[bin2])/np.sum(dm[bin2]*dndM0bis[bin2])
-		#~ Bias_eff0_smt3=np.sum(dndM0bis[bin3]*dm[bin3]*bsmt[bin3])/np.sum(dm[bin3]*dndM0bis[bin3])
-		#~ Bias_eff0_smt4=np.sum(dndM0bis[bin4]*dm[bin4]*bsmt[bin4])/np.sum(dm[bin4]*dndM0bis[bin4])
-		
-		#~ with open('/home/david/codes/montepython_public/BE_HaPPy/coefficients/0.0eV/large_scale/LS_z='+str(z[j])+'_.txt', 'w+') as fid_file:
-			#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (Bias_eff0_t1,Bias_eff0_t2, Bias_eff0_t3, Bias_eff0_t4))
-		#~ fid_file.close()
-		#~ with open('/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+str(Mnu)+'eV/large_scale/LS_z='+str(z[j])+'_.txt', 'w+') as fid_file:
-			#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (Bias_eff_t1,Bias_eff_t2, Bias_eff_t3, Bias_eff_t4))
-		#~ fid_file.close()
-		
-		#~ bias_0ev = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/large_scale/bcc_z='+str(z[j])+'_.txt')
-		#~ bias1_0ev = bias_0ev[:,1]
-		#~ bias2_0ev = bias_0ev[:,2]
-		#~ bias3_0ev = bias_0ev[:,3]
-		#~ bias4_0ev = bias_0ev[:,4]
-		
-		#### mean and error residuals on linear bias
-		#~ rbefft = np.mean(np.array([bias_eff0_t1/bias1, bias_eff0_t2/bias2, bias_eff0_t3/bias3, bias_eff0_t4/bias4]), axis=0)
-		#~ rbeffst = np.mean(np.array([bias_eff0_st1/bias1, bias_eff0_st2/bias2, bias_eff0_st3/bias3, bias_eff0_st4/bias4]), axis=0)
-		#~ rbeffsmt = np.mean(np.array([bias_eff0_smt1/bias1, bias_eff0_smt2/bias2, bias_eff0_smt3/bias3, bias_eff0_smt4/bias4]), axis=0)
-		#~ #-----------------------------
-		#~ errbefft = np.std(np.array([bias_eff0_t1/bias1, bias_eff0_t2/bias2, bias_eff0_t3/bias3, bias_eff0_t4/bias4]), axis=0)
-		#~ errbeffst = np.std(np.array([bias_eff0_st1/bias1, bias_eff0_st2/bias2, bias_eff0_st3/bias3, bias_eff0_st4/bias4]), axis=0)
-		#~ errbeffsmt = np.std(np.array([bias_eff0_smt1/bias1, bias_eff0_smt2/bias2, bias_eff0_smt3/bias3, bias_eff0_smt4/bias4]), axis=0)
-
-
-		dndM = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/hmf/thmf_z='+str(z[j])+'.txt')
-		dndMbis = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/hmf/chmf_z='+str(z[j])+'.txt')
-		
-		
-		#######--------- mean and std of bias and ps ratio ------------#####
-		#~ if j == z[0]:
-			#~ fig2 = plt.figure()
-		#~ J = j + 1
-		
-		#~ if len(z) == 1:
-			#~ ax2 = fig2.add_subplot(1, len(z), J)
-		#~ elif len(z) == 2:
-			#~ ax2 = fig2.add_subplot(1, 2, J)
-		#~ elif len(z) > 2:
-			#~ ax2 = fig2.add_subplot(2, 2, J)
-		
-		####### comparison bias and != models #############################
-		#~ M1, = ax2.plot(k, bias1, label='$b_{cc}$')
-		#~ M2, = ax2.plot(k, bias2)
-		#~ M3, = ax2.plot(k, bias3)
-		#~ M4, = ax2.plot(k, bias4)
-		#-----------------------------------------------
-		#~ M1, = ax2.plot(k, bias1_0ev, linestyle = '--', color='C0', label=r'$b_{cc , M_{\nu} = 0.0eV} $')
-		#~ M2, = ax2.plot(k, bias2_0ev, linestyle = '--', color='C1')
-		#~ M3, = ax2.plot(k, bias3_0ev, linestyle = '--', color='C2')
-		#~ M4, = ax2.plot(k, bias4_0ev, linestyle = '--', color='C3')
-		#~ #-----------------------------------------
-		#~ st1 =ax2.axhline(Tb1, color='C0', linestyle=':')
-		#~ ax2.axhline(Tb2, color='C1', linestyle=':')
-		#~ ax2.axhline(Tb3, color='C2', linestyle=':')
-		#~ ax2.axhline(Tb4, color='C3', linestyle=':')
-		#---------------------------------------------------
-		#~ st2 =ax2.axhline(lb1, color='C0', linestyle=':')
-		#~ ax2.axhline(lb2, color='C1', linestyle=':')
-		#~ ax2.axhline(lb3, color='C2', linestyle=':')
-		#~ ax2.axhline(lb4, color='C3', linestyle=':')
-		#---------------------------------------------------
-		#~ st2 =ax2.axhline(bias_eff0_t1, color='C0', linestyle=':')
-		#~ ax2.axhline(bias_eff0_t2, color='C1', linestyle=':')
-		#~ ax2.axhline(bias_eff0_t3, color='C2', linestyle=':')
-		#~ ax2.axhline(bias_eff0_t4, color='C3', linestyle=':')
-		#---------------------------------------------------
-		#~ st3 =ax2.axhline(bias_eff0_st1, color='C0', linestyle='--')
-		#~ ax2.axhline(bias_eff0_st2, color='C1', linestyle='--')
-		#~ ax2.axhline(bias_eff0_st3, color='C2', linestyle='--')
-		#~ ax2.axhline(bias_eff0_st4, color='C3', linestyle='--')
-		#---------------------------------------------------
-		#~ st4 =ax2.axhline(bias_eff0_smt1, color='C0', linestyle='-.')
-		#~ ax2.axhline(bias_eff0_smt2, color='C1', linestyle='-.')
-		#~ ax2.axhline(bias_eff0_smt3, color='C2', linestyle='-.')
-		#~ ax2.axhline(bias_eff0_smt4, color='C3', linestyle='-.')
-		#---------------------------------------------------
-		#~ st3 =ax2.axhline(lb1/rsc1, color='C0', linestyle=':')
-		#~ ax2.axhline(lb2/rsc2, color='C1', linestyle=':')
-		#~ ax2.axhline(lb3/rsc3, color='C2', linestyle=':')
-		#~ ax2.axhline(lb4/rsc4, color='C3', linestyle=':')
-		#-----------------------------------------------------
-		#~ ax2.axhline(Cb1, color='C0', linestyle=':', label='Simu + ST')
-		#~ ax2.axhline(Cb2, color='C1', linestyle=':')
-		#~ ax2.axhline(Cb3, color='C2', linestyle=':')
-		#~ ax2.axhline(Cb4, color='C3', linestyle=':')
-		#-----------------------------------------------
-		#~ ax2.axvline( kk1, color='C0', linestyle=':', label='shot noise = 80% of P(k)')
-		#~ ax2.axvline( kk2, color='C1', linestyle=':')
-		#~ ax2.axvline( kk3, color='C2', linestyle=':')
-		#~ ax2.axvline( kk4, color='C3', linestyle=':')
-		#~ ax2.fill_between(k,bias1-errb1, bias1+errb1, alpha=0.6)
-		#~ ax2.fill_between(k,bias2-errb2, bias2+errb2, alpha=0.6)
-		#~ ax2.fill_between(k,bias3-errb3, bias3+errb3, alpha=0.6)
-		#~ ax2.fill_between(k,bias4-errb4, bias4+errb4, alpha=0.6)
-		#~ ax2.set_ylim(bias1[0]*0.8,bias4[0]*1.2)
-		#~ ax2.set_xlim(8e-3,1)
-		#~ plt.figlegend( (M1,M2,M3,M4, st2,st3), ('$M_{1}$','$M_{2}$','$M_{3}$','$M_{4}$', 'Sim hmf + Tinker bias', 'rescaled effective bias'), \
-		#~ plt.figlegend( (M1,M2,M3,M4, st2,st3, st4), ('$M_{1}$','$M_{2}$','$M_{3}$','$M_{4}$', 'Tinker', 'ST', 'SMT'), \
-		#~ plt.figlegend( (M1,M2,M3,M4), ('$M_{1}$','$M_{2}$','$M_{3}$','$M_{4}$'), \
-		################################################################
-		#~ ax2.set_ylim(0.8,1.2)
-		#~ ax2.set_xlim(8e-3,0.1)
-		#~ r1,  =ax2.plot(k,rbefft)
-		#~ r2,  =ax2.plot(k,rbeffst)
-		#~ r3,  =ax2.plot(k,rbeffsmt)
-		#~ ax2.fill_between(k,rbefft - errbefft,rbefft + errbefft, alpha=0.6)
-		#~ ax2.fill_between(k,rbeffst - errbeffst,rbeffst + errbeffst, alpha=0.6)
-		#~ ax2.fill_between(k,rbeffsmt - errbeffsmt,rbeffsmt + errbeffsmt, alpha=0.6)
-		#~ ax2.axhline(1, color='k')
-		#~ plt.figlegend( (r1,r2,r3), ('Tinker','ST','SMT'), \
-		#~ ######################################
-		#~ ax2.scatter(m_middle, hmf*m_middle**2, marker='.', color='k', label='Sim')
-		#~ h1, = ax2.plot(m_middle, dndM*m_middle**2, color='r')
-		#~ h2, = ax2.plot(m_middle, dndM2*m_middle**2, color='r', linestyle=':')
-		#~ h3, = ax2.plot(m_middle, dndMbis*m_middle**2, color='b')
-		#~ h4, = ax2.plot(m_middle, dndM2bis*m_middle**2, color='b', linestyle=':')
-		#~ ax2.set_yscale('log')
-		#~ ax2.set_xlim(1e13, 4e15)
-		#~ ax2.set_ylim(1e7, 1e10)
-		#~ plt.figlegend( (h1,h3), (r'Tinker w/ $P_{cc}$',r'Crocce w/ $P_{cc}$'), \
-		#######################################
-		#~ loc = 'upper center', ncol=5, labelspacing=0., title =r' M$\nu$ = '+str(Mnu)+', case II ')
-		#~ ax2.legend(loc = 'upper left', title='z = '+str(z[j]), fancybox=True, ncol=3, fontsize=9)
-		#~ plt.subplots_adjust(left=0.1, wspace=0.05, hspace=0.1)
-		#~ ax2.set_xscale('log')
-		#----------------------------
-		
-		
-		#~ if j == 0 :
-			#~ ax2.tick_params(bottom='off', labelbottom='off')
-			#~ ax2.set_ylabel(r'$b_{eff}$ / $b_{sim}$')
-			#~ ax2.set_ylabel(r'$b_{cc}$')
-			#~ ax2.set_ylabel(r'$M^2 n(M)$')
-			#~ #ax2.grid()
-		#~ if j == 1 :
-			#~ ax2.tick_params(bottom='off', labelbottom='off', labelright=True, right= True, labelleft='off', left='off')
-			#~ ax2.set_ylabel(r'$b_{eff}$ / $b_{sim}$')
-			#~ ax2.set_ylabel(r'$b_{cc}$')
-			#~ ax2.set_ylabel(r'$M^2 n(M)$')
-			#~ ax2.yaxis.set_label_position("right")
-			#~ #ax2.grid()
-		#~ if j == 2 :
-			#ax.tick_params(labelleft=True)
-			#~ ax2.set_ylabel(r'$b_{eff}$ / $b_{sim}$')
-			#~ ax2.set_ylabel(r'$b_{cc}$')
-			#~ ax2.set_ylabel(r'$M^2 n(M)$')
-			#~ ax2.set_xlabel('k [h/Mpc]')
-			#~ ax2.set_xlabel(r'M [$h^{-1} M_{\odot}$]')
-			#~ #ax2.grid()
-		#~ if j == 3 :
-			#~ ax2.tick_params(labelright=True, right= True, labelleft='off', left='off')
-			#~ ax2.set_xlabel('k [h/Mpc]')
-			#~ ax2.set_xlabel(r'M [$h^{-1} M_{\odot}$]')
-			#~ ax2.set_ylabel(r'$b_{eff}$ / $b_{sim}$')
-			#~ ax2.set_ylabel(r'$b_{cc}$')
-			#~ ax2.set_ylabel(r'$M^2 n(M)$')
-			#~ ax2.yaxis.set_label_position("right")
-			#~ #ax2.grid()
-		
-		#~ #ax2.set_xlim(8e-3,0.05)
-		#~ if j == len(z) -1:
-			#~ plt.show()
-
-		
-		#~ kill
-		
-		####################################################################
-		#~ ##### define the maximum scale for the fit 
-		kstop1 = [0.16,0.2,0.25,0.35]
-		kstop2 = [0.12,0.16,0.2,0.2]
-		kstop3 = [0.15,0.15,0.15,0.15]
-		
-		#~ #### the case 
-		case = 2
-		
-		if case == 1:
-			kstop = kstop1[ind]
-		elif case == 2:
-			kstop = kstop2[ind]
-		elif case == 3:
-			kstop = kstop3[ind]
-		
-		#~ kstoplim = [0.5,0.5,0.5,0.4]
-		#~ kstop = kstoplim[ind]
-		print kstop
-		
-		#~ # put identation to the rest to loop over kstop
-		#kstop_arr = np.logspace(np.log10(0.05),np.log10(0.6),20)
-		#for kstop in kstop_arr:
-		#	print kstop
-		#~ ####################################################################
-		#~ #Plin = Pclass
-		#~ #klin = kclass
-		Plin = Pcamb
-		klin = kcamb
-		#Plin = pks
-		#~ #klin = ks
-
-		# compute the linear ps on the simulation bins
-		#~ with open('/home/david/codes/Paco/data2/0.0eV/exp/file1.txt', 'w+') as fid_file:
-			#~ for index_k in xrange(len(klin)):
-				#~ fid_file.write('%.8g %.8g\n' % ( klin[index_k], Plin[index_k]))
-		#~ fid_file.close()
-		#~ with open('/home/david/codes/Paco/data2/0.0eV/exp/file2.txt', 'w+') as fid_file:
-			#~ for index_k in xrange(len(kclass)):
-				#~ fid_file.write('%.8g %.8g\n' % ( kclass[index_k], Tm[index_k]))
-		#~ fid_file.close()
-		#~ with open('/home/david/codes/Paco/data2/0.0eV/exp/file3.txt', 'w+') as fid_file:
-			#~ for index_k in xrange(len(kclass)):
-				#~ fid_file.write('%.8g %.8g\n' % ( kclass[index_k], Tcb[index_k]))
-		#~ fid_file.close()
-		#~ ###
-		#~ #exp2.expected(j)
-		#~ ###
-			
-		pte = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/exp/expected1-'+str(z[j])+'.txt')
-		Plin = pte[:,1]
-		pte = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/exp/expected2-'+str(z[j])+'.txt')
-		Tm = pte[:,1]
-		pte = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/exp/expected3-'+str(z[j])+'.txt')
-		Tcb = pte[:,1]
-		
-		# interpolate to have more points and create an evenly logged array
-		kbis = np.logspace(np.log10(np.min(kclass)), np.log10(np.max(kclass)), 200)
-		#kbis = np.logspace(np.log10(np.min(k)), np.log10(np.max(k)), 350)
-		Plinbis = np.interp(kbis, k, Plin)
-		lim = np.where((kbis < kstop))[0]
-
-
-
-		#~ plt.figure()
-		#~ plt.plot(kcamb,Pcamb)
-		#~ plt.plot(kbis,Plinbis)
-		#~ plt.plot(k,Plin)
-		#~ plt.plot(k,Pmm)
-		#~ plt.xscale('log')
-		#~ plt.yscale('log')
-		#~ plt.xlim(1e-3,10)
-		#~ plt.ylim(1e-1,4e4)
+	
+	########################################################################
+	#######--------- mean and std of bias and ps ratio ------------#####
+	#~ if j == z[0]:
+		#~ fig2 = plt.figure()
+	#~ J = j + 1
+	
+	#~ if len(z) == 1:
+		#~ ax2 = fig2.add_subplot(1, len(z), J)
+	#~ elif len(z) == 2:
+		#~ ax2 = fig2.add_subplot(1, 2, J)
+	#~ elif len(z) > 2:
+		#~ ax2 = fig2.add_subplot(2, 2, J)
+	
+	####### comparison bias and != models #############################
+	#~ M1, = ax2.plot(k, bias1, label='$b_{cc}$')
+	#~ M2, = ax2.plot(k, bias2)
+	#~ M3, = ax2.plot(k, bias3)
+	#~ M4, = ax2.plot(k, bias4)
+	#-----------------------------------------------
+	#~ M1, = ax2.plot(k, bias1_0ev, linestyle = '--', color='C0', label=r'$b_{cc , M_{\nu} = 0.0eV} $')
+	#~ M2, = ax2.plot(k, bias2_0ev, linestyle = '--', color='C1')
+	#~ M3, = ax2.plot(k, bias3_0ev, linestyle = '--', color='C2')
+	#~ M4, = ax2.plot(k, bias4_0ev, linestyle = '--', color='C3')
+	#~ #-----------------------------------------
+	#~ st1 =ax2.axhline(Tb1, color='C0', linestyle=':')
+	#~ ax2.axhline(Tb2, color='C1', linestyle=':')
+	#~ ax2.axhline(Tb3, color='C2', linestyle=':')
+	#~ ax2.axhline(Tb4, color='C3', linestyle=':')
+	#---------------------------------------------------
+	#~ st2 =ax2.axhline(lb1, color='C0', linestyle=':')
+	#~ ax2.axhline(lb2, color='C1', linestyle=':')
+	#~ ax2.axhline(lb3, color='C2', linestyle=':')
+	#~ ax2.axhline(lb4, color='C3', linestyle=':')
+	#---------------------------------------------------
+	#~ st2 =ax2.axhline(bias_eff0_t1, color='C0', linestyle=':')
+	#~ ax2.axhline(bias_eff0_t2, color='C1', linestyle=':')
+	#~ ax2.axhline(bias_eff0_t3, color='C2', linestyle=':')
+	#~ ax2.axhline(bias_eff0_t4, color='C3', linestyle=':')
+	#---------------------------------------------------
+	#~ st3 =ax2.axhline(bias_eff0_st1, color='C0', linestyle='--')
+	#~ ax2.axhline(bias_eff0_st2, color='C1', linestyle='--')
+	#~ ax2.axhline(bias_eff0_st3, color='C2', linestyle='--')
+	#~ ax2.axhline(bias_eff0_st4, color='C3', linestyle='--')
+	#---------------------------------------------------
+	#~ st4 =ax2.axhline(bias_eff0_smt1, color='C0', linestyle='-.')
+	#~ ax2.axhline(bias_eff0_smt2, color='C1', linestyle='-.')
+	#~ ax2.axhline(bias_eff0_smt3, color='C2', linestyle='-.')
+	#~ ax2.axhline(bias_eff0_smt4, color='C3', linestyle='-.')
+	#---------------------------------------------------
+	#~ st3 =ax2.axhline(lb1/rsc1, color='C0', linestyle=':')
+	#~ ax2.axhline(lb2/rsc2, color='C1', linestyle=':')
+	#~ ax2.axhline(lb3/rsc3, color='C2', linestyle=':')
+	#~ ax2.axhline(lb4/rsc4, color='C3', linestyle=':')
+	#-----------------------------------------------------
+	#~ ax2.axhline(Cb1, color='C0', linestyle=':', label='Simu + ST')
+	#~ ax2.axhline(Cb2, color='C1', linestyle=':')
+	#~ ax2.axhline(Cb3, color='C2', linestyle=':')
+	#~ ax2.axhline(Cb4, color='C3', linestyle=':')
+	#-----------------------------------------------
+	#~ ax2.axvline( kk1, color='C0', linestyle=':', label='shot noise = 80% of P(k)')
+	#~ ax2.axvline( kk2, color='C1', linestyle=':')
+	#~ ax2.axvline( kk3, color='C2', linestyle=':')
+	#~ ax2.axvline( kk4, color='C3', linestyle=':')
+	#~ ax2.fill_between(k,bias1-errb1, bias1+errb1, alpha=0.6)
+	#~ ax2.fill_between(k,bias2-errb2, bias2+errb2, alpha=0.6)
+	#~ ax2.fill_between(k,bias3-errb3, bias3+errb3, alpha=0.6)
+	#~ ax2.fill_between(k,bias4-errb4, bias4+errb4, alpha=0.6)
+	#~ ax2.set_ylim(bias1[0]*0.8,bias4[0]*1.2)
+	#~ ax2.set_xlim(8e-3,1)
+	#~ plt.figlegend( (M1,M2,M3,M4, st2,st3), ('$M_{1}$','$M_{2}$','$M_{3}$','$M_{4}$', 'Sim hmf + Tinker bias', 'rescaled effective bias'), \
+	#~ plt.figlegend( (M1,M2,M3,M4, st2,st3, st4), ('$M_{1}$','$M_{2}$','$M_{3}$','$M_{4}$', 'Tinker', 'ST', 'SMT'), \
+	#~ plt.figlegend( (M1,M2,M3,M4), ('$M_{1}$','$M_{2}$','$M_{3}$','$M_{4}$'), \
+	################################################################
+	#~ ax2.set_ylim(0.8,1.2)
+	#~ ax2.set_xlim(8e-3,0.1)
+	#~ r1,  =ax2.plot(k,rbefft)
+	#~ r2,  =ax2.plot(k,rbeffst)
+	#~ r3,  =ax2.plot(k,rbeffsmt)
+	#~ ax2.fill_between(k,rbefft - errbefft,rbefft + errbefft, alpha=0.6)
+	#~ ax2.fill_between(k,rbeffst - errbeffst,rbeffst + errbeffst, alpha=0.6)
+	#~ ax2.fill_between(k,rbeffsmt - errbeffsmt,rbeffsmt + errbeffsmt, alpha=0.6)
+	#~ ax2.axhline(1, color='k')
+	#~ plt.figlegend( (r1,r2,r3), ('Tinker','ST','SMT'), \
+	#~ ######################################
+	#~ ax2.scatter(m_middle, hmf*m_middle**2, marker='.', color='k', label='Sim')
+	#~ h1, = ax2.plot(m_middle, dndM*m_middle**2, color='r')
+	#~ h2, = ax2.plot(m_middle, dndM2*m_middle**2, color='r', linestyle=':')
+	#~ h3, = ax2.plot(m_middle, dndMbis*m_middle**2, color='b')
+	#~ h4, = ax2.plot(m_middle, dndM2bis*m_middle**2, color='b', linestyle=':')
+	#~ ax2.set_yscale('log')
+	#~ ax2.set_xlim(1e13, 4e15)
+	#~ ax2.set_ylim(1e7, 1e10)
+	#~ plt.figlegend( (h1,h3), (r'Tinker w/ $P_{cc}$',r'Crocce w/ $P_{cc}$'), \
+	#######################################
+	#~ loc = 'upper center', ncol=5, labelspacing=0., title =r' M$\nu$ = '+str(Mnu)+', case II ')
+	#~ ax2.legend(loc = 'upper left', title='z = '+str(z[j]), fancybox=True, ncol=3, fontsize=9)
+	#~ plt.subplots_adjust(left=0.1, wspace=0.05, hspace=0.1)
+	#~ ax2.set_xscale('log')
+	#----------------------------
+	
+	
+	#~ if j == 0 :
+		#~ ax2.tick_params(bottom='off', labelbottom='off')
+		#~ ax2.set_ylabel(r'$b_{eff}$ / $b_{sim}$')
+		#~ ax2.set_ylabel(r'$b_{cc}$')
+		#~ ax2.set_ylabel(r'$M^2 n(M)$')
+		#~ #ax2.grid()
+	#~ if j == 1 :
+		#~ ax2.tick_params(bottom='off', labelbottom='off', labelright=True, right= True, labelleft='off', left='off')
+		#~ ax2.set_ylabel(r'$b_{eff}$ / $b_{sim}$')
+		#~ ax2.set_ylabel(r'$b_{cc}$')
+		#~ ax2.set_ylabel(r'$M^2 n(M)$')
+		#~ ax2.yaxis.set_label_position("right")
+		#~ #ax2.grid()
+	#~ if j == 2 :
+		#ax.tick_params(labelleft=True)
+		#~ ax2.set_ylabel(r'$b_{eff}$ / $b_{sim}$')
+		#~ ax2.set_ylabel(r'$b_{cc}$')
+		#~ ax2.set_ylabel(r'$M^2 n(M)$')
+		#~ ax2.set_xlabel('k [h/Mpc]')
+		#~ ax2.set_xlabel(r'M [$h^{-1} M_{\odot}$]')
+		#~ #ax2.grid()
+	#~ if j == 3 :
+		#~ ax2.tick_params(labelright=True, right= True, labelleft='off', left='off')
+		#~ ax2.set_xlabel('k [h/Mpc]')
+		#~ ax2.set_xlabel(r'M [$h^{-1} M_{\odot}$]')
+		#~ ax2.set_ylabel(r'$b_{eff}$ / $b_{sim}$')
+		#~ ax2.set_ylabel(r'$b_{cc}$')
+		#~ ax2.set_ylabel(r'$M^2 n(M)$')
+		#~ ax2.yaxis.set_label_position("right")
+		#~ #ax2.grid()
+	
+	#~ #ax2.set_xlim(8e-3,0.05)
+	#~ if j == len(z) -1:
 		#~ plt.show()
-		#~ kill
+
+
+
+	#~ plt.figure()
+	#~ plt.plot(kcamb,Pcamb)
+	#~ plt.plot(kbis,Plinbis)
+	#~ plt.plot(k,Plin)
+	#~ plt.plot(k,Pmm)
+	#~ plt.xscale('log')
+	#~ plt.yscale('log')
+	#~ plt.xlim(1e-3,10)
+	#~ plt.ylim(1e-1,4e4)
+	#~ plt.show()
+	#~ kill
 
 	#####################################################################################################################################
 	######### 0.15 eV Massive neutrino 
 	###########################################################################################################################################
-	if Mnu == 0.15:
-		hierarchy = 'degenerate' #'degenerate', 'normal', 'inverted'
-		Mnu       = 0.15  #eV
-		Nnu       = 0  #number of massive neutrinos
-		Neff      = 3.046
-
-		# cosmological parameters
-		h       = 0.6711
-		Omega_c = 0.2685 - Mnu/(93.14*h**2)
-		Omega_b = 0.049
-		Omega_l = 0.6825
-		Omega_k = 0.0
-		Omega_m = Omega_c + Omega_b
-		tau     = None
-		#-------------------------------------------------
-		#---------------- Class ---------------------------
-		#-------------------------------------------------
-		Class = np.loadtxt('/home/david/codes/Paco/data2/0.15eV/class/test_z'+str(j+1)+'_pk.dat')
-		kclass = Class[:,0]
-		Pclass = Class[:,1]
-		Class_trans = np.loadtxt('/home/david/codes/Paco/data2/0.15eV/class/test_z'+str(j+1)+'_tk.dat')
-
-		ktrans = Class_trans[:,0]
-		Tb = Class_trans[:,2]
-		Tcdm = Class_trans[:,3]
-		Tm = Class_trans[:,8]
-		Tcb = (Omega_c * Tcdm + Omega_b * Tb)/(Omega_c + Omega_b)
-
-		#-----------------------------------------------------------------------
-		#-------- get the transfer function and Pcc ----------------------------
-		#-----------------------------------------------------------------------
-		Pcc = Pclass * (Tcb/Tm)**2
-		Plin = Pcc
-		klin = kclass
-		with open('/home/david/codes/Paco/data2/0.15eV/Pcc_z='+str(z[j])+'_.txt', 'w+') as fid_file:
-			for index_k in xrange(len(klin)):
-				fid_file.write('%.8g %.8g\n' % ( klin[index_k], Plin[index_k]))
-		fid_file.close()
+	
 		
-		#-------------------------------------------------
-		#---------------- Camb ---------------------------
-		#-------------------------------------------------
-		camb = np.loadtxt('/home/david/codes/Paco/data2/0.15eV/CAMB/Pk_cb_z='+str(z[j])+'00.txt')
-		kcamb = camb[:,0]
-		Pcamb = camb[:,1]
-		Plin = Pcamb
-		klin = kcamb
-
-	#~ #-----------------------------------------------------------------------
-		#~ #---------------- matter neutrino Real space ---------------------------
-		#~ #-----------------------------------------------------------------------
-		d = np.loadtxt('/home/david/codes/Paco/data2/0.15eV/NCV1/analysis/Pk_c_z='+str(z[j])+'.txt')
-		e = np.loadtxt('/home/david/codes/Paco/data2/0.15eV/NCV2/analysis/Pk_c_z='+str(z[j])+'.txt')
-		k1 = d[:,0]
-		p1 = d[:,1]
-		k2 = e[:,0]
-		p2 = e[:,1]
-
-
-		d = np.loadtxt('/home/david/codes/Paco/data2/0.15eV/Pcc_realisation_'+str(Mnu)+'_z='+str(z[j])+'.txt')
-		kmat = d[:,8]
-		Pmat = np.zeros((len(kmat),10))
-		for i in xrange(0,8):
-			Pmat[:,i]= d[:,i]
-		
-		Pmat[:,8] = p1
-		Pmat[:,9] = p2
-
-
-		#-----------------------------------------------------------------------
-		#---------------- halo neutrino Real space ---------------------------
-		#-----------------------------------------------------------------------
-		d1 = np.loadtxt('/home/david/codes/Paco/data2/0.15eV/Phh1_realisation_0.15_z='+str(z[j])+'.txt')
-		k = d1[:,19]
-		Phh1 = np.zeros((len(k),10))
-		Pshot1 = np.zeros((10))
-		pnum1 = [0,2,4,6,8,10,12,14,16,18]
-		pnum2 = [1,3,5,7,9,11,13,15,17,20]
-		for i in xrange(0,10):
-			Phh1[:,i]= d1[:,pnum1[i]]
-			Pshot1[i]= d1[0,pnum2[i]]
-		# second mass range
-		d2 = np.loadtxt('/home/david/codes/Paco/data2/0.15eV/Phh2_realisation_0.15_z='+str(z[j])+'.txt')
-		k = d2[:,19]
-		Phh2 = np.zeros((len(k),10))
-		Pshot2 = np.zeros((10))
-		pnum1 = [0,2,4,6,8,10,12,14,16,18]
-		pnum2 = [1,3,5,7,9,11,13,15,17,20]
-		for i in xrange(0,10):
-			Phh2[:,i]= d2[:,pnum1[i]]
-			Pshot2[i]= d2[0,pnum2[i]]
-		# third mass range
-		d3 = np.loadtxt('/home/david/codes/Paco/data2/0.15eV/Phh3_realisation_0.15_z='+str(z[j])+'.txt')
-		k = d3[:,19]
-		Phh3 = np.zeros((len(k),10))
-		Pshot3 = np.zeros((10))
-		pnum1 = [0,2,4,6,8,10,12,14,16,18]
-		pnum2 = [1,3,5,7,9,11,13,15,17,20]
-		for i in xrange(0,10):
-			Phh3[:,i]= d3[:,pnum1[i]]
-			Pshot3[i]= d3[0,pnum2[i]]
-		# fourth mass range
-		d4 = np.loadtxt('/home/david/codes/Paco/data2/0.15eV/Phh4_realisation_0.15_z='+str(z[j])+'.txt')
-		k = d4[:,19]
-		Phh4 = np.zeros((len(k),10))
-		Pshot4 = np.zeros((10))
-		pnum1 = [0,2,4,6,8,10,12,14,16,18]
-		pnum2 = [1,3,5,7,9,11,13,15,17,20]
-		for i in xrange(0,10):
-			Phh4[:,i]= d4[:,pnum1[i]]
-			Pshot4[i]= d4[0,pnum2[i]]
-
-
-		
-		#-------------------------------------------------------------------
-		#----remove shot noise, compute bias and bias variance -------------
-		#-------------------------------------------------------------------
-		bhh1 = np.zeros((len(k),10))
-		bhh2 = np.zeros((len(k),10))
-		bhh3 = np.zeros((len(k),10))
-		bhh4 = np.zeros((len(k),10))
-		for i in xrange(0,10):
-			Phh1[:,i] = Phh1[:,i]-Pshot1[i]
-			Phh2[:,i] = Phh2[:,i]-Pshot2[i]
-			Phh3[:,i] = Phh3[:,i]-Pshot3[i]
-			Phh4[:,i] = Phh4[:,i]-Pshot4[i]
-			nul1 = np.where(Phh1[:,i] < 0)[0]
-			nul2 = np.where(Phh2[:,i] < 0)[0]
-			nul3 = np.where(Phh3[:,i] < 0)[0]
-			nul4 = np.where(Phh4[:,i] < 0)[0]
-			Phh1[nul1,i] = 0
-			Phh2[nul2,i] = 0
-			Phh3[nul3,i] = 0
-			Phh4[nul4,i] = 0
-			bhh1[:,i] = np.sqrt(Phh1[:,i]/Pmat[:,i])
-			bhh2[:,i] = np.sqrt(Phh2[:,i]/Pmat[:,i])
-			bhh3[:,i] = np.sqrt(Phh3[:,i]/Pmat[:,i])
-			bhh4[:,i] = np.sqrt(Phh4[:,i]/Pmat[:,i])
-			
-			
-		#~ ### do the mean over quantitites ###
-		
-		Pmm = np.mean(Pmat[:,0:11], axis=1)
-		PH1 = np.mean(Phh1[:,0:11], axis=1)
-		PH2 = np.mean(Phh2[:,0:11], axis=1)
-		PH3 = np.mean(Phh3[:,0:11], axis=1)
-		PH4 = np.mean(Phh4[:,0:11], axis=1)
-
-		
-		bias1 = np.mean(bhh1[:,0:11], axis=1)
-		bias2 = np.mean(bhh2[:,0:11], axis=1)
-		bias3 = np.mean(bhh3[:,0:11], axis=1)
-		bias4 = np.mean(bhh4[:,0:11], axis=1)
-		
-		errb1 = np.std(bhh1[:,0:11], axis=1)
-		errb2 = np.std(bhh2[:,0:11], axis=1)
-		errb3 = np.std(bhh3[:,0:11], axis=1)
-		errb4 = np.std(bhh4[:,0:11], axis=1)
-		
-		errPhh1 = np.std(Phh1[:,0:11], axis=1)
-		errPhh2 = np.std(Phh2[:,0:11], axis=1)
-		errPhh3 = np.std(Phh3[:,0:11], axis=1)
-		errPhh4 = np.std(Phh4[:,0:11], axis=1)
-		
-		
-		#-----------------------------------------------------------------------
-		#---------------- halo neutrino Redshift space ---------------------------
-		#-----------------------------------------------------------------------
-		d1a = np.loadtxt('/home/david/codes/Paco/data2/0.15eV/Phh1_realisation_red_axis_0_0.15_z='+str(z[j])+'.txt')
-		d1b = np.loadtxt('/home/david/codes/Paco/data2/0.15eV/Phh2_realisation_red_axis_0_0.15_z='+str(z[j])+'.txt')
-		d1c = np.loadtxt('/home/david/codes/Paco/data2/0.15eV/Phh3_realisation_red_axis_0_0.15_z='+str(z[j])+'.txt')
-		d1d = np.loadtxt('/home/david/codes/Paco/data2/0.15eV/Phh4_realisation_red_axis_0_0.15_z='+str(z[j])+'.txt')
-		d2a = np.loadtxt('/home/david/codes/Paco/data2/0.15eV/Phh1_realisation_red_axis_1_0.15_z='+str(z[j])+'.txt')
-		d2b = np.loadtxt('/home/david/codes/Paco/data2/0.15eV/Phh2_realisation_red_axis_1_0.15_z='+str(z[j])+'.txt')
-		d2c = np.loadtxt('/home/david/codes/Paco/data2/0.15eV/Phh3_realisation_red_axis_1_0.15_z='+str(z[j])+'.txt')
-		d2d = np.loadtxt('/home/david/codes/Paco/data2/0.15eV/Phh4_realisation_red_axis_1_0.15_z='+str(z[j])+'.txt')
-		d3a = np.loadtxt('/home/david/codes/Paco/data2/0.15eV/Phh1_realisation_red_axis_2_0.15_z='+str(z[j])+'.txt')
-		d3b = np.loadtxt('/home/david/codes/Paco/data2/0.15eV/Phh2_realisation_red_axis_2_0.15_z='+str(z[j])+'.txt')
-		d3c = np.loadtxt('/home/david/codes/Paco/data2/0.15eV/Phh3_realisation_red_axis_2_0.15_z='+str(z[j])+'.txt')
-		d3d = np.loadtxt('/home/david/codes/Paco/data2/0.15eV/Phh4_realisation_red_axis_2_0.15_z='+str(z[j])+'.txt')
-
-
-		kx1a = d1a[:,19]
-		Px1a = np.zeros((len(kx1a),10))
-		Px1b = np.zeros((len(kx1a),10))
-		Px1c = np.zeros((len(kx1a),10))
-		Px1d = np.zeros((len(kx1a),10))
-		Pxshot1a = np.zeros((10))
-		Pxshot1b = np.zeros((10))
-		Pxshot1c = np.zeros((10))
-		Pxshot1d = np.zeros((10))
-		pnum1 = [0,2,4,6,8,10,12,14,16,18]
-		pnum2 = [1,3,5,7,9,11,13,15,17,20]
-		for i in xrange(0,10):
-			Px1a[:,i]= d1a[:,pnum1[i]]
-			Px1b[:,i]= d1b[:,pnum1[i]]
-			Px1c[:,i]= d1c[:,pnum1[i]]
-			Px1d[:,i]= d1d[:,pnum1[i]]
-			Pxshot1a[i]= d1a[0,pnum2[i]]
-			Pxshot1b[i]= d1b[0,pnum2[i]]
-			Pxshot1c[i]= d1c[0,pnum2[i]]
-			Pxshot1d[i]= d1d[0,pnum2[i]]
-		kx2a = d2a[:,19]
-		Px2a = np.zeros((len(kx2a),10))
-		Px2b = np.zeros((len(kx2a),10))
-		Px2c = np.zeros((len(kx2a),10))
-		Px2d = np.zeros((len(kx2a),10))
-		Pxshot2a = np.zeros((10))
-		Pxshot2b = np.zeros((10))
-		Pxshot2c = np.zeros((10))
-		Pxshot2d = np.zeros((10))
-		pnum1 = [0,2,4,6,8,10,12,14,16,18]
-		pnum2 = [1,3,5,7,9,11,13,15,17,20]
-		for i in xrange(0,10):
-			Px2a[:,i]= d2a[:,pnum1[i]]
-			Px2b[:,i]= d2b[:,pnum1[i]]
-			Px2c[:,i]= d2c[:,pnum1[i]]
-			Px2d[:,i]= d2d[:,pnum1[i]]
-			Pxshot2a[i]= d2a[0,pnum2[i]]
-			Pxshot2b[i]= d2b[0,pnum2[i]]
-			Pxshot2c[i]= d2c[0,pnum2[i]]
-			Pxshot2d[i]= d2d[0,pnum2[i]]
-		kx3a = d3a[:,19]
-		Px3a = np.zeros((len(kx3a),10))
-		Px3b = np.zeros((len(kx3a),10))
-		Px3c = np.zeros((len(kx3a),10))
-		Px3d = np.zeros((len(kx3a),10))
-		Pxshot3a = np.zeros((10))
-		Pxshot3b = np.zeros((10))
-		Pxshot3c = np.zeros((10))
-		Pxshot3d = np.zeros((10))
-		pnum1 = [0,2,4,6,8,10,12,14,16,18]
-		pnum2 = [1,3,5,7,9,11,13,15,17,20]
-		for i in xrange(0,10):
-			Px3a[:,i]= d3a[:,pnum1[i]]
-			Px3b[:,i]= d3b[:,pnum1[i]]
-			Px3c[:,i]= d3c[:,pnum1[i]]
-			Px3d[:,i]= d3d[:,pnum1[i]]
-			Pxshot3a[i]= d3a[0,pnum2[i]]
-			Pxshot3b[i]= d3b[0,pnum2[i]]
-			Pxshot3c[i]= d3c[0,pnum2[i]]
-			Pxshot3d[i]= d3d[0,pnum2[i]]
-			
-		for i in xrange(0,10):
-			Px1a[:,i] = Px1a[:,i]-Pxshot1a[i]
-			Px1b[:,i] = Px1b[:,i]-Pxshot1b[i]
-			Px1c[:,i] = Px1c[:,i]-Pxshot1c[i]
-			Px1d[:,i] = Px1d[:,i]-Pxshot1d[i]
-			Px2a[:,i] = Px2a[:,i]-Pxshot2a[i]
-			Px2b[:,i] = Px2b[:,i]-Pxshot2b[i]
-			Px2c[:,i] = Px2c[:,i]-Pxshot2c[i]
-			Px2d[:,i] = Px2d[:,i]-Pxshot2d[i]
-			Px3a[:,i] = Px3a[:,i]-Pxshot3a[i]
-			Px3b[:,i] = Px3b[:,i]-Pxshot3b[i]
-			Px3c[:,i] = Px3c[:,i]-Pxshot3c[i]
-			Px3d[:,i] = Px3d[:,i]-Pxshot3d[i]
-			
-			nul1a = np.where(Px1a[:,i] < 0)[0]
-			Px1a[nul1a,i] = 0
-			nul1b = np.where(Px1b[:,i] < 0)[0]
-			Px1b[nul1b,i] = 0
-			nul1c = np.where(Px1c[:,i] < 0)[0]
-			Px1c[nul1c,i] = 0
-			nul1d = np.where(Px1d[:,i] < 0)[0]
-			Px1d[nul1d,i] = 0
-			nul2a = np.where(Px2a[:,i] < 0)[0]
-			Px2a[nul2a,i] = 0
-			nul2b = np.where(Px2b[:,i] < 0)[0]
-			Px2b[nul2b,i] = 0
-			nul2c = np.where(Px2c[:,i] < 0)[0]
-			Px2c[nul2c,i] = 0
-			nul2d = np.where(Px2d[:,i] < 0)[0]
-			Px2d[nul2d,i] = 0
-			nul3a = np.where(Px3a[:,i] < 0)[0]
-			Px3a[nul3a,i] = 0
-			nul3b = np.where(Px3b[:,i] < 0)[0]
-			Px3b[nul3b,i] = 0
-			nul3c = np.where(Px3c[:,i] < 0)[0]
-			Px3c[nul3c,i] = 0
-			nul3d = np.where(Px3d[:,i] < 0)[0]
-			Px3d[nul3d,i] = 0
-
-		Pmono1temp = (Px1a + Px2a + Px3a)/3
-		Pmono2temp = (Px1b + Px2b + Px3b)/3
-		Pmono3temp = (Px1c + Px2c + Px3c)/3
-		Pmono4temp = (Px1d + Px2d + Px3d)/3
-
-
-		### do the mean and std over quantitites ###
-		
-		Pmono1 = np.mean(Pmono1temp[:,0:11], axis=1)
-		Pmono2 = np.mean(Pmono2temp[:,0:11], axis=1)
-		Pmono3 = np.mean(Pmono3temp[:,0:11], axis=1)
-		Pmono4 = np.mean(Pmono4temp[:,0:11], axis=1)
-		
-		
-		errPr1 = np.std(Pmono1temp[:,0:11], axis=1)
-		errPr2 = np.std(Pmono2temp[:,0:11], axis=1)
-		errPr3 = np.std(Pmono3temp[:,0:11], axis=1)
-		errPr4 = np.std(Pmono4temp[:,0:11], axis=1)
-
-		#-------------------------------------------------------------------
-		#--- compute bias and bias variance -------------
-		#-------------------------------------------------------------------
-		#bredhh1 = np.zeros((len(k),10))
-		#bredhh2 = np.zeros((len(k),10))
-		#bredhh3 = np.zeros((len(k),10))
-		#bredhh4 = np.zeros((len(k),10))
-		#for i in xrange(0,10):
-		#	bredhh1[:,i] = np.sqrt(Pmono1temp[:,i]/Pmat_r[:,i])
-		#	bredhh2[:,i] = np.sqrt(Pmono2temp[:,i]/Pmat_r[:,i])
-		#	bredhh3[:,i] = np.sqrt(Pmono3temp[:,i]/Pmat_r[:,i])
-		#	bredhh4[:,i] = np.sqrt(Pmono4temp[:,i]/Pmat_r[:,i])
-			
-			
-		#~ ### do the mean over quantitites ###
-
-
-		
-		#biasred1 = np.mean(bredhh1[:,0:11], axis=1)
-		#biasred2 = np.mean(bredhh2[:,0:11], axis=1)
-		#biasred3 = np.mean(bredhh3[:,0:11], axis=1)
-		#biasred4 = np.mean(bredhh4[:,0:11], axis=1)
-		
-		#errbred1 = np.std(bredhh1[:,0:11], axis=1)
-		#errbred2 = np.std(bredhh2[:,0:11], axis=1)
-		#errbred3 = np.std(bredhh3[:,0:11], axis=1)
-		#errbred4 = np.std(bredhh4[:,0:11], axis=1)
-		
-		#----------------------------------------------------------------
-		#----------Tinker, Crocce param bias ----------------------------
-		#----------------------------------------------------------------
-
-		#~ #compute tinker stuff
-		##~ limM = [5e11,1e12,3e12,1e13, 3.2e15]
-		limM = [4.2e11,1e12,3e12,1e13, 5e15]
-		loglim = [ 11.623, 12., 12.477, 13., 15.698]
-		camb2 = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/CAMB/Pk_cb_z='+str(z[j])+'00.txt')
-		kcamb2 = camb2[:,0]
-		Pcamb2 = camb2[:,1]
-
-		#~ #### get the mass function from simulation
-		massf = np. loadtxt('/home/david/codes/Paco/data2/0.15eV/hmf_z='+str(z[j])+'.txt')
-		m_middle = massf[:,10]
-		dm = massf[:,11]
-		hmf_temp = np.zeros((len(m_middle),10))
-		for i in xrange(0,10):
-			hmf_temp[:,i]= massf[:,i]
-		
-		#~ M_middle=10**(0.5*(np.log10(m_middle[1:])+np.log10(m_middle[:-1]))) #center of the bin
-		hmf = np.mean(hmf_temp[:,0:11], axis=1)
-		################################################################
-		
-		#~ dndM=MFL.Tinker_mass_function(kcamb2,Pcamb2,Omega_m,z[j],limM[0],limM[4],len(m_middle),Masses=m_middle)[1]
-		#~ with open('/home/david/codes/Paco/data2/0.15eV/thmf_z='+str(z[j])+'.txt', 'w+') as fid_file:
-			#~ for m in xrange(0, len(m_middle)):
-				#~ fid_file.write('%.8g\n' % (dndM[m]))
-		#~ fid_file.close()
-		#~ dndMbis=MFL.Crocce_mass_function(kcamb2,Pcamb2,Omega_m,z[j],limM[0],limM[4],len(m_middle),Masses=m_middle)[1]
-		#~ with open('/home/david/codes/Paco/data2/0.15eV/chmf_z='+str(z[j])+'.txt', 'w+') as fid_file:
-			#~ for m in xrange(0, len(m_middle)):
-				#~ fid_file.write('%.8g\n' % (dndMbis[m]))
-		#~ fid_file.close()
-		
-		#~ bt=np.empty(len(m_middle),dtype=np.float64)
-		#~ bst=np.empty(len(m_middle),dtype=np.float64)
-		#~ bsmt=np.empty(len(m_middle),dtype=np.float64)
-		#~ for i in range(len(m_middle)):
-			#~ bt[i]=bias(kcamb,Pcamb,Omega_m,m_middle[i],'Tinker')
-			#~ bst[i]=bias(kcamb,Pcamb,Omega_m,m_middle[i],'Crocce')
-			#~ bsmt[i]=bias(kcamb,Pcamb,Omega_m,m_middle[i],'SMT01')
-		#~ with open('/home/david/codes/Paco/data2/0.15eV/large_scale/tlb1_z='+str(z[j])+'.txt', 'w+') as fid_file:
-			#~ for m in xrange(0, len(m_middle)):
-				#~ fid_file.write('%.8g\n' % (bt[m]))
-		#~ with open('/home/david/codes/Paco/data2/0.15eV/large_scale/clb1_z='+str(z[j])+'.txt', 'w+') as fid_file:
-			#~ for m in xrange(0, len(m_middle)):
-				#~ fid_file.write('%.8g\n' % (bst[m]))
-		#~ with open('/home/david/codes/Paco/data2/0.15eV/large_scale/clb2_z='+str(z[j])+'.txt', 'w+') as fid_file:
-			#~ for m in xrange(0, len(m_middle)):
-				#~ fid_file.write('%.8g\n' % (bsmt[m]))
-		#~ fid_file.close()
-		
-		
-		#~ #### get tinker and crocce hmf
-		#~ def linb(hmf,lim1, lim2):
-			#~ halo_mass = np.logspace(lim1, lim2,100) #a vector of halo masses between 1e10 and 1e15
-			#~ M_middle=10**(0.5*(np.log10(halo_mass[1:])+np.log10(halo_mass[:-1]))) #center of the bin
-			#~ deltaM=halo_mass[1:]-halo_mass[:-1]
-			#~ a = 1./(1+z[j])
-			#~ hmf = np.interp(M_middle, m_middle,hmf)
-			#~ #---------------------------------------
-			#~ b=np.empty(99,dtype=np.float64)
-			#~ for i in range(99):
-				#~ b[i] = bias(klin,Plin,Omega_m,M_middle[i],'Tinker')
-			#~ bias_eff=np.sum(hmf*deltaM*b)/np.sum(hmf*deltaM)
-			#~ return bias_eff
-
-		#~ lb1 = linb(hmf,loglim[0],loglim[4])
-		#~ lb2 = linb(hmf,loglim[1],loglim[4])
-		#~ lb3 = linb(hmf,loglim[2],loglim[4])
-		#~ lb4 = linb(hmf,loglim[3],loglim[4])
-		#~ print lb1, lb2, lb3, lb4
-
-		#### get tinker and crocce hmf
-		#Tb1 = halo_bias('Tinker', z[j], limM[0],limM[4], cname,Omega_c, Omega_b, do_DM=True )
-		#Tb2 = halo_bias('Tinker', z[j], limM[1],limM[4], cname,Omega_c, Omega_b, do_DM=True )
-		#Tb3 = halo_bias('Tinker', z[j], limM[2],limM[4], cname,Omega_c, Omega_b, do_DM=True )
-		#Tb4 = halo_bias('Tinker', z[j], limM[3],limM[4], cname,Omega_c, Omega_b, do_DM=True )
-		
-		#~ #Tb1 = halo_bias('Tinker', z[j], limM[0],limM[4], cname,Omega_c, Omega_b, do_DM=True )
-		#~ #Tb2 = halo_bias('Tinker', z[j], limM[1],limM[4], cname,Omega_c, Omega_b, do_DM=True )
-		#~ #Tb3 = halo_bias('Tinker', z[j], limM[2],limM[4], cname,Omega_c, Omega_b, do_DM=True )
-		#~ #Tb4 = halo_bias('Tinker', z[j], limM[3],limM[4], cname,Omega_c, Omega_b, do_DM=True )
-		
-		#~ Cb1 = halo_bias('Crocce', z[j], limM[0],limM[4], cname,Omega_c, Omega_b, do_DM=True )
-		#~ Cb2 = halo_bias('Crocce', z[j], limM[1],limM[4], cname,Omega_c, Omega_b, do_DM=True )
-		#~ Cb3 = halo_bias('Crocce', z[j], limM[2],limM[4], cname,Omega_c, Omega_b, do_DM=True )
-		#~ Cb4 = halo_bias('Crocce', z[j], limM[3],limM[4], cname,Omega_c, Omega_b, do_DM=True )
-
-		
-		#~ with open('/home/david/codes/Paco/data2/0.15eV/large_scale/LS2_z='+str(z[j])+'_.txt', 'w+') as fid_file:
-			#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (Cb1,Cb2, Cb3, Cb4))
-		#~ fid_file.close()
-		
-		
-		#~ with open('/home/david/codes/Paco/data2/0.15eV/large_scale/LS_z='+str(z[j])+'_.txt', 'w+') as fid_file:
-			#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (Tb1,Tb2, Tb3, Tb4))
-		#~ fid_file.close()
-
-		
-		#~ with open('/home/david/codes/Paco/data2/0.15eV/large_scale/ccl_z='+str(z[j])+'_.txt', 'w+') as fid_file:
-			#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (lb1,lb2, lb3, lb4))
-		#~ fid_file.close()
-		
-		#~ with open('/home/david/codes/Paco/data2/0.15eV/large_scale/bcc_z='+str(z[j])+'_.txt', 'w+') as fid_file:
-			#~ for index_k in xrange(len(k)):
-				#~ fid_file.write('%.8g %.8g %.8g %.8g %.8g\n' % ( k[index_k], bias1[index_k], bias2[index_k], bias3[index_k], bias4[index_k]))
-		#~ fid_file.close()
-		################################################################
-		
-		dndM = np.loadtxt('/home/david/codes/Paco/data2/0.15eV/thmf_z='+str(z[j])+'.txt')
-		dndMbis = np.loadtxt('/home/david/codes/Paco/data2/0.15eV/chmf_z='+str(z[j])+'.txt')
-		diff = hmf/dndM
-		bin1 = np.where(m_middle > 5e11 )[0]
-		bin2 = np.where(m_middle > 1e12 )[0]
-		bin3 = np.where(m_middle > 3e12 )[0]
-		bin4 = np.where(m_middle > 1e13 )[0]	
-		
-		
-		
-		Tb0ev = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/large_scale/LS_z='+str(z[j])+'_.txt')
-		tb1 = Tb0ev[0]
-		tb2 = Tb0ev[1]
-		tb3 = Tb0ev[2]
-		tb4 = Tb0ev[3]
-		
-		Tb15ev = np.loadtxt('/home/david/codes/Paco/data2/0.15eV/large_scale/LS_z='+str(z[j])+'_.txt')
-		Tb1 = Tb15ev[0]
-		Tb2 = Tb15ev[1]
-		Tb3 = Tb15ev[2]
-		Tb4 = Tb15ev[3]
-		
-		Cb0ev = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/large_scale/LS2_z='+str(z[j])+'_.txt')
-		cb1 = Cb0ev[0]
-		cb2 = Cb0ev[1]
-		cb3 = Cb0ev[2]
-		cb4 = Cb0ev[3]
-		
-		Cb15ev = np.loadtxt('/home/david/codes/Paco/data2/0.15eV/large_scale/LS2_z='+str(z[j])+'_.txt')
-		Cb1 = Cb15ev[0]
-		Cb2 = Cb15ev[1]
-		Cb3 = Cb15ev[2]
-		Cb4 = Cb15ev[3]
-		
-		ccl00 = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/large_scale/ccl_z='+str(z[j])+'_.txt')
-		Lb1 = ccl00[0]
-		Lb2 = ccl00[1]
-		Lb3 = ccl00[2]
-		Lb4 = ccl00[3]
-		
-		ccl15 = np.loadtxt('/home/david/codes/Paco/data2/0.15eV/large_scale/ccl_z='+str(z[j])+'_.txt')
-		lb1 = ccl15[0]
-		lb2 = ccl15[1]
-		lb3 = ccl15[2]
-		lb4 = ccl15[3]
-		#~ print lb1, lb2, lb3, lb4
-		
-		
-		
-		bias_0ev = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/large_scale/bcc_z='+str(z[j])+'_.txt')
-		bias1_0ev = bias_0ev[:,1]
-		bias2_0ev = bias_0ev[:,2]
-		bias3_0ev = bias_0ev[:,3]
-		bias4_0ev = bias_0ev[:,4]
-
-		als = np.where(k < 0.5)[0]
-
-
-		dndM0bis = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/hmf/chmf_z='+str(z[j])+'.txt')
-		dndM0 = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/hmf/thmf_z='+str(z[j])+'.txt')
-		massf0 = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/hmf/hmf_z='+str(z[j])+'.txt')
-		hmf_temp0 = np.zeros((len(m_middle),10))
-		for i in xrange(0,10):
-			hmf_temp0[:,i]= massf0[:,i]
-		hmf0 = np.mean(hmf_temp0[:,0:11], axis=1)
-		
-		############################################### WITH HMF SIMU
-		#### 0.0 eV ################
-		bt = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/large_scale/tlb1_z='+str(z[j])+'.txt')
-		bst = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/large_scale/clb1_z='+str(z[j])+'.txt')
-		bsmt = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/large_scale/clb2_z='+str(z[j])+'.txt')
-		#------------------------------
-		bias_eff0_t1=np.sum(hmf0[bin1]*dm[bin1]*bt[bin1])/np.sum(dm[bin1]*hmf0[bin1])
-		bias_eff0_t2=np.sum(hmf0[bin2]*dm[bin2]*bt[bin2])/np.sum(dm[bin2]*hmf0[bin2])
-		bias_eff0_t3=np.sum(hmf0[bin3]*dm[bin3]*bt[bin3])/np.sum(dm[bin3]*hmf0[bin3])
-		bias_eff0_t4=np.sum(hmf0[bin4]*dm[bin4]*bt[bin4])/np.sum(dm[bin4]*hmf0[bin4])
-		#------------------------------
-		bias_eff0_st1=np.sum(hmf0[bin1]*dm[bin1]*bst[bin1])/np.sum(dm[bin1]*hmf0[bin1])
-		bias_eff0_st2=np.sum(hmf0[bin2]*dm[bin2]*bst[bin2])/np.sum(dm[bin2]*hmf0[bin2])
-		bias_eff0_st3=np.sum(hmf0[bin3]*dm[bin3]*bst[bin3])/np.sum(dm[bin3]*hmf0[bin3])
-		bias_eff0_st4=np.sum(hmf0[bin4]*dm[bin4]*bst[bin4])/np.sum(dm[bin4]*hmf0[bin4])
-		#------------------------------
-		bias_eff0_smt1=np.sum(hmf0[bin1]*dm[bin1]*bsmt[bin1])/np.sum(dm[bin1]*hmf0[bin1])
-		bias_eff0_smt2=np.sum(hmf0[bin2]*dm[bin2]*bsmt[bin2])/np.sum(dm[bin2]*hmf0[bin2])
-		bias_eff0_smt3=np.sum(hmf0[bin3]*dm[bin3]*bsmt[bin3])/np.sum(dm[bin3]*hmf0[bin3])
-		bias_eff0_smt4=np.sum(hmf0[bin4]*dm[bin4]*bsmt[bin4])/np.sum(dm[bin4]*hmf0[bin4])
-		#### 0.15 eV ################
-		bt = np.loadtxt('/home/david/codes/Paco/data2/0.15eV/large_scale/tlb1_z='+str(z[j])+'.txt')
-		bst = np.loadtxt('/home/david/codes/Paco/data2/0.15eV/large_scale/clb1_z='+str(z[j])+'.txt')
-		bsmt = np.loadtxt('/home/david/codes/Paco/data2/0.15eV/large_scale/clb2_z='+str(z[j])+'.txt')
-		#------------------------------
-		bias_eff_t1=np.sum(hmf[bin1]*dm[bin1]*bt[bin1])/np.sum(dm[bin1]*hmf[bin1])
-		bias_eff_t2=np.sum(hmf[bin2]*dm[bin2]*bt[bin2])/np.sum(dm[bin2]*hmf[bin2])
-		bias_eff_t3=np.sum(hmf[bin3]*dm[bin3]*bt[bin3])/np.sum(dm[bin3]*hmf[bin3])
-		bias_eff_t4=np.sum(hmf[bin4]*dm[bin4]*bt[bin4])/np.sum(dm[bin4]*hmf[bin4])
-		#------------------------------
-		bias_eff_st1=np.sum(hmf[bin1]*dm[bin1]*bst[bin1])/np.sum(dm[bin1]*hmf[bin1])
-		bias_eff_st2=np.sum(hmf[bin2]*dm[bin2]*bst[bin2])/np.sum(dm[bin2]*hmf[bin2])
-		bias_eff_st3=np.sum(hmf[bin3]*dm[bin3]*bst[bin3])/np.sum(dm[bin3]*hmf[bin3])
-		bias_eff_st4=np.sum(hmf[bin4]*dm[bin4]*bst[bin4])/np.sum(dm[bin4]*hmf[bin4])
-		#------------------------------
-		bias_eff_smt1=np.sum(hmf[bin1]*dm[bin1]*bsmt[bin1])/np.sum(dm[bin1]*hmf[bin1])
-		bias_eff_smt2=np.sum(hmf[bin2]*dm[bin2]*bsmt[bin2])/np.sum(dm[bin2]*hmf[bin2])
-		bias_eff_smt3=np.sum(hmf[bin3]*dm[bin3]*bsmt[bin3])/np.sum(dm[bin3]*hmf[bin3])
-		bias_eff_smt4=np.sum(hmf[bin4]*dm[bin4]*bsmt[bin4])/np.sum(dm[bin4]*hmf[bin4])
-		#~ ############################################### WITH HMF CROCCE
-		#~ #### 0.0 eV ################
-		bt = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/large_scale/tlb1_z='+str(z[j])+'.txt')
-		bst = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/large_scale/clb1_z='+str(z[j])+'.txt')
-		bsmt = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/large_scale/clb2_z='+str(z[j])+'.txt')
-		#------------------------------
-		Bias_eff0_t1=np.sum(dndM0bis[bin1]*dm[bin1]*bt[bin1])/np.sum(dm[bin1]*dndM0bis[bin1])
-		Bias_eff0_t2=np.sum(dndM0bis[bin2]*dm[bin2]*bt[bin2])/np.sum(dm[bin2]*dndM0bis[bin2])
-		Bias_eff0_t3=np.sum(dndM0bis[bin3]*dm[bin3]*bt[bin3])/np.sum(dm[bin3]*dndM0bis[bin3])
-		Bias_eff0_t4=np.sum(dndM0bis[bin4]*dm[bin4]*bt[bin4])/np.sum(dm[bin4]*dndM0bis[bin4])
-		#------------------------------
-		Bias_eff0_st1=np.sum(dndM0bis[bin1]*dm[bin1]*bst[bin1])/np.sum(dm[bin1]*dndM0bis[bin1])
-		Bias_eff0_st2=np.sum(dndM0bis[bin2]*dm[bin2]*bst[bin2])/np.sum(dm[bin2]*dndM0bis[bin2])
-		Bias_eff0_st3=np.sum(dndM0bis[bin3]*dm[bin3]*bst[bin3])/np.sum(dm[bin3]*dndM0bis[bin3])
-		Bias_eff0_st4=np.sum(dndM0bis[bin4]*dm[bin4]*bst[bin4])/np.sum(dm[bin4]*dndM0bis[bin4])
-		#------------------------------
-		Bias_eff0_smt1=np.sum(dndM0bis[bin1]*dm[bin1]*bsmt[bin1])/np.sum(dm[bin1]*dndM0bis[bin1])
-		Bias_eff0_smt2=np.sum(dndM0bis[bin2]*dm[bin2]*bsmt[bin2])/np.sum(dm[bin2]*dndM0bis[bin2])
-		Bias_eff0_smt3=np.sum(dndM0bis[bin3]*dm[bin3]*bsmt[bin3])/np.sum(dm[bin3]*dndM0bis[bin3])
-		Bias_eff0_smt4=np.sum(dndM0bis[bin4]*dm[bin4]*bsmt[bin4])/np.sum(dm[bin4]*dndM0bis[bin4])
-		
-		#### 0.15 eV ################
-		bt = np.loadtxt('/home/david/codes/Paco/data2/0.15eV/large_scale/tlb1_z='+str(z[j])+'.txt')
-		bst = np.loadtxt('/home/david/codes/Paco/data2/0.15eV/large_scale/clb1_z='+str(z[j])+'.txt')
-		bsmt = np.loadtxt('/home/david/codes/Paco/data2/0.15eV/large_scale/clb2_z='+str(z[j])+'.txt')
-		#------------------------------
-		Bias_eff_t1=np.sum(dndMbis[bin1]*dm[bin1]*bt[bin1])/np.sum(dm[bin1]*dndMbis[bin1])
-		Bias_eff_t2=np.sum(dndMbis[bin2]*dm[bin2]*bt[bin2])/np.sum(dm[bin2]*dndMbis[bin2])
-		Bias_eff_t3=np.sum(dndMbis[bin3]*dm[bin3]*bt[bin3])/np.sum(dm[bin3]*dndMbis[bin3])
-		Bias_eff_t4=np.sum(dndMbis[bin4]*dm[bin4]*bt[bin4])/np.sum(dm[bin4]*dndMbis[bin4])
-		#------------------------------
-		Bias_eff_st1=np.sum(dndMbis[bin1]*dm[bin1]*bst[bin1])/np.sum(dm[bin1]*dndMbis[bin1])
-		Bias_eff_st2=np.sum(dndMbis[bin2]*dm[bin2]*bst[bin2])/np.sum(dm[bin2]*dndMbis[bin2])
-		Bias_eff_st3=np.sum(dndMbis[bin3]*dm[bin3]*bst[bin3])/np.sum(dm[bin3]*dndMbis[bin3])
-		Bias_eff_st4=np.sum(dndMbis[bin4]*dm[bin4]*bst[bin4])/np.sum(dm[bin4]*dndMbis[bin4])
-		#------------------------------
-		Bias_eff_smt1=np.sum(dndMbis[bin1]*dm[bin1]*bsmt[bin1])/np.sum(dm[bin1]*dndMbis[bin1])
-		Bias_eff_smt2=np.sum(dndMbis[bin2]*dm[bin2]*bsmt[bin2])/np.sum(dm[bin2]*dndMbis[bin2])
-		Bias_eff_smt3=np.sum(dndMbis[bin3]*dm[bin3]*bsmt[bin3])/np.sum(dm[bin3]*dndMbis[bin3])
-		Bias_eff_smt4=np.sum(dndMbis[bin4]*dm[bin4]*bsmt[bin4])/np.sum(dm[bin4]*dndMbis[bin4])
-		
-		
-		#~ with open('/home/david/codes/montepython_public/BE_HaPPy/coefficients/0.0eV/large_scale/LS_z='+str(z[j])+'_.txt', 'w+') as fid_file:
-			#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (Bias_eff0_t1,Bias_eff0_t2, Bias_eff0_t3, Bias_eff0_t4))
-		#~ fid_file.close()
-		#~ with open('/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+str(Mnu)+'eV/large_scale/LS_z='+str(z[j])+'_.txt', 'w+') as fid_file:
-			#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (Bias_eff_t1,Bias_eff_t2, Bias_eff_t3, Bias_eff_t4))
-		#~ fid_file.close()
+	
 		
 		
 		
@@ -1229,7 +390,9 @@ for j in xrange(0,len(z)):
 		elif case == 3:
 			kstop = kstop3[ind]
 			
-			
+		#~ kstoplim = [0.5,0.5,0.5,0.4]
+		#~ kstop = kstoplim[ind]
+		print kstop
 		
 		
 		# put identation to the rest to loop over kstop
@@ -1245,6 +408,30 @@ for j in xrange(0,len(z)):
 		#klin = ks
 		
 
+
+		# compute the linear ps on the simulation bins
+		#~ with open('/home/david/codes/Paco/data2/0.0eV/exp/file1.txt', 'w+') as fid_file:
+			#~ for index_k in xrange(len(klin)):
+				#~ fid_file.write('%.8g %.8g\n' % ( klin[index_k], Plin[index_k]))
+		#~ fid_file.close()
+		#~ with open('/home/david/codes/Paco/data2/0.0eV/exp/file2.txt', 'w+') as fid_file:
+			#~ for index_k in xrange(len(kclass)):
+				#~ fid_file.write('%.8g %.8g\n' % ( kclass[index_k], Tm[index_k]))
+		#~ fid_file.close()
+		#~ with open('/home/david/codes/Paco/data2/0.0eV/exp/file3.txt', 'w+') as fid_file:
+			#~ for index_k in xrange(len(kclass)):
+				#~ fid_file.write('%.8g %.8g\n' % ( kclass[index_k], Tcb[index_k]))
+		#~ fid_file.close()
+		#~ ###
+		#~ #exp2.expected(j)
+		#~ ###
+			
+		pte = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/exp/expected1-'+str(z[j])+'.txt')
+		Plin = pte[:,1]
+		pte = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/exp/expected2-'+str(z[j])+'.txt')
+		Tm = pte[:,1]
+		pte = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/exp/expected3-'+str(z[j])+'.txt')
+		Tcb = pte[:,1]
 		#~ # compute the linear ps on the simulation bins
 		#~ with open('/home/david/codes/Paco/data2/0.15eV/exp/file1.txt', 'w+') as fid_file:
 			#~ for index_k in xrange(len(klin)):
