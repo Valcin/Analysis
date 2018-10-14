@@ -431,3 +431,204 @@ if mv == 0.15:
 	#~ with open('/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+str(Mnu)+'eV/large_scale/LS_z='+str(z[j])+'_.txt', 'w+') as fid_file:
 		#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (Bias_eff_t1,Bias_eff_t2, Bias_eff_t3, Bias_eff_t4))
 	#~ fid_file.close()
+
+
+#########################################################################################################################################
+#########################################################################################################################################
+#########################################################################################################################################
+	#### plot all different bias test
+	#~ if j == z[0]:
+		#~ fig2 = plt.figure()
+	#~ J = j + 1
+	
+	#~ if len(z) == 1:
+		#~ ax2 = fig2.add_subplot(1, len(z), J)
+	#~ elif len(z) == 2:
+		#~ ax2 = fig2.add_subplot(1, 2, J)
+	#~ elif len(z) > 2:
+		#~ ax2 = fig2.add_subplot(2, 2, J)
+	############################################################
+	#~ ax2.scatter(m_middle, hmf*m_middle**2, marker='.', color='k', label='Sim')
+	#~ h1, = ax2.plot(m_middle, dndM*m_middle**2, color='r')
+	#~ h2, = ax2.plot(m_middle, dndM2*m_middle**2, color='r', linestyle=':')
+	#~ h3, = ax2.plot(m_middle, dndMbis*m_middle**2, color='b')
+	#~ h4, = ax2.plot(m_middle, dndM2bis*m_middle**2, color='b', linestyle=':')
+	#~ ax2.set_yscale('log')
+	#~ ax2.set_xlim(1e13, 4e15)
+	#~ ax2.set_ylim(1e7, 1e10)
+	#~ plt.figlegend( (h1,h3), (r'Tinker w/ $P_{cc}$',r'Crocce w/ $P_{cc}$'), \
+	###################################################################
+	####### comparison bias and != models #############################
+	#~ M1, = ax2.plot(k, bias1, label='$b_{cc}$')
+	#~ M2, = ax2.plot(k, bias2)
+	#~ M3, = ax2.plot(k, bias3)
+	#~ M4, = ax2.plot(k, bias4)
+	#-----------------------------------------------
+	#~ M1, = ax2.plot(k, bias1_0ev, linestyle = '--', color='C0', label=r'$b_{cc , M_{\nu} = 0.0eV} $')
+	#~ M2, = ax2.plot(k, bias2_0ev, linestyle = '--', color='C1')
+	#~ M3, = ax2.plot(k, bias3_0ev, linestyle = '--', color='C2')
+	#~ M4, = ax2.plot(k, bias4_0ev, linestyle = '--', color='C3')
+	#~ #-----------------------------------------
+	#~ st1 =ax2.axhline(Tb1, color='C0', linestyle=':')
+	#~ ax2.axhline(Tb2, color='C1', linestyle=':')
+	#~ ax2.axhline(Tb3, color='C2', linestyle=':')
+	#~ ax2.axhline(Tb4, color='C3', linestyle=':')
+	#---------------------------------------------------
+	#~ st2 =ax2.axhline(lb1, color='C0', linestyle=':')
+	#~ ax2.axhline(lb2, color='C1', linestyle=':')
+	#~ ax2.axhline(lb3, color='C2', linestyle=':')
+	#~ ax2.axhline(lb4, color='C3', linestyle=':')
+	#---------------------------------------------------
+	#~ st2 =ax2.axhline(bias_eff0_t1, color='C0', linestyle=':')
+	#~ ax2.axhline(bias_eff0_t2, color='C1', linestyle=':')
+	#~ ax2.axhline(bias_eff0_t3, color='C2', linestyle=':')
+	#~ ax2.axhline(bias_eff0_t4, color='C3', linestyle=':')
+	#---------------------------------------------------
+	#~ st3 =ax2.axhline(bias_eff0_st1, color='C0', linestyle='--')
+	#~ ax2.axhline(bias_eff0_st2, color='C1', linestyle='--')
+	#~ ax2.axhline(bias_eff0_st3, color='C2', linestyle='--')
+	#~ ax2.axhline(bias_eff0_st4, color='C3', linestyle='--')
+	#---------------------------------------------------
+	#~ st4 =ax2.axhline(bias_eff0_smt1, color='C0', linestyle='-.')
+	#~ ax2.axhline(bias_eff0_smt2, color='C1', linestyle='-.')
+	#~ ax2.axhline(bias_eff0_smt3, color='C2', linestyle='-.')
+	#~ ax2.axhline(bias_eff0_smt4, color='C3', linestyle='-.')
+	#---------------------------------------------------
+	#~ st3 =ax2.axhline(lb1/rsc1, color='C0', linestyle=':')
+	#~ ax2.axhline(lb2/rsc2, color='C1', linestyle=':')
+	#~ ax2.axhline(lb3/rsc3, color='C2', linestyle=':')
+	#~ ax2.axhline(lb4/rsc4, color='C3', linestyle=':')
+	#-----------------------------------------------------
+	#~ ax2.axhline(Cb1, color='C0', linestyle=':', label='Simu + ST')
+	#~ ax2.axhline(Cb2, color='C1', linestyle=':')
+	#~ ax2.axhline(Cb3, color='C2', linestyle=':')
+	#~ ax2.axhline(Cb4, color='C3', linestyle=':')
+	#-----------------------------------------------
+	#~ ax2.axvline( kk1, color='C0', linestyle=':', label='shot noise = 80% of P(k)')
+	#~ ax2.axvline( kk2, color='C1', linestyle=':')
+	#~ ax2.axvline( kk3, color='C2', linestyle=':')
+	#~ ax2.axvline( kk4, color='C3', linestyle=':')
+	#~ ax2.fill_between(k,bias1-errb1, bias1+errb1, alpha=0.6)
+	#~ ax2.fill_between(k,bias2-errb2, bias2+errb2, alpha=0.6)
+	#~ ax2.fill_between(k,bias3-errb3, bias3+errb3, alpha=0.6)
+	#~ ax2.fill_between(k,bias4-errb4, bias4+errb4, alpha=0.6)
+	#~ ax2.set_ylim(bias1[0]*0.8,bias4[0]*1.2)
+	#~ ax2.set_xlim(8e-3,1)
+	#~ plt.figlegend( (M1,M2,M3,M4, st2,st3), ('$M_{1}$','$M_{2}$','$M_{3}$','$M_{4}$', 'Sim hmf + Tinker bias', 'rescaled effective bias'), \
+	#~ plt.figlegend( (M1,M2,M3,M4, st2,st3, st4), ('$M_{1}$','$M_{2}$','$M_{3}$','$M_{4}$', 'Tinker', 'ST', 'SMT'), \
+	#~ plt.figlegend( (M1,M2,M3,M4), ('$M_{1}$','$M_{2}$','$M_{3}$','$M_{4}$'), \
+	################################################################
+	#~ ax2.set_ylim(0.8,1.2)
+	#~ ax2.set_xlim(8e-3,0.1)
+	#~ r1,  =ax2.plot(k,rbefft)
+	#~ r2,  =ax2.plot(k,rbeffst)
+	#~ r3,  =ax2.plot(k,rbeffsmt)
+	#~ ax2.fill_between(k,rbefft - errbefft,rbefft + errbefft, alpha=0.6)
+	#~ ax2.fill_between(k,rbeffst - errbeffst,rbeffst + errbeffst, alpha=0.6)
+	#~ ax2.fill_between(k,rbeffsmt - errbeffsmt,rbeffsmt + errbeffsmt, alpha=0.6)
+	#~ ax2.axhline(1, color='k')
+	#~ plt.figlegend( (r1,r2,r3), ('Tinker','ST','SMT'), \
+	#####################################################################
+	####### comparison bias and != models #############################
+	#~ M1, = ax2.plot(k, bias1,label=r'$b_{sim}$')
+	#~ M2, = ax2.plot(k, bias2)
+	#~ M3, = ax2.plot(k, bias3)
+	#~ M4, = ax2.plot(k, bias4)
+	#~ #-----------------------------------------------
+	#~ M1, = ax2.plot(k, bias1_0ev, linestyle = '--', color='C0', label=r'$b_{cc , M_{\nu} = 0.0eV} $')
+	#~ M2, = ax2.plot(k, bias2_0ev, linestyle = '--', color='C1')
+	#~ M3, = ax2.plot(k, bias3_0ev, linestyle = '--', color='C2')
+	#~ M4, = ax2.plot(k, bias4_0ev, linestyle = '--', color='C3')
+	#~ #-------------------------------------------------------------
+	#~ bres, = ax2.plot(k, bias1_0ev*bias_eff_t1/bias_eff0_t1, linestyle = '--', color='C0')
+	#~ ax2.plot(k, bias2_0ev*bias_eff_t2/bias_eff0_t2, linestyle = '--', color='C1')
+	#~ ax2.plot(k, bias3_0ev*bias_eff_t3/bias_eff0_t3, linestyle = '--', color='C2')
+	#~ ax2.plot(k, bias4_0ev*bias_eff_t4/bias_eff0_t4, linestyle = '--', color='C3')
+	#-------------------------------------------------------------
+	#~ ax2.plot(k, bias1_0ev*Bias_eff_t1/Bias_eff0_t1, linestyle = ':', color='C0', label=r'$b_{fiducial}$')
+	#~ ax2.plot(k, bias2_0ev*Bias_eff_t2/Bias_eff0_t2, linestyle = ':', color='C1')
+	#~ ax2.plot(k, bias3_0ev*Bias_eff_t3/Bias_eff0_t3, linestyle = ':', color='C2')
+	#~ ax2.plot(k, bias4_0ev*Bias_eff_t4/Bias_eff0_t4, linestyle = ':', color='C3')
+	#~ #--------------------------------------------------------
+	#~ ax2.fill_between(k,bias1-errb1, bias1+errb1, alpha=0.6)
+	#~ ax2.fill_between(k,bias2-errb2, bias2+errb2, alpha=0.6)
+	#~ ax2.fill_between(k,bias3-errb3, bias3+errb3, alpha=0.6)
+	#~ ax2.fill_between(k,bias4-errb4, bias4+errb4, alpha=0.6)
+	#~ #---------------------------------------------------------
+	#~ ax2.set_ylim(bias1[0]*0.8,bias4[0]*1.4)
+	#~ ax2.set_xlim(8e-3,1)
+	#~ plt.figlegend( (M1,M2,M3,M4, st2,st3), ('$M_{1}$','$M_{2}$','$M_{3}$','$M_{4}$', 'Sim hmf + Tinker bias', 'rescaled effective bias'), \
+	#~ plt.figlegend( (M1,M2,M3,M4), ('$M_{1}$','$M_{2}$','$M_{3}$','$M_{4}$'), \
+	####################################################################
+	#~ ax2.scatter(k,bias1/bias1_0ev, color='b', marker='.')
+	#~ ax2.scatter(k,bias2/bias2_0ev, color='r', marker='.')
+	#~ ax2.scatter(k,bias3/bias3_0ev, color='g', marker='.')
+	#~ ax2.scatter(k,bias4/bias4_0ev, color='c', marker='.')
+	#~ ax2.plot(k,bias1/bias1_0ev, color='b', linestyle='--')
+	#~ ax2.plot(k,bias2/bias2_0ev, color='r', linestyle='--')
+	#~ ax2.plot(k,bias3/bias3_0ev, color='g', linestyle='--')
+	#~ ax2.plot(k,bias4/bias4_0ev, color='c', linestyle='--')
+	#~ #-------------------------------------
+	#~ ax2.axhline(bias_eff_t1/bias_eff0_t1, color='b')
+	#~ ax2.axhline(bias_eff_t2/bias_eff0_t2, color='r')
+	#~ ax2.axhline(bias_eff_t3/bias_eff0_t3, color='g')
+	#~ ax2.axhline(bias_eff_t4/bias_eff0_t4, color='c')
+	#~ #--------------------------------------
+	#~ ax2.axhline(Bias_eff_t1/Bias_eff0_t1, color='b', linestyle=':')
+	#~ ax2.axhline(Bias_eff_t2/Bias_eff0_t2, color='r', linestyle=':')
+	#~ ax2.axhline(Bias_eff_t3/Bias_eff0_t3, color='g', linestyle=':')
+	#~ ax2.axhline(Bias_eff_t4/Bias_eff0_t4, color='c', linestyle=':')
+	#~ #-------------------------------------
+	#~ ax2.axhline(bias_eff_st1/bias_eff0_st1, color='b', linestyle=':')
+	#~ ax2.axhline(bias_eff_st2/bias_eff0_st2, color='r', linestyle=':')
+	#~ ax2.axhline(bias_eff_st3/bias_eff0_st3, color='g', linestyle=':')
+	#~ ax2.axhline(bias_eff_st4/bias_eff0_st4, color='c', linestyle=':')
+	#-------------------------------------
+	#~ ax2.axhline(bias_eff_smt1/bias_eff0_smt1, color='b', linestyle='--')
+	#~ ax2.axhline(bias_eff_smt2/bias_eff0_smt2, color='r', linestyle='--')
+	#~ ax2.axhline(bias_eff_smt3/bias_eff0_smt3, color='g', linestyle='--')
+	#~ ax2.axhline(bias_eff_smt4/bias_eff0_smt4, color='c', linestyle='--')
+	#---------------------------------------
+	#~ ax2.set_ylim(1.02,1.08)
+	#~ ax2.set_xlim(0.008,0.1)
+	
+	#~ plt.figlegend( (bres, bres2,M2,M3,M4), ('Tinker bias + sim HMF', 'Tinker bias + Tinker HMF','$M_{2}$','$M_{3}$','$M_{4}$'), \
+	#######################################
+	#~ loc = 'upper center', ncol=5, labelspacing=0., title =r' M$\nu$ = '+str(Mnu)+', case II ')
+	#~ ax2.legend(loc = 'upper left', title='z = '+str(z[j]), fancybox=True, ncol=3, fontsize=9)
+	#~ plt.subplots_adjust(left=0.1, wspace=0.05, hspace=0.1)
+	#~ ax2.set_xscale('log')
+	#----------------------------
+	#~ if j == 0 :
+		#~ ax2.tick_params(bottom='off', labelbottom='off')
+		#~ ax2.set_ylabel(r'$b_{eff}$ / $b_{sim}$')
+		#~ ax2.set_ylabel(r'$b_{cc}$')
+		#~ ax2.set_ylabel(r'$M^2 n(M)$')
+		#~ #ax2.grid()
+	#~ if j == 1 :
+		#~ ax2.tick_params(bottom='off', labelbottom='off', labelright=True, right= True, labelleft='off', left='off')
+		#~ ax2.set_ylabel(r'$b_{eff}$ / $b_{sim}$')
+		#~ ax2.set_ylabel(r'$b_{cc}$')
+		#~ ax2.set_ylabel(r'$M^2 n(M)$')
+		#~ ax2.yaxis.set_label_position("right")
+		#~ #ax2.grid()
+	#~ if j == 2 :
+		#ax.tick_params(labelleft=True)
+		#~ ax2.set_ylabel(r'$b_{eff}$ / $b_{sim}$')
+		#~ ax2.set_ylabel(r'$b_{cc}$')
+		#~ ax2.set_ylabel(r'$M^2 n(M)$')
+		#~ ax2.set_xlabel('k [h/Mpc]')
+		#~ ax2.set_xlabel(r'M [$h^{-1} M_{\odot}$]')
+		#~ #ax2.grid()
+	#~ if j == 3 :
+		#~ ax2.tick_params(labelright=True, right= True, labelleft='off', left='off')
+		#~ ax2.set_xlabel('k [h/Mpc]')
+		#~ ax2.set_xlabel(r'M [$h^{-1} M_{\odot}$]')
+		#~ ax2.set_ylabel(r'$b_{eff}$ / $b_{sim}$')
+		#~ ax2.set_ylabel(r'$b_{cc}$')
+		#~ ax2.set_ylabel(r'$M^2 n(M)$')
+		#~ ax2.yaxis.set_label_position("right")
+		#~ #ax2.grid()
+	#~ #ax2.set_xlim(8e-3,0.05)
+	#~ if j == len(z) -1:
+		#~ plt.show()

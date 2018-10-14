@@ -42,8 +42,8 @@ def coeffit_pl2 (kstop,lb1, errlb1, pop, k ,b ,errb):
 	
 
 	nll = lambda *args: -lnlike(*args)
-	#~ result = op.minimize(nll, [pop],  method='Nelder-Mead', args=(k, b ,errb ),  options={'maxfev': 2000} )
-	result = op.minimize(nll, [pop], args=(k, b ,errb ))
+	result = op.minimize(nll, [pop],  method='Nelder-Mead', args=(k, b ,errb ),  options={'maxfev': 2000} )
+	#~ result = op.minimize(nll, [pop], args=(k, b ,errb ))
 	b1_ml, b2_ml, b4_ml = result["x"]
 	print pop
 	print result
@@ -120,10 +120,10 @@ def coeffit_pl (kstop,lb1, errlb1, pop, k ,b ,errb):
 	
 
 	nll = lambda *args: -lnlike(*args)
-	#~ result = op.minimize(nll, [pop],  method='Nelder-Mead', args=(k, b ,errb ),  options={'maxfev': 2000} )
-	result = op.minimize(nll, [pop], args=(k, b ,errb ))
+	result = op.minimize(nll, [pop],  method='Nelder-Mead', args=(k, b ,errb ),  options={'maxfev': 2000} )
+	#~ result = op.minimize(nll, [pop], args=(k, b ,errb ))
 	b1_ml, b2_ml, b3_ml, b4_ml = result["x"]
-	#~ print pop
+	print pop
 	print result
 	#~ max_l = lnlike(result["x"], k, b, errb )
 	#~ AIC = 2*4. - 2 * max_l
@@ -204,6 +204,8 @@ def coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb1, errlb1, pop, k ,b ,errb):
 	#~ result = op.minimize(nll, [pop],  method='Nelder-Mead', args=(k, b ,errb ),  options={'maxfev': 2000} )
 	result = op.minimize(nll, [pop], args=(k, b ,errb ))
 	b1_ml, b2_ml, bs_ml = result["x"]
+	print pop
+	print(result)
 	
 	#~ max_l = lnlike(result["x"], k, b, errb )
 	#~ AIC = 2*3. - 2 * max_l
@@ -371,7 +373,8 @@ def coeffit_exp3(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, pop, k ,b ,errb):
 	#~ result = op.minimize(nll, [pop],  method='Nelder-Mead', args=(k, b ,errb ),  options={'maxfev': 2000} )
 	result = op.minimize(nll, [pop], args=(k, b ,errb ))
 	b1_ml, b2_ml, bs_ml = result["x"]
-	
+	print pop
+	print result
 	
 	#~ max_l = lnlike(result["x"], k, b, errb )
 	#~ AIC = 2*4. - 2 * max_l
