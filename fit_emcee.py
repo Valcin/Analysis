@@ -17,7 +17,8 @@ from scipy.special import erf
 ########################################################################
 
 def coeffit_pl2 (kstop,lb1, errlb1, pop, k ,b ,errb):
-	lim = np.where(k < kstop)[0]
+	#~ lim = np.where(k < kstop)[0]
+	lim = np.where((k < kstop)&(k > 1e-2))[0]
 	def lnlike(theta, x, y, yerr):
 		b1, b2, b4 = theta
 		model = b1 + b2*x[lim]**2 + b4*x[lim]**4 
@@ -95,7 +96,8 @@ def coeffit_pl2 (kstop,lb1, errlb1, pop, k ,b ,errb):
 ########################################################################
 
 def coeffit_pl (kstop,lb1, errlb1, pop, k ,b ,errb):
-	lim = np.where(k < kstop)[0]
+	#~ lim = np.where(k < kstop)[0]
+	lim = np.where((k < kstop)&(k > 1e-2))[0]
 	def lnlike(theta, x, y, yerr):
 		b1, b2, b3, b4 = theta
 		model = b1 + b2*x[lim]**2 + b3*x[lim]**3 + b4*x[lim]**4 
@@ -177,7 +179,8 @@ def coeffit_pl (kstop,lb1, errlb1, pop, k ,b ,errb):
 ######### bias expansion 2nd order
 ########################################################################
 def coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb1, errlb1, pop, k ,b ,errb):
-	lim = np.where(k < kstop)[0]
+	#~ lim = np.where(k < kstop)[0]
+	lim = np.where((k < kstop)&(k > 1e-2))[0]
 	def lnlike(theta, x, y, yerr):
 		b1, b2, bs = theta
 		model = np.sqrt((b1**2 * Pmm[lim]+ b1*b2*A[lim] + 1/4.*b2**2*B[lim] + b1*bs*C[lim] + 1/2.*b2*bs*D[lim] + \
@@ -201,8 +204,8 @@ def coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb1, errlb1, pop, k ,b ,errb):
 
 
 	nll = lambda *args: -lnlike(*args)
-	#~ result = op.minimize(nll, [pop],  method='Nelder-Mead', args=(k, b ,errb ),  options={'maxfev': 2000} )
-	result = op.minimize(nll, [pop], args=(k, b ,errb ))
+	result = op.minimize(nll, [pop],  method='Nelder-Mead', args=(k, b ,errb ),  options={'maxfev': 2000} )
+	#~ result = op.minimize(nll, [pop], args=(k, b ,errb ),  options={'maxiter': 2000} )
 	b1_ml, b2_ml, bs_ml = result["x"]
 	print pop
 	print(result)
@@ -255,7 +258,10 @@ def coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb1, errlb1, pop, k ,b ,errb):
 ########################################################################
 def coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, pop, k ,b ,errb):
 	
-	lim = np.where(k < kstop)[0]
+	#~ lim = np.where(k < kstop)[0]
+	lim = np.where((k < kstop)&(k > 1e-2))[0]
+	#~ print k[lim]
+	#~ kill
 	#~ print lim
 	def lnlike(theta, x, y, yerr):
 		b1, b2, bs, b3nl = theta
@@ -267,9 +273,7 @@ def coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, pop, k ,b ,errb):
 	def lnprior(theta):
 		b1, b2, bs, b3nl = theta
 		if lb1 - 3*errlb1 < b1 < lb1 + 3*errlb1 :
-		#~ if lb1 - errlb1 < b1 < lb1 + errlb1 :
 			return 0.0
-		#~ return 0.0
 		return -np.inf
 	
 	def lnprob(theta, x, y, yerr):
@@ -283,8 +287,8 @@ def coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, pop, k ,b ,errb):
 	
 
 	nll = lambda *args: -lnlike(*args)
-	#~ result = op.minimize(nll, [pop],  method='Nelder-Mead', args=(k, b ,errb ),  options={'maxfev': 2000} )
-	result = op.minimize(nll, [pop], args=(k, b ,errb ))
+	result = op.minimize(nll, [pop],  method='Nelder-Mead', args=(k, b ,errb ),  options={'maxfev': 2000} )
+	#~ result = op.minimize(nll, [pop],  method='BFGS', args=(k, b ,errb ))
 	b1_ml, b2_ml, bs_ml, b3nl = result["x"]
 	print pop
 	print(result)
@@ -295,10 +299,10 @@ def coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, pop, k ,b ,errb):
 	#~ print 'AIC = '+str(AIC)
 	
 	ndim, nwalkers = len(pop), 300
-	pos = [result["x"] + 1e-4*np.random.randn(ndim) for i in range(nwalkers)]
+	pos = [result["x"] + 1e-3*np.random.randn(ndim) for i in range(nwalkers)]
 	
 
-	sampler = emcee.EnsembleSampler(nwalkers, ndim, lnprob, args=(k, b, errb), a= 6)
+	sampler = emcee.EnsembleSampler(nwalkers, ndim, lnprob, args=(k, b, errb))
 	sampler.run_mcmc(pos, 1000)
 	
 	samples = sampler.chain[:, 200:, :].reshape((-1, ndim))
@@ -341,8 +345,8 @@ def coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, pop, k ,b ,errb):
 ########################################################################
 def coeffit_exp3(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, pop, k ,b ,errb):
 	
-	lim = np.where(k < kstop)[0]
-	#~ print lim
+	#~ lim = np.where(k < kstop)[0]
+	lim = np.where((k < kstop)&(k > 1e-2))[0]
 	def lnlike(theta, x, y, yerr):
 		b1, b2, bs = theta
 		b3nl = 32/315.*(b1-1)
@@ -439,12 +443,12 @@ def coeffit_Kaiser(j, fcc, kstop, Pmm, lb1, k ,b ,errb):
 		#~ coeffA = math.sqrt(math.pi)/2. * erf(kappa)/kappa
 		#~ coeffB = 3./2./kappa**2*(coeffA - np.exp(-kappa**2))
 		#~ coeffC = 5./2./kappa**2*(coeffB - np.exp(-kappa**2))
-		kappa = x[lim]*sigma*fcc[ind]*Dz[ind]
+		kappa = x[lim]*sigma*fcc*Dz[ind]
 		coeffA = np.arctan(kappa/math.sqrt(2))/(math.sqrt(2)*kappa) + 1/(2+kappa**2)
 		coeffB = 6/kappa**2*(coeffA - 2/(2+kappa**2))
 		coeffC = -10/kappa**2*(coeffB - 2/(2+kappa**2))
-		model = Pmm[lim]*(lb1[lim]**2*coeffA +  2/3.*lb1[lim]*f[ind]*coeffB + 1/5.*f[ind]**2*coeffC)
-		#~ model = Pmm[lim]*(lb1**2*coeffA +  2/3.*lb1*f[ind]*coeffB + 1/5.*f[ind]**2)
+		model = Pmm[lim]*(lb1[lim]**2*coeffA +  2/3.*lb1[lim]*fcc*coeffB + 1/5.*fcc**2*coeffC)
+		#~ model = Pmm[lim]*(lb1**2*coeffA +  2/3.*lb1*fcc*coeffB + 1/5.*fcc**2)
 		inv_sigma2 = 1.0/(yerr[lim]**2)
 		return -0.5*(np.sum((y[lim]-model)**2*inv_sigma2 - np.log(inv_sigma2)))
 	
@@ -527,7 +531,7 @@ def coeffit_Scocci(j, fcc, kstop,Pmod_dd, Pmod_dt, Pmod_tt, lb1, k ,b ,errb):
 		coeffA = np.arctan(kappa/math.sqrt(2))/(math.sqrt(2)*kappa) + 1/(2+kappa**2)
 		coeffB = 6/kappa**2*(coeffA - 2/(2+kappa**2))
 		coeffC = -10/kappa**2*(coeffB - 2/(2+kappa**2))
-		model = lb1[lim]**2*Pmod_dd[lim]*coeffA + 2/3.*lb1[lim]*f[ind]*Pmod_dt[lim]*coeffB + 1/5.*f[ind]**2*Pmod_tt[lim]*coeffC
+		model = lb1[lim]**2*Pmod_dd[lim]*coeffA + 2/3.*lb1[lim]*fcc*Pmod_dt[lim]*coeffB + 1/5.*fcc**2*Pmod_tt[lim]*coeffC
 		inv_sigma2 = 1.0/(yerr[lim]**2)
 		return -0.5*(np.sum((y[lim]-model)**2*inv_sigma2 - np.log(inv_sigma2)))
 	
@@ -615,7 +619,7 @@ def coeffit_TNS(j, fcc, kstop,Pmod_dd, Pmod_dt, Pmod_tt, lb1, k ,b ,errb,AB2,AB4
 		coeffC = -10/kappa**2*(coeffB - 2/(2+kappa**2))
 		coeffD = -2/3./kappa**2*(coeffC - 2/(2+kappa**2))
 		coeffE = -4/10./kappa**2*(7.*coeffD - 2/(2+kappa**2))
-		model = lb1[lim]**2*Pmod_dd[lim]*coeffA + 2/3.*lb1[lim]*f[ind]*Pmod_dt[lim]*coeffB + 1/5.*f[ind]**2*Pmod_tt[lim]*coeffC \
+		model = lb1[lim]**2*Pmod_dd[lim]*coeffA + 2/3.*lb1[lim]*fcc*Pmod_dt[lim]*coeffB + 1/5.*fcc**2*Pmod_tt[lim]*coeffC \
 		+ (1/3.*AB2[lim]*coeffB+ 1/5.*AB4[lim]*coeffC+ 1/7.*AB6[lim]*coeffD+ 1/9.*AB8[lim]*coeffE)
 		inv_sigma2 = 1.0/(yerr[lim]**2)
 		return -0.5*(np.sum((y[lim]-model)**2*inv_sigma2 - np.log(inv_sigma2)))
@@ -708,11 +712,11 @@ def coeffit_eTNS(j, fcc, kstop, b1, b2, bs, b3nl, Pmod_dd, Pmod_dt, Pmod_tt, A, 
 		coeffD = -2/3./kappa**2*(coeffC - 2/(2+kappa**2))
 		coeffE = -4/10./kappa**2*(7.*coeffD - 2/(2+kappa**2))
 		if sca:
-			model = PsptD1z*coeffA*sca**2 + 2/3.*f[ind]*PsptT*coeffB*sca + 1/5.*f[ind]**2*Pmod_tt[lim]*coeffC \
+			model = PsptD1z*coeffA*sca**2 + 2/3.*fcc*PsptT*coeffB*sca + 1/5.*fcc**2*Pmod_tt[lim]*coeffC \
 			+ (1/3.*AB2[lim]*coeffB+ 1/5.*AB4[lim]*coeffC+ 1/7.*AB6[lim]*coeffD+ 1/9.*AB8[lim]*coeffE)
 			inv_sigma2 = 1.0/(yerr[lim]**2)
 		else:
-			model = PsptD1z*coeffA + 2/3.*f[ind]*PsptT*coeffB + 1/5.*f[ind]**2*Pmod_tt[lim]*coeffC \
+			model = PsptD1z*coeffA + 2/3.*fcc*PsptT*coeffB + 1/5.*fcc**2*Pmod_tt[lim]*coeffC \
 			+ (1/3.*AB2[lim]*coeffB+ 1/5.*AB4[lim]*coeffC+ 1/7.*AB6[lim]*coeffD+ 1/9.*AB8[lim]*coeffE)
 			inv_sigma2 = 1.0/(yerr[lim]**2)
 		return -0.5*(np.sum((y[lim]-model)**2*inv_sigma2 - np.log(inv_sigma2)))

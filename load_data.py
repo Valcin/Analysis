@@ -146,30 +146,30 @@ def ld_data(mv, z, j):
 
 		#~ ### compute where shot noise is 80% of the ps
 		
-		#~ kk1t = np.zeros(10)
-		#~ kk2t = np.zeros(10)
-		#~ kk3t = np.zeros(10)
-		#~ kk4t = np.zeros(10)
+		kk1t = np.zeros(10)
+		kk2t = np.zeros(10)
+		kk3t = np.zeros(10)
+		kk4t = np.zeros(10)
 		
-		#~ for i in xrange(0,10):
-			#~ dede1 = np.where(0.8*Phh1[:,i] < Pshot1[i])[0]
-			#~ dede2 = np.where(0.8*Phh2[:,i] < Pshot2[i])[0]
-			#~ dede3 = np.where(0.8*Phh3[:,i] < Pshot3[i])[0]
-			#~ dede4 = np.where(0.8*Phh4[:,i] < Pshot4[i])[0]
-			#~ dedemin1 = np.min(dede1)
-			#~ dedemin2 = np.min(dede2)
-			#~ dedemin3 = np.min(dede3)
-			#~ dedemin4 = np.min(dede4)
-			#~ kk1t[i] = k[dedemin1]
-			#~ kk2t[i] = k[dedemin2]
-			#~ kk3t[i] = k[dedemin3]
-			#~ kk4t[i] = k[dedemin4]
+		for i in xrange(0,10):
+			dede1 = np.where(0.8*Phh1[:,i] < Pshot1[i])[0]
+			dede2 = np.where(0.8*Phh2[:,i] < Pshot2[i])[0]
+			dede3 = np.where(0.8*Phh3[:,i] < Pshot3[i])[0]
+			dede4 = np.where(0.8*Phh4[:,i] < Pshot4[i])[0]
+			dedemin1 = np.min(dede1)
+			dedemin2 = np.min(dede2)
+			dedemin3 = np.min(dede3)
+			dedemin4 = np.min(dede4)
+			kk1t[i] = k[dedemin1]
+			kk2t[i] = k[dedemin2]
+			kk3t[i] = k[dedemin3]
+			kk4t[i] = k[dedemin4]
 			
-		#~ kk1 = np.mean(kk1t)
-		#~ kk2 = np.mean(kk2t)
-		#~ kk3 = np.mean(kk3t)
-		#~ kk4 = np.mean(kk4t)
-		#~ kk4 = np.mean(kk4t)
+		kk1 = np.mean(kk1t)
+		kk2 = np.mean(kk2t)
+		kk3 = np.mean(kk3t)
+		kk4 = np.mean(kk4t)
+		kk4 = np.mean(kk4t)
 
 		
 		
@@ -211,11 +211,11 @@ def ld_data(mv, z, j):
 		#~ plt.axvline( kk3, color='C2', linestyle=':')
 		#~ plt.axvline( kk4, color='C3', linestyle=':')
 		#~ plt.legend(loc = 'upper right', title='z = '+str(z[j]), fancybox=True)
-		#~ plt.legend(loc = 'lower left', title='z = '+str(z[j]), fancybox=True)
+		#~ plt.legend(loc = 'lower left', title='z = '+str(z[j]), fancybox=True, fontsize = 14)
 		#~ plt.figlegend( (M1,M2,M3,M4), ('mass range M1','mass range M2','mass range M3','mass range M4'), \
-		#~ loc = 'upper center', ncol=2, labelspacing=0. )
-		#~ plt.xlabel('k [h/Mpc]')
-		#~ plt.ylabel('P(k)')
+		#~ loc = 'upper center', ncol=2, labelspacing=0. , fontsize = 14)
+		#~ plt.xlabel('k [h/Mpc]', fontsize=14)
+		#~ plt.ylabel('P(k)', fontsize=14)
 		#~ plt.xscale('log')
 		#~ plt.yscale('log')
 		#~ plt.xlim(8e-3,2)
@@ -275,6 +275,31 @@ def ld_data(mv, z, j):
 		errPhh4 = np.std(Phh4[:,0:11], axis=1)
 		
 		
+		#~ plt.figure()
+		#~ M1, =plt.plot(k, bias1, label=r'$b_{cc}$')
+		#~ M2, =plt.plot(k, bias2)
+		#~ M3, =plt.plot(k, bias3)
+		#~ M4, =plt.plot(k, bias4)
+		#~ plt.fill_between(k,bias1-errb1, bias1+errb1, alpha=0.6)
+		#~ plt.fill_between(k,bias2-errb2, bias2+errb2, alpha=0.6)
+		#~ plt.fill_between(k,bias3-errb3, bias3+errb3, alpha=0.6)
+		#~ plt.fill_between(k,bias4-errb4, bias4+errb4, alpha=0.6)
+		#~ plt.axvline( kk1, color='C0', linestyle=':', label='shot noise = 80% of P(k)')
+		#~ plt.axvline( kk2, color='C1', linestyle=':')
+		#~ plt.axvline( kk3, color='C2', linestyle=':')
+		#~ plt.axvline( kk4, color='C3', linestyle=':')
+		#~ plt.legend(loc = 'upper right', title='z = '+str(z[j]), fancybox=True)
+		#~ plt.legend(loc = 'lower left', title='z = '+str(z[j]), fancybox=True, fontsize = 14)
+		#~ plt.figlegend( (M1,M2,M3,M4), ('mass range M1','mass range M2','mass range M3','mass range M4'), \
+		#~ loc = 'upper center', ncol=2, labelspacing=0. , fontsize = 14)
+		#~ plt.xlabel('k [h/Mpc]', fontsize=14)
+		#~ plt.ylabel('b(k)', fontsize=14)
+		#~ plt.xscale('log')
+		#~ plt.ylim(0.0,bias4[0]*1.4)
+		#~ plt.xlim(8e-3,2)
+		#~ plt.show()
+		
+		#~ kill
 		
 
 		#---------------------------------------------------
@@ -489,7 +514,7 @@ def ld_data(mv, z, j):
 		p2 = e[:,1]
 
 
-		d = np.loadtxt('/home/david/codes/Paco/data2/0.15eV/Pcc_realisation_'+str(nv)+'_z='+str(z[j])+'.txt')
+		d = np.loadtxt('/home/david/codes/Paco/data2/0.15eV/Pcc_realisation_'+str(mv)+'_z='+str(z[j])+'.txt')
 		kmat = d[:,8]
 		Pmat = np.zeros((len(kmat),10))
 		for i in xrange(0,8):

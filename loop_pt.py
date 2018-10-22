@@ -87,7 +87,7 @@ def pt_terms(kbis, Plinbis):
 	G = P_spt_dt[2]
 	H = P_spt_dt[3]
 	
-	return A, B, C, D, E, F, G, H 
+	return Pmod_dd, Pmod_dt, Pmod_tt, A, B, C, D, E, F, G, H 
 	### for scoccimaro comparison
 	#~ plt.figure()
 	#~ plt.suptitle('z = '+str(z[j])+' ,expansion at 11th order, class h = 0.7, omega_b =0.05, omega_cdm = 0.25')
