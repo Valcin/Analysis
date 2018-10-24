@@ -46,7 +46,7 @@ z = [0.0,0.5,1.0,2.0]
 # neutrino parameters
 hierarchy = 'degenerate' #'degenerate', 'normal', 'inverted'
 ###########################
-Mnu       = 0.0  #eV
+Mnu       = 0.15  #eV
 ###########################
 Nnu       = 0  #number of massive neutrinos
 Neff      = 3.046
@@ -314,13 +314,13 @@ for j in xrange(0,len(z)):
 		Pcamb = camb[:,1]
 
 		#~ #### get the mass function from simulation
-		massf = np. loadtxt('/home/david/codes/Paco/data2/0.15eV/hmf_z='+str(z[j])+'.txt')
-		m_middle = massf[:,10]
-		dm = massf[:,11]
-		hmf_temp = np.zeros((len(m_middle),10))
-		for i in xrange(0,10):
-			hmf_temp[:,i]= massf[:,i]
-		hmf = np.mean(hmf_temp[:,0:11], axis=1)
+		#~ massf = np. loadtxt('/home/david/codes/Paco/data2/0.15eV/hmf_z='+str(z[j])+'.txt')
+		#~ m_middle = massf[:,10]
+		#~ dm = massf[:,11]
+		#~ hmf_temp = np.zeros((len(m_middle),10))
+		#~ for i in xrange(0,10):
+			#~ hmf_temp[:,i]= massf[:,i]
+		#~ hmf = np.mean(hmf_temp[:,0:11], axis=1)
 ######## for M1 
 		massf1 = np. loadtxt('/home/david/codes/Paco/data2/0.15eV/hmf1_z='+str(z[j])+'.txt')
 		m_middle1 = massf1[:,10]
@@ -523,6 +523,11 @@ for j in xrange(0,len(z)):
 			#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (Bias_eff_t1,Bias_eff_t2, Bias_eff_t3, Bias_eff_t4))
 		#~ fid_file.close()
 		
+		#~ with open('/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+str(Mnu)+'eV/large_scale/rescaling_z='+str(z[j])+'_.txt', 'w+') as fid_file:
+			#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (bias_eff_t1/bias_eff0_t1, bias_eff_t2/bias_eff0_t2, \
+			#~ bias_eff_t3/bias_eff0_t3, bias_eff_t4/bias_eff0_t4 ))
+		#~ fid_file.close()
+		
 #########################################################################################################################################
 #########################################################################################################################################
 #########################################################################################################################################
@@ -621,11 +626,13 @@ for j in xrange(0,len(z)):
 	#~ M4, = ax2.plot(k, bias4_0ev, linestyle = '--', color='C3')
 	#~ #-------------------------------------------------------------
 	#~ bres, = ax2.plot(k, bias1_0ev*bias_eff_t1/bias_eff0_t1, linestyle = '--', color='C0', label=r'$Tinker 2010 MF$')
+	#~ bres, = ax2.plot(k, bias1_0ev*bias_eff_t1/bias_eff0_t1, linestyle = '--', color='C0', label=r'$b_{model}$')
 	#~ ax2.plot(k, bias2_0ev*bias_eff_t2/bias_eff0_t2, linestyle = '--', color='C1')
 	#~ ax2.plot(k, bias3_0ev*bias_eff_t3/bias_eff0_t3, linestyle = '--', color='C2')
 	#~ ax2.plot(k, bias4_0ev*bias_eff_t4/bias_eff0_t4, linestyle = '--', color='C3')
 	#~ #-------------------------------------------------------------
 	#~ ax2.plot(k, bias1_0ev*Bias_eff_t1/Bias_eff0_t1, linestyle = ':', color='C0', label=r'$Crocce MF$')
+	#~ ax2.plot(k, bias1_0ev*Bias_eff_t1/Bias_eff0_t1, linestyle = ':', color='C0', label=r'$b_{model}$')
 	#~ ax2.plot(k, bias2_0ev*Bias_eff_t2/Bias_eff0_t2, linestyle = ':', color='C1')
 	#~ ax2.plot(k, bias3_0ev*Bias_eff_t3/Bias_eff0_t3, linestyle = ':', color='C2')
 	#~ ax2.plot(k, bias4_0ev*Bias_eff_t4/Bias_eff0_t4, linestyle = ':', color='C3')
@@ -663,49 +670,50 @@ for j in xrange(0,len(z)):
 	#~ ax2.set_xlim(0.008,0.2)
 	
 	#~ plt.figlegend( (M1,M2,M3,M4), ('$M_{1}$','$M_{2}$','$M_{3}$','$M_{4}$'), \
-	#######################################
-	#~ loc = 'upper center', ncol=5, labelspacing=0., title =r' M$\nu$ = '+str(Mnu)+',  bins = '+str(len(m_middle1), fontsize=14))
+	#~ #######################################
+	#~ loc = 'upper center', ncol=5, labelspacing=0., title =r' M$\nu$ = '+str(Mnu)+',  bins = '+str(len(m_middle1)), fontsize=14)
 	#~ ax2.legend(loc = 'upper left', title='z = '+str(z[j]), fancybox=True, ncol=3, fontsize=14)
 	#~ plt.subplots_adjust(left=0.1, wspace=0.05, hspace=0.1)
 	#~ ax2.set_xscale('log')
 	#~ #----------------------------
 	#~ if j == 0 :
 		#~ ax2.tick_params(bottom='off', labelbottom='off')
-		#~ ax2.set_ylabel(r'$b_{eff}$ / $b_{sim}$')
-		#~ ax2.set_ylabel(r'$b_{sim, 0.15}$ / ($b_{sim, 0.0}$*$b_{fiducial})$')
-		#~ ax2.set_ylabel(r'$b_{cc}$', fontsize = 12)
-		#~ ax2.set_ylabel(r'$M^2 n(M)$')
+		#~ ax2.set_ylabel(r'$b_{eff}$ / $b_{sim}$', fontsize = 16)
+		#~ ax2.set_ylabel(r'$b_{sim, 0.15}$ / ($b_{sim, 0.0}$*$b_{fiducial})$', fontsize = 16)
+		#~ ax2.set_ylabel(r'$b_{cc}$', fontsize = 16)
+		#~ ax2.set_ylabel(r'$M^2 n(M)$', fontsize = 16)
 		#~ #ax2.grid()
 	#~ if j == 1 :
 		#~ ax2.tick_params(bottom='off', labelbottom='off', labelright=True, right= True, labelleft='off', left='off')
-		#~ ax2.set_ylabel(r'$b_{eff}$ / $b_{sim}$')
-		#~ ax2.set_ylabel(r'$b_{sim, 0.15}$ / ($b_{sim, 0.0}$*$b_{fiducial})$')
-		#~ ax2.set_ylabel(r'$b_{cc}$')
-		#~ ax2.set_ylabel(r'$M^2 n(M)$')
+		#~ ax2.set_ylabel(r'$b_{eff}$ / $b_{sim}$', fontsize = 16)
+		#~ ax2.set_ylabel(r'$b_{sim, 0.15}$ / ($b_{sim, 0.0}$*$b_{fiducial})$', fontsize = 16)
+		#~ ax2.set_ylabel(r'$b_{cc}$', fontsize = 16)
+		#~ ax2.set_ylabel(r'$M^2 n(M)$', fontsize = 16)
 		#~ ax2.yaxis.set_label_position("right")
 		#~ #ax2.grid()
 	#~ if j == 2 :
 		#ax.tick_params(labelleft=True)
-		#~ ax2.set_ylabel(r'$b_{eff}$ / $b_{sim}$')
-		#~ ax2.set_ylabel(r'$b_{sim, 0.15}$ / ($b_{sim, 0.0}$*$b_{fiducial})$')
-		#~ ax2.set_ylabel(r'$b_{cc}$')
-		#~ ax2.set_ylabel(r'$M^2 n(M)$')
-		#~ ax2.set_xlabel('k [h/Mpc]')
-		#~ ax2.set_xlabel(r'M [$h^{-1} M_{\odot}$]')
+		#~ ax2.set_ylabel(r'$b_{eff}$ / $b_{sim}$', fontsize = 16)
+		#~ ax2.set_ylabel(r'$b_{sim, 0.15}$ / ($b_{sim, 0.0}$*$b_{fiducial})$', fontsize = 16)
+		#~ ax2.set_ylabel(r'$b_{cc}$', fontsize = 16)
+		#~ ax2.set_ylabel(r'$M^2 n(M)$', fontsize = 16)
+		#~ ax2.set_xlabel('k [h/Mpc]', fontsize = 14)
+		#~ ax2.set_xlabel(r'M [$h^{-1} M_{\odot}$]', fontsize = 14)
 		#~ #ax2.grid()
 	#~ if j == 3 :
 		#~ ax2.tick_params(labelright=True, right= True, labelleft='off', left='off')
-		#~ ax2.set_xlabel('k [h/Mpc]')
-		#~ ax2.set_xlabel(r'M [$h^{-1} M_{\odot}$]')
-		#~ ax2.set_ylabel(r'$b_{eff}$ / $b_{sim}$')
-		#~ ax2.set_ylabel(r'$b_{sim, 0.15}$ / ($b_{sim, 0.0}$*$b_{fiducial})$')
-		#~ ax2.set_ylabel(r'$b_{cc}$')
-		#~ ax2.set_ylabel(r'$M^2 n(M)$')
+		#~ ax2.set_xlabel('k [h/Mpc]', fontsize = 16)
+		#~ ax2.set_xlabel(r'M [$h^{-1} M_{\odot}$]', fontsize = 16)
+		#~ ax2.set_ylabel(r'$b_{eff}$ / $b_{sim}$', fontsize = 16)
+		#~ ax2.set_ylabel(r'$b_{sim, 0.15}$ / ($b_{sim, 0.0}$*$b_{fiducial})$', fontsize = 16)
+		#~ ax2.set_ylabel(r'$b_{cc}$', fontsize = 16)
+		#~ ax2.set_ylabel(r'$M^2 n(M)$', fontsize = 14)
 		#~ ax2.yaxis.set_label_position("right")
 		#~ #ax2.grid()
 	#~ #ax2.set_xlim(8e-3,0.05)
 	#~ if j == len(z) -1:
 		#~ plt.show()
+
 
 end = time()
 print 'total time is '+str((end - start))

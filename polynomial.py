@@ -34,7 +34,7 @@ def poly(kstop, k, lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, kbis, bia
 	bias2bis, bias3bis, bias4bis, errb1bis, errb2bis, errb3bis, errb4bis, mv, z, j, case):
 		
 	print mv
-	lim = np.where(k < kstop)[0]
+	lim = np.where((k < kstop)&(k > 1e-2))[0]
 
 	
 
@@ -46,15 +46,15 @@ def poly(kstop, k, lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, kbis, bia
 	
 	
 	#~ # here kh because the simu scale
-	popF1, pcovF1 = curve_fit(funcb, kbis[lim], bias1bis[lim], sigma = errb1bis[lim],  check_finite=True, maxfev=500000)
-	popF2, pcovF2 = curve_fit(funcb, kbis[lim], bias2bis[lim], sigma = errb2bis[lim],  check_finite=True, maxfev=500000)
-	popF3, pcovF3 = curve_fit(funcb, kbis[lim], bias3bis[lim], sigma = errb3bis[lim],  check_finite=True, maxfev=500000)
-	popF4, pcovF4 = curve_fit(funcb, kbis[lim], bias4bis[lim], sigma = errb4bis[lim],  check_finite=True, maxfev=500000)
+	#~ popF1, pcovF1 = curve_fit(funcb, kbis[lim], bias1bis[lim], sigma = errb1bis[lim],  check_finite=True, maxfev=500000)
+	#~ popF2, pcovF2 = curve_fit(funcb, kbis[lim], bias2bis[lim], sigma = errb2bis[lim],  check_finite=True, maxfev=500000)
+	#~ popF3, pcovF3 = curve_fit(funcb, kbis[lim], bias3bis[lim], sigma = errb3bis[lim],  check_finite=True, maxfev=500000)
+	#~ popF4, pcovF4 = curve_fit(funcb, kbis[lim], bias4bis[lim], sigma = errb4bis[lim],  check_finite=True, maxfev=500000)
 
-	popF1bis, pcovF1bis = curve_fit(funcbis, kbis[lim], bias1bis[lim], sigma = errb1bis[lim],  check_finite=True, maxfev=500000)
-	popF2bis, pcovF2bis = curve_fit(funcbis, kbis[lim], bias2bis[lim], sigma = errb2bis[lim],  check_finite=True, maxfev=500000)
-	popF3bis, pcovF3bis = curve_fit(funcbis, kbis[lim], bias3bis[lim], sigma = errb3bis[lim],  check_finite=True, maxfev=500000)
-	popF4bis, pcovF4bis = curve_fit(funcbis, kbis[lim], bias4bis[lim], sigma = errb4bis[lim],  check_finite=True, maxfev=500000)
+	#~ popF1bis, pcovF1bis = curve_fit(funcbis, kbis[lim], bias1bis[lim], sigma = errb1bis[lim],  check_finite=True, maxfev=500000)
+	#~ popF2bis, pcovF2bis = curve_fit(funcbis, kbis[lim], bias2bis[lim], sigma = errb2bis[lim],  check_finite=True, maxfev=500000)
+	#~ popF3bis, pcovF3bis = curve_fit(funcbis, kbis[lim], bias3bis[lim], sigma = errb3bis[lim],  check_finite=True, maxfev=500000)
+	#~ popF4bis, pcovF4bis = curve_fit(funcbis, kbis[lim], bias4bis[lim], sigma = errb4bis[lim],  check_finite=True, maxfev=500000)
 		
 		
 		
@@ -63,7 +63,6 @@ def poly(kstop, k, lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, kbis, bia
 	#~ b1x2_mcmc, b2x2_mcmc, b3x2_mcmc, b4x2_mcmc = coeffit_pl(kstop, lb2, errlb2, popF2, kbis, bias2bis, errb2bis)
 	#~ b1x3_mcmc, b2x3_mcmc, b3x3_mcmc, b4x3_mcmc = coeffit_pl(kstop, lb3, errlb3, popF3, kbis, bias3bis, errb3bis)
 	#~ b1x4_mcmc, b2x4_mcmc, b3x4_mcmc, b4x4_mcmc = coeffit_pl(kstop, lb4, errlb4, popF4, kbis, bias4bis, errb4bis)
-
 
 	#~ # even power law ----------------------------------------------------------------------------------------
 	#~ b1w1_mcmc, b2w1_mcmc, b4w1_mcmc = coeffit_pl2(kstop, lb1, errlb1, popF1bis, kbis, bias1bis, errb1bis)
@@ -133,17 +132,16 @@ def poly(kstop, k, lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, kbis, bia
 
 ##########################################################################
 
-	
-	bpl = np.loadtxt('/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+\
-	str(mv)+'eV/case'+str(case)+'/coeff_pl_'+str(mv)+'_z='+str(z[j])+'.txt')
-	bplbis =np.loadtxt('/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+\
-	str(mv)+'eV/case'+str(case)+'/coeff_ple_'+str(mv)+'_z='+str(z[j])+'.txt')
-	
 	#~ bpl = np.loadtxt('/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+\
 	#~ str(mv)+'eV/coeff_pl_'+str(mv)+'_z='+str(z[j])+'.txt')
 	#~ bplbis = np.loadtxt('/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+\
 	#~ str(mv)+'eV/coeff_ple_'+str(mv)+'_z='+str(z[j])+'.txt')
 	
+	bpl = np.loadtxt('/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+\
+	str(mv)+'eV/case'+str(case)+'/coeff_pl_'+str(mv)+'_z='+str(z[j])+'.txt')
+	bplbis =np.loadtxt('/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+\
+	str(mv)+'eV/case'+str(case)+'/coeff_ple_'+str(mv)+'_z='+str(z[j])+'.txt')
+
 	b1pl = bpl[:,0]; b1plbis = bplbis[:,0]
 	b2pl = bpl[:,1]; b2plbis = bplbis[:,1]
 	b3pl = bpl[:,2]
@@ -166,5 +164,5 @@ def poly(kstop, k, lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, kbis, bia
 ##########################################################################
 
 	return biasF1, biasF2, biasF3, biasF4, biasF1bis, biasF2bis, biasF3bis, biasF4bis
-	#~ return biasF1bis, biasF2bis, biasF3bis, biasF4bis
+	return biasF1bis, biasF2bis, biasF3bis, biasF4bis
 	#~ return biasF1, biasF2, biasF3, biasF4
