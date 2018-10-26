@@ -22,6 +22,7 @@ import tempfile
 import expected_CF
 import exp2
 from load_data import ld_data
+from rescaling import rescal
 from loop_pt import pt_terms
 from polynomial import poly
 from perturbation import perturb
@@ -48,7 +49,7 @@ z = [0.0,0.5,1.0,2.0]
 # neutrino parameters
 hierarchy = 'degenerate' #'degenerate', 'normal', 'inverted'
 ###########################
-Mnu       = 0.0  #eV
+Mnu       = 0.15  #eV
 ###########################
 Nnu       = 0  #number of massive neutrinos
 Neff      = 3.046
@@ -92,6 +93,7 @@ for j in xrange(0,len(z)):
 
 	kcamb, Pcamb, k, Pmm, PH1, PH2, PH3 , PH4, errPhh1, errPhh2, errPhh3, errPhh4, bias1, bias2, bias3, bias4, \
 	errb1, errb2, errb3, errb4, Pmono1, Pmono2, Pmono3, Pmono4, errPr1, errPr2, errPr3, errPr4 = ld_data(Mnu, z, j)
+	
 
 ####################################################################
 ##### define the maximum scale for the fit 
@@ -100,7 +102,7 @@ for j in xrange(0,len(z)):
 	kstop3 = [0.15,0.15,0.15,0.15]
 	
 #### the case 
-	case = 1
+	case = 3
 	
 	if case == 1:
 		kstop = kstop1[ind]
@@ -300,23 +302,9 @@ for j in xrange(0,len(z)):
 	b2 = np.mean(B2,axis=0)
 	b3 = np.mean(B3,axis=0)
 	b3bis = np.mean(B3bis,axis=0)
-	
 
-#####################################################################
-#####################################################################
-		### mean ####
-		#~ Bb1 = np.array([b2PT1/bias1bis, b2PT2/bias2bis, b2PT3/bias3bis, b2PT4/bias4bis])
-		#~ Bb1bis = np.array([b3PT1/bias1bis, b3PT2/bias2bis, b3PT3/bias3bis, b3PT4/bias4bis])
-		#~ Bb1ter = np.array([b3PTbis1/bias1bis, b3PTbis2/bias2bis, b3PTbis3/bias3bis, b3PTbis4/bias4bis])
-		#~ Bb3 = np.array([bF1/bias1bis, bF2/bias2bis, bF3/bias3bis, bF4/bias4bis])
-		#~ Bb3bis = np.array([bF1bis/bias1bis, bF2bis/bias2bis, bF3bis/bias3bis, bF4bis/bias4bis])
-		#~ bb1 = np.mean(Bb1,axis=0)
-		#~ bb1bis = np.mean(Bb1bis,axis=0)
-		#~ bb1ter = np.mean(Bb1ter,axis=0)
-		#~ bb3 = np.mean(Bb3,axis=0)
-		#~ bb3bis = np.mean(Bb3bis,axis=0)
-######################################################################################
-######################################################################################
+
+######################################################################
 
 	#~ plt.figure()
 	#~ plt.plot(kbis,kbis**1.5*F, color='C3', label=r'$\sigma_{3}^{2}(k) P^{lin}$')
@@ -334,6 +322,21 @@ for j in xrange(0,len(z)):
 	
 	
 	#~ kill
+
+####################################################################
+#### get rescaled coefficients
+	#~ bbias2PT1, bbias2PT2, bbias2PT3, bbias2PT4,bbias3PT1, bbias3PT2, bbias3PT3,\
+	#~ bbias3PT4,bbiasF1, bbiasF2, bbiasF3, bbiasF4, bbias3PTbis1, bbias3PTbis2, bbias3PTbis3, bbias3PTbis4 = rescal(j, case)
+
+	#~ Bb1 = np.array([bbias2PT1/bias1bis, bbias2PT2/bias2bis, bbias2PT3/bias3bis, bbias2PT4/bias4bis])
+	#~ Bb1bis = np.array([bbias3PT1/bias1bis, bbias3PT2/bias2bis, bbias3PT3/bias3bis, bbias3PT4/bias4bis])
+	#~ Bb1ter = np.array([bbias3PTbis1/bias1bis, bbias3PTbis2/bias2bis, bbias3PTbis3/bias3bis, bbias3PTbis4/bias4bis])
+	#~ Bb3 = np.array([bbiasF1/bias1bis, bbiasF2/bias2bis, bbiasF3/bias3bis, bbiasF4/bias4bis])
+	#~ bb1 = np.mean(Bb1,axis=0)
+	#~ bb1bis = np.mean(Bb1bis,axis=0)
+	#~ bb1ter = np.mean(Bb1ter,axis=0)
+	#~ bb3 = np.mean(Bb3,axis=0)
+	
 	
 ####################################################################
 ##### different fit
@@ -447,16 +450,12 @@ for j in xrange(0,len(z)):
 	#~ ax2.axhline(0.99, color='k', linestyle=':')
 	#~ B3, = ax2.plot(kbis, b3,label=r'w/ $b_{sim}$', color='C0')
 	#~ B3, = ax2.plot(kbis, b3, label='z = '+str(z[j]), color='C0')
-	#~ B1, = ax2.plot(kbis, b1, color='C1')	
+	#~ B1, = ax2.plot(kbis, b1, color='C1')
 	#~ B1bis, = ax2.plot(kbis, b1bis, color='C2')
 	#~ B1ter, = ax2.plot(kbis, b1ter,  color='C3')
 	#~ B2, = ax2.plot(kbis, b2, color='k')
-	#~ ax2.plot(kbis, bias3PT1/bias1bis)
-	#~ ax2.plot(kbis, bias3PT2/bias2bis)
-	#~ ax2.plot(kbis, bias3PT3/bias3bis)
-	#~ ax2.plot(kbis, bias3PT4/bias4bis)
 	
-	#~ B3anal, = ax2.plot(kbis, bb3,label=r'w/ $b_{fiducial}$', color='C0',linestyle='--')
+	#~ B3anal, = ax2.plot(kbis, bb3,label=r'w/ $b_{model}$', color='C0',linestyle='--')
 	#~ B1anal, = ax2.plot(kbis, bb1, color='C1',linestyle='--')
 	#~ B1bisanal, = ax2.plot(kbis, bb1bis, color='C2',linestyle='--')
 	#~ B1teranal, = ax2.plot(kbis, bb1ter,  color='C3',linestyle='--')
@@ -493,62 +492,8 @@ for j in xrange(0,len(z)):
 	#~ if j == len(z) -1:
 		#~ plt.show()
 	
-		
-	#~ kill
-	
-
-###############################################################################
-###############################################################################
-	
-
-	
-	#~ plt.figure()
-	#~ plt.plot(kbis, kai1/Pmono1bis, color='r')
-	#~ plt.plot(kbis, sco1/Pmono1bis, color='b')
-	#~ plt.plot(kbis, tns1/Pmono1bis, color='g')
-	#~ plt.plot(kbis, etns1/Pmono1bis, color='c')
-	#~ plt.plot(kbis, Pmono1bis, color='k')
-	#~ plt.plot(kbis, Pmmbis, color='c')
-	#~ plt.plot(kbis, kai1, color='r')
-	#~ plt.plot(kbis, sco1, color='b')
-	#~ plt.plot(kbis, tns1, color='g')
-	#~ plt.plot(kbis, etns1, color='c')
-	#~ plt.axvspan(kstop, 7, alpha=0.2, color='grey')
-	#~ plt.axhline(1., color='k')
-	#~ plt.axhline(1.01, color='k', linestyle='--')
-	#~ plt.axhline(0.99, color='k', linestyle='--')
-	#~ plt.xscale('log')
-	#~ plt.yscale('log')
-	#~ plt.xlim(0.008,1.0)
-	#~ plt.ylim(0.9,1.1)
-	#~ plt.ylim(1e2,2e5)
-	#~ plt.show()
-	#~ kill
-	
-
-	#--------
-	#~ plt.legend(loc='upper right', bbox_to_anchor=(1.1, 1), title='z = '+str(z[j]), fancybox=True)
-	#~ plt.axvspan(kstop, 7, alpha=0.2, color='grey')
-	#~ plt.xlabel('k')
-	#~ plt.ylabel('P(k)')
-	#~ plt.xscale('log')
-	#~ plt.yscale('log')
-	#~ plt.xlim(8e-3,0.4)
-	#~ plt.ylim(1e3,2e5)
-	#~ plt.show()
-	#~ kill
-	
-########################################################################
-### load rescaling coefficients
-	if Mnu == 0.15:
-		sca1, sca2, sca3, sca4 = np.loadtxt('/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+str(Mnu)+\
-		'eV/large_scale/rescaling_z='+str(z[j])+'_.txt')
-	
-####################################################################
-### compute of the 4 mass bins
-####################################################################
-	
-	#### compute fcc with transfer function
+#####################################################################
+#### compute fcc with transfer function
 	fcc = fz * (Tm/ Tcb)
 	
 	
@@ -568,15 +513,21 @@ for j in xrange(0,len(z)):
 	p6 = np.array([etns1/Pmono1bis, etns2/Pmono2bis, etns3/Pmono3bis, etns4/Pmono4bis])
 	P6 = np.mean(p6, axis=0)
 	
-	#~ p2bis = np.array([k1/Pmono1bis, k2/Pmono2bis, k3/Pmono3bis, k4/Pmono4bis])
-	#~ P2bis = np.mean(p2bis, axis=0)
-	#~ p3bis = np.array([s1/Pmono1bis, s2/Pmono2bis, s3/Pmono3bis, s4/Pmono4bis])
-	#~ P3bis = np.mean(p3bis, axis=0)
-	#~ p4bis = np.array([t1/Pmono1bis, t2/Pmono2bis, t3/Pmono3bis, t4/Pmono4bis])
-	#~ P4bis = np.mean(p4bis, axis=0)
-	#~ p6bis = np.array([e1/Pmono1bis, e2/Pmono2bis, e3/Pmono3bis, e4/Pmono4bis])
-	#~ P6bis = np.mean(p6bis, axis=0)
+
+
+####################################################################
+#### get rescaled coefficients
+	k1, k2, k3, k4, s1, s2, s3, s4, t1, t2, t3, t4, e1, e2, e3, e4 = rescal(j, case)
 	
+	p2bis = np.array([k1/Pmono1bis, k2/Pmono2bis, k3/Pmono3bis, k4/Pmono4bis])
+	P2bis = np.mean(p2bis, axis=0)
+	p3bis = np.array([s1/Pmono1bis, s2/Pmono2bis, s3/Pmono3bis, s4/Pmono4bis])
+	P3bis = np.mean(p3bis, axis=0)
+	p4bis = np.array([t1/Pmono1bis, t2/Pmono2bis, t3/Pmono3bis, t4/Pmono4bis])
+	P4bis = np.mean(p4bis, axis=0)
+	p6bis = np.array([e1/Pmono1bis, e2/Pmono2bis, e3/Pmono3bis, e4/Pmono4bis])
+	P6bis = np.mean(p6bis, axis=0)
+
 	#~ p2ter = np.array([k1ter/Pmono1bis, k2ter/Pmono2bis,	k3ter/Pmono3bis, k4ter/Pmono4bis])
 	#~ P2ter = np.mean(p2ter, axis=0)
 	#~ p3ter = np.array([s1ter/Pmono1bis, s2ter/Pmono2bis, s3ter/Pmono3bis, s4ter/Pmono4bis])
@@ -587,9 +538,11 @@ for j in xrange(0,len(z)):
 	#~ e3ter*(Bias_eff_t3/Bias_eff0_t3)**2/Pmono3bis, e4ter*(Bias_eff_t4/Bias_eff0_t4)**2/Pmono4bis])
 	#~ P6ter = np.mean(p6ter, axis=0)
 	
+############################################################################################################
+############################################################################################################
+############################################################################################################
 	
-	
-	#######--------- mean and std of bias and ps ratio ------------#####
+	#~ #######--------- mean and std of bias and ps ratio ------------#####
 	if j == z[0]:
 		fig2 = plt.figure()
 	J = j + 1
@@ -608,17 +561,17 @@ for j in xrange(0,len(z)):
 	ax2.axhline(0.99, color='k', linestyle=':')
 	P1, =ax2.plot(kbis,P1, color='k')
 	P2, =ax2.plot(kbis,P2, color='C3',label=r'w/ $b_{sim}$')
-	P2, =ax2.plot(kbis,P2, color='C3', label='z = '+str(z[j]))
+	#~ P2, =ax2.plot(kbis,P2, color='C3', label='z = '+str(z[j]))
 	P3, =ax2.plot(kbis,P3, color='C0')
 	P4, =ax2.plot(kbis,P4, color='C1')
 	P6, =ax2.plot(kbis,P6, color='c')
 	#~ #-------------------------------
-	#~ ax2.plot(kbis,P2bis, color='C3', linestyle='--',label=r'w/ $b_{fiducial}$ and $\sigma_v$ free')
-	#~ ax2.plot(kbis,P3bis, color='C0', linestyle='--')
-	#~ ax2.plot(kbis,P4bis, color='C1', linestyle='--')
-	#~ ax2.plot(kbis,P6bis, color='c', linestyle='--')
+	ax2.plot(kbis,P2bis, color='C3', linestyle='--',label=r'w/ $b_{model}$ and $\sigma_v$ free')
+	ax2.plot(kbis,P3bis, color='C0', linestyle='--')
+	ax2.plot(kbis,P4bis, color='C1', linestyle='--')
+	ax2.plot(kbis,P6bis, color='c', linestyle='--')
 	#-------------------------------
-	#~ ax2.plot(kbis,P2ter, color='C3', linestyle='--',label=r'w/ $b_{fiducial}$ and $\sigma_v$ fixed')
+	#~ ax2.plot(kbis,P2ter, color='C3', linestyle='--',label=r'w/ $b_{model}$ and $\sigma_v$ fixed')
 	#~ ax2.plot(kbis,P3ter, color='C0', linestyle='--')
 	#~ ax2.plot(kbis,P4ter, color='C1', linestyle='--')
 	#~ ax2.plot(kbis,P6ter, color='c', linestyle='--')
@@ -657,7 +610,7 @@ for j in xrange(0,len(z)):
 	loc = 'upper center', ncol=5, labelspacing=0., title =r' M$\nu$ = '+str(Mnu)+', case '+str(case), fontsize=14)
 	ax2.axvspan(kstop, 7, alpha=0.2, color='grey')
 	ax2.legend(loc = 'upper left', title='z = '+str(z[j]), fancybox=True, fontsize=14)
-	ax2.legend(loc = 'upper left', title='z = '+str(z[j]), fancybox=True, fontsize=14)
+	ax2.legend(loc = 'upper left', fancybox=True, fontsize=14)
 	plt.subplots_adjust(left=0.1, wspace=0.05, hspace=0.1)
 	ax2.set_xscale('log')
 	if j == 0 :

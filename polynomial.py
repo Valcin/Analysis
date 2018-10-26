@@ -58,7 +58,7 @@ def poly(kstop, k, lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, kbis, bia
 		
 		
 		
-	#~ # odd power law----------------------------------------------------
+	# odd power law----------------------------------------------------
 	#~ b1x1_mcmc, b2x1_mcmc, b3x1_mcmc, b4x1_mcmc = coeffit_pl(kstop, lb1, errlb1, popF1, kbis, bias1bis, errb1bis)
 	#~ b1x2_mcmc, b2x2_mcmc, b3x2_mcmc, b4x2_mcmc = coeffit_pl(kstop, lb2, errlb2, popF2, kbis, bias2bis, errb2bis)
 	#~ b1x3_mcmc, b2x3_mcmc, b3x3_mcmc, b4x3_mcmc = coeffit_pl(kstop, lb3, errlb3, popF3, kbis, bias3bis, errb3bis)

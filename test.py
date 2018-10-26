@@ -100,7 +100,7 @@ for j in xrange(0,len(z)):
 	kstop3 = [0.15,0.15,0.15,0.15]
 	
 #### the case 
-	case = 2
+	case = 3
 	
 	if case == 1:
 		kstop = kstop1[ind]
@@ -112,7 +112,7 @@ for j in xrange(0,len(z)):
 		
 #~ #*********************************************************************************************
 #~ #*********************************************************************************************
-	ktest = np.logspace(np.log10(0.03),np.log10(0.55),10)
+	ktest = np.logspace(np.log10(0.05),np.log10(0.55),15)
 	for kstop in ktest:
 		print kstop
 	
@@ -205,10 +205,10 @@ for j in xrange(0,len(z)):
 	#### get fitted coefficients
 
 
-		#~ biasF1, biasF2, biasF3, biasF4, biasF1bis, biasF2bis, biasF3bis, biasF4bis = poly(kstop, k, lb1, lb2, lb3, lb4,\
-		#~ errlb1, errlb2, errlb3, errlb4, kbis, bias1bis, bias2bis, bias3bis, bias4bis, errb1bis, errb2bis, errb3bis, errb4bis,Mnu, z, j, case)
-		biasF1, biasF2, biasF3, biasF4 = poly(kstop, k, lb1, lb2, lb3, lb4,\
+		biasF1, biasF2, biasF3, biasF4, biasF1bis, biasF2bis, biasF3bis, biasF4bis = poly(kstop, k, lb1, lb2, lb3, lb4,\
 		errlb1, errlb2, errlb3, errlb4, kbis, bias1bis, bias2bis, bias3bis, bias4bis, errb1bis, errb2bis, errb3bis, errb4bis,Mnu, z, j, case)
+		#~ biasF1, biasF2, biasF3, biasF4 = poly(kstop, k, lb1, lb2, lb3, lb4,\
+		#~ errlb1, errlb2, errlb3, errlb4, kbis, bias1bis, bias2bis, bias3bis, bias4bis, errb1bis, errb2bis, errb3bis, errb4bis,Mnu, z, j, case)
 
 
 	#-------------------------------------------------------------------

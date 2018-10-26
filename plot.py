@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as colors
 
 
-
+Mnu = 0.0
 
 z = [0.0,0.5,1.0,2.0]
 
@@ -38,22 +38,35 @@ for j in xrange(0,len(z)):
 	chipl2 = goodfit[:,2]
 	chipl3 = goodfit[:,3]
 	chipl4 = goodfit[:,4]
+	Chipl = np.array([chipl1,chipl2,chipl3,chipl4])
+	chipl = np.mean(Chipl, axis=0)
+	echipl = np.std(Chipl, axis=0)
+
 	#--------------------
 	chipt1 = goodfit[:,5]
 	chipt2 = goodfit[:,6]
 	chipt3 = goodfit[:,7]
 	chipt4 = goodfit[:,8]
+	Chipt = np.array([chipt1,chipt2,chipt3,chipt4])
+	chipt = np.mean(Chipt, axis=0)
+	echipt = np.std(Chipt, axis=0)
+	
 	#--------------------
 	chipbis1 = goodfit[:,9]
 	chipbis2 = goodfit[:,10]
 	chipbis3 = goodfit[:,11]
 	chipbis4 = goodfit[:,12]
+	Chipbis = np.array([chipbis1,chipbis2,chipbis3,chipbis4])
+	chipbis = np.mean(Chipbis, axis=0)
+	echipbis = np.std(Chipbis, axis=0)
 	#--------------------
 	chipter1 = goodfit[:,13]
 	chipter2 = goodfit[:,14]
 	chipter3 = goodfit[:,15]
 	chipter4 = goodfit[:,16]
-	
+	Chipter = np.array([chipter1,chipter2,chipter3,chipter4])
+	chipter = np.mean(Chipter, axis=0)
+	echipter = np.std(Chipter, axis=0)
 
 
 
@@ -70,29 +83,43 @@ for j in xrange(0,len(z)):
 	elif len(z) > 2:
 		ax2 = fig2.add_subplot(2, 2, J)
 	#~ ######### pl residuals comparison #################
-	ax2.plot(kmax, chipl1, color='C0')
-	ax2.plot(kmax, chipl2, color='C0')
-	ax2.plot(kmax, chipl3, color='C0')
-	ax2.plot(kmax, chipl4, color='C0')
-	ax2.plot(kmax, chipt1, color='C1')
-	ax2.plot(kmax, chipt2, color='C1')
-	ax2.plot(kmax, chipt3, color='C1')
-	ax2.plot(kmax, chipt4, color='C1')
-	ax2.plot(kmax, chipbis1, color='C2')
-	ax2.plot(kmax, chipbis2, color='C2')
-	ax2.plot(kmax, chipbis3, color='C2')
-	ax2.plot(kmax, chipbis4, color='C2')
+	#~ ax2.plot(kmax, chipl1, color='C0')
+	#~ ax2.plot(kmax, chipl2, color='C0')
+	#~ ax2.plot(kmax, chipl3, color='C0')
+	#~ ax2.plot(kmax, chipl4, color='C0')
+	P1, =ax2.plot(kmax, chipl, color='C0', label='z = '+str(z[j]))
+	ax2.errorbar(kmax, chipl, yerr= echipl,fmt='.')
+	#---------------------------------
+	#~ ax2.plot(kmax, chipt1, color='C1')
+	#~ ax2.plot(kmax, chipt2, color='C1')
+	#~ ax2.plot(kmax, chipt3, color='C1')
+	#~ ax2.plot(kmax, chipt4, color='C1')
+	P2, =ax2.plot(kmax, chipt, color='C1')
+	ax2.errorbar(kmax, chipt, yerr= echipt,fmt='.')
+	#---------------------------------
+	#~ ax2.plot(kmax, chipbis1, color='C2')
+	#~ ax2.plot(kmax, chipbis2, color='C2')
+	#~ ax2.plot(kmax, chipbis3, color='C2')
+	#~ ax2.plot(kmax, chipbis4, color='C2')
+	P3, =ax2.plot(kmax, chipbis, color='C2')
+	ax2.errorbar(kmax, chipbis, yerr= echipbis,fmt='.')
+	#---------------------------------
 	#~ ax2.plot(kmax, chipter1, color='C3')
 	#~ ax2.plot(kmax, chipter2, color='C3')
 	#~ ax2.plot(kmax, chipter3, color='C3')
 	#~ ax2.plot(kmax, chipter4, color='C3')
+	P4, =ax2.plot(kmax, chipter, color='C3')
+	ax2.errorbar(kmax, chipter, yerr= echipter,fmt='.')
+	#---------------------------------
+	plt.figlegend( (P1,P2, P3, P4), ('Polynomial','2nd order PT',r'3nd order PT with free $b_{s}$,$b_{3nl}$',\
+	r'3nd order PT with fixed $b_{s}$,$b_{3nl}$'), \
 	######################################
-	#~ loc = 'upper center', ncol=5, labelspacing=0., title =r' M$\nu$ = '+str(Mnu)+', case II ', fontsize=14)
+	loc = 'upper center', ncol=5, labelspacing=0., title =r' M$\nu$ = '+str(Mnu), fontsize=14)
 	ax2.legend(loc = 'upper left', fancybox=True, fontsize=14)
 	plt.subplots_adjust(left=0.1, wspace=0.05, hspace=0.1)
 	ax2.set_xscale('log')
 	#~ ax2.set_yscale('log')
-	ax2. set_xlim(0.03,0.55)
+	ax2. set_xlim(0.05,0.55)
 	ax2. set_ylim(0,30)
 	if j == 0 :
 		ax2.tick_params(bottom='off', labelbottom='off',labelleft=True)

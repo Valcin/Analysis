@@ -453,7 +453,7 @@ def coeffit_Kaiser(j, fcc, kstop, Pmm, lb1, k ,b ,errb):
 	def lnprior(theta):
 		sigma = theta
 		#~ if lb1 - 3*errlb1 < b1 < lb1 + 3*errlb1 :
-		if 0 < sigma < 10:
+		if 0 < sigma < 100:
 			return 0.0
 		return -np.inf
 	
@@ -503,11 +503,11 @@ def coeffit_Kaiser(j, fcc, kstop, Pmm, lb1, k ,b ,errb):
 	print b1_mcmc
 	
 
-	plt.figure()
-	plt.title('sigma kaiser')
-	for i in xrange(0,nwalkers):
-		plt.plot(np.arange(1000), sampler.chain[i,:,0])
-	plt.show()
+	#~ plt.figure()
+	#~ plt.title('sigma kaiser')
+	#~ for i in xrange(0,nwalkers):
+		#~ plt.plot(np.arange(1000), sampler.chain[i,:,0])
+	#~ plt.show()
 	
 	end = time.time()
 	print 'time is '+str((end - start))
@@ -592,8 +592,8 @@ def coeffit_Scocci(j, fcc, kstop,Pmod_dd, Pmod_dt, Pmod_tt, lb1, k ,b ,errb):
 	#~ plt.title('sigma scocci')
 	#~ for i in xrange(0,nwalkers):
 		#~ plt.plot(np.arange(1000), sampler.chain[i,:,0])
-	
 	#~ plt.show()
+	
 	end = time.time()
 	print 'time is '+str((end - start))
 	return b1_mcmc
@@ -682,8 +682,8 @@ def coeffit_TNS(j, fcc, kstop,Pmod_dd, Pmod_dt, Pmod_tt, lb1, k ,b ,errb,AB2,AB4
 	#~ plt.title('sigma tns')
 	#~ for i in xrange(0,nwalkers):
 		#~ plt.plot(np.arange(1000), sampler.chain[i,:,0])
-	
 	#~ plt.show()
+	
 	end = time.time()
 	print 'time is '+str((end - start))
 	return b1_mcmc
@@ -782,7 +782,6 @@ def coeffit_eTNS(j, fcc, kstop, b1, b2, bs, b3nl, Pmod_dd, Pmod_dt, Pmod_tt, A, 
 	#~ plt.title('sigma tns')
 	#~ for i in xrange(0,nwalkers):
 		#~ plt.plot(np.arange(1000), sampler.chain[i,:,0])
-	
 	#~ plt.show()
 	end = time.time()
 	print 'time is '+str((end - start))
