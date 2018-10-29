@@ -33,7 +33,7 @@ from fit_emcee import coeffit_pl,coeffit_pl2,coeffit_exp1, coeffit_exp2, coeffit
 def poly(kstop, k, lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, kbis, bias1bis,\
 	bias2bis, bias3bis, bias4bis, errb1bis, errb2bis, errb3bis, errb4bis, mv, z, j, case):
 		
-	print mv
+	print ' the mass of neutrinos is '+str(mv)
 	lim = np.where((k < kstop)&(k > 1e-2))[0]
 
 	
@@ -58,7 +58,7 @@ def poly(kstop, k, lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, kbis, bia
 		
 		
 		
-	# odd power law----------------------------------------------------
+	#~ # odd power law----------------------------------------------------
 	#~ b1x1_mcmc, b2x1_mcmc, b3x1_mcmc, b4x1_mcmc = coeffit_pl(kstop, lb1, errlb1, popF1, kbis, bias1bis, errb1bis)
 	#~ b1x2_mcmc, b2x2_mcmc, b3x2_mcmc, b4x2_mcmc = coeffit_pl(kstop, lb2, errlb2, popF2, kbis, bias2bis, errb2bis)
 	#~ b1x3_mcmc, b2x3_mcmc, b3x3_mcmc, b4x3_mcmc = coeffit_pl(kstop, lb3, errlb3, popF3, kbis, bias3bis, errb3bis)
@@ -71,14 +71,14 @@ def poly(kstop, k, lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, kbis, bia
 	#~ b1w4_mcmc, b2w4_mcmc, b4w4_mcmc = coeffit_pl2(kstop, lb4, errlb4, popF4bis, kbis, bias4bis, errb4bis)
 		
 		
-#~ #### compute bias
-#~ # power law odd ----------------------------------------------------------------------------
+#### compute bias
+# power law odd ----------------------------------------------------------------------------
 	#~ biasF1 = b1x1_mcmc[0] + b2x1_mcmc[0] * kbis**2 + b3x1_mcmc[0] * kbis**3 + b4x1_mcmc[0] * kbis**4
 	#~ biasF2 = b1x2_mcmc[0] + b2x2_mcmc[0] * kbis**2 + b3x2_mcmc[0] * kbis**3 + b4x2_mcmc[0] * kbis**4
 	#~ biasF3 = b1x3_mcmc[0] + b2x3_mcmc[0] * kbis**2 + b3x3_mcmc[0] * kbis**3 + b4x3_mcmc[0] * kbis**4
 	#~ biasF4 = b1x4_mcmc[0] + b2x4_mcmc[0] * kbis**2 + b3x4_mcmc[0] * kbis**3 + b4x4_mcmc[0] * kbis**4
 
-# power law even -------------------------------------------------------------------------------------------
+#~ # power law even -------------------------------------------------------------------------------------------
 	#~ biasF1bis = b1w1_mcmc[0] + b2w1_mcmc[0] * kbis**2 + b4w1_mcmc[0] * kbis**4
 	#~ biasF2bis = b1w2_mcmc[0] + b2w2_mcmc[0] * kbis**2 + b4w2_mcmc[0] * kbis**4
 	#~ biasF3bis = b1w3_mcmc[0] + b2w3_mcmc[0] * kbis**2 + b4w3_mcmc[0] * kbis**4
@@ -147,14 +147,14 @@ def poly(kstop, k, lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, kbis, bia
 	b3pl = bpl[:,2]
 	b4pl = bpl[:,3]; b4plbis = bplbis[:,2]
 
-#~ #### compute bias
-#~ # power law odd ----------------------------------------------------------------------------
+#### compute bias
+# power law odd ----------------------------------------------------------------------------
 	biasF1 = b1pl[0] + b2pl[0] * kbis**2 + b3pl[0] * kbis**3 + b4pl[0] * kbis**4
 	biasF2 = b1pl[1] + b2pl[1] * kbis**2 + b3pl[1] * kbis**3 + b4pl[1] * kbis**4
 	biasF3 = b1pl[2] + b2pl[2] * kbis**2 + b3pl[2] * kbis**3 + b4pl[2] * kbis**4
 	biasF4 = b1pl[3] + b2pl[3] * kbis**2 + b3pl[3] * kbis**3 + b4pl[3] * kbis**4
 
-# power law even -------------------------------------------------------------------------------------------
+#~ # power law even -------------------------------------------------------------------------------------------
 	biasF1bis = b1plbis[0] + b2plbis[0] * kbis**2 + b4plbis[0] * kbis**4
 	biasF2bis = b1plbis[1] + b2plbis[1] * kbis**2 + b4plbis[1] * kbis**4
 	biasF3bis = b1plbis[2] + b2plbis[2] * kbis**2 + b4plbis[2] * kbis**4

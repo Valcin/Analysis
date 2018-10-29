@@ -14,6 +14,57 @@ Mnu = 0.0
 z = [0.0,0.5,1.0,2.0]
 
 
+bfile = np.loadtxt('3rdorder_0.0.txt')
+ktest = bfile[:,0]
+b1a = bfile[:,1]
+b1b = bfile[:,2]
+b1c = bfile[:,3]
+b1d = bfile[:,4]
+b3a = bfile[:,5]
+b3b = bfile[:,6]
+b3c = bfile[:,7]
+b3d = bfile[:,8]
+
+plt.figure()
+plt.plot(ktest, b3a/(b1a-1))
+plt.plot(ktest, b3b/(b1b-1))
+plt.plot(ktest, b3c/(b1c-1))
+plt.plot(ktest, b3d/(b1d-1))
+#~ plt.plot(ktest, b1a)
+#~ plt.plot(ktest, b1b)
+#~ plt.plot(ktest, b1c)
+#~ plt.plot(ktest, b1d)
+#~ plt.plot(ktest, b3a)
+#~ plt.plot(ktest, b3b)
+#~ plt.plot(ktest, b3c)
+#~ plt.plot(ktest, b3d)
+plt.xscale('log')
+plt.axhline(32/315., color='k')
+plt.xlim(0.03,0.2)
+plt.ylim(-0.5,5)
+plt.show()
+
+j=0
+cname = 'chi2_z='+str(z[j])+'.txt'
+goodfit = np.loadtxt(cname) 
+kmax = goodfit[:,0]
+chipbis1 = goodfit[:,9]
+chipbis2 = goodfit[:,10]
+chipbis3 = goodfit[:,11]
+chipbis4 = goodfit[:,12]
+Chipbis = np.array([chipbis1,chipbis2,chipbis3,chipbis4])
+chipbis = np.mean(Chipbis, axis=0)
+echipbis = np.std(Chipbis, axis=0)
+plt.figure()
+plt.plot(kmax, chipbis1)
+plt.plot(kmax, chipbis2)
+plt.plot(kmax, chipbis3)
+plt.plot(kmax, chipbis4)
+plt.xscale('log')
+plt.xlim(0.04,0.2)
+plt.ylim(0,10)
+plt.show()
+kill
 ########################################################################
 ############# 	0.0 eV Masseless neutrino 
 ########################################################################

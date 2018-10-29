@@ -94,6 +94,7 @@ def rescal(j, case):
 	kstop3 = [0.15,0.15,0.15,0.15]
 	
 #### the case 
+	print 'this is the case '+str(case)
 	
 	if case == 1:
 		kstop = kstop1[ind]
@@ -183,35 +184,57 @@ def rescal(j, case):
 	bias2bis, bias3bis, bias4bis, errb1bis, errb2bis, errb3bis, errb4bis, A, B, C, D, E, F,0.0, z, j, case)
 
 ### mean ####
-	b1 = np.array([bias2PT1*sca1/bias1bis, bias2PT2*sca2/bias2bis, bias2PT3*sca3/bias3bis, bias2PT4*sca4/bias4bis])
-	b1bis = np.array([bias3PT1*sca1/bias1bis, bias3PT2*sca2/bias2bis, bias3PT3*sca3/bias3bis, bias3PT4*sca4/bias4bis])
-	b1ter = np.array([bias3PTbis1*sca1/bias1bis, bias3PTbis2*sca2/bias2bis, bias3PTbis3*sca3/bias3bis, bias3PTbis4*sca4/bias4bis])
-	b3 = np.array([biasF1*sca1/bias1bis, biasF2*sca2/bias2bis, biasF3*sca3/bias3bis, biasF4*sca4/bias4bis])
-	b3bis = np.array([biasF1bis*sca1/bias1bis, biasF2bis*sca2/bias2bis, biasF3bis*sca3/bias3bis, biasF4bis*sca4/bias4bis])
-	b1 = np.mean(b1,axis=0)
-	b1bis = np.mean(b1bis,axis=0)
-	b1ter = np.mean(b1ter,axis=0)
-	b3 = np.mean(b3,axis=0)
-	b3bis = np.mean(b3bis,axis=0)
-
-	#~ return bias2PT1*sca1, bias2PT2*sca2, bias2PT3*sca3, bias2PT4*sca4,bias3PT1*sca1, bias3PT2*sca2, bias3PT3*sca3,\
-	#~ bias3PT4*sca4,biasF1*sca1, biasF2*sca2, biasF3*sca3, biasF4*sca4, bias3PTbis1*sca1, bias3PTbis2*sca2, bias3PTbis3*sca3,\
-	#~ bias3PTbis4*sca4
-	#~ k1, k2, k3, k4, s1, s2, s3, s4, t1, t2, t3, t4, e1, e2, e3, e4 = RSD(fz,fcc, Dz[ind]\
-	#~ , j, kstop, Pmmbis, bbiasF1, bbiasF2, bbiasF3, bbiasF4, kbis, Plinbis, pmono1bis, pmono2bis, pmono3bis, \
-	#~ pmono4bis, errPr1bis, errPr2bis, errPr3bis, errPr4bis, Pmod_dt, Pmod_tt, case,z,Mnu, A, B, C, D, E, F, G, H )
+	#~ b1 = np.array([bias2PT1*sca1/bias1bis, bias2PT2*sca2/bias2bis, bias2PT3*sca3/bias3bis, bias2PT4*sca4/bias4bis])
+	#~ b1bis = np.array([bias3PT1*sca1/bias1bis, bias3PT2*sca2/bias2bis, bias3PT3*sca3/bias3bis, bias3PT4*sca4/bias4bis])
+	#~ b1ter = np.array([bias3PTbis1*sca1/bias1bis, bias3PTbis2*sca2/bias2bis, bias3PTbis3*sca3/bias3bis, bias3PTbis4*sca4/bias4bis])
+	#~ b3 = np.array([biasF1*sca1/bias1bis, biasF2*sca2/bias2bis, biasF3*sca3/bias3bis, biasF4*sca4/bias4bis])
+	#~ b3bis = np.array([biasF1bis*sca1/bias1bis, biasF2bis*sca2/bias2bis, biasF3bis*sca3/bias3bis, biasF4bis*sca4/bias4bis])
+	#~ b1 = np.mean(b1,axis=0)
+	#~ b1bis = np.mean(b1bis,axis=0)
+	#~ b1ter = np.mean(b1ter,axis=0)
+	#~ b3 = np.mean(b3,axis=0)
+	#~ b3bis = np.mean(b3bis,axis=0)
 	
+	
+
+
+	b2PT1 = bias2PT1*sca1
+	b2PT2 = bias2PT2*sca2
+	b2PT3 = bias2PT3*sca3
+	b2PT4 = bias2PT4*sca4
+	b3PT1 = bias3PT1*sca1
+	b3PT2 = bias3PT2*sca2
+	b3PT3 = bias3PT3*sca3
+	b3PT4 =	bias3PT4*sca4
+	bF1 = biasF1*sca1
+	bF2 = biasF2*sca2
+	bF3 = biasF3*sca3
+	bF4 = biasF4*sca4
+	b3PTbis1 = bias3PTbis1*sca1
+	b3PTbis2 = bias3PTbis2*sca2
+	b3PTbis3 = bias3PTbis3*sca3
+	b3PTbis4 = bias3PTbis4*sca4
+	
+	#~ return b2PT1, b2PT2, b2PT3, b2PT4,b3PT1, b3PT2, b3PT3, b3PT4,bF1, bF2, bF3, bF4,\
+	#~ b3PTbis1, b3PTbis2, b3PTbis3, b3PTbis4
 #~ ####################################################################
 #~ ### compute of the 4 mass bins
 #~ ####################################################################
 	fcc = fz * (Tm/ Tcb)
 	
-	kai1, kai2, kai3, kai4, sco1, sco2, sco3, sco4, tns1, tns2, tns3, tns4, etns1, etns2, etns3, etns4 = RSD(fz,fcc, Dz[ind]\
-	, j, kstop, Pmmbis, biasF1, biasF2, biasF3, biasF4, kbis, Plinbis, Pmono1bis, Pmono2bis, Pmono3bis, \
-	Pmono4bis, errPr1bis, errPr2bis, errPr3bis, errPr4bis, Pmod_dt, Pmod_tt, case,z,0.0, A, B, C, D, E, F, G, H )
+	#~ kai1, kai2, kai3, kai4, sco1, sco2, sco3, sco4, tns1, tns2, tns3, tns4, etns1, etns2, etns3, etns4 = RSD(fz,fcc, Dz[ind]\
+	#~ , j, kstop, Pmmbis, biasF1, biasF2, biasF3, biasF4, kbis, Plinbis, Pmono1bis, Pmono2bis, Pmono3bis, \
+	#~ Pmono4bis, errPr1bis, errPr2bis, errPr3bis, errPr4bis, Pmod_dt, Pmod_tt, case,z,0.0, A, B, C, D, E, F, G, H )
 	
 	
 	#~ return kai1*sca1, kai2*sca2, kai3*sca3, kai4*sca4, sco1*sca1, sco2*sca2, sco3*sca3, sco4*sca4, tns1*sca1, tns2*sca2,\
 	#~ tns3*sca3, tns4*sca4, etns1*sca1, etns2*sca2, etns3*sca3, etns4*sca4
-	return kai1, kai2, kai3, kai4*sca4, sco1, sco2, sco3, sco4, tns1, tns2,\
+	#---------------------------------------------------
+	kai1, kai2, kai3, kai4, sco1, sco2, sco3, sco4, tns1, tns2, tns3, tns4, etns1, etns2, etns3, etns4 = RSD(fz,fcc, Dz[ind]\
+	, j, kstop, Pmmbis, bF1, bF2, bF3, bF4, kbis, Plinbis, Pmono1bis, Pmono2bis, Pmono3bis, Pmono4bis, errPr1bis, errPr2bis,\
+	errPr3bis, errPr4bis, Pmod_dt, Pmod_tt, case,z,0.0, A, B, C, D, E, F, G, H, sca1, sca2, sca3, sca4 )
+	
+	
+	return kai1, kai2, kai3, kai4, sco1, sco2, sco3, sco4*sca4, tns1, tns2,\
 	tns3, tns4, etns1, etns2, etns3, etns4
+	

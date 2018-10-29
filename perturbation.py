@@ -75,14 +75,14 @@ def perturb(kstop, k,  lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, Pmmbi
 	#~ b1y3_mcmc, b2y3_mcmc, bsy3_mcmc = coeffit_exp1(kstop, Pmmbis, A, B, C, D, E, lb3,errlb3, pop3, kbis ,bias3bis ,errb3bis)
 	#~ b1y4_mcmc, b2y4_mcmc, bsy4_mcmc = coeffit_exp1(kstop, Pmmbis, A, B, C, D, E, lb4,errlb4, pop4, kbis ,bias4bis ,errb4bis)
 	#~ #3rd order free -----------------------------------------------------------------------------------------------
-	#~ b1z1_mcmc, b2z1_mcmc, bsz1_mcmc, b3z1_mcmc = coeffit_exp2(kstop, Pmmbis, A, B, C, D, E, F, lb1, errlb1, popbis1,\
-	#~ kbis ,bias1bis ,errb1bis)
-	#~ b1z2_mcmc, b2z2_mcmc, bsz2_mcmc, b3z2_mcmc = coeffit_exp2(kstop, Pmmbis, A, B, C, D, E, F, lb2, errlb2, popbis2,\
-	#~ kbis ,bias2bis ,errb2bis)
-	#~ b1z3_mcmc, b2z3_mcmc, bsz3_mcmc, b3z3_mcmc = coeffit_exp2(kstop, Pmmbis, A, B, C, D, E, F, lb3, errlb3, popbis3,\
-	#~ kbis ,bias3bis ,errb3bis)
-	#~ b1z4_mcmc, b2z4_mcmc, bsz4_mcmc, b3z4_mcmc = coeffit_exp2(kstop, Pmmbis, A, B, C, D, E, F, lb4, errlb4, popbis4,\
-	#~ kbis ,bias4bis ,errb4bis)
+	b1z1_mcmc, b2z1_mcmc, bsz1_mcmc, b3z1_mcmc = coeffit_exp2(kstop, Pmmbis, A, B, C, D, E, F, lb1, errlb1, popbis1,\
+	kbis ,bias1bis ,errb1bis)
+	b1z2_mcmc, b2z2_mcmc, bsz2_mcmc, b3z2_mcmc = coeffit_exp2(kstop, Pmmbis, A, B, C, D, E, F, lb2, errlb2, popbis2,\
+	kbis ,bias2bis ,errb2bis)
+	b1z3_mcmc, b2z3_mcmc, bsz3_mcmc, b3z3_mcmc = coeffit_exp2(kstop, Pmmbis, A, B, C, D, E, F, lb3, errlb3, popbis3,\
+	kbis ,bias3bis ,errb3bis)
+	b1z4_mcmc, b2z4_mcmc, bsz4_mcmc, b3z4_mcmc = coeffit_exp2(kstop, Pmmbis, A, B, C, D, E, F, lb4, errlb4, popbis4,\
+	kbis ,bias4bis ,errb4bis)
 	#~ #-3rd order fixed -------------------------------------------------------------------------------------------------
 	#~ b1u1_mcmc, b2u1_mcmc= coeffit_exp3(kstop, Pmmbis, A, B, C, D, E, F, lb1, errlb1, popter1,\
 	#~ kbis ,bias1bis ,errb1bis)
@@ -106,14 +106,22 @@ def perturb(kstop, k,  lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, Pmmbi
 	#~ 1/2.*b2y4_mcmc[0]*bsy4_mcmc[0]*D + 1/4.*bsy4_mcmc[0]**2*E )/Pmmbis)
 
 	# 3rd order free -------------------------------------------------------------------
-	#~ bias3PT1 = np.sqrt((b1z1_mcmc[0]**2 * Pmmbis+ b1z1_mcmc[0]*b2z1_mcmc[0]*A + 1/4.*b2z1_mcmc[0]**2*B + b1z1_mcmc[0]*bsz1_mcmc[0]*C +\
-	#~ 1/2.*b2z1_mcmc[0]*bsz1_mcmc[0]*D + 1/4.*bsz1_mcmc[0]**2*E + 2*b1z1_mcmc[0]*b3z1_mcmc[0]*F)/Pmmbis)
-	#~ bias3PT2 = np.sqrt((b1z2_mcmc[0]**2 * Pmmbis+ b1z2_mcmc[0]*b2z2_mcmc[0]*A + 1/4.*b2z2_mcmc[0]**2*B + b1z2_mcmc[0]*bsz2_mcmc[0]*C +\
-	#~ 1/2.*b2z2_mcmc[0]*bsz2_mcmc[0]*D + 1/4.*bsz2_mcmc[0]**2*E + 2*b1z2_mcmc[0]*b3z2_mcmc[0]*F)/Pmmbis)
-	#~ bias3PT3 = np.sqrt((b1z3_mcmc[0]**2 * Pmmbis+ b1z3_mcmc[0]*b2z3_mcmc[0]*A + 1/4.*b2z3_mcmc[0]**2*B + b1z3_mcmc[0]*bsz3_mcmc[0]*C +\
-	#~ 1/2.*b2z3_mcmc[0]*bsz3_mcmc[0]*D + 1/4.*bsz3_mcmc[0]**2*E + 2*b1z3_mcmc[0]*b3z3_mcmc[0]*F)/Pmmbis)
-	#~ bias3PT4 = np.sqrt((b1z4_mcmc[0]**2 * Pmmbis+ b1z4_mcmc[0]*b2z4_mcmc[0]*A + 1/4.*b2z4_mcmc[0]**2*B + b1z4_mcmc[0]*bsz4_mcmc[0]*C +\
-	#~ 1/2.*b2z4_mcmc[0]*bsz4_mcmc[0]*D + 1/4.*bsz4_mcmc[0]**2*E + 2*b1z4_mcmc[0]*b3z4_mcmc[0]*F)/Pmmbis)
+	bias3PT1 = np.sqrt((b1z1_mcmc[0]**2 * Pmmbis+ b1z1_mcmc[0]*b2z1_mcmc[0]*A + 1/4.*b2z1_mcmc[0]**2*B + b1z1_mcmc[0]*bsz1_mcmc[0]*C +\
+	1/2.*b2z1_mcmc[0]*bsz1_mcmc[0]*D + 1/4.*bsz1_mcmc[0]**2*E + 2*b1z1_mcmc[0]*b3z1_mcmc[0]*F)/Pmmbis)
+	bias3PT2 = np.sqrt((b1z2_mcmc[0]**2 * Pmmbis+ b1z2_mcmc[0]*b2z2_mcmc[0]*A + 1/4.*b2z2_mcmc[0]**2*B + b1z2_mcmc[0]*bsz2_mcmc[0]*C +\
+	1/2.*b2z2_mcmc[0]*bsz2_mcmc[0]*D + 1/4.*bsz2_mcmc[0]**2*E + 2*b1z2_mcmc[0]*b3z2_mcmc[0]*F)/Pmmbis)
+	bias3PT3 = np.sqrt((b1z3_mcmc[0]**2 * Pmmbis+ b1z3_mcmc[0]*b2z3_mcmc[0]*A + 1/4.*b2z3_mcmc[0]**2*B + b1z3_mcmc[0]*bsz3_mcmc[0]*C +\
+	1/2.*b2z3_mcmc[0]*bsz3_mcmc[0]*D + 1/4.*bsz3_mcmc[0]**2*E + 2*b1z3_mcmc[0]*b3z3_mcmc[0]*F)/Pmmbis)
+	bias3PT4 = np.sqrt((b1z4_mcmc[0]**2 * Pmmbis+ b1z4_mcmc[0]*b2z4_mcmc[0]*A + 1/4.*b2z4_mcmc[0]**2*B + b1z4_mcmc[0]*bsz4_mcmc[0]*C +\
+	1/2.*b2z4_mcmc[0]*bsz4_mcmc[0]*D + 1/4.*bsz4_mcmc[0]**2*E + 2*b1z4_mcmc[0]*b3z4_mcmc[0]*F)/Pmmbis)
+	#~ bias3PT1 = np.sqrt((b1z1_mcmc**2 * Pmmbis+ b1z1_mcmc*b2z1_mcmc*A + 1/4.*b2z1_mcmc**2*B + b1z1_mcmc*bsz1_mcmc*C +\
+	#~ 1/2.*b2z1_mcmc*bsz1_mcmc*D + 1/4.*bsz1_mcmc**2*E + 2*b1z1_mcmc*b3z1_mcmc*F)/Pmmbis)
+	#~ bias3PT2 = np.sqrt((b1z2_mcmc**2 * Pmmbis+ b1z2_mcmc*b2z2_mcmc*A + 1/4.*b2z2_mcmc**2*B + b1z2_mcmc*bsz2_mcmc*C +\
+	#~ 1/2.*b2z2_mcmc*bsz2_mcmc*D + 1/4.*bsz2_mcmc**2*E + 2*b1z2_mcmc*b3z2_mcmc*F)/Pmmbis)
+	#~ bias3PT3 = np.sqrt((b1z3_mcmc**2 * Pmmbis+ b1z3_mcmc*b2z3_mcmc*A + 1/4.*b2z3_mcmc**2*B + b1z3_mcmc*bsz3_mcmc*C +\
+	#~ 1/2.*b2z3_mcmc*bsz3_mcmc*D + 1/4.*bsz3_mcmc**2*E + 2*b1z3_mcmc*b3z3_mcmc*F)/Pmmbis)
+	#~ bias3PT4 = np.sqrt((b1z4_mcmc**2 * Pmmbis+ b1z4_mcmc*b2z4_mcmc*A + 1/4.*b2z4_mcmc**2*B + b1z4_mcmc*bsz4_mcmc*C +\
+	#~ 1/2.*b2z4_mcmc*bsz4_mcmc*D + 1/4.*bsz4_mcmc**2*E + 2*b1z4_mcmc*b3z4_mcmc*F)/Pmmbis)
 	# 3rd order fixed --------------------------------------------------------------------------------
 	#~ BsTa = -4/7.*(b1u1_mcmc[0]-1)
 	#~ BsTb = -4/7.*(b1u2_mcmc[0]-1)
@@ -132,9 +140,13 @@ def perturb(kstop, k,  lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, Pmmbi
 	#~ bias3PTbis4 = np.sqrt((b1u4_mcmc[0]**2 * Pmmbis+ b1u4_mcmc[0]*b2u4_mcmc[0]*A + 1/4.*b2u4_mcmc[0]**2*B + b1u4_mcmc[0]*BsTd*C +\
 	#~ 1/2.*b2u4_mcmc[0]*BsTd*D + 1/4.*BsTd**2*E + 2*b1u4_mcmc[0]*B3nlTd*F)/Pmmbis)
 	
+	with open('3rdorder_'+str(z[j])+'.txt', 'a') as fid_file:
+		fid_file.write('%.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g\n' % (kstop, b1z1_mcmc[0], b1z2_mcmc[0], b1z3_mcmc[0],\
+		b1z4_mcmc[0], b3z1_mcmc[0], b3z2_mcmc[0], b3z3_mcmc[0], b3z4_mcmc[0]))
+	fid_file.close()
 	#~ with open('3rdorder_'+str(z[j])+'.txt', 'a') as fid_file:
-		#~ fid_file.write('%.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g\n' % (kstop, b1z1_mcmc[0], b1z2_mcmc[0], b1z3_mcmc[0],\
-		#~ b1z4_mcmc[0], b3z1_mcmc[0], b3z2_mcmc[0], b3z3_mcmc[0], b3z4_mcmc[0]))
+		#~ fid_file.write('%.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g\n' % (kstop, b1z1_mcmc, b1z2_mcmc, b1z3_mcmc,\
+		#~ b1z4_mcmc, b3z1_mcmc, b3z2_mcmc, b3z3_mcmc, b3z4_mcmc))
 	#~ fid_file.close()
 
 ##########################################################################
@@ -245,17 +257,17 @@ def perturb(kstop, k,  lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, Pmmbi
 	
 
 
-	# 3rd order free -------------------------------------------------------------------
-	bias3PT1 = np.sqrt((b1pt3[0]**2 * Pmmbis+ b1pt3[0]*b2pt3[0]*A + 1/4.*b2pt3[0]**2*B + b1pt3[0]*bspt3[0]*C +\
-	1/2.*b2pt3[0]*bspt3[0]*D + 1/4.*bspt3[0]**2*E + 2*b1pt3[0]*b3pt3[0]*F)/Pmmbis)
-	bias3PT2 = np.sqrt((b1pt3[1]**2 * Pmmbis+ b1pt3[1]*b2pt3[1]*A + 1/4.*b2pt3[1]**2*B + b1pt3[1]*bspt3[1]*C +\
-	1/2.*b2pt3[1]*bspt3[1]*D + 1/4.*bspt3[1]**2*E + 2*b1pt3[1]*b3pt3[1]*F)/Pmmbis)
-	bias3PT3 = np.sqrt((b1pt3[2]**2 * Pmmbis+ b1pt3[2]*b2pt3[2]*A + 1/4.*b2pt3[2]**2*B + b1pt3[2]*bspt3[2]*C +\
-	1/2.*b2pt3[2]*bspt3[2]*D + 1/4.*bspt3[2]**2*E + 2*b1pt3[2]*b3pt3[2]*F)/Pmmbis)
-	bias3PT4 = np.sqrt((b1pt3[3]**2 * Pmmbis+ b1pt3[3]*b2pt3[3]*A + 1/4.*b2pt3[3]**2*B + b1pt3[3]*bspt3[3]*C +\
-	1/2.*b2pt3[3]*bspt3[3]*D + 1/4.*bspt3[3]**2*E + 2*b1pt3[3]*b3pt3[3]*F)/Pmmbis)
+	#~ # 3rd order free -------------------------------------------------------------------
+	#~ bias3PT1 = np.sqrt((b1pt3[0]**2 * Pmmbis+ b1pt3[0]*b2pt3[0]*A + 1/4.*b2pt3[0]**2*B + b1pt3[0]*bspt3[0]*C +\
+	#~ 1/2.*b2pt3[0]*bspt3[0]*D + 1/4.*bspt3[0]**2*E + 2*b1pt3[0]*b3pt3[0]*F)/Pmmbis)
+	#~ bias3PT2 = np.sqrt((b1pt3[1]**2 * Pmmbis+ b1pt3[1]*b2pt3[1]*A + 1/4.*b2pt3[1]**2*B + b1pt3[1]*bspt3[1]*C +\
+	#~ 1/2.*b2pt3[1]*bspt3[1]*D + 1/4.*bspt3[1]**2*E + 2*b1pt3[1]*b3pt3[1]*F)/Pmmbis)
+	#~ bias3PT3 = np.sqrt((b1pt3[2]**2 * Pmmbis+ b1pt3[2]*b2pt3[2]*A + 1/4.*b2pt3[2]**2*B + b1pt3[2]*bspt3[2]*C +\
+	#~ 1/2.*b2pt3[2]*bspt3[2]*D + 1/4.*bspt3[2]**2*E + 2*b1pt3[2]*b3pt3[2]*F)/Pmmbis)
+	#~ bias3PT4 = np.sqrt((b1pt3[3]**2 * Pmmbis+ b1pt3[3]*b2pt3[3]*A + 1/4.*b2pt3[3]**2*B + b1pt3[3]*bspt3[3]*C +\
+	#~ 1/2.*b2pt3[3]*bspt3[3]*D + 1/4.*bspt3[3]**2*E + 2*b1pt3[3]*b3pt3[3]*F)/Pmmbis)
 	
-	# 3rd order fixed --------------------------------------------------------------------------------
+	#~ # 3rd order fixed --------------------------------------------------------------------------------
 	B3nlTa = 32/315.*(b1pt3bis[0]-1)
 	B3nlTb = 32/315.*(b1pt3bis[1]-1)
 	B3nlTc = 32/315.*(b1pt3bis[2]-1)

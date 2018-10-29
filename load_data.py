@@ -231,6 +231,7 @@ def ld_data(mv, z, j):
 		bhh2 = np.zeros((len(k),10))
 		bhh3 = np.zeros((len(k),10))
 		bhh4 = np.zeros((len(k),10))
+		
 		for i in xrange(0,10):
 			Phh1[:,i] = Phh1[:,i]-Pshot1[i]
 			Phh2[:,i] = Phh2[:,i]-Pshot2[i]
@@ -249,7 +250,7 @@ def ld_data(mv, z, j):
 			bhh3[:,i] = np.sqrt(Phh3[:,i]/Pmat[:,i])
 			bhh4[:,i] = np.sqrt(Phh4[:,i]/Pmat[:,i])
 			
-			
+
 		#~ ### do the mean over quantitites ###
 		
 		Pmm = np.mean(Pmat[:,0:11], axis=1)
@@ -263,20 +264,36 @@ def ld_data(mv, z, j):
 		bias2 = np.mean(bhh2[:,0:11], axis=1)
 		bias3 = np.mean(bhh3[:,0:11], axis=1)
 		bias4 = np.mean(bhh4[:,0:11], axis=1)
+
 		
 		errb1 = np.std(bhh1[:,0:11], axis=1)
 		errb2 = np.std(bhh2[:,0:11], axis=1)
 		errb3 = np.std(bhh3[:,0:11], axis=1)
 		errb4 = np.std(bhh4[:,0:11], axis=1)
 		
+		
 		errPhh1 = np.std(Phh1[:,0:11], axis=1)
 		errPhh2 = np.std(Phh2[:,0:11], axis=1)
 		errPhh3 = np.std(Phh3[:,0:11], axis=1)
 		errPhh4 = np.std(Phh4[:,0:11], axis=1)
 		
+		### smooth the curve
+		from scipy.signal import savgol_filter
+		bias1s = savgol_filter(bias1, 51, 3) 
+		bias2s = savgol_filter(bias2, 51, 3) 
+		bias3s = savgol_filter(bias3, 51, 3) 
+		bias4s = savgol_filter(bias4, 51, 3) 
+		
+		errb1s = savgol_filter(errb1,51,6)
+		errb2s = savgol_filter(errb2,51,6)
+		errb3s = savgol_filter(errb3,51,6)
+		errb4s = savgol_filter(errb4,51,6)
+		
+		
 		
 		#~ plt.figure()
 		#~ M1, =plt.plot(k, bias1, label=r'$b_{cc}$')
+		#~ M1, =plt.plot(k, bias1, label='No smoothing')
 		#~ M2, =plt.plot(k, bias2)
 		#~ M3, =plt.plot(k, bias3)
 		#~ M4, =plt.plot(k, bias4)
@@ -292,11 +309,29 @@ def ld_data(mv, z, j):
 		#~ plt.legend(loc = 'lower left', title='z = '+str(z[j]), fancybox=True, fontsize = 14)
 		#~ plt.figlegend( (M1,M2,M3,M4), ('mass range M1','mass range M2','mass range M3','mass range M4'), \
 		#~ loc = 'upper center', ncol=2, labelspacing=0. , fontsize = 14)
-		#~ plt.xlabel('k [h/Mpc]', fontsize=14)
-		#~ plt.ylabel('b(k)', fontsize=14)
-		#~ plt.xscale('log')
 		#~ plt.ylim(0.0,bias4[0]*1.4)
-		#~ plt.xlim(8e-3,2)
+		#~ #---------------------------------------------------------------
+		#~ M1, =plt.plot(k, bias1s, label='4th order smoothing',linestyle='--', color='C0')
+		#~ M1, =plt.plot(k, bias2s,linestyle='--', color='C1')
+		#~ M1, =plt.plot(k, bias3s1,linestyle='--', color='C2')
+		#~ M1, =plt.plot(k, bias3s2,linestyle=':', color='C2')
+		#~ M1, =plt.plot(k, bias3s3,linestyle='-.', color='C2')
+		#~ M1, =plt.plot(k, bias4s,linestyle='--', color='C3')
+		#~ plt.ylim(0.9,1.1)
+		#~ plt.ylim(1.2,1.4)
+		#~ plt.legend(loc = 'upper right', title='z = '+str(z[j]), fancybox=True, fontsize=14)
+		#~ plt.plot(k, errb3)
+		#~ plt.plot(k, errb3s1)
+		#~ plt.plot(k, errb3s2)
+		#~ plt.plot(k, errb3s3)
+		#~ plt.plot(k, errb3s4)
+		#~ plt.plot(k, errb3s5)
+		#~ plt.ylim(0,0.05)
+		#------------------
+		#~ plt.xlabel('k [h/Mpc]', fontsize=14)
+		#~ plt.ylabel('b(k)', fontsize=16)
+		#~ plt.xscale('log')
+		#~ plt.xlim(8e-3,0.2)
 		#~ plt.show()
 		
 		#~ kill
@@ -608,6 +643,13 @@ def ld_data(mv, z, j):
 		bias2 = np.mean(bhh2[:,0:11], axis=1)
 		bias3 = np.mean(bhh3[:,0:11], axis=1)
 		bias4 = np.mean(bhh4[:,0:11], axis=1)
+		
+		### smooth the curve
+		from scipy.signal import savgol_filter
+		bias1s = savgol_filter(bias1, 51, 4) 
+		bias2s = savgol_filter(bias2, 51, 4) 
+		bias3s = savgol_filter(bias3, 51, 4) 
+		bias4s = savgol_filter(bias4, 51, 4) 
 		
 		errb1 = np.std(bhh1[:,0:11], axis=1)
 		errb2 = np.std(bhh2[:,0:11], axis=1)

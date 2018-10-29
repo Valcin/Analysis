@@ -135,9 +135,9 @@ def coeffit_pl (kstop,lb1, errlb1, pop, k ,b ,errb):
 	
 
 
-
+	posnum = 1000
 	sampler = emcee.EnsembleSampler(nwalkers, ndim, lnprob, args=(k, b, errb))
-	sampler.run_mcmc(pos, 1000)
+	sampler.run_mcmc(pos, posnum)
 	
 	samples = sampler.chain[:, 200:, :].reshape((-1, ndim))
 
@@ -157,18 +157,22 @@ def coeffit_pl (kstop,lb1, errlb1, pop, k ,b ,errb):
 	#~ ax1.set_title('b1')
 	#~ for i in xrange(0,nwalkers):
 		#~ ax1.plot(np.arange(1000), sampler.chain[i,:,0])
+	#~ ax1.plot(np.arange(posnum), np.mean(sampler.chain[:,:,0], axis =0))
 	#~ ax2 = plt.subplot(222)
 	#~ ax2.set_title('b2')
 	#~ for i in xrange(0,nwalkers):
 		#~ ax2.plot(np.arange(1000), sampler.chain[i,:,1])
+	#~ ax2.plot(np.arange(posnum), np.mean(sampler.chain[:,:,1], axis =0))
 	#~ ax3 = plt.subplot(223)
 	#~ ax3.set_title('b3')
 	#~ for i in xrange(0,nwalkers):
 		#~ ax3.plot(np.arange(1000), sampler.chain[i,:,2])
+	#~ ax3.plot(np.arange(posnum), np.mean(sampler.chain[:,:,2], axis =0))
 	#~ ax4 = plt.subplot(224)
 	#~ ax4.set_title('b4')
 	#~ for i in xrange(0,nwalkers):
 		#~ ax4.plot(np.arange(1000), sampler.chain[i,:,3])
+	#~ ax4.plot(np.arange(posnum), np.mean(sampler.chain[:,:,3], axis =0))
 	#~ plt.show()
 	
 	return b1_mcmc, b2_mcmc, b3_mcmc, b4_mcmc
@@ -190,7 +194,7 @@ def coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb1, errlb1, pop, k ,b ,errb):
 	def lnprior(theta):
 		b1, b2, bs = theta
 		#~ if lb1 - 3*errlb1 < b1 < lb1 + 3*errlb1  and b1 > 0:
-		if lb1 - 5*errlb1 < b1 < lb1 + 5*errlb1  and b1 > 0 and -4/7.*((lb1 - 20*errlb1)-1) > bs > -4/7.*((lb1 + 20*errlb1)-1):
+		if  0 < b1 < 10  and -10 < b2 < 10 and -10 < bs < 10:
 			return 0.0
 		#~ return 0.0
 		return -np.inf
@@ -267,13 +271,14 @@ def coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, pop, k ,b ,errb):
 		model = np.sqrt((b1**2 * Pmm[lim]+ b1*b2*A[lim] + 1/4.*b2**2*B[lim] + b1*bs*C[lim] + 1/2.*b2*bs*D[lim] + 1/4.*bs**2*E[lim]\
 		+ 2*b1*b3nl*F[lim])/Pmm[lim])
 		inv_sigma2 = 1.0/(yerr[lim]**2)
-		return -0.5*(np.sum((y[lim]-model)**2*inv_sigma2 - np.log(inv_sigma2)))
+		#~ return -0.5*(np.sum((y[lim]-model)**2*inv_sigma2 - np.log(inv_sigma2)))
+		return -0.5*(np.sum((y[lim]-model)**2*inv_sigma2 ))
 	
 	def lnprior(theta):
 		b1, b2, bs, b3nl = theta
 		#~ if lb1 - 3*errlb1 < b1 < lb1 + 3*errlb1  and b1 > 0:
-		if lb1 - 5*errlb1 < b1 < lb1 + 5*errlb1  and b1 > 0 and -4/7.*((lb1 - 70*errlb1)-1) > bs > -4/7.*((lb1 + 70*errlb1)-1)\
-		and 32/315.*((lb1 - 30*errlb1)-1) < b3nl < 32/315.*((lb1 + 30*errlb1)-1):
+		#~ if  0 < b1 < 10  and -10 < b2 < 10 and -10 < bs < 10 and -100 < b3nl < 100:
+		if  0 < b1 :
 			return 0.0
 		return -np.inf
 	
@@ -300,13 +305,13 @@ def coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, pop, k ,b ,errb):
 	#~ print 'AIC = '+str(AIC)
 	
 	ndim, nwalkers = len(pop), 300
-	pos = [result["x"] + 1e-3*np.random.randn(ndim) for i in range(nwalkers)]
+	pos = [result["x"] + 1e-2*np.random.randn(ndim) for i in range(nwalkers)]
 	
-
-	sampler = emcee.EnsembleSampler(nwalkers, ndim, lnprob, args=(k, b, errb))
-	sampler.run_mcmc(pos, 1000)
+	posnum = 15000
+	sampler = emcee.EnsembleSampler(nwalkers, ndim, lnprob, args=(k, b, errb),a=2)
+	sampler.run_mcmc(pos, posnum)
 	
-	samples = sampler.chain[:, 200:, :].reshape((-1, ndim))
+	samples = sampler.chain[:, 10000:, :].reshape((-1, ndim))
 
 	
 	#~ import corner
@@ -319,25 +324,32 @@ def coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, pop, k ,b ,errb):
 	print b1_mcmc, b2_mcmc, bs_mcmc, b3_mcmc
 	
 
-	#~ plt.figure()
-	#~ ax1 = plt.subplot(221)
-	#~ ax1.set_title('b1')
-	#~ for i in xrange(0,nwalkers):
-		#~ ax1.plot(np.arange(1000), sampler.chain[i,:,0])
-	#~ ax2 = plt.subplot(222)
-	#~ ax2.set_title('b2')
-	#~ for i in xrange(0,nwalkers):
-		#~ ax2.plot(np.arange(1000), sampler.chain[i,:,1])
-	#~ ax3 = plt.subplot(223)
-	#~ ax3.set_title('bs')
-	#~ for i in xrange(0,nwalkers):
-		#~ ax3.plot(np.arange(1000), sampler.chain[i,:,2])
-	#~ ax3 = plt.subplot(224)
-	#~ ax3.set_title('b3nl')
-	#~ for i in xrange(0,nwalkers):
-		#~ ax3.plot(np.arange(1000), sampler.chain[i,:,3])
+	print("Mean acceptance fraction: {0:.3f}"
+                .format(np.mean(sampler.acceptance_fraction)))
 
-	#~ plt.show()
+	plt.figure()
+	ax1 = plt.subplot(221)
+	ax1.set_title('b1')
+	#~ for i in xrange(0,nwalkers):
+		#~ ax1.plot(np.arange(posnum), sampler.chain[i,:,0])
+	ax1.plot(np.arange(posnum), np.mean(sampler.chain[:,:,0], axis =0))
+	ax2 = plt.subplot(222)
+	ax2.set_title('b2')
+	#~ for i in xrange(0,nwalkers):
+		#~ ax2.plot(np.arange(posnum), sampler.chain[i,:,1])
+	ax2.plot(np.arange(posnum), np.mean(sampler.chain[:,:,1], axis =0))
+	ax3 = plt.subplot(223)
+	ax3.set_title('bs')
+	#~ for i in xrange(0,nwalkers):
+		#~ ax3.plot(np.arange(posnum), sampler.chain[i,:,2])
+	ax3.plot(np.arange(posnum), np.mean(sampler.chain[:,:,2], axis =0))
+	ax4 = plt.subplot(224)
+	ax4.set_title('b3nl')
+	#~ for i in xrange(0,nwalkers):
+		#~ ax3.plot(np.arange(posnum), sampler.chain[i,:,3])
+	ax4.plot(np.arange(posnum), np.mean(sampler.chain[:,:,3], axis =0))
+
+	plt.show()
 
 	return b1_mcmc, b2_mcmc, bs_mcmc, b3_mcmc
 	#~ return b1_ml, b2_ml, bs_ml, b3nl
@@ -359,7 +371,7 @@ def coeffit_exp3(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, pop, k ,b ,errb):
 	
 	def lnprior(theta):
 		b1, b2 = theta
-		if lb1 - 3*errlb1 < b1 < lb1 + 3*errlb1  and b1 > 0:
+		if  0 < b1 < 10  and -10 < b2 < 10 :
 			return 0.0
 		#~ return 0.0
 		return -np.inf

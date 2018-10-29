@@ -1,6 +1,7 @@
 import numpy as np
 import h5py
 import math
+import scipy
 import readsnap
 import matplotlib
 #~ matplotlib.use('Agg')
@@ -112,7 +113,8 @@ for j in xrange(0,len(z)):
 		
 #~ #*********************************************************************************************
 #~ #*********************************************************************************************
-	ktest = np.logspace(np.log10(0.05),np.log10(0.55),15)
+	#~ ktest = np.logspace(np.log10(0.05),np.log10(0.55),15)
+	ktest = np.logspace(np.log10(0.1),np.log10(0.2),10)
 	for kstop in ktest:
 		print kstop
 	
@@ -131,7 +133,7 @@ for j in xrange(0,len(z)):
 			Tcb = pte[:,1]
 		
 		# interpolate to have more points and create an evenly logged array
-		kbis = np.logspace(np.log10(np.min(k)), np.log10(np.max(k)), 250)
+		kbis = np.logspace(np.log10(np.min(k)), np.log10(np.max(k)), 100)
 		Plinbis = np.interp(kbis, k, Plin)
 		lim = np.where((k < kstop)&(k > 1e-2))[0]
 
@@ -175,7 +177,10 @@ for j in xrange(0,len(z)):
 	##### compute linear bias and error
 		
 		# on interpolated array
-		toto = np.where(kbis < 0.05)[0]
+		if kstop < 0.05:
+			toto = np.where(kbis < kstop)[0]
+		else:
+			toto = np.where(kbis < 0.05)[0]
 		lb1 = np.mean(bias1bis[toto])
 		lb2 = np.mean(bias2bis[toto])
 		lb3 = np.mean(bias3bis[toto])
@@ -207,6 +212,7 @@ for j in xrange(0,len(z)):
 
 		biasF1, biasF2, biasF3, biasF4, biasF1bis, biasF2bis, biasF3bis, biasF4bis = poly(kstop, k, lb1, lb2, lb3, lb4,\
 		errlb1, errlb2, errlb3, errlb4, kbis, bias1bis, bias2bis, bias3bis, bias4bis, errb1bis, errb2bis, errb3bis, errb4bis,Mnu, z, j, case)
+		
 		#~ biasF1, biasF2, biasF3, biasF4 = poly(kstop, k, lb1, lb2, lb3, lb4,\
 		#~ errlb1, errlb2, errlb3, errlb4, kbis, bias1bis, bias2bis, bias3bis, bias4bis, errb1bis, errb2bis, errb3bis, errb4bis,Mnu, z, j, case)
 
@@ -217,9 +223,38 @@ for j in xrange(0,len(z)):
 		bias3PTbis4 = perturb(kstop, k,  lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, Pmmbis, kbis, bias1bis,\
 		bias2bis, bias3bis, bias4bis, errb1bis, errb2bis, errb3bis, errb4bis, A, B, C, D, E, F,Mnu, z, j, case)
 		
-	
+		#~ bins = np.logspace(np.log10(np.min(k)), np.log10(np.max(k)), 50)
+		#~ stats, binedges, binnumber = scipy.stats.binned_statistic(kbis,bias4bis,'mean',bins )
+		#~ binmean=10**(0.5*(np.log10(binedges[1:])+np.log10(binedges[:-1])))
+		#~ bin_width = (binedges[1] - binedges[0])
+		#~ bin_centers = binedges[1:] - bin_width/2
+		#~ print binmean
 		
-		
+		plt.figure()
+		plt.plot(kbis,bias1bis)
+		plt.plot(kbis,bias3PT1)
+		#~ plt.plot(kbis,biasF1)
+		plt.ylim(0.7, 0.9)
+		#~ #-------------------
+		#~ plt.plot(kbis,bias2bis)
+		#~ plt.plot(kbis,bias3PT2)
+		#~ plt.ylim(0.7, 0.9)
+		#-------------------
+		#~ plt.plot(kbis,bias3bis)
+		#~ plt.plot(kbis,bias3PT3)
+		#~ plt.ylim(0.9, 1.1)
+		#-------------------
+		#~ plt.plot(kbis,bias4bis)
+		#~ plt.plot(kbis,bias3PT4)
+		#~ plt.ylim(1.2, 1.4)
+		#--------------------
+		plt.xlim(1e-2, kstop)
+		plt.xscale('log')
+		plt.axvline(0.15)
+		plt.axvspan(kstop, 7, alpha=0.2, color='grey')
+		plt.show()
+
+		#~ kill
 	####################################################################
 	##### compute the chi2 of different quantities
 	####################################################################
@@ -282,7 +317,7 @@ for j in xrange(0,len(z)):
 		biasF1, biasF2, biasF3, biasF4, bias2PT1, bias2PT2, bias2PT3, bias2PT4,\
 		bias3PT1, bias3PT2, bias3PT3, bias3PT4, bias3PTbis1, bias3PTbis2, bias3PTbis3,bias3PTbis4,F1 ,F2,F3,F4,chi2F1,chi2F2,chi2F3,chi2F4,PT1,PT2,PT3,PT4,chi2PT1,chi2PT2,chi2PT3,chi2PT4,PTbis1,PTbis2,PTbis3\
 		,PTbis4,chi2PTbis1,chi2PTbis2,chi2PTbis3,chi2PTbis4
-	
+	kill
 end = time()
 print 'total time is '+str((end - start))	 
 
