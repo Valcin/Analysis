@@ -49,7 +49,7 @@ z = [0.0,0.5,1.0,2.0]
 # neutrino parameters
 hierarchy = 'degenerate' #'degenerate', 'normal', 'inverted'
 ###########################
-Mnu       = 0.0  #eV
+Mnu       = 0.0 #eV
 ###########################
 Nnu       = 0  #number of massive neutrinos
 Neff      = 3.046
@@ -77,7 +77,6 @@ for j in xrange(0,len(z)):
 ########################################################################
 	####################################################################
 	##### scale factor 
-
 	red = ['0.0','0.5','1.0','2.0']
 	ind = red.index(str(z[j]))
 	#~ fz = [0.524,0.759,0.875,0.958]
@@ -87,12 +86,12 @@ for j in xrange(0,len(z)):
 	Omeg_m_z = Omega_m * (1 + z[j])**3 / (Omega_m * (1 + z[j])**3 + Omega_l)
 	fz = Omeg_m_z**0.55
 	
-	
 #########################################################################
 #### load data from simualtion 
 
 	kcamb, Pcamb, k, Pmm, PH1, PH2, PH3 , PH4, errPhh1, errPhh2, errPhh3, errPhh4, bias1, bias2, bias3, bias4, \
-	errb1, errb2, errb3, errb4, Pmono1, Pmono2, Pmono3, Pmono4, errPr1, errPr2, errPr3, errPr4 = ld_data(Mnu, z, j)
+	bias1s, bias2s, bias3s, bias4s, errb1, errb2, errb3, errb4, Pmono1, Pmono2, Pmono3, Pmono4, errPr1, errPr2,\
+	errPr3, errPr4 = ld_data(Mnu, z, j)
 	
 ####################################################################
 ##### define the maximum scale for the fit 
@@ -101,7 +100,7 @@ for j in xrange(0,len(z)):
 	kstop3 = [0.15,0.15,0.15,0.15]
 	
 #### the case 
-	case = 2
+	case = 3
 	
 	if case == 1:
 		kstop = kstop1[ind]
@@ -146,7 +145,7 @@ for j in xrange(0,len(z)):
 				#~ fid_file.write('%.8g %.8g\n' % ( kclass[index_k], Tcb[index_k]))
 		#~ fid_file.close()
 		#~ ###
-		#~ #exp2.expected(j)
+		#exp2.expected(j)
 		#~ ###
 			
 		pte = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/exp/expected1-'+str(z[j])+'.txt')
@@ -182,7 +181,7 @@ for j in xrange(0,len(z)):
 		Tcb = pte[:,1]
 	
 	# interpolate to have more points and create an evenly logged array
-	kbis = np.logspace(np.log10(np.min(k)), np.log10(np.max(k)), 100)
+	kbis = np.logspace(np.log10(np.min(k)), np.log10(np.max(k)), 250)
 	#~ kbis = np.logspace(np.log10(np.min(kcamb)), np.log10(np.max(kcamb)), 200)
 	Plinbis = np.interp(kbis, k, Plin)
 	lim = np.where((k < kstop)&(k > 1e-2))[0]
@@ -206,6 +205,10 @@ for j in xrange(0,len(z)):
 	bias2bis = np.interp(kbis, k, bias2)
 	bias3bis = np.interp(kbis, k, bias3)
 	bias4bis = np.interp(kbis, k, bias4)
+	bias1biss = np.interp(kbis, k, bias1s)
+	bias2biss = np.interp(kbis, k, bias2s)
+	bias3biss = np.interp(kbis, k, bias3s)
+	bias4biss = np.interp(kbis, k, bias4s)
 	errb1bis = np.interp(kbis, k, errb1)
 	errb2bis = np.interp(kbis, k, errb2)
 	errb3bis = np.interp(kbis, k, errb3)
@@ -273,6 +276,9 @@ for j in xrange(0,len(z)):
 	biasF1, biasF2, biasF3, biasF4, biasF1bis, biasF2bis, biasF3bis, biasF4bis = poly(kstop, k, lb1, lb2, lb3, lb4,\
 	errlb1, errlb2, errlb3, errlb4, kbis, bias1bis, bias2bis, bias3bis, bias4bis, errb1bis, errb2bis, errb3bis, errb4bis,Mnu, z, j, case)
 
+	biasF1s, biasF2s, biasF3s, biasF4s, biasF1biss, biasF2biss, biasF3biss, biasF4biss = poly(kstop, k, lb1, lb2, lb3, lb4,\
+	errlb1, errlb2, errlb3, errlb4, kbis, bias1biss, bias2biss, bias3biss, bias4biss, errb1bis, errb2bis, errb3bis, errb4bis,Mnu, z, j, case)
+
 
 #-------------------------------------------------------------------
 
@@ -285,22 +291,36 @@ for j in xrange(0,len(z)):
 	bias3PTbis2, bias3PTbis3, bias3PTbis4 = perturb(kstop, k,  lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, Pmmbis, kbis, bias1bis,\
 	bias2bis, bias3bis, bias4bis, errb1bis, errb2bis, errb3bis, errb4bis, A, B, C, D, E, F,Mnu, z, j, case)
 	
+	bias2PT1s, bias2PT2s, bias2PT3s, bias2PT4s, bias3PT1s, bias3PT2s, bias3PT3s, bias3PT4s, bias3PTbis1s,\
+	bias3PTbis2s, bias3PTbis3s, bias3PTbis4s = perturb(kstop, k,  lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, Pmmbis,\
+	kbis, bias1biss, bias2biss, bias3biss, bias4biss, errb1bis, errb2bis, errb3bis, errb4bis, A, B, C, D, E, F,Mnu, z, j, case)
+	
 	
 ######################################################################
 ### mean of mass bins
 
 	B1 = np.array([bias2PT1/bias1bis, bias2PT2/bias2bis, bias2PT3/bias3bis, bias2PT4/bias4bis])
+	B1s = np.array([bias2PT1s/bias1biss, bias2PT2s/bias2biss, bias2PT3s/bias3biss, bias2PT4s/bias4biss])
 	B1bis = np.array([bias3PT1/bias1bis, bias3PT2/bias2bis, bias3PT3/bias3bis, bias3PT4/bias4bis])
+	B1biss = np.array([bias3PT1s/bias1biss, bias3PT2s/bias2biss, bias3PT3s/bias3biss, bias3PT4s/bias4biss])
 	B1ter = np.array([bias3PTbis1/bias1bis, bias3PTbis2/bias2bis, bias3PTbis3/bias3bis, bias3PTbis4/bias4bis])
+	B1ters = np.array([bias3PTbis1s/bias1biss, bias3PTbis2s/bias2biss, bias3PTbis3s/bias3biss, bias3PTbis4s/bias4biss])
 	B2 = np.array([bias1bis/bias1bis, bias2bis/bias2bis, bias3bis/bias3bis, bias4bis/bias4bis])
 	B3 = np.array([biasF1/bias1bis, biasF2/bias2bis, biasF3/bias3bis, biasF4/bias4bis])
+	B3s = np.array([biasF1s/bias1biss, biasF2s/bias2biss, biasF3s/bias3biss, biasF4s/bias4biss])
 	B3bis = np.array([biasF1bis/bias1bis, biasF2bis/bias2bis, biasF3bis/bias3bis, biasF4bis/bias4bis])
+	B3biss = np.array([biasF1biss/bias1biss, biasF2biss/bias2biss, biasF3biss/bias3biss, biasF4biss/bias4biss])
 	b1 = np.mean(B1,axis=0)
+	b1s = np.mean(B1s,axis=0)
 	b1bis = np.mean(B1bis,axis=0)
+	b1biss = np.mean(B1biss,axis=0)
 	b1ter = np.mean(B1ter,axis=0)
+	b1ters = np.mean(B1ters,axis=0)
 	b2 = np.mean(B2,axis=0)
 	b3 = np.mean(B3,axis=0)
+	b3s = np.mean(B3s,axis=0)
 	b3bis = np.mean(B3bis,axis=0)
+	b3biss = np.mean(B3biss,axis=0)
 
 
 ######################################################################
@@ -448,11 +468,16 @@ for j in xrange(0,len(z)):
 	ax2.axhline(1.01, color='k', linestyle=':')
 	ax2.axhline(0.99, color='k', linestyle=':')
 	B3, = ax2.plot(kbis, b3,label=r'w/ $b_{sim}$', color='C0')
-	B3, = ax2.plot(kbis, b3, label='z = '+str(z[j]), color='C0')
+	#~ B3, = ax2.plot(kbis, b3, label='z = '+str(z[j]), color='C0')
 	B1, = ax2.plot(kbis, b1, color='C1')
 	B1bis, = ax2.plot(kbis, b1bis, color='C2')
 	B1ter, = ax2.plot(kbis, b1ter,  color='C3')
 	B2, = ax2.plot(kbis, b2, color='k')
+	#----------------------------------------
+	B3s, = ax2.plot(kbis, b3s,label=r'w/ $b_{sim}$ smoothed', color='C0', linestyle='--')
+	B1s, = ax2.plot(kbis, b1s, color='C1', linestyle='--')
+	B1biss, = ax2.plot(kbis, b1biss, color='C2', linestyle='--')
+	B1ters, = ax2.plot(kbis, b1ters,  color='C3', linestyle='--')
 	
 	#~ B3anal, = ax2.plot(kbis, bb3,label=r'w/ $b_{model}$', color='C0',linestyle='--')
 	#~ B1anal, = ax2.plot(kbis, bb1, color='C1',linestyle='--')
@@ -464,7 +489,8 @@ for j in xrange(0,len(z)):
 	######################################
 	loc = 'upper center', ncol=5, labelspacing=0., title =r' M$\nu$ = '+str(Mnu)+', case '+str(case), fontsize=12)
 	ax2.axvspan(kstop, 7, alpha=0.2, color='grey')
-	ax2.legend(loc = 'upper left', fancybox=True, fontsize=14)
+	#~ ax2.legend(loc = 'upper left', fancybox=True, fontsize=14)
+	ax2.legend(loc = 'upper left', title = 'z = '+str(z[j]), fancybox=True, fontsize=14)
 	plt.subplots_adjust(left=0.1, wspace=0.05, hspace=0.1)
 	ax2.set_xscale('log')
 	if j == 0 :

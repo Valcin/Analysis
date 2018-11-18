@@ -72,7 +72,7 @@ BoxSize = 1000.0 #Mpc/h                                      
 
 start = time()
 
-for j in xrange(0,len(z)):
+for j in xrange(2,len(z)): #chmahe this after test
 ########################################################################
 ########################################################################
 	####################################################################
@@ -114,7 +114,7 @@ for j in xrange(0,len(z)):
 #~ #*********************************************************************************************
 #~ #*********************************************************************************************
 	#~ ktest = np.logspace(np.log10(0.05),np.log10(0.55),15)
-	ktest = np.logspace(np.log10(0.1),np.log10(0.2),10)
+	ktest = np.logspace(np.log10(0.04),np.log10(0.5),15)
 	for kstop in ktest:
 		print kstop
 	
@@ -133,7 +133,7 @@ for j in xrange(0,len(z)):
 			Tcb = pte[:,1]
 		
 		# interpolate to have more points and create an evenly logged array
-		kbis = np.logspace(np.log10(np.min(k)), np.log10(np.max(k)), 100)
+		kbis = np.logspace(np.log10(np.min(k)), np.log10(np.max(k)), 200)
 		Plinbis = np.interp(kbis, k, Plin)
 		lim = np.where((k < kstop)&(k > 1e-2))[0]
 
@@ -230,16 +230,15 @@ for j in xrange(0,len(z)):
 		#~ bin_centers = binedges[1:] - bin_width/2
 		#~ print binmean
 		
-		plt.figure()
-		plt.plot(kbis,bias1bis)
-		plt.plot(kbis,bias3PT1)
-		#~ plt.plot(kbis,biasF1)
-		plt.ylim(0.7, 0.9)
-		#~ #-------------------
-		#~ plt.plot(kbis,bias2bis)
-		#~ plt.plot(kbis,bias3PT2)
+		#~ plt.figure()
+		#~ plt.plot(kbis,bias1bis)
+		#~ plt.plot(kbis,bias3PT1)
 		#~ plt.ylim(0.7, 0.9)
 		#-------------------
+		#~ plt.plot(kbis,bias2bis)
+		#~ plt.plot(kbis,bias3PT2)
+		#~ plt.ylim(0.75, 0.95)
+		#~ #-------------------
 		#~ plt.plot(kbis,bias3bis)
 		#~ plt.plot(kbis,bias3PT3)
 		#~ plt.ylim(0.9, 1.1)
@@ -248,11 +247,11 @@ for j in xrange(0,len(z)):
 		#~ plt.plot(kbis,bias3PT4)
 		#~ plt.ylim(1.2, 1.4)
 		#--------------------
-		plt.xlim(1e-2, kstop)
-		plt.xscale('log')
-		plt.axvline(0.15)
-		plt.axvspan(kstop, 7, alpha=0.2, color='grey')
-		plt.show()
+		#~ plt.xlim(1e-2, kstop)
+		#~ plt.xscale('log')
+		#~ plt.axvline(0.15)
+		#~ plt.axvspan(kstop, 7, alpha=0.2, color='grey')
+		#~ plt.show()
 
 		#~ kill
 	####################################################################
@@ -297,7 +296,7 @@ for j in xrange(0,len(z)):
 		chi2PTter3 = np.sum(PTter3)
 		chi2PTter4 = np.sum(PTter4)
 		
-		cname = 'chi2_z='+str(z[j])+'.txt'
+		cname = 'chi2b_z='+str(z[j])+'.txt'
 		with open(cname, 'a+') as fid_file:
 
 			fid_file.write('%.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g\n' % (kstop,\
@@ -317,7 +316,7 @@ for j in xrange(0,len(z)):
 		biasF1, biasF2, biasF3, biasF4, bias2PT1, bias2PT2, bias2PT3, bias2PT4,\
 		bias3PT1, bias3PT2, bias3PT3, bias3PT4, bias3PTbis1, bias3PTbis2, bias3PTbis3,bias3PTbis4,F1 ,F2,F3,F4,chi2F1,chi2F2,chi2F3,chi2F4,PT1,PT2,PT3,PT4,chi2PT1,chi2PT2,chi2PT3,chi2PT4,PTbis1,PTbis2,PTbis3\
 		,PTbis4,chi2PTbis1,chi2PTbis2,chi2PTbis3,chi2PTbis4
-	kill
+	#~ kill
 end = time()
 print 'total time is '+str((end - start))	 
 

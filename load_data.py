@@ -76,7 +76,8 @@ def ld_data(mv, z, j):
 		Pcamb = camb[:,1]
 		#~ Plin = Pcamb
 		#~ klin = kcamb
-
+		
+		
 		#~ #-------------------------------------------------
 		#~ #---------------- Class ---------------------------
 		#~ #-------------------------------------------------
@@ -146,32 +147,30 @@ def ld_data(mv, z, j):
 
 		#~ ### compute where shot noise is 80% of the ps
 		
-		kk1t = np.zeros(10)
-		kk2t = np.zeros(10)
-		kk3t = np.zeros(10)
-		kk4t = np.zeros(10)
+		#~ kk1t = np.zeros(10)
+		#~ kk2t = np.zeros(10)
+		#~ kk3t = np.zeros(10)
+		#~ kk4t = np.zeros(10)
 		
-		for i in xrange(0,10):
-			dede1 = np.where(0.8*Phh1[:,i] < Pshot1[i])[0]
-			dede2 = np.where(0.8*Phh2[:,i] < Pshot2[i])[0]
-			dede3 = np.where(0.8*Phh3[:,i] < Pshot3[i])[0]
-			dede4 = np.where(0.8*Phh4[:,i] < Pshot4[i])[0]
-			dedemin1 = np.min(dede1)
-			dedemin2 = np.min(dede2)
-			dedemin3 = np.min(dede3)
-			dedemin4 = np.min(dede4)
-			kk1t[i] = k[dedemin1]
-			kk2t[i] = k[dedemin2]
-			kk3t[i] = k[dedemin3]
-			kk4t[i] = k[dedemin4]
+		#~ for i in xrange(0,10):
+			#~ dede1 = np.where(0.8*Phh1[:,i] < Pshot1[i])[0]
+			#~ dede2 = np.where(0.8*Phh2[:,i] < Pshot2[i])[0]
+			#~ dede3 = np.where(0.8*Phh3[:,i] < Pshot3[i])[0]
+			#~ dede4 = np.where(0.8*Phh4[:,i] < Pshot4[i])[0]
+			#~ dedemin1 = np.min(dede1)
+			#~ dedemin2 = np.min(dede2)
+			#~ dedemin3 = np.min(dede3)
+			#~ dedemin4 = np.min(dede4)
+			#~ kk1t[i] = k[dedemin1]
+			#~ kk2t[i] = k[dedemin2]
+			#~ kk3t[i] = k[dedemin3]
+			#~ kk4t[i] = k[dedemin4]
 			
-		kk1 = np.mean(kk1t)
-		kk2 = np.mean(kk2t)
-		kk3 = np.mean(kk3t)
-		kk4 = np.mean(kk4t)
-		kk4 = np.mean(kk4t)
+		#~ kk1 = np.mean(kk1t)
+		#~ kk2 = np.mean(kk2t)
+		#~ kk3 = np.mean(kk3t)
+		#~ kk4 = np.mean(kk4t)
 
-		
 		
 		### do the mean over quantitites ###
 		
@@ -190,18 +189,25 @@ def ld_data(mv, z, j):
 		#~ errPhh3 = np.std(Phh3[:,0:11], axis=1)
 		#~ errPhh4 = np.std(Phh4[:,0:11], axis=1)
 		
-		
+		#~ with open('test.txt', 'w') as fid_file:
+			#~ for index_k in xrange(len(k)):
+				#~ fid_file.write('%.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g\n' % ( PH1[index_k],\
+				#~ PH2[index_k],PH3[index_k],PH4[index_k],\
+				#~ Pshot1, Pshot2, Pshot3, Pshot4, kk1, kk2, kk3, kk4 ))
+		#~ fid_file.close()
 
 		
 		#~ plt.figure()
 		#~ M1, =plt.plot(k, PH1, label='halo Power spectrum')
 		#~ M2, =plt.plot(k, PH2)
 		#~ M3, =plt.plot(k, PH3)
-		#~ M4, =plt.plot(k, PH4)
+		#~ M4, =plt.plot(k, PH4, c='k')
+		#~ for i in range(10):
+			#~ plt.scatter(k, Phh4[:,i])
 		#~ plt.axhline( Pshot1, color='C0', linestyle='--', label='shot noise')
 		#~ plt.axhline( Pshot2, color='C1', linestyle='--')
 		#~ plt.axhline( Pshot3, color='C2', linestyle='--')
-		#~ plt.axhline( Pshot4, color='C3', linestyle='--')
+		#~ plt.axhline( Pshot4, color='k', linestyle='--', label='shot noise')
 		#~ plt.fill_between(k,PH1-errPhh1, PH1+errPhh1, alpha=0.6)
 		#~ plt.fill_between(k,PH2-errPhh2, PH2+errPhh2, alpha=0.6)
 		#~ plt.fill_between(k,PH3-errPhh3, PH3+errPhh3, alpha=0.6)
@@ -209,17 +215,17 @@ def ld_data(mv, z, j):
 		#~ plt.axvline( kk1, color='C0', linestyle=':', label='shot noise = 80% of P(k)')
 		#~ plt.axvline( kk2, color='C1', linestyle=':')
 		#~ plt.axvline( kk3, color='C2', linestyle=':')
-		#~ plt.axvline( kk4, color='C3', linestyle=':')
+		#~ plt.axvline( kk4, color='k', linestyle=':', label='shot noise = 80% of P(k)')
 		#~ plt.legend(loc = 'upper right', title='z = '+str(z[j]), fancybox=True)
 		#~ plt.legend(loc = 'lower left', title='z = '+str(z[j]), fancybox=True, fontsize = 14)
 		#~ plt.figlegend( (M1,M2,M3,M4), ('mass range M1','mass range M2','mass range M3','mass range M4'), \
-		#~ loc = 'upper center', ncol=2, labelspacing=0. , fontsize = 14)
+		#~ loc = 'upper center', ncol=2, labelspacing=0. , title ='Mv = 0.0eV ', fontsize = 14)
 		#~ plt.xlabel('k [h/Mpc]', fontsize=14)
 		#~ plt.ylabel('P(k)', fontsize=14)
 		#~ plt.xscale('log')
 		#~ plt.yscale('log')
 		#~ plt.xlim(8e-3,2)
-		#~ plt.ylim(1e2,1e5)
+		#~ plt.ylim(1e4,2e5)
 		#~ plt.show()
 		
 		#~ kill
@@ -231,6 +237,7 @@ def ld_data(mv, z, j):
 		bhh2 = np.zeros((len(k),10))
 		bhh3 = np.zeros((len(k),10))
 		bhh4 = np.zeros((len(k),10))
+		
 		
 		for i in xrange(0,10):
 			Phh1[:,i] = Phh1[:,i]-Pshot1[i]
@@ -258,14 +265,35 @@ def ld_data(mv, z, j):
 		PH2 = np.mean(Phh2[:,0:11], axis=1)
 		PH3 = np.mean(Phh3[:,0:11], axis=1)
 		PH4 = np.mean(Phh4[:,0:11], axis=1)
-
 		
 		bias1 = np.mean(bhh1[:,0:11], axis=1)
 		bias2 = np.mean(bhh2[:,0:11], axis=1)
 		bias3 = np.mean(bhh3[:,0:11], axis=1)
 		bias4 = np.mean(bhh4[:,0:11], axis=1)
-
 		
+		hsize = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/hsize_z='+str(z[j])+'.txt')
+		hsize_m1 = hsize[:,0]
+		hsize_m2 = hsize[:,1]
+		hsize_m3 = hsize[:,2]
+		hsize_m4 = hsize[:,3]
+		mostmass = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/mostmass_z='+str(z[j])+'.txt')
+		mostmass_m1 = mostmass[:,0]
+		mostmass_m2 = mostmass[:,1]
+		mostmass_m3 = mostmass[:,2]
+		mostmass_m4 = mostmass[:,3]
+		
+		
+		sn1 = Phh1[:,0:11]/Pshot1[0:11]
+		sn2 = Phh2[:,0:11]/Pshot2[0:11]
+		sn3 = Phh3[:,0:11]/Pshot3[0:11]
+		sn4 = Phh4[:,0:11]/Pshot4[0:11]
+		
+		Sn1 = np.sum(sn1,axis=1)
+		wei1 = sn1/Sn1[:,None]
+		
+	
+		
+
 		errb1 = np.std(bhh1[:,0:11], axis=1)
 		errb2 = np.std(bhh2[:,0:11], axis=1)
 		errb3 = np.std(bhh3[:,0:11], axis=1)
@@ -284,23 +312,21 @@ def ld_data(mv, z, j):
 		bias3s = savgol_filter(bias3, 51, 3) 
 		bias4s = savgol_filter(bias4, 51, 3) 
 		
-		errb1s = savgol_filter(errb1,51,6)
-		errb2s = savgol_filter(errb2,51,6)
-		errb3s = savgol_filter(errb3,51,6)
-		errb4s = savgol_filter(errb4,51,6)
-		
 		
 		
 		#~ plt.figure()
-		#~ M1, =plt.plot(k, bias1, label=r'$b_{cc}$')
-		#~ M1, =plt.plot(k, bias1, label='No smoothing')
+		#~ M1, =plt.plot(k, bias1, label=r'$b_{cc}$',c='r')
+		#~ M1, =plt.plot(k, bias1bis,c='k')
 		#~ M2, =plt.plot(k, bias2)
+		#~ M2, =plt.plot(k, bias2bis)
 		#~ M3, =plt.plot(k, bias3)
-		#~ M4, =plt.plot(k, bias4)
+		#~ M3, =plt.plot(k, bias3bis)
+		#~ M4, =plt.plot(k, bias4,c='C0', label='No smoothing')
 		#~ plt.fill_between(k,bias1-errb1, bias1+errb1, alpha=0.6)
 		#~ plt.fill_between(k,bias2-errb2, bias2+errb2, alpha=0.6)
 		#~ plt.fill_between(k,bias3-errb3, bias3+errb3, alpha=0.6)
 		#~ plt.fill_between(k,bias4-errb4, bias4+errb4, alpha=0.6)
+		#~ plt.errorbar(k, bias4, yerr=errb4,fmt='o', capsize=2, )
 		#~ plt.axvline( kk1, color='C0', linestyle=':', label='shot noise = 80% of P(k)')
 		#~ plt.axvline( kk2, color='C1', linestyle=':')
 		#~ plt.axvline( kk3, color='C2', linestyle=':')
@@ -313,19 +339,33 @@ def ld_data(mv, z, j):
 		#~ #---------------------------------------------------------------
 		#~ M1, =plt.plot(k, bias1s, label='4th order smoothing',linestyle='--', color='C0')
 		#~ M1, =plt.plot(k, bias2s,linestyle='--', color='C1')
-		#~ M1, =plt.plot(k, bias3s1,linestyle='--', color='C2')
-		#~ M1, =plt.plot(k, bias3s2,linestyle=':', color='C2')
-		#~ M1, =plt.plot(k, bias3s3,linestyle='-.', color='C2')
-		#~ M1, =plt.plot(k, bias4s,linestyle='--', color='C3')
+		#~ M1, =plt.plot(k, bias3s,linestyle='--', color='C2')
+		#~ M1, =plt.plot(k, bias4s,linestyle='--', color='C3', label='smoothing 3rd order')
+		#~ plt.plot(k, PH1, c='r')
+		#~ plt.plot(k, PH1bis, c='r',linestyle='--')
+		#~ plt.plot(k, PH2, c='b')
+		#~ plt.plot(k, PH2bis,c='b',linestyle='--')
+		#~ plt.plot(k, PH3, c='g')
+		#~ plt.plot(k, PH3bis, c='g',linestyle='--')
+		#~ plt.plot(k, PH4, c='c')
+		#~ plt.plot(k, Pmm, color='k')
+		
+		#~ for i in range(10):
+			#~ print np.min(hsize_m3[i])
+			#~ plt.scatter(k, Phh3[:,i], c = np.full((len(k)),Phh3[:,i]/Pshot3[i]),\
+			#~ norm=matplotlib.colors.Normalize(np.min(Phh3[:,i]/Pshot3[i]),np.max(Phh3[:,i]/Pshot3[i])))
+			#~ plt.scatter(k, Phh3[:,i], c = np.full((len(k)),hsize_m3[i]),\
+			#~ norm=matplotlib.colors.Normalize(np.min(hsize_m3),np.max(hsize_m3)))
+			#~ plt.scatter(k, Phh3[:,i], c = np.full((len(k)),Pshot3[i]),\
+			#~ norm=matplotlib.colors.Normalize(np.min(Pshot3),np.max(Pshot3)))
+		
+		#~ cbar= plt.colorbar()
+		#~ plt.ylim(0.7,0.9)
+		#~ plt.ylim(0.75,0.95)
 		#~ plt.ylim(0.9,1.1)
 		#~ plt.ylim(1.2,1.4)
+		#~ plt.title('Mass bin M4')
 		#~ plt.legend(loc = 'upper right', title='z = '+str(z[j]), fancybox=True, fontsize=14)
-		#~ plt.plot(k, errb3)
-		#~ plt.plot(k, errb3s1)
-		#~ plt.plot(k, errb3s2)
-		#~ plt.plot(k, errb3s3)
-		#~ plt.plot(k, errb3s4)
-		#~ plt.plot(k, errb3s5)
 		#~ plt.ylim(0,0.05)
 		#------------------
 		#~ plt.xlabel('k [h/Mpc]', fontsize=14)
@@ -496,7 +536,9 @@ def ld_data(mv, z, j):
 		errPr4 = np.std(Pmono4temp[:,0:11], axis=1)
 
 		return kcamb, Pcamb, k, Pmm, PH1, PH2, PH3 , PH4, errPhh1, errPhh2, errPhh3, errPhh4, bias1, bias2, bias3, bias4, \
-		errb1, errb2, errb3, errb4, Pmono1, Pmono2, Pmono3, Pmono4, errPr1, errPr2, errPr3, errPr4
+		bias1s, bias2s, bias3s, bias4s, errb1, errb2, errb3, errb4, Pmono1, Pmono2, Pmono3, Pmono4, errPr1, errPr2, errPr3, errPr4
+		#~ return kcamb, Pcamb, k, Pmm, PH1, PH2, PH3 , PH4, errPhh1, errPhh2, errPhh3, errPhh4, bias1s, bias2s, bias3s, bias4s, \
+		#~ errb1, errb2, errb3, errb4, Pmono1, Pmono2, Pmono3, Pmono4, errPr1, errPr2, errPr3, errPr4
 		
 #####################################################################################################################################
 #####################################################################################################################################
@@ -601,9 +643,108 @@ def ld_data(mv, z, j):
 		for i in xrange(0,10):
 			Phh4[:,i]= d4[:,pnum1[i]]
 			Pshot4[i]= d4[0,pnum2[i]]
-
+	
+	
+		#~ ### compute where shot noise is 80% of the ps
+		
+		#~ kk1t = np.zeros(10)
+		#~ kk2t = np.zeros(10)
+		#~ kk3t = np.zeros(10)
+		#~ kk4t = np.zeros(10)
+		
+		#~ for i in xrange(0,10):
+			#~ dede1 = np.where(0.8*Phh1[:,i] < Pshot1[i])[0]
+			#~ dede2 = np.where(0.8*Phh2[:,i] < Pshot2[i])[0]
+			#~ dede3 = np.where(0.8*Phh3[:,i] < Pshot3[i])[0]
+			#~ dede4 = np.where(0.8*Phh4[:,i] < Pshot4[i])[0]
+			#~ dedemin1 = np.min(dede1)
+			#~ dedemin2 = np.min(dede2)
+			#~ dedemin3 = np.min(dede3)
+			#~ dedemin4 = np.min(dede4)
+			#~ kk1t[i] = k[dedemin1]
+			#~ kk2t[i] = k[dedemin2]
+			#~ kk3t[i] = k[dedemin3]
+			#~ kk4t[i] = k[dedemin4]
+			
+		#~ kk1 = np.mean(kk1t)
+		#~ kk2 = np.mean(kk2t)
+		#~ kk3 = np.mean(kk3t)
+		#~ kk4 = np.mean(kk4t)
 
 		
+		### do the mean over quantitites ###
+		
+		#~ Pmm = np.mean(Pmat[:,0:11], axis=1)
+		#~ Pshot1 = np.mean(Pshot1)
+		#~ Pshot2 = np.mean(Pshot2)
+		#~ Pshot3 = np.mean(Pshot3)
+		#~ Pshot4 = np.mean(Pshot4)
+		#~ PH1 = np.mean(Phh1[:,0:11], axis=1)
+		#~ PH2 = np.mean(Phh2[:,0:11], axis=1)
+		#~ PH3 = np.mean(Phh3[:,0:11], axis=1)
+		#~ PH4 = np.mean(Phh4[:,0:11], axis=1)
+		
+		#~ errPhh1 = np.std(Phh1[:,0:11], axis=1)
+		#~ errPhh2 = np.std(Phh2[:,0:11], axis=1)
+		#~ errPhh3 = np.std(Phh3[:,0:11], axis=1)
+		#~ errPhh4 = np.std(Phh4[:,0:11], axis=1)
+		
+		#~ test = np.loadtxt('test.txt')
+		#~ PH1bis = test[:,0]
+		#~ PH2bis = test[:,1]
+		#~ PH3bis = test[:,2]
+		#~ PH4bis = test[:,3]
+		#~ Pshot1bis = test[0,4]
+		#~ Pshot2bis = test[0,5]
+		#~ Pshot3bis = test[0,6]
+		#~ Pshot4bis = test[0,7]
+		#~ kk1bis = test[0,8]
+		#~ kk2bis = test[0,9]
+		#~ kk3bis = test[0,10]
+		#~ kk4bis = test[0,11]
+		
+		#~ plt.figure()
+		#~ M1, =plt.plot(k, PH1, c ='C0', label='halo Power spectrum')
+		#~ M2, =plt.plot(k, PH2, c ='C1',)
+		#~ M3, =plt.plot(k, PH3, c ='C2',)
+		#~ M4, =plt.plot(k, PH4, c ='C3',)
+		#~ M1, =plt.plot(k, PH1bis, c ='C0',)
+		#~ M2, =plt.plot(k, PH2bis, c ='C1',)
+		#~ M3, =plt.plot(k, PH3bis, c ='C2',)
+		#~ M4, =plt.plot(k, PH4bis, c ='C3',)
+		#~ plt.axhline( Pshot1, color='C0', linestyle='--', label='shot noise')
+		#~ plt.axhline( Pshot2, color='C1', linestyle='--')
+		#~ plt.axhline( Pshot3, color='C2', linestyle='--')
+		#~ plt.axhline( Pshot4, color='C3', linestyle='--')
+		#~ plt.axhline( Pshot1bis, color='C0', linestyle='--')
+		#~ plt.axhline( Pshot2bis, color='C1', linestyle='--')
+		#~ plt.axhline( Pshot3bis, color='C2', linestyle='--')
+		#~ plt.axhline( Pshot4bis, color='C3', linestyle='--')
+		#~ plt.fill_between(k,PH1-errPhh1, PH1+errPhh1, alpha=0.6)
+		#~ plt.fill_between(k,PH2-errPhh2, PH2+errPhh2, alpha=0.6)
+		#~ plt.fill_between(k,PH3-errPhh3, PH3+errPhh3, alpha=0.6)
+		#~ plt.fill_between(k,PH4-errPhh4, PH4+errPhh4, alpha=0.6)
+		#~ plt.axvline( kk1, color='C0', linestyle=':', label='shot noise = 80% of P(k)')
+		#~ plt.axvline( kk2, color='C1', linestyle=':')
+		#~ plt.axvline( kk3, color='C2', linestyle=':')
+		#~ plt.axvline( kk4, color='C3', linestyle=':')
+		#~ plt.axvline( kk1bis, color='C0', linestyle=':')
+		#~ plt.axvline( kk2bis, color='C1', linestyle=':')
+		#~ plt.axvline( kk3bis, color='C2', linestyle=':')
+		#~ plt.axvline( kk4bis, color='C3', linestyle=':')
+		#~ plt.legend(loc = 'upper right', title='z = '+str(z[j]), fancybox=True)
+		#~ plt.legend(loc = 'lower left', title='z = '+str(z[j]), fancybox=True, fontsize = 14)
+		#~ plt.figlegend( (M1,M2,M3,M4), ('mass range M1','mass range M2','mass range M3','mass range M4'), \
+		#~ loc = 'upper center', ncol=2, labelspacing=0. , title ='Mv = 0.15eV ', fontsize = 14)
+		#~ plt.xlabel('k [h/Mpc]', fontsize=14)
+		#~ plt.ylabel('P(k)', fontsize=14)
+		#~ plt.xscale('log')
+		#~ plt.yscale('log')
+		#~ plt.xlim(8e-3,2)
+		#~ plt.ylim(1e2,2e5)
+		#~ plt.show()
+		
+		#~ kill
 		#-------------------------------------------------------------------
 		#----remove shot noise, compute bias and bias variance -------------
 		#-------------------------------------------------------------------
@@ -646,10 +787,10 @@ def ld_data(mv, z, j):
 		
 		### smooth the curve
 		from scipy.signal import savgol_filter
-		bias1s = savgol_filter(bias1, 51, 4) 
-		bias2s = savgol_filter(bias2, 51, 4) 
-		bias3s = savgol_filter(bias3, 51, 4) 
-		bias4s = savgol_filter(bias4, 51, 4) 
+		bias1s = savgol_filter(bias1, 51, 3) 
+		bias2s = savgol_filter(bias2, 51, 3) 
+		bias3s = savgol_filter(bias3, 51, 3) 
+		bias4s = savgol_filter(bias4, 51, 3) 
 		
 		errb1 = np.std(bhh1[:,0:11], axis=1)
 		errb2 = np.std(bhh2[:,0:11], axis=1)
@@ -660,6 +801,7 @@ def ld_data(mv, z, j):
 		errPhh2 = np.std(Phh2[:,0:11], axis=1)
 		errPhh3 = np.std(Phh3[:,0:11], axis=1)
 		errPhh4 = np.std(Phh4[:,0:11], axis=1)
+		
 		
 		
 		#-----------------------------------------------------------------------
@@ -799,4 +941,6 @@ def ld_data(mv, z, j):
 		errPr4 = np.std(Pmono4temp[:,0:11], axis=1)
 		
 		return kcamb, Pcamb, k, Pmm, PH1, PH2, PH3 , PH4, errPhh1, errPhh2, errPhh3, errPhh4, bias1, bias2, bias3, bias4, \
-		errb1, errb2, errb3, errb4, Pmono1, Pmono2, Pmono3, Pmono4, errPr1, errPr2, errPr3, errPr4
+		bias1s, bias2s, bias3s, bias4s, errb1, errb2, errb3, errb4, Pmono1, Pmono2, Pmono3, Pmono4, errPr1, errPr2, errPr3, errPr4
+		#~ return kcamb, Pcamb, k, Pmm, PH1, PH2, PH3 , PH4, errPhh1, errPhh2, errPhh3, errPhh4, bias1s, bias2s, bias3s, bias4s, \
+		#~ errb1, errb2, errb3, errb4, Pmono1, Pmono2, Pmono3, Pmono4, errPr1, errPr2, errPr3, errPr4

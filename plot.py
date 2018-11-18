@@ -14,22 +14,22 @@ Mnu = 0.0
 z = [0.0,0.5,1.0,2.0]
 
 
-bfile = np.loadtxt('3rdorder_0.0.txt')
-ktest = bfile[:,0]
-b1a = bfile[:,1]
-b1b = bfile[:,2]
-b1c = bfile[:,3]
-b1d = bfile[:,4]
-b3a = bfile[:,5]
-b3b = bfile[:,6]
-b3c = bfile[:,7]
-b3d = bfile[:,8]
+#~ bfile = np.loadtxt('3rdorder_0.0.txt')
+#~ ktest = bfile[:,0]
+#~ b1a = bfile[:,1]
+#~ b1b = bfile[:,2]
+#~ b1c = bfile[:,3]
+#~ b1d = bfile[:,4]
+#~ b3a = bfile[:,5]
+#~ b3b = bfile[:,6]
+#~ b3c = bfile[:,7]
+#~ b3d = bfile[:,8]
 
-plt.figure()
-plt.plot(ktest, b3a/(b1a-1))
-plt.plot(ktest, b3b/(b1b-1))
-plt.plot(ktest, b3c/(b1c-1))
-plt.plot(ktest, b3d/(b1d-1))
+#~ plt.figure()
+#~ M1, =plt.plot(ktest, b3a/(b1a-1))
+#~ M2, =plt.plot(ktest, b3b/(b1b-1))
+#~ M3, =plt.plot(ktest, b3c/(b1c-1))
+#~ M4, =plt.plot(ktest, b3d/(b1d-1))
 #~ plt.plot(ktest, b1a)
 #~ plt.plot(ktest, b1b)
 #~ plt.plot(ktest, b1c)
@@ -38,33 +38,37 @@ plt.plot(ktest, b3d/(b1d-1))
 #~ plt.plot(ktest, b3b)
 #~ plt.plot(ktest, b3c)
 #~ plt.plot(ktest, b3d)
-plt.xscale('log')
-plt.axhline(32/315., color='k')
-plt.xlim(0.03,0.2)
-plt.ylim(-0.5,5)
-plt.show()
+#~ plt.figlegend( (M1,M2,M3,M4), ('$M_{1}$','$M_{2}$','$M_{3}$','$M_{4}$'),\
+#~ loc = 'upper center', ncol=5, labelspacing=0., title =r' M$\nu$ = '+str(Mnu), fontsize=14)
+#~ plt.xscale('log')
+#~ plt.ylabel(r'$b_{3nl}$ / $(b_{1} - 1)$ ', fontsize = 14)
+#~ plt.xlabel(r'$k$ [h/Mpc] ', fontsize = 14)
+#~ plt.axhline(32/315., color='k')
+#~ plt.xlim(0.04,0.2)
+#~ plt.ylim(-0.6,0.6)
+#~ plt.show()
 
-j=0
-cname = 'chi2_z='+str(z[j])+'.txt'
-goodfit = np.loadtxt(cname) 
-kmax = goodfit[:,0]
-chipbis1 = goodfit[:,9]
-chipbis2 = goodfit[:,10]
-chipbis3 = goodfit[:,11]
-chipbis4 = goodfit[:,12]
-Chipbis = np.array([chipbis1,chipbis2,chipbis3,chipbis4])
-chipbis = np.mean(Chipbis, axis=0)
-echipbis = np.std(Chipbis, axis=0)
-plt.figure()
-plt.plot(kmax, chipbis1)
-plt.plot(kmax, chipbis2)
-plt.plot(kmax, chipbis3)
-plt.plot(kmax, chipbis4)
-plt.xscale('log')
-plt.xlim(0.04,0.2)
-plt.ylim(0,10)
-plt.show()
-kill
+#~ j=0
+#~ cname = 'chi2a_z='+str(z[j])+'.txt'
+#~ goodfit = np.loadtxt(cname) 
+#~ kmax = goodfit[:,0]
+#~ chipbis1 = goodfit[:,9]
+#~ chipbis2 = goodfit[:,10]
+#~ chipbis3 = goodfit[:,11]
+#~ chipbis4 = goodfit[:,12]
+#~ Chipbis = np.array([chipbis1,chipbis2,chipbis3,chipbis4])
+#~ chipbis = np.mean(Chipbis, axis=0)
+#~ echipbis = np.std(Chipbis, axis=0)
+#~ plt.figure()
+#~ plt.plot(kmax, chipbis1)
+#~ plt.plot(kmax, chipbis2)
+#~ plt.plot(kmax, chipbis3)
+#~ plt.plot(kmax, chipbis4)
+#~ plt.xscale('log')
+#~ plt.xlim(0.04,0.2)
+#~ plt.ylim(0,10)
+#~ plt.show()
+#~ kill
 ########################################################################
 ############# 	0.0 eV Masseless neutrino 
 ########################################################################
@@ -80,44 +84,78 @@ for j in xrange(0,len(z)):
 	Dz = [ 1.,0.77,0.61,0.42]
 	print 'For redshift z = ' + str(z[j])
 
-	cname = 'chi2_z='+str(z[j])+'.txt'
+	cname1 = 'chi2a_z='+str(z[j])+'.txt'
+	cname2 = 'chi2b_z='+str(z[j])+'.txt'
 
-	goodfit = np.loadtxt(cname) 
-	kmax = goodfit[:,0]
+	goodfit1 = np.loadtxt(cname1) 
+	goodfit2 = np.loadtxt(cname2) 
+	kmax = goodfit1[:,0]
 	#--------------------
-	chipl1 = goodfit[:,1]
-	chipl2 = goodfit[:,2]
-	chipl3 = goodfit[:,3]
-	chipl4 = goodfit[:,4]
+	chipl1 = goodfit1[:,1]
+	chipl2 = goodfit1[:,2]
+	chipl3 = goodfit1[:,3]
+	chipl4 = goodfit1[:,4]
 	Chipl = np.array([chipl1,chipl2,chipl3,chipl4])
 	chipl = np.mean(Chipl, axis=0)
 	echipl = np.std(Chipl, axis=0)
+	
+	chipl1prime = goodfit2[:,1]
+	chipl2prime = goodfit2[:,2]
+	chipl3prime = goodfit2[:,3]
+	chipl4prime = goodfit2[:,4]
+	Chiplprime = np.array([chipl1prime,chipl2prime,chipl3prime,chipl4prime])
+	chiplprime = np.mean(Chiplprime, axis=0)
+	echiplprime = np.std(Chiplprime, axis=0)
 
 	#--------------------
-	chipt1 = goodfit[:,5]
-	chipt2 = goodfit[:,6]
-	chipt3 = goodfit[:,7]
-	chipt4 = goodfit[:,8]
+	chipt1 = goodfit1[:,5]
+	chipt2 = goodfit1[:,6]
+	chipt3 = goodfit1[:,7]
+	chipt4 = goodfit1[:,8]
 	Chipt = np.array([chipt1,chipt2,chipt3,chipt4])
 	chipt = np.mean(Chipt, axis=0)
 	echipt = np.std(Chipt, axis=0)
 	
+	chipt1prime = goodfit2[:,5]
+	chipt2prime = goodfit2[:,6]
+	chipt3prime = goodfit2[:,7]
+	chipt4prime = goodfit2[:,8]
+	Chiptprime = np.array([chipt1prime,chipt2prime,chipt3prime,chipt4prime])
+	chiptprime = np.mean(Chiptprime, axis=0)
+	echiptprime = np.std(Chiptprime, axis=0)
+	
 	#--------------------
-	chipbis1 = goodfit[:,9]
-	chipbis2 = goodfit[:,10]
-	chipbis3 = goodfit[:,11]
-	chipbis4 = goodfit[:,12]
+	chipbis1 = goodfit1[:,9]
+	chipbis2 = goodfit1[:,10]
+	chipbis3 = goodfit1[:,11]
+	chipbis4 = goodfit1[:,12]
 	Chipbis = np.array([chipbis1,chipbis2,chipbis3,chipbis4])
 	chipbis = np.mean(Chipbis, axis=0)
 	echipbis = np.std(Chipbis, axis=0)
+	
+	chipbis1prime = goodfit2[:,9]
+	chipbis2prime = goodfit2[:,10]
+	chipbis3prime = goodfit2[:,11]
+	chipbis4prime = goodfit2[:,12]
+	Chipbisprime = np.array([chipbis1prime,chipbis2prime,chipbis3prime,chipbis4prime])
+	chipbisprime = np.mean(Chipbisprime, axis=0)
+	echipbisprime = np.std(Chipbisprime, axis=0)
 	#--------------------
-	chipter1 = goodfit[:,13]
-	chipter2 = goodfit[:,14]
-	chipter3 = goodfit[:,15]
-	chipter4 = goodfit[:,16]
+	chipter1 = goodfit1[:,13]
+	chipter2 = goodfit1[:,14]
+	chipter3 = goodfit1[:,15]
+	chipter4 = goodfit1[:,16]
 	Chipter = np.array([chipter1,chipter2,chipter3,chipter4])
 	chipter = np.mean(Chipter, axis=0)
 	echipter = np.std(Chipter, axis=0)
+	
+	chipter1prime = goodfit2[:,13]
+	chipter2prime = goodfit2[:,14]
+	chipter3prime = goodfit2[:,15]
+	chipter4prime = goodfit2[:,16]
+	Chipterprime = np.array([chipter1prime,chipter2prime,chipter3prime,chipter4prime])
+	chipterprime = np.mean(Chipterprime, axis=0)
+	echipterprime = np.std(Chipterprime, axis=0)
 
 
 
@@ -139,28 +177,32 @@ for j in xrange(0,len(z)):
 	#~ ax2.plot(kmax, chipl3, color='C0')
 	#~ ax2.plot(kmax, chipl4, color='C0')
 	P1, =ax2.plot(kmax, chipl, color='C0', label='z = '+str(z[j]))
-	ax2.errorbar(kmax, chipl, yerr= echipl,fmt='.')
+	P1, =ax2.plot(kmax, chiplprime, color='C0', label='z = '+str(z[j]), linestyle ='--')
+	#~ ax2.errorbar(kmax, chipl, yerr= echipl,fmt='.')
 	#---------------------------------
 	#~ ax2.plot(kmax, chipt1, color='C1')
 	#~ ax2.plot(kmax, chipt2, color='C1')
 	#~ ax2.plot(kmax, chipt3, color='C1')
 	#~ ax2.plot(kmax, chipt4, color='C1')
 	P2, =ax2.plot(kmax, chipt, color='C1')
-	ax2.errorbar(kmax, chipt, yerr= echipt,fmt='.')
+	P2, =ax2.plot(kmax, chiptprime, color='C1', linestyle ='--')
+	#~ ax2.errorbar(kmax, chipt, yerr= echipt,fmt='.')
 	#---------------------------------
 	#~ ax2.plot(kmax, chipbis1, color='C2')
 	#~ ax2.plot(kmax, chipbis2, color='C2')
 	#~ ax2.plot(kmax, chipbis3, color='C2')
 	#~ ax2.plot(kmax, chipbis4, color='C2')
 	P3, =ax2.plot(kmax, chipbis, color='C2')
-	ax2.errorbar(kmax, chipbis, yerr= echipbis,fmt='.')
+	P3, =ax2.plot(kmax, chipbisprime, color='C2', linestyle ='--')
+	#~ ax2.errorbar(kmax, chipbis, yerr= echipbis,fmt='.')
 	#---------------------------------
 	#~ ax2.plot(kmax, chipter1, color='C3')
 	#~ ax2.plot(kmax, chipter2, color='C3')
 	#~ ax2.plot(kmax, chipter3, color='C3')
 	#~ ax2.plot(kmax, chipter4, color='C3')
 	P4, =ax2.plot(kmax, chipter, color='C3')
-	ax2.errorbar(kmax, chipter, yerr= echipter,fmt='.')
+	P4, =ax2.plot(kmax, chipterprime, color='C3', linestyle ='--')
+	#~ ax2.errorbar(kmax, chipter, yerr= echipter,fmt='.')
 	#---------------------------------
 	plt.figlegend( (P1,P2, P3, P4), ('Polynomial','2nd order PT',r'3nd order PT with free $b_{s}$,$b_{3nl}$',\
 	r'3nd order PT with fixed $b_{s}$,$b_{3nl}$'), \
@@ -170,7 +212,7 @@ for j in xrange(0,len(z)):
 	plt.subplots_adjust(left=0.1, wspace=0.05, hspace=0.1)
 	ax2.set_xscale('log')
 	#~ ax2.set_yscale('log')
-	ax2. set_xlim(0.05,0.55)
+	ax2. set_xlim(0.04,0.5)
 	ax2. set_ylim(0,30)
 	if j == 0 :
 		ax2.tick_params(bottom='off', labelbottom='off',labelleft=True)

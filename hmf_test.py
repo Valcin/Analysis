@@ -80,7 +80,7 @@ for j in xrange(0,len(z)):
 #### load data from simualtion 
 
 	kcamb, Pcamb, k, Pmm, PH1, PH2, PH3 , PH4, errPhh1, errPhh2, errPhh3, errPhh4, bias1, bias2, bias3, bias4, \
-	errb1, errb2, errb3, errb4, Pmono1, Pmono2, Pmono3, Pmono4, errPr1, errPr2, errPr3, errPr4 = ld_data(Mnu, z, j)
+	bias1s, bias2s, bias3s, bias4s, errb1, errb2, errb3, errb4, Pmono1, Pmono2, Pmono3, Pmono4, errPr1, errPr2, errPr3, errPr4 = ld_data(Mnu, z, j)
 
 
 #########################################################################
@@ -462,12 +462,13 @@ for j in xrange(0,len(z)):
 		#~ dndM = np.loadtxt('/home/david/codes/Paco/data2/0.15eV/thmf_z='+str(z[j])+'.txt')
 		#~ dndMbis = np.loadtxt('/home/david/codes/Paco/data2/0.15eV/chmf_z='+str(z[j])+'.txt')
 
-		
-		bias_0ev = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/large_scale/bcc_z='+str(z[j])+'_.txt')
-		bias1_0ev = bias_0ev[:,1]
-		bias2_0ev = bias_0ev[:,2]
-		bias3_0ev = bias_0ev[:,3]
-		bias4_0ev = bias_0ev[:,4]
+		kcamb, Pcamb, k, Pmm, PH1, PH2, PH3 , PH4, errPhh1, errPhh2, errPhh3, errPhh4, bias1_0ev, bias2_0ev, bias3_0ev, bias4_0ev, \
+		bias1s0, bias2s0, bias3s0, bias4s0, errb1, errb2, errb3, errb4, Pmono1, Pmono2, Pmono3, Pmono4, errPr1, errPr2, errPr3, errPr4 = ld_data(0.0, z, j)
+		#~ bias_0ev = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/large_scale/bcc_z='+str(z[j])+'_.txt')
+		#~ bias1_0ev = bias_0ev[:,1]
+		#~ bias2_0ev = bias_0ev[:,2]
+		#~ bias3_0ev = bias_0ev[:,3]
+		#~ bias4_0ev = bias_0ev[:,4]
 
 		als = np.where(k < 0.5)[0]
 
@@ -532,16 +533,16 @@ for j in xrange(0,len(z)):
 #########################################################################################################################################
 #########################################################################################################################################
 	#### plot all different bias test
-	#~ if j == z[0]:
-		#~ fig2 = plt.figure()
-	#~ J = j + 1
+	if j == z[0]:
+		fig2 = plt.figure()
+	J = j + 1
 	
-	#~ if len(z) == 1:
-		#~ ax2 = fig2.add_subplot(1, len(z), J)
-	#~ elif len(z) == 2:
-		#~ ax2 = fig2.add_subplot(1, 2, J)
-	#~ elif len(z) > 2:
-		#~ ax2 = fig2.add_subplot(2, 2, J)
+	if len(z) == 1:
+		ax2 = fig2.add_subplot(1, len(z), J)
+	elif len(z) == 2:
+		ax2 = fig2.add_subplot(1, 2, J)
+	elif len(z) > 2:
+		ax2 = fig2.add_subplot(2, 2, J)
 	############################################################
 	#~ ax2.scatter(m_middle1, hmf1*m_middle1**2, marker='.', color='C0', label='Sim')
 	#~ ax2.scatter(m_middle2, hmf2*m_middle2**2, marker='.', color='C1')
@@ -626,10 +627,16 @@ for j in xrange(0,len(z)):
 	#~ M4, = ax2.plot(k, bias4_0ev, linestyle = '--', color='C3')
 	#~ #-------------------------------------------------------------
 	#~ bres, = ax2.plot(k, bias1_0ev*bias_eff_t1/bias_eff0_t1, linestyle = '--', color='C0', label=r'$Tinker 2010 MF$')
-	#~ bres, = ax2.plot(k, bias1_0ev*bias_eff_t1/bias_eff0_t1, linestyle = '--', color='C0', label=r'$b_{model}$')
+	#~ bres1, = ax2.plot(k, bias1_0ev*bias_eff_t1/bias_eff0_t1, linestyle = '--', color='C0')
 	#~ ax2.plot(k, bias2_0ev*bias_eff_t2/bias_eff0_t2, linestyle = '--', color='C1')
 	#~ ax2.plot(k, bias3_0ev*bias_eff_t3/bias_eff0_t3, linestyle = '--', color='C2')
 	#~ ax2.plot(k, bias4_0ev*bias_eff_t4/bias_eff0_t4, linestyle = '--', color='C3')
+	#~ #-------------------------------------------------------------
+	#~ bres, = ax2.plot(k, bias1_0ev*bias_eff_t1/bias_eff0_t1, linestyle = '--', color='C0', label=r'$Tinker 2010 MF$')
+	#~ bres2, = ax2.plot(k, bias1s0*bias_eff_t1/bias_eff0_t1, linestyle = ':', color='C0')
+	#~ ax2.plot(k, bias2s0*bias_eff_t2/bias_eff0_t2, linestyle = ':', color='C1')
+	#~ ax2.plot(k, bias3s0*bias_eff_t3/bias_eff0_t3, linestyle = ':', color='C2')
+	#~ ax2.plot(k, bias4s0*bias_eff_t4/bias_eff0_t4, linestyle = ':', color='C3')
 	#~ #-------------------------------------------------------------
 	#~ ax2.plot(k, bias1_0ev*Bias_eff_t1/Bias_eff0_t1, linestyle = ':', color='C0', label=r'$Crocce MF$')
 	#~ ax2.plot(k, bias1_0ev*Bias_eff_t1/Bias_eff0_t1, linestyle = ':', color='C0', label=r'$b_{model}$')
@@ -644,75 +651,88 @@ for j in xrange(0,len(z)):
 	#~ #---------------------------------------------------------
 	#~ ax2.set_ylim(bias1[0]*0.8,bias4[0]*1.4)
 	#~ ax2.set_xlim(8e-3,1)
-	#~ plt.figlegend( (M1,M2,M3,M4, st2,st3), ('$M_{1}$','$M_{2}$','$M_{3}$','$M_{4}$', 'Sim hmf + Tinker bias', 'rescaled effective bias'), \
+	#~ plt.figlegend( (M1,M2,M3,M4, bres1,bres2), ('$M_{1}$','$M_{2}$','$M_{3}$','$M_{4}$', r'$b_{model}$', r'$b_{model}$ smoothed '), \
 	#~ plt.figlegend( (M1,M2,M3,M4), ('$M_{1}$','$M_{2}$','$M_{3}$','$M_{4}$'), \
 	####################################################################
 	#~ ax2.scatter(k,bias1/bias1_0ev, color='b', marker='.')
 	#~ ax2.scatter(k,bias2/bias2_0ev, color='r', marker='.')
 	#~ ax2.scatter(k,bias3/bias3_0ev, color='g', marker='.')
 	#~ ax2.scatter(k,bias4/bias4_0ev, color='c', marker='.')
-	#~ ax2.plot(k,bias1/bias1_0ev, color='b', linestyle='--')
-	#~ ax2.plot(k,bias2/bias2_0ev, color='r', linestyle='--')
-	#~ ax2.plot(k,bias3/bias3_0ev, color='g', linestyle='--')
-	#~ ax2.plot(k,bias4/bias4_0ev, color='c', linestyle='--')
+	#~ M1, =ax2.plot(k,bias1/bias1_0ev, color='b', linestyle='--', label='No smoothing')
+	#~ M2, =ax2.plot(k,bias2/bias2_0ev, color='r', linestyle='--')
+	#~ M3, =ax2.plot(k,bias3/bias3_0ev, color='g', linestyle='--')
+	#~ M4, =ax2.plot(k,bias4/bias4_0ev, color='c', linestyle='--')
+	#~ #-------------------------------------------------------
+	#~ ax2.plot(k,bias1s/bias1s0, color='b', label='smoothed')
+	#~ ax2.plot(k,bias2s/bias2s0, color='r')
+	#~ ax2.plot(k,bias3s/bias3s0, color='g')
+	#~ ax2.plot(k,bias4s/bias4s0, color='c')
 	#~ #-------------------------------------
 	#~ ax2.axhline(1, color='k')
 	#~ M1, =ax2.plot(k,bias1/(bias1_0ev *bias_eff_t1/bias_eff0_t1), color='b', linestyle='--', label='Tinker 2010')
 	#~ M2, =ax2.plot(k,bias2/(bias2_0ev *bias_eff_t2/bias_eff0_t2), color='r', linestyle='--')
 	#~ M3, =ax2.plot(k,bias3/(bias3_0ev *bias_eff_t3/bias_eff0_t3), color='g', linestyle='--')
-	#~ M4, =ax2.plot(k,bias4/(bias4_0ev *bias_eff_t4/bias_eff0_t4), color='c', linestyle='--')
+	#~ M4, =ax2.plot(k,bias4/(bias4_0ev *bias_eff_t4/bias_eff0_t4), color='C3', linestyle='--')
 	#-------------------------------------
-	#~ ax2.plot(k,bias1/(bias1_0ev *Bias_eff_t1/Bias_eff0_t1), color='b', linestyle=':', label='Crocce')
-	#~ ax2.plot(k,bias2/(bias2_0ev *Bias_eff_t2/Bias_eff0_t2), color='r', linestyle=':')
-	#~ ax2.plot(k,bias3/(bias3_0ev *Bias_eff_t3/Bias_eff0_t3), color='g', linestyle=':')
-	#~ ax2.plot(k,bias4/(bias4_0ev *Bias_eff_t4/Bias_eff0_t4), color='c', linestyle=':')
+	#~ M1, =ax2.plot(k,bias1/(bias1_0ev *bias_eff_t1/bias_eff0_t1), color='b', linestyle='--', label='Tinker 2010')
+	#~ M2, =ax2.plot(k,bias2/(bias2_0ev *bias_eff_t2/bias_eff0_t2), color='r', linestyle='--')
+	#~ M3, =ax2.plot(k,bias3/(bias3_0ev *bias_eff_t3/bias_eff0_t3), color='g', linestyle='--')
+	#~ M4, =ax2.plot(k,bias4/(bias4s0 *bias_eff_t4/bias_eff0_t4), color='C3', linestyle=':')
+	#~ #-------------------------------------
+	#~ M1, =ax2.plot(k,bias1s/(bias1_0ev *bias_eff_t1/bias_eff0_t1), color='b', linestyle='--', label='Tinker 2010')
+	#~ M2, =ax2.plot(k,bias2s/(bias2_0ev *bias_eff_t2/bias_eff0_t2), color='r', linestyle='--')
+	#~ M3, =ax2.plot(k,bias3s/(bias3_0ev *bias_eff_t3/bias_eff0_t3), color='g', linestyle='--')
+	#~ M4, =ax2.plot(k,bias4s/(bias4s0 *bias_eff_t4/bias_eff0_t4), color='C3')
+	#-------------------------------------
+	
+	#~ ax2.set_ylim(1.02,1.1)
 	#~ ax2.set_ylim(0.95,1.05)
 	#~ ax2.set_xlim(0.008,0.2)
 	
 	#~ plt.figlegend( (M1,M2,M3,M4), ('$M_{1}$','$M_{2}$','$M_{3}$','$M_{4}$'), \
-	#~ #######################################
-	#~ loc = 'upper center', ncol=5, labelspacing=0., title =r' M$\nu$ = '+str(Mnu)+',  bins = '+str(len(m_middle1)), fontsize=14)
-	#~ ax2.legend(loc = 'upper left', title='z = '+str(z[j]), fancybox=True, ncol=3, fontsize=14)
-	#~ plt.subplots_adjust(left=0.1, wspace=0.05, hspace=0.1)
-	#~ ax2.set_xscale('log')
-	#~ #----------------------------
-	#~ if j == 0 :
-		#~ ax2.tick_params(bottom='off', labelbottom='off')
-		#~ ax2.set_ylabel(r'$b_{eff}$ / $b_{sim}$', fontsize = 16)
-		#~ ax2.set_ylabel(r'$b_{sim, 0.15}$ / ($b_{sim, 0.0}$*$b_{fiducial})$', fontsize = 16)
-		#~ ax2.set_ylabel(r'$b_{cc}$', fontsize = 16)
+	#######################################
+	loc = 'upper center', ncol=5, labelspacing=0., title =r' M$\nu$ = '+str(Mnu)+',  bins = '+str(len(m_middle1)), fontsize=14)
+	ax2.legend(loc = 'upper left', title='z = '+str(z[j]), fancybox=True, ncol=3, fontsize=14)
+	plt.subplots_adjust(left=0.1, wspace=0.05, hspace=0.1)
+	ax2.set_xscale('log')
+	#----------------------------
+	if j == 0 :
+		ax2.tick_params(bottom='off', labelbottom='off')
+		ax2.set_ylabel(r'$b_{eff}$ / $b_{sim}$', fontsize = 16)
+		ax2.set_ylabel(r'$b_{sim, 0.15}$ / $b_{sim, 0.0}$', fontsize = 16)
+		ax2.set_ylabel(r'$b_{cc}$', fontsize = 16)
 		#~ ax2.set_ylabel(r'$M^2 n(M)$', fontsize = 16)
-		#~ #ax2.grid()
-	#~ if j == 1 :
-		#~ ax2.tick_params(bottom='off', labelbottom='off', labelright=True, right= True, labelleft='off', left='off')
-		#~ ax2.set_ylabel(r'$b_{eff}$ / $b_{sim}$', fontsize = 16)
-		#~ ax2.set_ylabel(r'$b_{sim, 0.15}$ / ($b_{sim, 0.0}$*$b_{fiducial})$', fontsize = 16)
-		#~ ax2.set_ylabel(r'$b_{cc}$', fontsize = 16)
+		#ax2.grid()
+	if j == 1 :
+		ax2.tick_params(bottom='off', labelbottom='off', labelright=True, right= True, labelleft='off', left='off')
+		ax2.set_ylabel(r'$b_{eff}$ / $b_{sim}$', fontsize = 16)
+		ax2.set_ylabel(r'$b_{sim, 0.15}$ / $b_{sim, 0.0}$', fontsize = 16)
+		ax2.set_ylabel(r'$b_{cc}$', fontsize = 16)
 		#~ ax2.set_ylabel(r'$M^2 n(M)$', fontsize = 16)
-		#~ ax2.yaxis.set_label_position("right")
-		#~ #ax2.grid()
-	#~ if j == 2 :
-		#ax.tick_params(labelleft=True)
-		#~ ax2.set_ylabel(r'$b_{eff}$ / $b_{sim}$', fontsize = 16)
-		#~ ax2.set_ylabel(r'$b_{sim, 0.15}$ / ($b_{sim, 0.0}$*$b_{fiducial})$', fontsize = 16)
-		#~ ax2.set_ylabel(r'$b_{cc}$', fontsize = 16)
+		ax2.yaxis.set_label_position("right")
+		#ax2.grid()
+	if j == 2 :
+		#~ #ax.tick_params(labelleft=True)
+		ax2.set_ylabel(r'$b_{eff}$ / $b_{sim}$', fontsize = 16)
+		ax2.set_ylabel(r'$b_{sim, 0.15}$ / $b_{sim, 0.0}$', fontsize = 16)
+		ax2.set_ylabel(r'$b_{cc}$', fontsize = 16)
 		#~ ax2.set_ylabel(r'$M^2 n(M)$', fontsize = 16)
-		#~ ax2.set_xlabel('k [h/Mpc]', fontsize = 14)
+		ax2.set_xlabel('k [h/Mpc]', fontsize = 14)
 		#~ ax2.set_xlabel(r'M [$h^{-1} M_{\odot}$]', fontsize = 14)
-		#~ #ax2.grid()
-	#~ if j == 3 :
-		#~ ax2.tick_params(labelright=True, right= True, labelleft='off', left='off')
-		#~ ax2.set_xlabel('k [h/Mpc]', fontsize = 16)
+		#ax2.grid()
+	if j == 3 :
+		ax2.tick_params(labelright=True, right= True, labelleft='off', left='off')
+		ax2.set_xlabel('k [h/Mpc]', fontsize = 16)
 		#~ ax2.set_xlabel(r'M [$h^{-1} M_{\odot}$]', fontsize = 16)
-		#~ ax2.set_ylabel(r'$b_{eff}$ / $b_{sim}$', fontsize = 16)
-		#~ ax2.set_ylabel(r'$b_{sim, 0.15}$ / ($b_{sim, 0.0}$*$b_{fiducial})$', fontsize = 16)
-		#~ ax2.set_ylabel(r'$b_{cc}$', fontsize = 16)
+		ax2.set_ylabel(r'$b_{eff}$ / $b_{sim}$', fontsize = 16)
+		ax2.set_ylabel(r'$b_{sim, 0.15}$ / $b_{sim, 0.0}$', fontsize = 16)
+		ax2.set_ylabel(r'$b_{cc}$', fontsize = 16)
 		#~ ax2.set_ylabel(r'$M^2 n(M)$', fontsize = 14)
-		#~ ax2.yaxis.set_label_position("right")
-		#~ #ax2.grid()
-	#~ #ax2.set_xlim(8e-3,0.05)
-	#~ if j == len(z) -1:
-		#~ plt.show()
+		ax2.yaxis.set_label_position("right")
+		#ax2.grid()
+	#ax2.set_xlim(8e-3,0.05)
+	if j == len(z) -1:
+		plt.show()
 
 
 end = time()
