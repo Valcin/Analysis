@@ -109,8 +109,8 @@ for j in xrange(0,len(z)):
 	#~ #--------- halo real space -------------------------
 	#~ #---------------------------------------------------
 	# fourth mass range
-	d4 = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/Phh3_realisation_z='+str(z[j])+'.txt')
-	#~ d4 = np.loadtxt('/home/david/codes/Analysis/cosmo_test/Phh4_realisation_0.0_z=0.0.txt')
+	#~ d4 = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/Phh4_realisation_z='+str(z[j])+'.txt')
+	d4 = np.loadtxt('/home/david/codes/Analysis/cosmo_test/Phh4_realisation_0.0_z=0.0.txt')
 	k = d4[:,19]
 	Phh4 = np.zeros((len(k),10))
 	Pshot4 = np.zeros((10))
@@ -152,23 +152,26 @@ for j in xrange(0,len(z)):
 	####################################################################
 	# load other cosmology ps
 	
-	#~ fid = np.loadtxt('/home/david/codes/Analysis/cosmo_test/b_z=0.txt')
-	#~ kfid = fid[:,0]
-	#~ bfid_square = fid[:,1]
-	#~ bfid = np.sqrt(bfid_square)
-	#~ efid_square = fid[:,2]
-	#~ efid = efid_square/2./bfid
+	fid = np.loadtxt('/home/david/codes/Analysis/cosmo_test/b_z=0.txt')
+	kfid = fid[:,0]
+	bfid_square = fid[:,1]
+	bfid = np.sqrt(bfid_square)
+	efid_square = fid[:,2]
+	efid = efid_square/2./bfid
 	
-	#~ fid2 = np.loadtxt('/home/david/codes/Analysis/cosmo_test/Pk_z=0.txt')
-	#~ Pmmfid = fid2[:,1]
+	fid2 = np.loadtxt('/home/david/codes/Analysis/cosmo_test/Pk_z=0.txt')
+	Pmmfid = fid2[:,1]
 	
+	#~ plt.plot(k,PH4)
+	#~ plt.plot(k,np.sqrt(PH4/Pmm))
 	#~ plt.plot(kfid, bfid)
 	#~ plt.fill_between(kfid, bfid -efid, bfid + efid, alpha = 0.6)
 	#~ plt.plot(k, bias4)
 	#~ plt.fill_between(k, bias4 -errb4, bias4 + errb4, alpha = 0.6)
+	#~ plt.yscale('log')
 	#~ plt.xscale('log')
 	#~ plt.xlim(1e-2, 0.4)
-	#~ plt.ylim(1.6, 2.2)
+	#~ plt.ylim(0.7, 0.9)
 	#~ plt.show()
 	#~ kill
 	
@@ -329,20 +332,17 @@ for j in xrange(0,len(z)):
 	
 	
 	# here kh because the simu scale
-	#~ popF4, pcovF4 = curve_fit(funcb, kfid[lim], bfid[lim], sigma = efid[lim],  check_finite=True, maxfev=500000)
-	#~ b1x4_mcmc, b2x4_mcmc, b3x4_mcmc, b4x4_mcmc = coeffit_pl(kstop, lb4, errlb4, popF4, kfid, bfid, efid)
-	#~ biasF4 = b1x4_mcmc[0] + b2x4_mcmc[0] * kfid**2 + b3x4_mcmc[0] * kfid**3 + b4x4_mcmc[0] * kfid**4
-	#~ kill
-	#~ popF4, pcovF4 = curve_fit(funcb, k[lim], bias4[lim], sigma = errb4[lim],  check_finite=True, maxfev=500000)
-	#~ b1x4_mcmc, b2x4_mcmc, b3x4_mcmc, b4x4_mcmc = coeffit_pl(kstop, lb4, errlb4, popF4, k, bias4, errb4)
-	#~ biasF4 = b1x4_mcmc[0] + b2x4_mcmc[0] * k**2 + b3x4_mcmc[0] * k**3 + b4x4_mcmc[0] * k**4
+	popF4, pcovF4 = curve_fit(funcb, kfid[lim], bfid[lim], sigma = efid[lim],  check_finite=True, maxfev=500000)
+	b1x4_ml, b2x4_ml, b3x4_ml, b4x4_ml = coeffit_pl(kstop, lb4, errlb4, popF4, kfid, bfid, efid)
+	biasF4 = b1x4_ml + b2x4_ml * kfid**2 + b3x4_ml * kfid**3 + b4x4_ml * kfid**4
+	
 
 #-------------------------------------------------------------------
 
 	print 'perturbation'
 	popbis4 = [lb4, -25.,-4/7.*(lb4-1),32/315.*(lb4-1)]
-	popbis4 = [lb4, 1.,-4/7.*(lb4-1),32/315.*(lb4-1),100]
-	#~ popbis4 = [lb4, 1.,-4/7.*(lb4-1),100]
+	
+	
 	#~ popbis4 = [lb4,1]
 	
 	#~ print efid
@@ -352,26 +352,20 @@ for j in xrange(0,len(z)):
 	
 	
 	
-	
-	b1z4_mcmc, b2z4_mcmc, bsz4_mcmc, b3z4_mcmc, N = coeffit_exp2(kstop, Pmod_dd, A, B, C, D, E, F, lb4, errlb4, popbis4,\
+	popbis4 = [lb4, 1.,-4/7.*(lb4-1),32/315.*(lb4-1),100]
+	b1z4_ml, b2z4_ml, bsz4_ml, b3z4_ml, N_ml  = coeffit_exp2(kstop, Pmod_dd, A, B, C, D, E, F, lb4, errlb4, popbis4,\
 	kfid ,bfid ,efid)
-	#~ b1z4_mcmc, b2z4_mcmc, bsz4_mcmc, N = coeffit_exp1(kstop, Pmod_dd, A, B, C, D, E, lb4, errlb4, popbis4,\
+	bias3PT4 = np.sqrt((b1z4_ml**2 * Pmod_dd+ b1z4_ml*b2z4_ml*A + 1/4.*b2z4_ml**2*B + b1z4_ml*bsz4_ml*C +\
+	1/2.*b2z4_ml*bsz4_ml*D + 1/4.*bsz4_ml**2*E + 2*b1z4_ml*b3z4_ml*F + N_ml)/Pmod_dd)
+	
+	#~ popbis4 = [lb4, 1.,-4/7.*(lb4-1),100]
+	#~ b1z4_mcmc, b2z4_mcmc, bsz4_mcmc, N, b1z4_ml, b2z4_ml, bsz4_ml, N_ml = coeffit_exp1(kstop, Pmod_dd, A, B, C, D, E, lb4, errlb4, popbis4,\
 	#~ kfid ,bfid ,efid)
 	#~ bias3PT4 = np.sqrt((b1z4_mcmc[0]**2 * Pmod_dd+ b1z4_mcmc[0]*b2z4_mcmc[0]*A + 1/4.*b2z4_mcmc[0]**2*B + b1z4_mcmc[0]*bsz4_mcmc[0]*C +\
-	#~ 1/2.*b2z4_mcmc[0]*bsz4_mcmc[0]*D + 1/4.*bsz4_mcmc[0]**2*E + 2*b1z4_mcmc[0]*b3z4_mcmc[0]*F + N[0])/Pmod_dd)
-	#~ bias3PT4 = np.sqrt((b1z4_mcmc**2 * Pmod_dd+ b1z4_mcmc*b2z4_mcmc*A + 1/4.*b2z4_mcmc**2*B + b1z4_mcmc*bsz4_mcmc*C +\
-	#~ 1/2.*b2z4_mcmc*bsz4_mcmc*D + 1/4.*bsz4_mcmc**2*E + N)/Pmod_dd)
-	bias3PT4 = np.sqrt((b1z4_mcmc**2 * Pmod_dd+ b1z4_mcmc*b2z4_mcmc*A + 1/4.*b2z4_mcmc**2*B + b1z4_mcmc*bsz4_mcmc*C +\
-	1/2.*b2z4_mcmc*bsz4_mcmc*D + 1/4.*bsz4_mcmc**2*E + 2*b1z4_mcmc*b3z4_mcmc*F + N)/Pmod_dd)
-
-	#~ Pmm = np.interp(kfid, k, Pmm)
-	#~ b1z4_mcmc, b2z4_mcmc, bsz4_mcmc, b3z4_mcmc = coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb4, errlb4, popbis4,\
-	#~ k ,bias4 ,errb4)
-	#~ bias3PT4 = np.sqrt((b1z4_mcmc[0]**2 * Pmm+ b1z4_mcmc[0]*b2z4_mcmc[0]*A + 1/4.*b2z4_mcmc[0]**2*B + b1z4_mcmc[0]*bsz4_mcmc[0]*C +\
-	#~ 1/2.*b2z4_mcmc[0]*bsz4_mcmc[0]*D + 1/4.*bsz4_mcmc[0]**2*E + 2*b1z4_mcmc[0]*b3z4_mcmc[0]*F)/Pmm)
-	#~ bias3PT4 = np.sqrt((b1z4_mcmc**2 * Pmm+ b1z4_mcmc*b2z4_mcmc*A + 1/4.*b2z4_mcmc**2*B + b1z4_mcmc*bsz4_mcmc*C +\
-	#~ 1/2.*b2z4_mcmc*bsz4_mcmc*D + 1/4.*bsz4_mcmc**2*E + 2*b1z4_mcmc*b3z4_mcmc*F)/Pmm)
-
+	#~ 1/2.*b2z4_mcmc[0]*bsz4_mcmc[0]*D + 1/4.*bsz4_mcmc[0]**2*E + N[0])/Pmod_dd)
+	#~ bias3PT4bis = np.sqrt((b1z4_ml**2 * Pmod_dd+ b1z4_ml*b2z4_ml*A + 1/4.*b2z4_ml**2*B + b1z4_ml*bsz4_ml*C +\
+	#~ 1/2.*b2z4_ml*bsz4_ml*D + 1/4.*bsz4_ml**2*E + N_ml)/Pmod_dd)
+	
 		
 	
 	####################################################################
@@ -392,17 +386,17 @@ for j in xrange(0,len(z)):
 	
 	#~ plt.figure()
 	plt.axhline(1, c='k')
-	#~ r1, =plt.plot(kfid, biasF4/bfid, c='k', label = 'Polynomial')
-	#~ r2, =plt.plot(kfid, biasF4/btest1, c='C0')
-	#~ r3, =plt.plot(kfid, biasF4/btest2, c='C1')
-	#~ r4, =plt.plot(kfid, biasF4/btest3, c='C2')
-	#~ r5, =plt.plot(kfid, biasF4/btest4, c='C3')
+	r1, =plt.plot(kfid, biasF4/bfid, c='k', label = 'Polynomial')
+	r2, =plt.plot(kfid, biasF4/btest1, c='C0')
+	r3, =plt.plot(kfid, biasF4/btest2, c='C1')
+	r4, =plt.plot(kfid, biasF4/btest3, c='C2')
+	r5, =plt.plot(kfid, biasF4/btest4, c='C3')
 	#--------------------------------------------
 	r1, =plt.plot(kfid, bias3PT4/bfid, c='k', label = 'Perturbation theory', linestyle='--')
-	#~ r2, =plt.plot(kfid2, bias3PT4/btest1, c='C0', linestyle='--')
-	#~ r3, =plt.plot(kfid2, bias3PT4/btest2, c='C1', linestyle='--')
-	#~ r4, =plt.plot(kfid2, bias3PT4/btest3, c='C2', linestyle='--')
-	#~ r5, =plt.plot(kfid2, bias3PT4/btest4, c='C3', linestyle='--')
+	r2, =plt.plot(kfid, bias3PT4/btest1, c='C0', linestyle='--')
+	r3, =plt.plot(kfid, bias3PT4/btest2, c='C1', linestyle='--')
+	r4, =plt.plot(kfid, bias3PT4/btest3, c='C2', linestyle='--')
+	r5, =plt.plot(kfid, bias3PT4/btest4, c='C3', linestyle='--')
 	plt.axhline(1.01, linestyle = ':', c='k')
 	plt.axhline(0.99, linestyle = ':', c='k')
 	plt.axvspan(kstop, 7, alpha=0.2, color='grey')
