@@ -30,8 +30,8 @@ from scipy.special import gamma
 from fit_emcee import coeffit_pl,coeffit_pl2,coeffit_exp1, coeffit_exp2, coeffit_exp3,coeffit_Kaiser, coeffit_Scocci, coeffit_TNS, coeffit_eTNS
 
 
-def poly(kstop, k, lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, kbis, bias1bis,\
-	bias2bis, bias3bis, bias4bis, errb1bis, errb2bis, errb3bis, errb4bis, mv, z, j, case):
+def poly(kstop, lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, k, bias1,\
+	bias2, bias3, bias4, errb1, errb2, errb3, errb4, mv, z, j, case):
 		
 	print ' the mass of neutrinos is '+str(mv)
 	lim = np.where((k < kstop)&(k > 1e-2))[0]
@@ -46,51 +46,51 @@ def poly(kstop, k, lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, kbis, bia
 	
 	
 	#~ # here kh because the simu scale
-	popF1, pcovF1 = curve_fit(funcb, kbis[lim], bias1bis[lim], sigma = errb1bis[lim],  check_finite=True, maxfev=500000)
-	popF2, pcovF2 = curve_fit(funcb, kbis[lim], bias2bis[lim], sigma = errb2bis[lim],  check_finite=True, maxfev=500000)
-	popF3, pcovF3 = curve_fit(funcb, kbis[lim], bias3bis[lim], sigma = errb3bis[lim],  check_finite=True, maxfev=500000)
-	popF4, pcovF4 = curve_fit(funcb, kbis[lim], bias4bis[lim], sigma = errb4bis[lim],  check_finite=True, maxfev=500000)
+	popF1, pcovF1 = curve_fit(funcb, k[lim], bias1[lim], sigma = errb1[lim],  check_finite=True, maxfev=500000)
+	popF2, pcovF2 = curve_fit(funcb, k[lim], bias2[lim], sigma = errb2[lim],  check_finite=True, maxfev=500000)
+	popF3, pcovF3 = curve_fit(funcb, k[lim], bias3[lim], sigma = errb3[lim],  check_finite=True, maxfev=500000)
+	popF4, pcovF4 = curve_fit(funcb, k[lim], bias4[lim], sigma = errb4[lim],  check_finite=True, maxfev=500000)
 
-	popF1bis, pcovF1bis = curve_fit(funcbis, kbis[lim], bias1bis[lim], sigma = errb1bis[lim],  check_finite=True, maxfev=500000)
-	popF2bis, pcovF2bis = curve_fit(funcbis, kbis[lim], bias2bis[lim], sigma = errb2bis[lim],  check_finite=True, maxfev=500000)
-	popF3bis, pcovF3bis = curve_fit(funcbis, kbis[lim], bias3bis[lim], sigma = errb3bis[lim],  check_finite=True, maxfev=500000)
-	popF4bis, pcovF4bis = curve_fit(funcbis, kbis[lim], bias4bis[lim], sigma = errb4bis[lim],  check_finite=True, maxfev=500000)
+	popF1bis, pcovF1bis = curve_fit(funcbis, k[lim], bias1[lim], sigma = errb1[lim],  check_finite=True, maxfev=500000)
+	popF2bis, pcovF2bis = curve_fit(funcbis, k[lim], bias2[lim], sigma = errb2[lim],  check_finite=True, maxfev=500000)
+	popF3bis, pcovF3bis = curve_fit(funcbis, k[lim], bias3[lim], sigma = errb3[lim],  check_finite=True, maxfev=500000)
+	popF4bis, pcovF4bis = curve_fit(funcbis, k[lim], bias4[lim], sigma = errb4[lim],  check_finite=True, maxfev=500000)
 		
 		
 		
 	# odd power law----------------------------------------------------
-	b1x1_mcmc, b2x1_mcmc, b3x1_mcmc, b4x1_mcmc = coeffit_pl(kstop, lb1, errlb1, popF1, kbis, bias1bis, errb1bis)
-	b1x2_mcmc, b2x2_mcmc, b3x2_mcmc, b4x2_mcmc = coeffit_pl(kstop, lb2, errlb2, popF2, kbis, bias2bis, errb2bis)
-	b1x3_mcmc, b2x3_mcmc, b3x3_mcmc, b4x3_mcmc = coeffit_pl(kstop, lb3, errlb3, popF3, kbis, bias3bis, errb3bis)
-	b1x4_mcmc, b2x4_mcmc, b3x4_mcmc, b4x4_mcmc = coeffit_pl(kstop, lb4, errlb4, popF4, kbis, bias4bis, errb4bis)
+	b1x1_mcmc, b2x1_mcmc, b3x1_mcmc, b4x1_mcmc = coeffit_pl(kstop, lb1, errlb1, popF1, k, bias1, errb1)
+	b1x2_mcmc, b2x2_mcmc, b3x2_mcmc, b4x2_mcmc = coeffit_pl(kstop, lb2, errlb2, popF2, k, bias2, errb2)
+	b1x3_mcmc, b2x3_mcmc, b3x3_mcmc, b4x3_mcmc = coeffit_pl(kstop, lb3, errlb3, popF3, k, bias3, errb3)
+	b1x4_mcmc, b2x4_mcmc, b3x4_mcmc, b4x4_mcmc = coeffit_pl(kstop, lb4, errlb4, popF4, k, bias4, errb4)
 
 	# even power law ----------------------------------------------------------------------------------------
-	b1w1_mcmc, b2w1_mcmc, b4w1_mcmc = coeffit_pl2(kstop, lb1, errlb1, popF1bis, kbis, bias1bis, errb1bis)
-	b1w2_mcmc, b2w2_mcmc, b4w2_mcmc = coeffit_pl2(kstop, lb2, errlb2, popF2bis, kbis, bias2bis, errb2bis)
-	b1w3_mcmc, b2w3_mcmc, b4w3_mcmc = coeffit_pl2(kstop, lb3, errlb3, popF3bis, kbis, bias3bis, errb3bis)
-	b1w4_mcmc, b2w4_mcmc, b4w4_mcmc = coeffit_pl2(kstop, lb4, errlb4, popF4bis, kbis, bias4bis, errb4bis)
+	b1w1_mcmc, b2w1_mcmc, b4w1_mcmc = coeffit_pl2(kstop, lb1, errlb1, popF1bis, k, bias1, errb1)
+	b1w2_mcmc, b2w2_mcmc, b4w2_mcmc = coeffit_pl2(kstop, lb2, errlb2, popF2bis, k, bias2, errb2)
+	b1w3_mcmc, b2w3_mcmc, b4w3_mcmc = coeffit_pl2(kstop, lb3, errlb3, popF3bis, k, bias3, errb3)
+	b1w4_mcmc, b2w4_mcmc, b4w4_mcmc = coeffit_pl2(kstop, lb4, errlb4, popF4bis, k, bias4, errb4)
 		
 		
 #~ #### compute bias
 #~ # power law odd ----------------------------------------------------------------------------
-	biasF1 = b1x1_mcmc[0] + b2x1_mcmc[0] * kbis**2 + b3x1_mcmc[0] * kbis**3 + b4x1_mcmc[0] * kbis**4
-	biasF2 = b1x2_mcmc[0] + b2x2_mcmc[0] * kbis**2 + b3x2_mcmc[0] * kbis**3 + b4x2_mcmc[0] * kbis**4
-	biasF3 = b1x3_mcmc[0] + b2x3_mcmc[0] * kbis**2 + b3x3_mcmc[0] * kbis**3 + b4x3_mcmc[0] * kbis**4
-	biasF4 = b1x4_mcmc[0] + b2x4_mcmc[0] * kbis**2 + b3x4_mcmc[0] * kbis**3 + b4x4_mcmc[0] * kbis**4
-	#~ biasF1 = b1x1_mcmc + b2x1_mcmc * kbis**2 + b3x1_mcmc * kbis**3 + b4x1_mcmc * kbis**4
-	#~ biasF2 = b1x2_mcmc + b2x2_mcmc * kbis**2 + b3x2_mcmc * kbis**3 + b4x2_mcmc * kbis**4
-	#~ biasF3 = b1x3_mcmc + b2x3_mcmc * kbis**2 + b3x3_mcmc * kbis**3 + b4x3_mcmc * kbis**4
-	#~ biasF4 = b1x4_mcmc + b2x4_mcmc * kbis**2 + b3x4_mcmc * kbis**3 + b4x4_mcmc * kbis**4
+	#~ biasF1 = b1x1_mcmc[0] + b2x1_mcmc[0] * k**2 + b3x1_mcmc[0] * k**3 + b4x1_mcmc[0] * k**4
+	#~ biasF2 = b1x2_mcmc[0] + b2x2_mcmc[0] * k**2 + b3x2_mcmc[0] * k**3 + b4x2_mcmc[0] * k**4
+	#~ biasF3 = b1x3_mcmc[0] + b2x3_mcmc[0] * k**2 + b3x3_mcmc[0] * k**3 + b4x3_mcmc[0] * k**4
+	#~ biasF4 = b1x4_mcmc[0] + b2x4_mcmc[0] * k**2 + b3x4_mcmc[0] * k**3 + b4x4_mcmc[0] * k**4
+	biasF1 = b1x1_mcmc + b2x1_mcmc * k**2 + b3x1_mcmc * k**3 + b4x1_mcmc * k**4
+	biasF2 = b1x2_mcmc + b2x2_mcmc * k**2 + b3x2_mcmc * k**3 + b4x2_mcmc * k**4
+	biasF3 = b1x3_mcmc + b2x3_mcmc * k**2 + b3x3_mcmc * k**3 + b4x3_mcmc * k**4
+	biasF4 = b1x4_mcmc + b2x4_mcmc * k**2 + b3x4_mcmc * k**3 + b4x4_mcmc * k**4
 
 # power law even -------------------------------------------------------------------------------------------
-	biasF1bis = b1w1_mcmc[0] + b2w1_mcmc[0] * kbis**2 + b4w1_mcmc[0] * kbis**4
-	biasF2bis = b1w2_mcmc[0] + b2w2_mcmc[0] * kbis**2 + b4w2_mcmc[0] * kbis**4
-	biasF3bis = b1w3_mcmc[0] + b2w3_mcmc[0] * kbis**2 + b4w3_mcmc[0] * kbis**4
-	biasF4bis = b1w4_mcmc[0] + b2w4_mcmc[0] * kbis**2 + b4w4_mcmc[0] * kbis**4
-	#~ biasF1bis = b1w1_mcmc + b2w1_mcmc * kbis**2 + b4w1_mcmc * kbis**4
-	#~ biasF2bis = b1w2_mcmc + b2w2_mcmc * kbis**2 + b4w2_mcmc * kbis**4
-	#~ biasF3bis = b1w3_mcmc + b2w3_mcmc * kbis**2 + b4w3_mcmc * kbis**4
-	#~ biasF4bis = b1w4_mcmc + b2w4_mcmc * kbis**2 + b4w4_mcmc * kbis**4
+	#~ biasF1bis = b1w1_mcmc[0] + b2w1_mcmc[0] * k**2 + b4w1_mcmc[0] * k**4
+	#~ biasF2bis = b1w2_mcmc[0] + b2w2_mcmc[0] * k**2 + b4w2_mcmc[0] * k**4
+	#~ biasF3bis = b1w3_mcmc[0] + b2w3_mcmc[0] * k**2 + b4w3_mcmc[0] * k**4
+	#~ biasF4bis = b1w4_mcmc[0] + b2w4_mcmc[0] * k**2 + b4w4_mcmc[0] * k**4
+	biasF1bis = b1w1_mcmc + b2w1_mcmc * k**2 + b4w1_mcmc * k**4
+	biasF2bis = b1w2_mcmc + b2w2_mcmc * k**2 + b4w2_mcmc * k**4
+	biasF3bis = b1w3_mcmc + b2w3_mcmc * k**2 + b4w3_mcmc * k**4
+	biasF4bis = b1w4_mcmc + b2w4_mcmc * k**2 + b4w4_mcmc * k**4
 
 #~ ###########################################################################
 ###########################################################################

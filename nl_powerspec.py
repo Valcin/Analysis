@@ -100,7 +100,7 @@ for j in xrange(0,len(z)):
 	kstop3 = [0.15,0.15,0.15,0.15]
 	
 #### the case 
-	case = 3
+	case = 2
 	
 	if case == 1:
 		kstop = kstop1[ind]
@@ -181,9 +181,9 @@ for j in xrange(0,len(z)):
 		Tcb = pte[:,1]
 	
 	# interpolate to have more points and create an evenly logged array
-	kbis = np.logspace(np.log10(np.min(k)), np.log10(np.max(k)), 250)
+	#~ kbis = np.logspace(np.log10(np.min(k)), np.log10(np.max(k)), 250)
 	#~ kbis = np.logspace(np.log10(np.min(kcamb)), np.log10(np.max(kcamb)), 200)
-	Plinbis = np.interp(kbis, k, Plin)
+	#~ Plinbis = np.interp(kbis, k, Plin)
 	lim = np.where((k < kstop)&(k > 1e-2))[0]
 
 	#~ plt.figure()
@@ -197,61 +197,20 @@ for j in xrange(0,len(z)):
 	#~ plt.show()
 	#~ kill
 
-########################################################################################################################################
-#######################################################################################################################################
-##### interpolate data to have more point on fitting scales
-##### real space
-	bias1bis = np.interp(kbis, k, bias1)
-	bias2bis = np.interp(kbis, k, bias2)
-	bias3bis = np.interp(kbis, k, bias3)
-	bias4bis = np.interp(kbis, k, bias4)
-	bias1biss = np.interp(kbis, k, bias1s)
-	bias2biss = np.interp(kbis, k, bias2s)
-	bias3biss = np.interp(kbis, k, bias3s)
-	bias4biss = np.interp(kbis, k, bias4s)
-	errb1bis = np.interp(kbis, k, errb1)
-	errb2bis = np.interp(kbis, k, errb2)
-	errb3bis = np.interp(kbis, k, errb3)
-	errb4bis = np.interp(kbis, k, errb4)
-	Pmmbis = np.interp(kbis, k, Pmm)
-	PH1bis = np.interp(kbis, k, PH1)
-	PH2bis = np.interp(kbis, k, PH2)
-	PH3bis = np.interp(kbis, k, PH3)
-	PH4bis = np.interp(kbis, k, PH4)
-	errPhh1bis = np.interp(kbis, k, errPhh1)
-	errPhh2bis = np.interp(kbis, k, errPhh2)
-	errPhh3bis = np.interp(kbis, k, errPhh3)
-	errPhh4bis = np.interp(kbis, k, errPhh4)
 
-	##### redshift space
-	Pmono1bis = np.interp(kbis, k, Pmono1)
-	Pmono2bis = np.interp(kbis, k, Pmono2)
-	Pmono3bis = np.interp(kbis, k, Pmono3)
-	Pmono4bis = np.interp(kbis, k, Pmono4)
-	errPr1bis = np.interp(kbis, k, errPr1)
-	errPr2bis = np.interp(kbis, k, errPr2)
-	errPr3bis = np.interp(kbis, k, errPr3)
-	errPr4bis = np.interp(kbis, k, errPr4)
-	#~ Predbis = np.interp(kbis,k, Pred)
-	#~ errPredbis = np.interp(kbis,k, errPred)
-	Tm =  np.interp(kbis,k,Tm)
-	Tcb =  np.interp(kbis,k,Tcb)
-
-
-	
 ####################################################################
 ##### compute linear bias and error
 	
 	# on interpolated array
-	toto = np.where(kbis < 0.05)[0]
-	lb1 = np.mean(bias1bis[toto])
-	lb2 = np.mean(bias2bis[toto])
-	lb3 = np.mean(bias3bis[toto])
-	lb4 = np.mean(bias4bis[toto])
-	errlb1 = np.mean(errb1bis[toto])
-	errlb2 = np.mean(errb2bis[toto])
-	errlb3 = np.mean(errb3bis[toto])
-	errlb4 = np.mean(errb4bis[toto])
+	toto = np.where(k < 0.05)[0]
+	lb1 = np.mean(bias1[toto])
+	lb2 = np.mean(bias2[toto])
+	lb3 = np.mean(bias3[toto])
+	lb4 = np.mean(bias4[toto])
+	errlb1 = np.mean(errb1[toto])
+	errlb2 = np.mean(errb2[toto])
+	errlb3 = np.mean(errb3[toto])
+	errlb4 = np.mean(errb4[toto])
 	
 	# on simulation array
 	Toto = np.where(k < 0.05)[0]
@@ -267,17 +226,29 @@ for j in xrange(0,len(z)):
 ####################################################################
 #### compute pt terms
 
-	Pmod_dd, Pmod_dt, Pmod_tt, A, B, C, D, E, F, G, H   = pt_terms(kbis, Plinbis)
+	Pmod_dd, Pmod_dt, Pmod_tt, A, B, C, D, E, F, G, H   = pt_terms(kcamb, Pcamb)
+	
+	Pmod_dd = np.interp(k, kcamb, Pmod_dd)
+	Pmod_dt = np.interp(k, kcamb, Pmod_dt)
+	Pmod_tt = np.interp(k, kcamb, Pmod_tt)
+	A = np.interp(k, kcamb, A)
+	B = np.interp(k, kcamb, B)
+	C = np.interp(k, kcamb, C)
+	D = np.interp(k, kcamb, D)
+	E = np.interp(k, kcamb, E)
+	F = np.interp(k, kcamb, F)
+	G = np.interp(k, kcamb, G)
+	H = np.interp(k, kcamb, H)
 	
 ####################################################################
 #### get fitted coefficients
 
 	print 'polynomial'
-	biasF1, biasF2, biasF3, biasF4, biasF1bis, biasF2bis, biasF3bis, biasF4bis = poly(kstop, k, lb1, lb2, lb3, lb4,\
-	errlb1, errlb2, errlb3, errlb4, kbis, bias1bis, bias2bis, bias3bis, bias4bis, errb1bis, errb2bis, errb3bis, errb4bis,Mnu, z, j, case)
+	biasF1, biasF2, biasF3, biasF4, biasF1bis, biasF2bis, biasF3bis, biasF4bis = poly(kstop, lb1, lb2, lb3, lb4,\
+	errlb1, errlb2, errlb3, errlb4, k, bias1, bias2, bias3, bias4, errb1, errb2, errb3, errb4,Mnu, z, j, case)
 
-	biasF1s, biasF2s, biasF3s, biasF4s, biasF1biss, biasF2biss, biasF3biss, biasF4biss = poly(kstop, k, lb1, lb2, lb3, lb4,\
-	errlb1, errlb2, errlb3, errlb4, kbis, bias1biss, bias2biss, bias3biss, bias4biss, errb1bis, errb2bis, errb3bis, errb4bis,Mnu, z, j, case)
+	#~ biasF1s, biasF2s, biasF3s, biasF4s, biasF1biss, biasF2biss, biasF3biss, biasF4biss = poly(kstop, k, lb1, lb2, lb3, lb4,\
+	#~ errlb1, errlb2, errlb3, errlb4, kbis, bias1biss, bias2biss, bias3biss, bias4biss, errb1bis, errb2bis, errb3bis, errb4bis,Mnu, z, j, case)
 
 
 #-------------------------------------------------------------------
@@ -288,39 +259,29 @@ for j in xrange(0,len(z)):
 	#~ bias2bis, bias3bis, bias4bis, errb1bis, errb2bis, errb3bis, errb4bis, A, B, C, D, E, F,Mnu, z, j, case)
 	
 	bias2PT1, bias2PT2, bias2PT3, bias2PT4, bias3PT1, bias3PT2, bias3PT3, bias3PT4, bias3PTbis1,\
-	bias3PTbis2, bias3PTbis3, bias3PTbis4 = perturb(kstop, k,  lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, Pmmbis, kbis, bias1bis,\
-	bias2bis, bias3bis, bias4bis, errb1bis, errb2bis, errb3bis, errb4bis, A, B, C, D, E, F,Mnu, z, j, case)
+	bias3PTbis2, bias3PTbis3, bias3PTbis4 = perturb(kstop,  lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, Pmod_dd, k, bias1,\
+	bias2, bias3, bias4, errb1, errb2, errb3, errb4, A, B, C, D, E, F,Mnu, z, j, case)
 	
-	bias2PT1s, bias2PT2s, bias2PT3s, bias2PT4s, bias3PT1s, bias3PT2s, bias3PT3s, bias3PT4s, bias3PTbis1s,\
-	bias3PTbis2s, bias3PTbis3s, bias3PTbis4s = perturb(kstop, k,  lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, Pmmbis,\
-	kbis, bias1biss, bias2biss, bias3biss, bias4biss, errb1bis, errb2bis, errb3bis, errb4bis, A, B, C, D, E, F,Mnu, z, j, case)
+	#~ bias2PT1s, bias2PT2s, bias2PT3s, bias2PT4s, bias3PT1s, bias3PT2s, bias3PT3s, bias3PT4s, bias3PTbis1s,\
+	#~ bias3PTbis2s, bias3PTbis3s, bias3PTbis4s = perturb(kstop, k,  lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, Pmmbis,\
+	#~ kbis, bias1biss, bias2biss, bias3biss, bias4biss, errb1bis, errb2bis, errb3bis, errb4bis, A, B, C, D, E, F,Mnu, z, j, case)
 	
 	
 ######################################################################
 ### mean of mass bins
 
-	B1 = np.array([bias2PT1/bias1bis, bias2PT2/bias2bis, bias2PT3/bias3bis, bias2PT4/bias4bis])
-	B1s = np.array([bias2PT1s/bias1biss, bias2PT2s/bias2biss, bias2PT3s/bias3biss, bias2PT4s/bias4biss])
-	B1bis = np.array([bias3PT1/bias1bis, bias3PT2/bias2bis, bias3PT3/bias3bis, bias3PT4/bias4bis])
-	B1biss = np.array([bias3PT1s/bias1biss, bias3PT2s/bias2biss, bias3PT3s/bias3biss, bias3PT4s/bias4biss])
-	B1ter = np.array([bias3PTbis1/bias1bis, bias3PTbis2/bias2bis, bias3PTbis3/bias3bis, bias3PTbis4/bias4bis])
-	B1ters = np.array([bias3PTbis1s/bias1biss, bias3PTbis2s/bias2biss, bias3PTbis3s/bias3biss, bias3PTbis4s/bias4biss])
-	B2 = np.array([bias1bis/bias1bis, bias2bis/bias2bis, bias3bis/bias3bis, bias4bis/bias4bis])
-	B3 = np.array([biasF1/bias1bis, biasF2/bias2bis, biasF3/bias3bis, biasF4/bias4bis])
-	B3s = np.array([biasF1s/bias1biss, biasF2s/bias2biss, biasF3s/bias3biss, biasF4s/bias4biss])
-	B3bis = np.array([biasF1bis/bias1bis, biasF2bis/bias2bis, biasF3bis/bias3bis, biasF4bis/bias4bis])
-	B3biss = np.array([biasF1biss/bias1biss, biasF2biss/bias2biss, biasF3biss/bias3biss, biasF4biss/bias4biss])
+	B1 = np.array([bias2PT1/bias1, bias2PT2/bias2, bias2PT3/bias3, bias2PT4/bias4])
+	B1bis = np.array([bias3PT1/bias1, bias3PT2/bias2, bias3PT3/bias3, bias3PT4/bias4])
+	B1ter = np.array([bias3PTbis1/bias1, bias3PTbis2/bias2, bias3PTbis3/bias3, bias3PTbis4/bias4])
+	B2 = np.array([bias1/bias1, bias2/bias2, bias3/bias3, bias4/bias4])
+	B3 = np.array([biasF1/bias1, biasF2/bias2, biasF3/bias3, biasF4/bias4])
+	B3bis = np.array([biasF1bis/bias1, biasF2bis/bias2, biasF3bis/bias3, biasF4bis/bias4])
 	b1 = np.mean(B1,axis=0)
-	b1s = np.mean(B1s,axis=0)
 	b1bis = np.mean(B1bis,axis=0)
-	b1biss = np.mean(B1biss,axis=0)
 	b1ter = np.mean(B1ter,axis=0)
-	b1ters = np.mean(B1ters,axis=0)
 	b2 = np.mean(B2,axis=0)
 	b3 = np.mean(B3,axis=0)
-	b3s = np.mean(B3s,axis=0)
 	b3bis = np.mean(B3bis,axis=0)
-	b3biss = np.mean(B3biss,axis=0)
 
 
 ######################################################################
@@ -467,22 +428,17 @@ for j in xrange(0,len(z)):
 	ax2.axhline(1, color='k', linestyle='--')
 	ax2.axhline(1.01, color='k', linestyle=':')
 	ax2.axhline(0.99, color='k', linestyle=':')
-	B3, = ax2.plot(kbis, b3,label=r'w/ $b_{sim}$', color='C0')
+	B3, = ax2.plot(k, b3,label=r'w/ $b_{sim}$', color='C0')
 	#~ B3, = ax2.plot(kbis, b3, label='z = '+str(z[j]), color='C0')
-	B1, = ax2.plot(kbis, b1, color='C1')
-	B1bis, = ax2.plot(kbis, b1bis, color='C2')
-	B1ter, = ax2.plot(kbis, b1ter,  color='C3')
-	B2, = ax2.plot(kbis, b2, color='k')
-	#----------------------------------------
-	B3s, = ax2.plot(kbis, b3s,label=r'w/ $b_{sim}$ smoothed', color='C0', linestyle='--')
-	B1s, = ax2.plot(kbis, b1s, color='C1', linestyle='--')
-	B1biss, = ax2.plot(kbis, b1biss, color='C2', linestyle='--')
-	B1ters, = ax2.plot(kbis, b1ters,  color='C3', linestyle='--')
+	B1, = ax2.plot(k, b1, color='C1')
+	B1bis, = ax2.plot(k, b1bis, color='C2')
+	B1ter, = ax2.plot(k, b1ter,  color='C3')
+	B2, = ax2.plot(k, b2, color='k')
 	
-	#~ B3anal, = ax2.plot(kbis, bb3,label=r'w/ $b_{model}$', color='C0',linestyle='--')
-	#~ B1anal, = ax2.plot(kbis, bb1, color='C1',linestyle='--')
-	#~ B1bisanal, = ax2.plot(kbis, bb1bis, color='C2',linestyle='--')
-	#~ B1teranal, = ax2.plot(kbis, bb1ter,  color='C3',linestyle='--')
+	#~ B3anal, = ax2.plot(k, bb3,label=r'w/ $b_{model}$', color='C0',linestyle='--')
+	#~ B1anal, = ax2.plot(k, bb1, color='C1',linestyle='--')
+	#~ B1bisanal, = ax2.plot(k, bb1bis, color='C2',linestyle='--')
+	#~ B1teranal, = ax2.plot(k, bb1ter,  color='C3',linestyle='--')
 	
 	plt.figlegend( (B1,B1bis,B1ter,B2,B3), ('2nd order expansion',r'3rd order expansion with free $b_{3nl}$',\
 	r'3rd order expansion with fixed $b_{3nl}$', 'N-body','Power law '), \
@@ -522,9 +478,9 @@ for j in xrange(0,len(z)):
 	fcc = fz * (Tm/ Tcb)
 	
 	
-	#~ kai1, kai2, kai3, kai4, sco1, sco2, sco3, sco4, tns1, tns2, tns3, tns4, etns1, etns2, etns3, etns4 = RSD(fz,fcc, Dz[ind]\
-	#~ , j, kstop, Pmmbis, biasF1, biasF2, biasF3, biasF4, kbis, Plinbis, Pmono1bis, Pmono2bis, Pmono3bis, \
-	#~ Pmono4bis, errPr1bis, errPr2bis, errPr3bis, errPr4bis, Pmod_dt, Pmod_tt, case,z,Mnu, A, B, C, D, E, F, G, H )
+	kai1, kai2, kai3, kai4, sco1, sco2, sco3, sco4, tns1, tns2, tns3, tns4, etns1, etns2, etns3, etns4 = RSD(fz,fcc, Dz[ind]\
+	, j, kstop, Pmmbis, biasF1, biasF2, biasF3, biasF4, k, Plin, Pmono1, Pmono2, Pmono3, \
+	Pmono4, errPr1, errPr2, errPr3, errPr4, Pmod_dt, Pmod_tt, case,z,Mnu, A, B, C, D, E, F, G, H )
 
 
 	#~ p1 = np.array([Pmono1bis/Pmono1bis, Pmono2bis/Pmono2bis, Pmono3bis/Pmono3bis, Pmono4bis/Pmono4bis])
@@ -669,9 +625,7 @@ for j in xrange(0,len(z)):
 	#~ kill
 	
 	del kcamb, Pcamb, k, Pmm, PH1, PH2, PH3 , PH4, errPhh1, errPhh2, errPhh3, errPhh4, bias1, bias2, bias3, bias4, \
-	errb1, errb2, errb3, errb4, Pmono1, Pmono2, Pmono3, Pmono4, errPr1, errPr2, errPr3, errPr4, pte, Plin, Tm, Tcb, kbis,\
-	Plinbis, bias1bis, bias2bis, bias3bis, bias4bis, errb1bis, errb2bis,errb3bis,errb4bis, Pmmbis,PH1bis,PH2bis,PH3bis,PH4bis,\
-	errPhh1bis,errPhh2bis,errPhh3bis,errPhh4bis,Pmono1bis,Pmono2bis,Pmono3bis,Pmono4bis,errPr1bis,errPr2bis,errPr3bis,errPr4bis,\
+	errb1, errb2, errb3, errb4, Pmono1, Pmono2, Pmono3, Pmono4, errPr1, errPr2, errPr3, errPr4, pte, Plin, Tm, Tcb, \
 	biasF1, biasF2, biasF3, biasF4, biasF1bis, biasF2bis, biasF3bis, biasF4bis, bias2PT1, bias2PT2, bias2PT3, bias2PT4,\
 	bias3PT1, bias3PT2, bias3PT3, bias3PT4, bias3PTbis1, bias3PTbis2, bias3PTbis3,bias3PTbis4,B1,B1bis,B1ter,B2,B3,B3bis,b1,b1bis,\
 	b1ter,b2,b3,b3bis

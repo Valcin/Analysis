@@ -204,7 +204,7 @@ def coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb1, errlb1, pop, k ,b ,errb):
 	def lnprior(theta):
 		b1, b2, bs, N = theta
 		#~ if lb1 - 3*errlb1 < b1 < lb1 + 3*errlb1  and b1 > 0:
-		if  0 < b1 < 10 :
+		if  0 < b1 :
 			return 0.0
 		#~ return 0.0
 		return -np.inf
@@ -305,7 +305,7 @@ def coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, pop, k ,b ,errb):
 	
 	def lnprior(theta, x, y, yerr):
 		b1, b2, bs, b3nl, N = theta
-		if  0.8 < b1 < 0.9  :
+		if  0 < b1   :
 			return 0.0
 		return -np.inf
 		
@@ -407,17 +407,17 @@ def coeffit_exp3(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, pop, k ,b ,errb):
 	#~ lim = np.where(k < kstop)[0]
 	lim = np.where((k < kstop)&(k > 1e-2))[0]
 	def lnlike(theta, x, y, yerr):
-		b1, b2 = theta
+		b1, b2, N = theta
 		bs = -4/7.*(b1-1)
 		b3nl = 32/315.*(b1-1)
 		model = np.sqrt((b1**2 * Pmm[lim]+ b1*b2*A[lim] + 1/4.*b2**2*B[lim] + b1*bs*C[lim] + 1/2.*b2*bs*D[lim] + 1/4.*bs**2*E[lim]\
-		+ 2*b1*b3nl*F[lim])/Pmm[lim])
+		+ 2*b1*b3nl*F[lim] + N)/Pmm[lim])
 		inv_sigma2 = 1.0/(yerr[lim]**2)
 		return -0.5*(np.sum((y[lim]-model)**2*inv_sigma2 - np.log(inv_sigma2)))
 	
 	def lnprior(theta):
-		b1, b2 = theta
-		if  0 < b1 < 10  and -10 < b2 < 10 :
+		b1, b2, N = theta
+		if  0 < b1:
 		#~ if lb1 - 3*errlb1 < b1 < lb1 + 3*errlb1  and b1 > 0:
 			return 0.0
 		#~ return 0.0
@@ -433,11 +433,11 @@ def coeffit_exp3(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, pop, k ,b ,errb):
 		
 	
 
-	#~ nll = lambda *args: -lnlike(*args)
-	#~ result = op.minimize(nll, [pop],  method='Nelder-Mead', args=(k, b ,errb ),  options={'maxfev': 2000} )
-	#~ b1_ml, b2_ml = result["x"]
-	#~ print pop
-	#~ print result
+	nll = lambda *args: -lnlike(*args)
+	result = op.minimize(nll, [pop],  method='Nelder-Mead', args=(k, b ,errb ),  options={'maxfev': 2000} )
+	b1_ml, b2_ml, N_ml = result["x"]
+	print pop
+	print result
 	
 	#~ max_l = lnlike(result["x"], k, b, errb )
 	#~ AIC = 2*4. - 2 * max_l
@@ -455,13 +455,13 @@ def coeffit_exp3(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, pop, k ,b ,errb):
 
 	
 	#~ import corner
-	#~ fig = corner.corner(samples, labels=["$b1$", "$b2$", "$bs$", "$b3nl$" ], truths=[b1_ml, b2_ml, bs_ml, b3nl])
+	#~ fig = corner.corner(samples, labels=["$b1$", "$b2$", "$N$" ], truths=[b1_ml, b2_ml, N_ml])
 	#~ fig.savefig("/home/david/triangle.png")
 	
 
-	#~ b1_mcmc, b2_mcmc = map(lambda v: (v[1], v[2]-v[1], v[1]-v[0]), zip(*np.percentile(samples, [16, 50, 84], axis=0)))
+	#~ b1_mcmc, b2_mcmc, N_mcmc = map(lambda v: (v[1], v[2]-v[1], v[1]-v[0]), zip(*np.percentile(samples, [16, 50, 84], axis=0)))
 	
-	#~ print b1_mcmc, b2_mcmc
+	#~ print b1_mcmc, b2_mcmc, N_mcmc
 	
 
 	#~ plt.figure()
@@ -481,8 +481,8 @@ def coeffit_exp3(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, pop, k ,b ,errb):
 
 	#~ plt.show()
 
-	#~ return b1_mcmc, b2_mcmc
-	return b1_ml, b2_ml
+	#~ return b1_mcmc, b2_mcmc, N_mcmc
+	return b1_ml, b2_ml, N_ml
 
 ########################################################################
 #### Linear Kaiser
