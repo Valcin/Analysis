@@ -100,17 +100,17 @@ def poly(kstop, lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, k, bias1,\
 	#~ cname1bis = '/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+str(mv)+'eV/coeff_ple_'+str(mv)+'_z='+str(z[j])+'.txt'
 	#~ cname1errbis = '/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+str(mv)+'eV/err_ple_'+str(mv)+'_z='+str(z[j])+'.txt'
 	
-	#~ cname1 = '/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+str(mv)+'eV/case'+str(case)+'/coeff_pl_'+str(mv)+'_z='+str(z[j])+'.txt'
-	#~ cname1err = '/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+str(mv)+'eV/case'+str(case)+'/err_pl_'+str(mv)+'_z='+str(z[j])+'.txt'
-	#~ cname1bis = '/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+str(mv)+'eV/case'+str(case)+'/coeff_ple_'+str(mv)+'_z='+str(z[j])+'.txt'
-	#~ cname1errbis = '/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+str(mv)+'eV/case'+str(case)+'/err_ple_'+str(mv)+'_z='+str(z[j])+'.txt'
+	cname1 = '/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+str(mv)+'eV/case'+str(case)+'/coeff_pl_'+str(mv)+'_z='+str(z[j])+'.txt'
+	cname1err = '/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+str(mv)+'eV/case'+str(case)+'/err_pl_'+str(mv)+'_z='+str(z[j])+'.txt'
+	cname1bis = '/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+str(mv)+'eV/case'+str(case)+'/coeff_ple_'+str(mv)+'_z='+str(z[j])+'.txt'
+	cname1errbis = '/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+str(mv)+'eV/case'+str(case)+'/err_ple_'+str(mv)+'_z='+str(z[j])+'.txt'
 		
-	#~ with open(cname1, 'w') as fid_file:
-		#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (b1x1_mcmc[0], b2x1_mcmc[0], b3x1_mcmc[0], b4x1_mcmc[0]))
-		#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (b1x2_mcmc[0], b2x2_mcmc[0], b3x2_mcmc[0], b4x2_mcmc[0]))
-		#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (b1x3_mcmc[0], b2x3_mcmc[0], b3x3_mcmc[0], b4x3_mcmc[0]))
-		#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (b1x4_mcmc[0], b2x4_mcmc[0], b3x4_mcmc[0], b4x4_mcmc[0]))
-	#~ fid_file.close()
+	with open(cname1, 'w') as fid_file:
+		fid_file.write('%.8g %.8g %.8g %.8g\n' % (b1x1_mcmc, b2x1_mcmc, b3x1_mcmc, b4x1_mcmc))
+		fid_file.write('%.8g %.8g %.8g %.8g\n' % (b1x2_mcmc, b2x2_mcmc, b3x2_mcmc, b4x2_mcmc))
+		fid_file.write('%.8g %.8g %.8g %.8g\n' % (b1x3_mcmc, b2x3_mcmc, b3x3_mcmc, b4x3_mcmc))
+		fid_file.write('%.8g %.8g %.8g %.8g\n' % (b1x4_mcmc, b2x4_mcmc, b3x4_mcmc, b4x4_mcmc))
+	fid_file.close()
 	#~ with open(cname1err, 'w') as fid_file:
 		#~ fid_file.write('%.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g\n' % (b1x1_mcmc[1], b2x1_mcmc[1], b3x1_mcmc[1], b4x1_mcmc[1]\
 		#~ ,b1x1_mcmc[2], b2x1_mcmc[2], b3x1_mcmc[2], b4x1_mcmc[2]))
@@ -121,12 +121,12 @@ def poly(kstop, lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, k, bias1,\
 		#~ fid_file.write('%.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g\n' % (b1x4_mcmc[1], b2x4_mcmc[1], b3x4_mcmc[1], b4x4_mcmc[1]\
 		#~ ,b1x4_mcmc[2], b2x4_mcmc[2], b3x4_mcmc[2], b4x4_mcmc[2]))
 	#~ fid_file.close()
-	#~ with open(cname1bis, 'w') as fid_file:
-		#~ fid_file.write('%.8g %.8g %.8g\n' % (b1w1_mcmc[0], b2w1_mcmc[0], b4w1_mcmc[0]))
-		#~ fid_file.write('%.8g %.8g %.8g\n' % (b1w2_mcmc[0], b2w2_mcmc[0], b4w2_mcmc[0]))
-		#~ fid_file.write('%.8g %.8g %.8g\n' % (b1w3_mcmc[0], b2w3_mcmc[0], b4w3_mcmc[0]))
-		#~ fid_file.write('%.8g %.8g %.8g\n' % (b1w4_mcmc[0], b2w4_mcmc[0], b4w4_mcmc[0]))
-	#~ fid_file.close()
+	with open(cname1bis, 'w') as fid_file:
+		fid_file.write('%.8g %.8g %.8g\n' % (b1w1_mcmc, b2w1_mcmc, b4w1_mcmc))
+		fid_file.write('%.8g %.8g %.8g\n' % (b1w2_mcmc, b2w2_mcmc, b4w2_mcmc))
+		fid_file.write('%.8g %.8g %.8g\n' % (b1w3_mcmc, b2w3_mcmc, b4w3_mcmc))
+		fid_file.write('%.8g %.8g %.8g\n' % (b1w4_mcmc, b2w4_mcmc, b4w4_mcmc))
+	fid_file.close()
 	#~ with open(cname1errbis, 'w') as fid_file:
 		#~ fid_file.write('%.8g %.8g %.8g %.8g %.8g %.8g\n' % (b1w1_mcmc[1], b2w1_mcmc[1], b4w1_mcmc[1]\
 		#~ ,b1w1_mcmc[2], b2w1_mcmc[2], b4w1_mcmc[2]))
@@ -172,5 +172,5 @@ def poly(kstop, lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, k, bias1,\
 ##########################################################################
 
 	return biasF1, biasF2, biasF3, biasF4, biasF1bis, biasF2bis, biasF3bis, biasF4bis
-	return biasF1bis, biasF2bis, biasF3bis, biasF4bis
+	#~ return biasF1bis, biasF2bis, biasF3bis, biasF4bis
 	#~ return biasF1, biasF2, biasF3, biasF4

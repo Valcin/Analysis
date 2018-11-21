@@ -528,8 +528,7 @@ def ld_data(mv, z, j):
 		Pmono2 = np.mean(Pmono2temp[:,0:11], axis=1)
 		Pmono3 = np.mean(Pmono3temp[:,0:11], axis=1)
 		Pmono4 = np.mean(Pmono4temp[:,0:11], axis=1)
-		
-		
+				
 		errPr1 = np.std(Pmono1temp[:,0:11], axis=1)
 		errPr2 = np.std(Pmono2temp[:,0:11], axis=1)
 		errPr3 = np.std(Pmono3temp[:,0:11], axis=1)

@@ -133,44 +133,9 @@ for j in xrange(2,len(z)): #chmahe this after test
 			Tcb = pte[:,1]
 		
 		# interpolate to have more points and create an evenly logged array
-		kbis = np.logspace(np.log10(np.min(k)), np.log10(np.max(k)), 200)
-		Plinbis = np.interp(kbis, k, Plin)
+		#~ kbis = np.logspace(np.log10(np.min(k)), np.log10(np.max(k)), 200)
+		#~ Plinbis = np.interp(kbis, k, Plin)
 		lim = np.where((k < kstop)&(k > 1e-2))[0]
-
-	########################################################################################################################################
-	#######################################################################################################################################
-	##### interpolate data to have more point on fitting scales
-	##### real space
-		bias1bis = np.interp(kbis, k, bias1)
-		bias2bis = np.interp(kbis, k, bias2)
-		bias3bis = np.interp(kbis, k, bias3)
-		bias4bis = np.interp(kbis, k, bias4)
-		errb1bis = np.interp(kbis, k, errb1)
-		errb2bis = np.interp(kbis, k, errb2)
-		errb3bis = np.interp(kbis, k, errb3)
-		errb4bis = np.interp(kbis, k, errb4)
-		Pmmbis = np.interp(kbis, k, Pmm)
-		PH1bis = np.interp(kbis, k, PH1)
-		PH2bis = np.interp(kbis, k, PH2)
-		PH3bis = np.interp(kbis, k, PH3)
-		PH4bis = np.interp(kbis, k, PH4)
-		errPhh1bis = np.interp(kbis, k, errPhh1)
-		errPhh2bis = np.interp(kbis, k, errPhh2)
-		errPhh3bis = np.interp(kbis, k, errPhh3)
-		errPhh4bis = np.interp(kbis, k, errPhh4)
-
-		##### redshift space
-		Pmono1bis = np.interp(kbis, k, Pmono1)
-		Pmono2bis = np.interp(kbis, k, Pmono2)
-		Pmono3bis = np.interp(kbis, k, Pmono3)
-		Pmono4bis = np.interp(kbis, k, Pmono4)
-		errPr1bis = np.interp(kbis, k, errPr1)
-		errPr2bis = np.interp(kbis, k, errPr2)
-		errPr3bis = np.interp(kbis, k, errPr3)
-		errPr4bis = np.interp(kbis, k, errPr4)
-		Tm =  np.interp(kbis,k,Tm)
-		Tcb =  np.interp(kbis,k,Tcb)
-
 
 		
 	####################################################################

@@ -539,17 +539,17 @@ def coeffit_Kaiser(j, fcc, kstop, Pmm, lb1, k ,b ,errb):
 	#~ print 'maximum likelihood is '+str(max_l)
 	#~ print 'AIC = '+str(AIC)
 	
-	ndim, nwalkers = 1, 200
-	pos = [result["x"] + 1e-4*np.random.randn(ndim) for i in range(nwalkers)]
+	#~ ndim, nwalkers = 1, 200
+	#~ pos = [result["x"] + 1e-4*np.random.randn(ndim) for i in range(nwalkers)]
 
 
 
-	sampler = emcee.EnsembleSampler(nwalkers, ndim, lnprob, args=(k, b, errb))
-	sampler.run_mcmc(pos, 1000)
+	#~ sampler = emcee.EnsembleSampler(nwalkers, ndim, lnprob, args=(k, b, errb))
+	#~ sampler.run_mcmc(pos, 1000)
 	
      
 
-	samples = sampler.chain[:, 200:, :].reshape((-1, ndim))
+	#~ samples = sampler.chain[:, 200:, :].reshape((-1, ndim))
 
 	
 	#~ import corner
@@ -557,9 +557,9 @@ def coeffit_Kaiser(j, fcc, kstop, Pmm, lb1, k ,b ,errb):
 	#~ fig.savefig("/home/david/triangle.png")
 	
 
-	b1_mcmc = map(lambda v: (v[1], v[2]-v[1], v[1]-v[0]), zip(*np.percentile(samples, [16, 50, 84], axis=0)))
+	#~ b1_mcmc = map(lambda v: (v[1], v[2]-v[1], v[1]-v[0]), zip(*np.percentile(samples, [16, 50, 84], axis=0)))
 	
-	print b1_mcmc
+	#~ print b1_mcmc
 	
 
 	#~ plt.figure()
@@ -570,7 +570,8 @@ def coeffit_Kaiser(j, fcc, kstop, Pmm, lb1, k ,b ,errb):
 	
 	end = time.time()
 	print 'time is '+str((end - start))
-	return b1_mcmc
+	#~ return b1_mcmc
+	return b1_ml
 	
 ########################################################################
 #### Scoccimaro
@@ -624,17 +625,17 @@ def coeffit_Scocci(j, fcc, kstop,Pmod_dd, Pmod_dt, Pmod_tt, lb1, k ,b ,errb):
 	#~ print 'maximum likelihood is '+str(max_l)
 	#~ print 'AIC = '+str(AIC)
 	
-	ndim, nwalkers = 1, 200
-	pos = [result["x"] + 1e-4*np.random.randn(ndim) for i in range(nwalkers)]
+	#~ ndim, nwalkers = 1, 200
+	#~ pos = [result["x"] + 1e-4*np.random.randn(ndim) for i in range(nwalkers)]
 
 
 
-	sampler = emcee.EnsembleSampler(nwalkers, ndim, lnprob, args=(k, b, errb))
-	sampler.run_mcmc(pos, 1000)
+	#~ sampler = emcee.EnsembleSampler(nwalkers, ndim, lnprob, args=(k, b, errb))
+	#~ sampler.run_mcmc(pos, 1000)
 	
      
 
-	samples = sampler.chain[:, 200:, :].reshape((-1, ndim))
+	#~ samples = sampler.chain[:, 200:, :].reshape((-1, ndim))
 
 	
 	#~ import corner
@@ -642,9 +643,9 @@ def coeffit_Scocci(j, fcc, kstop,Pmod_dd, Pmod_dt, Pmod_tt, lb1, k ,b ,errb):
 	#~ fig.savefig("/home/david/triangle.png")
 	
 
-	b1_mcmc = map(lambda v: (v[1], v[2]-v[1], v[1]-v[0]), zip(*np.percentile(samples, [16, 50, 84], axis=0)))
+	#~ b1_mcmc = map(lambda v: (v[1], v[2]-v[1], v[1]-v[0]), zip(*np.percentile(samples, [16, 50, 84], axis=0)))
 	
-	print b1_mcmc
+	#~ print b1_mcmc
 	
 
 	#~ plt.figure()
@@ -655,7 +656,8 @@ def coeffit_Scocci(j, fcc, kstop,Pmod_dd, Pmod_dt, Pmod_tt, lb1, k ,b ,errb):
 	
 	end = time.time()
 	print 'time is '+str((end - start))
-	return b1_mcmc
+	#~ return b1_mcmc
+	return b1_ml
 
 ########################################################################
 #### TNS
@@ -714,17 +716,17 @@ def coeffit_TNS(j, fcc, kstop,Pmod_dd, Pmod_dt, Pmod_tt, lb1, k ,b ,errb,AB2,AB4
 	#~ print 'maximum likelihood is '+str(max_l)
 	#~ print 'AIC = '+str(AIC)
 	
-	ndim, nwalkers = 1, 200
-	pos = [result["x"] + 1e-4*np.random.randn(ndim) for i in range(nwalkers)]
+	#~ ndim, nwalkers = 1, 200
+	#~ pos = [result["x"] + 1e-4*np.random.randn(ndim) for i in range(nwalkers)]
 
 
 
-	sampler = emcee.EnsembleSampler(nwalkers, ndim, lnprob, args=(k, b, errb))
-	sampler.run_mcmc(pos, 1000)
+	#~ sampler = emcee.EnsembleSampler(nwalkers, ndim, lnprob, args=(k, b, errb))
+	#~ sampler.run_mcmc(pos, 1000)
 	
      
 
-	samples = sampler.chain[:, 200:, :].reshape((-1, ndim))
+	#~ samples = sampler.chain[:, 200:, :].reshape((-1, ndim))
 
 	
 	#~ import corner
@@ -732,9 +734,9 @@ def coeffit_TNS(j, fcc, kstop,Pmod_dd, Pmod_dt, Pmod_tt, lb1, k ,b ,errb,AB2,AB4
 	#~ fig.savefig("/home/david/triangle.png")
 	
 
-	b1_mcmc = map(lambda v: (v[1], v[2]-v[1], v[1]-v[0]), zip(*np.percentile(samples, [16, 50, 84], axis=0)))
+	#~ b1_mcmc = map(lambda v: (v[1], v[2]-v[1], v[1]-v[0]), zip(*np.percentile(samples, [16, 50, 84], axis=0)))
 	
-	print b1_mcmc
+	#~ print b1_mcmc
 	
 
 	#~ plt.figure()
@@ -745,12 +747,14 @@ def coeffit_TNS(j, fcc, kstop,Pmod_dd, Pmod_dt, Pmod_tt, lb1, k ,b ,errb,AB2,AB4
 	
 	end = time.time()
 	print 'time is '+str((end - start))
-	return b1_mcmc
+	#~ return b1_mcmc
+	return b1_ml
 	
 ########################################################################
 #### TNS + saito or eTns
 ########################################################################
-def coeffit_eTNS(j, fcc, kstop, b1, b2, bs, b3nl, Pmod_dd, Pmod_dt, Pmod_tt, A, B, C, D, E, F, G, H, k ,b ,errb,AB2,AB4,AB6,AB8, sca=None ):
+def coeffit_eTNS(j, fcc, kstop, b1, b2, bs, b3nl, Pmod_dd, Pmod_dt, Pmod_tt, A, B, C, D, E, F, G, H, k ,b ,\
+	errb,AB2,AB4,AB6,AB8,N, sca=None ):
 	
 	start = time.time()
 	#~ lim = np.where(k < kstop)[0]
@@ -760,7 +764,7 @@ def coeffit_eTNS(j, fcc, kstop, b1, b2, bs, b3nl, Pmod_dd, Pmod_dt, Pmod_tt, A, 
 		#~ b1, b2, bs, b3nl, sigma = theta
 		sigma = theta
 		PsptD1z = b1**2*Pmod_dd[lim] + b1*b2*A[lim] + 1/4.*b2**2*B[lim] + b1*bs*C[lim] + 1/2.*b2*bs*D[lim] + 1/4.*bs**2*E[lim] \
-		+ 2*b1*b3nl*F[lim]
+		+ 2*b1*b3nl*F[lim] +N
 		PsptT = b1* Pmod_dt[lim] + b2*G[lim] + bs*H[lim] + b3nl*F[lim]
 		kappa = x[lim]*sigma
 		#~ coeffA = math.sqrt(math.pi)/2. * erf(kappa)/kappa
@@ -814,17 +818,17 @@ def coeffit_eTNS(j, fcc, kstop, b1, b2, bs, b3nl, Pmod_dd, Pmod_dt, Pmod_tt, A, 
 	#~ print 'maximum likelihood is '+str(max_l)
 	#~ print 'AIC = '+str(AIC)
 	
-	ndim, nwalkers = 1, 200
-	pos = [result["x"] + 1e-4*np.random.randn(ndim) for i in range(nwalkers)]
+	#~ ndim, nwalkers = 1, 200
+	#~ pos = [result["x"] + 1e-4*np.random.randn(ndim) for i in range(nwalkers)]
 
 
 
-	sampler = emcee.EnsembleSampler(nwalkers, ndim, lnprob, args=(k, b, errb))
-	sampler.run_mcmc(pos, 1000)
+	#~ sampler = emcee.EnsembleSampler(nwalkers, ndim, lnprob, args=(k, b, errb))
+	#~ sampler.run_mcmc(pos, 1000)
 	
      
 
-	samples = sampler.chain[:, 200:, :].reshape((-1, ndim))
+	#~ samples = sampler.chain[:, 200:, :].reshape((-1, ndim))
 
 	
 	#~ import corner
@@ -832,9 +836,9 @@ def coeffit_eTNS(j, fcc, kstop, b1, b2, bs, b3nl, Pmod_dd, Pmod_dt, Pmod_tt, A, 
 	#~ fig.savefig("/home/david/triangle.png")
 	
 
-	b1_mcmc = map(lambda v: (v[1], v[2]-v[1], v[1]-v[0]), zip(*np.percentile(samples, [16, 50, 84], axis=0)))
+	#~ b1_mcmc = map(lambda v: (v[1], v[2]-v[1], v[1]-v[0]), zip(*np.percentile(samples, [16, 50, 84], axis=0)))
 	
-	print b1_mcmc
+	#~ print b1_mcmc
 	
 
 	#~ plt.figure()
@@ -844,4 +848,5 @@ def coeffit_eTNS(j, fcc, kstop, b1, b2, bs, b3nl, Pmod_dd, Pmod_dt, Pmod_tt, A, 
 	#~ plt.show()
 	end = time.time()
 	print 'time is '+str((end - start))
-	return b1_mcmc
+	#~ return b1_mcmc
+	return b1_ml

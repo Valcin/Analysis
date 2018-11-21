@@ -33,7 +33,7 @@ from scipy.special import erf
 from scipy.special import gamma
 from fit_emcee import coeffit_pl,coeffit_pl2,coeffit_exp1, coeffit_exp2, coeffit_exp3,coeffit_Kaiser, coeffit_Scocci, coeffit_TNS, coeffit_eTNS
 	
-def RSD(fz,fcc, Dz, j, kstop, Pmmbis, biasF1, biasF2, biasF3, biasF4, k, Plin, Pmono1, Pmono2, Pmono3, \
+def RSD(fz,fcc, Dz, j, kstop, kcamb, Pcamb, Pmm, biasF1, biasF2, biasF3, biasF4, k, Plin, Pmono1, Pmono2, Pmono3, \
 		Pmono4, errPr1, errPr2, errPr3, errPr4, Pmod_dt, Pmod_tt, case,z,Mnu,A, B, C, D, E, F, G, H, sca1 = None,
 		sca2 = None, sca3 = None, sca4 = None ):
 	####################################################################
@@ -57,7 +57,7 @@ def RSD(fz,fcc, Dz, j, kstop, Pmmbis, biasF1, biasF2, biasF3, biasF4, k, Plin, P
 	# including extrapolation to higher and lower k  
 	# time the operation
 	t1=time()
-	fastpt=FPT.FASTPT(k,to_do=to_do,n_pad=n_pad, verbose=True) 
+	fastpt=FPT.FASTPT(kcamb,to_do=to_do,n_pad=n_pad, verbose=True) 
 	t2=time()
 	
 ####################################################################
@@ -73,16 +73,35 @@ def RSD(fz,fcc, Dz, j, kstop, Pmmbis, biasF1, biasF2, biasF3, biasF4, k, Plin, P
 		b2pt3 = bpt3[:,1]
 		bspt3 = bpt3[:,2]
 		b3pt3 = bpt3[:,3]
+		Npt3 = bpt3[:,4]
 		
-		AB2_1,AB4_1,AB6_1,AB8_1 = fastpt.RSD_ABsum_components(Plin,fz,b1pl[0]*sca1 ,C_window=C_window)
-		AB2_2,AB4_2,AB6_2,AB8_2 = fastpt.RSD_ABsum_components(Plin,fz,b1pl[1]*sca2 ,C_window=C_window)
-		AB2_3,AB4_3,AB6_3,AB8_3 = fastpt.RSD_ABsum_components(Plin,fz,b1pl[2]*sca3 ,C_window=C_window)
-		AB2_4,AB4_4,AB6_4,AB8_4 = fastpt.RSD_ABsum_components(Plin,fz,b1pl[3]*sca4 ,C_window=C_window)
+		AB2_1,AB4_1,AB6_1,AB8_1 = fastpt.RSD_ABsum_components(Pcamb,fz,b1pl[0]*sca1 ,C_window=C_window)
+		AB2_2,AB4_2,AB6_2,AB8_2 = fastpt.RSD_ABsum_components(Pcamb,fz,b1pl[1]*sca2 ,C_window=C_window)
+		AB2_3,AB4_3,AB6_3,AB8_3 = fastpt.RSD_ABsum_components(Pcamb,fz,b1pl[2]*sca3 ,C_window=C_window)
+		AB2_4,AB4_4,AB6_4,AB8_4 = fastpt.RSD_ABsum_components(Pcamb,fz,b1pl[3]*sca4 ,C_window=C_window)
 		
-		AB2bis_1,AB4bis_1,AB6bis_1,AB8bis_1 = fastpt.RSD_ABsum_components(Plin,fz,b1pt3[0]*sca1 ,C_window=C_window)
-		AB2bis_2,AB4bis_2,AB6bis_2,AB8bis_2 = fastpt.RSD_ABsum_components(Plin,fz,b1pt3[1]*sca2 ,C_window=C_window)
-		AB2bis_3,AB4bis_3,AB6bis_3,AB8bis_3 = fastpt.RSD_ABsum_components(Plin,fz,b1pt3[2]*sca3 ,C_window=C_window)
-		AB2bis_4,AB4bis_4,AB6bis_4,AB8bis_4 = fastpt.RSD_ABsum_components(Plin,fz,b1pt3[3]*sca4 ,C_window=C_window)
+		AB2bis_1,AB4bis_1,AB6bis_1,AB8bis_1 = fastpt.RSD_ABsum_components(Pcamb,fz,b1pt3[0]*sca1 ,C_window=C_window)
+		AB2bis_2,AB4bis_2,AB6bis_2,AB8bis_2 = fastpt.RSD_ABsum_components(Pcamb,fz,b1pt3[1]*sca2 ,C_window=C_window)
+		AB2bis_3,AB4bis_3,AB6bis_3,AB8bis_3 = fastpt.RSD_ABsum_components(Pcamb,fz,b1pt3[2]*sca3 ,C_window=C_window)
+		AB2bis_4,AB4bis_4,AB6bis_4,AB8bis_4 = fastpt.RSD_ABsum_components(Pcamb,fz,b1pt3[3]*sca4 ,C_window=C_window)
+		
+		### interpolate on simulation k
+		AB2_1 = np.interp(k, kcamb, AB2_1); AB2bis_1 = np.interp(k, kcamb, AB2bis_1)
+		AB4_1 = np.interp(k, kcamb, AB4_1); AB4bis_1 = np.interp(k, kcamb, AB4bis_1)
+		AB6_1 = np.interp(k, kcamb, AB6_1); AB6bis_1 = np.interp(k, kcamb, AB6bis_1)
+		AB8_1 = np.interp(k, kcamb, AB8_1); AB8bis_1 = np.interp(k, kcamb, AB8bis_1)
+		AB2_2 = np.interp(k, kcamb, AB2_2); AB2bis_2 = np.interp(k, kcamb, AB2bis_2)
+		AB4_2 = np.interp(k, kcamb, AB4_2); AB4bis_2 = np.interp(k, kcamb, AB4bis_2)
+		AB6_2 = np.interp(k, kcamb, AB6_2); AB6bis_2 = np.interp(k, kcamb, AB6bis_2)
+		AB8_2 = np.interp(k, kcamb, AB8_2); AB8bis_2 = np.interp(k, kcamb, AB8bis_2)
+		AB2_3 = np.interp(k, kcamb, AB2_3); AB2bis_3 = np.interp(k, kcamb, AB2bis_3)
+		AB4_3 = np.interp(k, kcamb, AB4_3); AB4bis_3 = np.interp(k, kcamb, AB4bis_3)
+		AB6_3 = np.interp(k, kcamb, AB6_3); AB6bis_3 = np.interp(k, kcamb, AB6bis_3)
+		AB8_3 = np.interp(k, kcamb, AB8_3); AB8bis_3 = np.interp(k, kcamb, AB8bis_3)
+		AB2_4 = np.interp(k, kcamb, AB2_4); AB2bis_4 = np.interp(k, kcamb, AB2bis_4)
+		AB4_4 = np.interp(k, kcamb, AB4_4); AB4bis_4 = np.interp(k, kcamb, AB4bis_4)
+		AB6_4 = np.interp(k, kcamb, AB6_4); AB6bis_4 = np.interp(k, kcamb, AB6bis_4)
+		AB8_4 = np.interp(k, kcamb, AB8_4); AB8bis_4 = np.interp(k, kcamb, AB8bis_4)
 		
 	else:
 		bpl = np.loadtxt('/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+\
@@ -95,18 +114,36 @@ def RSD(fz,fcc, Dz, j, kstop, Pmmbis, biasF1, biasF2, biasF3, biasF4, k, Plin, P
 		b2pt3 = bpt3[:,1]
 		bspt3 = bpt3[:,2]
 		b3pt3 = bpt3[:,3]
+		Npt3 = bpt3[:,4]
 		
-		AB2_1,AB4_1,AB6_1,AB8_1 = fastpt.RSD_ABsum_components(Plin,fz,b1pl[0] ,C_window=C_window)
-		AB2_2,AB4_2,AB6_2,AB8_2 = fastpt.RSD_ABsum_components(Plin,fz,b1pl[1] ,C_window=C_window)
-		AB2_3,AB4_3,AB6_3,AB8_3 = fastpt.RSD_ABsum_components(Plin,fz,b1pl[2] ,C_window=C_window)
-		AB2_4,AB4_4,AB6_4,AB8_4 = fastpt.RSD_ABsum_components(Plin,fz,b1pl[3] ,C_window=C_window)
+		AB2_1,AB4_1,AB6_1,AB8_1 = fastpt.RSD_ABsum_components(Pcamb,fz,b1pl[0] ,C_window=C_window)
+		AB2_2,AB4_2,AB6_2,AB8_2 = fastpt.RSD_ABsum_components(Pcamb,fz,b1pl[1] ,C_window=C_window)
+		AB2_3,AB4_3,AB6_3,AB8_3 = fastpt.RSD_ABsum_components(Pcamb,fz,b1pl[2] ,C_window=C_window)
+		AB2_4,AB4_4,AB6_4,AB8_4 = fastpt.RSD_ABsum_components(Pcamb,fz,b1pl[3] ,C_window=C_window)
 		
-		AB2bis_1,AB4bis_1,AB6bis_1,AB8bis_1 = fastpt.RSD_ABsum_components(Plin,fz,b1pt3[0] ,C_window=C_window)
-		AB2bis_2,AB4bis_2,AB6bis_2,AB8bis_2 = fastpt.RSD_ABsum_components(Plin,fz,b1pt3[1] ,C_window=C_window)
-		AB2bis_3,AB4bis_3,AB6bis_3,AB8bis_3 = fastpt.RSD_ABsum_components(Plin,fz,b1pt3[2] ,C_window=C_window)
-		AB2bis_4,AB4bis_4,AB6bis_4,AB8bis_4 = fastpt.RSD_ABsum_components(Plin,fz,b1pt3[3] ,C_window=C_window)
+		AB2bis_1,AB4bis_1,AB6bis_1,AB8bis_1 = fastpt.RSD_ABsum_components(Pcamb,fz,b1pt3[0] ,C_window=C_window)
+		AB2bis_2,AB4bis_2,AB6bis_2,AB8bis_2 = fastpt.RSD_ABsum_components(Pcamb,fz,b1pt3[1] ,C_window=C_window)
+		AB2bis_3,AB4bis_3,AB6bis_3,AB8bis_3 = fastpt.RSD_ABsum_components(Pcamb,fz,b1pt3[2] ,C_window=C_window)
+		AB2bis_4,AB4bis_4,AB6bis_4,AB8bis_4 = fastpt.RSD_ABsum_components(Pcamb,fz,b1pt3[3] ,C_window=C_window)
 	
-	
+		### interpolate on simulation k
+		AB2_1 = np.interp(k, kcamb, AB2_1); AB2bis_1 = np.interp(k, kcamb, AB2bis_1)
+		AB4_1 = np.interp(k, kcamb, AB4_1); AB4bis_1 = np.interp(k, kcamb, AB4bis_1)
+		AB6_1 = np.interp(k, kcamb, AB6_1); AB6bis_1 = np.interp(k, kcamb, AB6bis_1)
+		AB8_1 = np.interp(k, kcamb, AB8_1); AB8bis_1 = np.interp(k, kcamb, AB8bis_1)
+		AB2_2 = np.interp(k, kcamb, AB2_2); AB2bis_2 = np.interp(k, kcamb, AB2bis_2)
+		AB4_2 = np.interp(k, kcamb, AB4_2); AB4bis_2 = np.interp(k, kcamb, AB4bis_2)
+		AB6_2 = np.interp(k, kcamb, AB6_2); AB6bis_2 = np.interp(k, kcamb, AB6bis_2)
+		AB8_2 = np.interp(k, kcamb, AB8_2); AB8bis_2 = np.interp(k, kcamb, AB8bis_2)
+		AB2_3 = np.interp(k, kcamb, AB2_3); AB2bis_3 = np.interp(k, kcamb, AB2bis_3)
+		AB4_3 = np.interp(k, kcamb, AB4_3); AB4bis_3 = np.interp(k, kcamb, AB4bis_3)
+		AB6_3 = np.interp(k, kcamb, AB6_3); AB6bis_3 = np.interp(k, kcamb, AB6bis_3)
+		AB8_3 = np.interp(k, kcamb, AB8_3); AB8bis_3 = np.interp(k, kcamb, AB8bis_3)
+		AB2_4 = np.interp(k, kcamb, AB2_4); AB2bis_4 = np.interp(k, kcamb, AB2bis_4)
+		AB4_4 = np.interp(k, kcamb, AB4_4); AB4bis_4 = np.interp(k, kcamb, AB4bis_4)
+		AB6_4 = np.interp(k, kcamb, AB6_4); AB6bis_4 = np.interp(k, kcamb, AB6bis_4)
+		AB8_4 = np.interp(k, kcamb, AB8_4); AB8bis_4 = np.interp(k, kcamb, AB8bis_4)
+		
 	#~ dat_file_path = '/home/david/codes/montepython_public/BE_HaPPy/coefficients/0.0eV/large_scale/'\
 		#~ 'LS_z='+str(z[j])+'_.txt'
 	#~ f = np.loadtxt(dat_file_path)
@@ -114,10 +151,10 @@ def RSD(fz,fcc, Dz, j, kstop, Pmmbis, biasF1, biasF2, biasF3, biasF4, k, Plin, P
 	#~ bls2 = f[1]
 	#~ bls3 = f[2]
 	#~ bls4 = f[3]
-	#~ AB2ter_1,AB4ter_1,AB6ter_1,AB8ter_1 = fastpt.RSD_ABsum_components(Plin,fz,bls1 ,C_window=C_window)
-	#~ AB2ter_2,AB4ter_2,AB6ter_2,AB8ter_2 = fastpt.RSD_ABsum_components(Plin,fz,bls2 ,C_window=C_window)
-	#~ AB2ter_3,AB4ter_3,AB6ter_3,AB8ter_3 = fastpt.RSD_ABsum_components(Plin,fz,bls3 ,C_window=C_window)
-	#~ AB2ter_4,AB4ter_4,AB6ter_4,AB8ter_4 = fastpt.RSD_ABsum_components(Plin,fz,bls4 ,C_window=C_window)
+	#~ AB2ter_1,AB4ter_1,AB6ter_1,AB8ter_1 = fastpt.RSD_ABsum_components(Pcamb,fz,bls1 ,C_window=C_window)
+	#~ AB2ter_2,AB4ter_2,AB6ter_2,AB8ter_2 = fastpt.RSD_ABsum_components(Pcamb,fz,bls2 ,C_window=C_window)
+	#~ AB2ter_3,AB4ter_3,AB6ter_3,AB8ter_3 = fastpt.RSD_ABsum_components(Pcamb,fz,bls3 ,C_window=C_window)
+	#~ AB2ter_4,AB4ter_4,AB6ter_4,AB8ter_4 = fastpt.RSD_ABsum_components(Pcamb,fz,bls4 ,C_window=C_window)
 	
 	#~ #-------------------------------------------------------
 	#~ cname1m1 = '/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+str(Mnu)+'eV/TNS_coeff/'\
@@ -183,7 +220,7 @@ def RSD(fz,fcc, Dz, j, kstop, Pmmbis, biasF1, biasF2, biasF3, biasF4, k, Plin, P
 		#~ for index_k in xrange(len(k)):
 			#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (AB2ter_4[index_k],AB4ter_4[index_k],AB6ter_4[index_k],AB8ter_4[index_k]))
 
-
+	
 
 	#----------------------------------------------------------------
 	#### compute mcmc coefficient of halo ps fit
@@ -224,29 +261,29 @@ def RSD(fz,fcc, Dz, j, kstop, Pmmbis, biasF1, biasF2, biasF3, biasF4, k, Plin, P
 	if sca1 is not None:
 		betns1 = coeffit_eTNS(j, fcc, kstop, b1pt3[0]*sca1, b2pt3[0]*sca2, bspt3[0]*sca3, b3pt3[0]*sca4, Pmm, Pmod_dt, Pmod_tt,\
 		A, B, C, D, E, F, G, H, k, Pmono1, errPr1, AB2bis_1, AB4bis_1,\
-		AB6bis_1, AB8bis_1)
+		AB6bis_1, AB8bis_1, Npt3[0])
 		betns2 = coeffit_eTNS(j, fcc, kstop, b1pt3[1]*sca1, b2pt3[1]*sca2, bspt3[1]*sca3, b3pt3[1]*sca4, Pmm, Pmod_dt, Pmod_tt,\
 		A, B, C, D, E, F, G, H, k, Pmono2, errPr2, AB2bis_2, AB4bis_2,\
-		AB6bis_2, AB8bis_2)
+		AB6bis_2, AB8bis_2, Npt3[1])
 		betns3 = coeffit_eTNS(j, fcc, kstop, b1pt3[2]*sca1, b2pt3[2]*sca2, bspt3[2]*sca3, b3pt3[2]*sca4, Pmm, Pmod_dt, Pmod_tt,\
 		A, B, C, D, E, F, G, H, k, Pmono3, errPr3, AB2bis_3, AB4bis_3,\
-		AB6bis_3, AB8bis_3)
+		AB6bis_3, AB8bis_3, Npt3[2])
 		betns4 = coeffit_eTNS(j, fcc, kstop, b1pt3[3]*sca1, b2pt3[3]*sca2, bspt3[3]*sca3, b3pt3[3]*sca4, Pmm, Pmod_dt, Pmod_tt,\
 		A, B, C, D, E, F, G, H, k, Pmono4, errPr4, AB2bis_4, AB4bis_4,\
-		AB6bis_4, AB8bis_4)
+		AB6bis_4, AB8bis_4, Npt3[3])
 	else:
 		betns1 = coeffit_eTNS(j, fcc, kstop, b1pt3[0], b2pt3[0], bspt3[0], b3pt3[0], Pmm, Pmod_dt, Pmod_tt,\
 		A, B, C, D, E, F, G, H, k, Pmono1, errPr1, AB2bis_1, AB4bis_1,\
-		AB6bis_1, AB8bis_1)
+		AB6bis_1, AB8bis_1, Npt3[0])
 		betns2 = coeffit_eTNS(j, fcc, kstop, b1pt3[1], b2pt3[1], bspt3[1], b3pt3[1], Pmm, Pmod_dt, Pmod_tt,\
 		A, B, C, D, E, F, G, H, k, Pmono2, errPr2, AB2bis_2, AB4bis_2,\
-		AB6bis_2, AB8bis_2)
+		AB6bis_2, AB8bis_2, Npt3[1])
 		betns3 = coeffit_eTNS(j, fcc, kstop, b1pt3[2], b2pt3[2], bspt3[2], b3pt3[2], Pmm, Pmod_dt, Pmod_tt,\
 		A, B, C, D, E, F, G, H, k, Pmono3, errPr3, AB2bis_3, AB4bis_3,\
-		AB6bis_3, AB8bis_3)
+		AB6bis_3, AB8bis_3, Npt3[2])
 		betns4 = coeffit_eTNS(j, fcc, kstop, b1pt3[3], b2pt3[3], bspt3[3], b3pt3[3], Pmm, Pmod_dt, Pmod_tt,\
 		A, B, C, D, E, F, G, H, k, Pmono4, errPr4, AB2bis_4, AB4bis_4,\
-		AB6bis_4, AB8bis_4)
+		AB6bis_4, AB8bis_4, Npt3[3])
 	#~ cn4 = '/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+str(Mnu)+'eV/v_disp/case'+str(case)+'/vdispetns_z='+str(z[j])+'.txt'
 	#~ with open(cn4, 'w') as fid_file:
 		#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (betns1[0][0],betns2[0][0],betns3[0][0],betns4[0][0]))
@@ -272,10 +309,10 @@ def RSD(fz,fcc, Dz, j, kstop, Pmmbis, biasF1, biasF2, biasF3, biasF4, k, Plin, P
 	#~ kai2 = kaips(biasF2, bK[1])
 	#~ kai3 = kaips(biasF3, bK[2])
 	#~ kai4 = kaips(biasF4, bK[3])
-	kai1 = kaips(biasF1, bK1[0][0])
-	kai2 = kaips(biasF2, bK2[0][0])
-	kai3 = kaips(biasF3, bK3[0][0])
-	kai4 = kaips(biasF4, bK4[0][0])
+	kai1 = kaips(biasF1, bK1)
+	kai2 = kaips(biasF2, bK2)
+	kai3 = kaips(biasF3, bK3)
+	kai4 = kaips(biasF4, bK4)
 	#*****************************
 	#~ k1 = kaips(bF1, BK[0])
 	#~ k2 = kaips(bF2, BK[1])
@@ -303,10 +340,10 @@ def RSD(fz,fcc, Dz, j, kstop, Pmmbis, biasF1, biasF2, biasF3, biasF4, k, Plin, P
 	#~ sco2 = scops(biasF2, bsco[1])
 	#~ sco3 = scops(biasF3, bsco[2])
 	#~ sco4 = scops(biasF4, bsco[3])
-	sco1 = scops(biasF1, bsco1[0][0])
-	sco2 = scops(biasF2, bsco2[0][0])
-	sco3 = scops(biasF3, bsco3[0][0])
-	sco4 = scops(biasF4, bsco4[0][0])
+	sco1 = scops(biasF1, bsco1)
+	sco2 = scops(biasF2, bsco2)
+	sco3 = scops(biasF3, bsco3)
+	sco4 = scops(biasF4, bsco4)
 	
 	#~ s1 = scops(bF1, Bsco[0])
 	#~ s2 = scops(bF2, Bsco[1])
@@ -337,10 +374,10 @@ def RSD(fz,fcc, Dz, j, kstop, Pmmbis, biasF1, biasF2, biasF3, biasF4, k, Plin, P
 	#~ tns2 = tnsps(biasF2,btns[1], AB2_2, AB4_2, AB6_2, AB8_2)
 	#~ tns3 = tnsps(biasF3,btns[2], AB2_3, AB4_3, AB6_3, AB8_3)
 	#~ tns4 = tnsps(biasF4,btns[3], AB2_4, AB4_4, AB6_4, AB8_4)
-	tns1 = tnsps(biasF1,btns1[0][0], AB2_1, AB4_1, AB6_1, AB8_1)
-	tns2 = tnsps(biasF2,btns2[0][0], AB2_2, AB4_2, AB6_2, AB8_2)
-	tns3 = tnsps(biasF3,btns3[0][0], AB2_3, AB4_3, AB6_3, AB8_3)
-	tns4 = tnsps(biasF4,btns4[0][0], AB2_4, AB4_4, AB6_4, AB8_4)
+	tns1 = tnsps(biasF1,btns1, AB2_1, AB4_1, AB6_1, AB8_1)
+	tns2 = tnsps(biasF2,btns2, AB2_2, AB4_2, AB6_2, AB8_2)
+	tns3 = tnsps(biasF3,btns3, AB2_3, AB4_3, AB6_3, AB8_3)
+	tns4 = tnsps(biasF4,btns4, AB2_4, AB4_4, AB6_4, AB8_4)
 	
 	#~ t1 = tnsps(bF1,Btns[0], ab2_1, ab4_1, ab6_1, ab8_1)
 	#~ t2 = tnsps(bF2,Btns[1], ab2_2, ab4_2, ab6_2, ab8_2)
@@ -355,8 +392,8 @@ def RSD(fz,fcc, Dz, j, kstop, Pmmbis, biasF1, biasF2, biasF3, biasF4, k, Plin, P
 	betns = np.loadtxt('/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+str(Mnu)+'eV/v_disp/case'+str(case)+'/vdispetns_z='+str(z[j])+'.txt')
 	#~ Betns = np.loadtxt('/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+str(Mnu)+'eV/v_disp/case'+str(case)+'/vdispetnsbis_z='+str(z[j])+'.txt')
 	#~ be = np.loadtxt('/home/david/codes/montepython_public/BE_HaPPy/coefficients/0.0eV/v_disp/case'+str(case)+'/vdispetns_z='+str(z[j])+'.txt')
-	def etnsps(b1,b2,bs,b3nl,sigma, AB2, AB4, AB6, AB8, sca=None):
-		PsptD1z = b1**2*Pmm + b1*b2*A+ 1/4.*b2**2*B+ b1*bs*C+ 1/2.*b2*bs*D+ 1/4.*bs**2*E+ 2*b1*b3nl*F
+	def etnsps(b1,b2,bs,b3nl,sigma, AB2, AB4, AB6, AB8, N, sca=None):
+		PsptD1z = b1**2*Pmm + b1*b2*A+ 1/4.*b2**2*B+ b1*bs*C+ 1/2.*b2*bs*D+ 1/4.*bs**2*E+ 2*b1*b3nl*F + N
 		PsptT = b1* Pmod_dt+ b2*G+ bs*H + b3nl*F
 		#~ kappa = k*sigma
 		#~ coeffA = math.sqrt(math.pi)/2. * erf(kappa)/kappa
@@ -384,10 +421,10 @@ def RSD(fz,fcc, Dz, j, kstop, Pmmbis, biasF1, biasF2, biasF3, biasF4, k, Plin, P
 	#~ etns2 = etnsps(b1pt3[1], b2pt3[1], bspt3[1], b3pt3[1], betns[1], AB2bis_2, AB4bis_2, AB6bis_2, AB8bis_2)  
 	#~ etns3 = etnsps(b1pt3[2], b2pt3[2], bspt3[2], b3pt3[2], betns[2], AB2bis_3, AB4bis_3, AB6bis_3, AB8bis_3)  
 	#~ etns4 = etnsps(b1pt3[3], b2pt3[3], bspt3[3], b3pt3[3], betns[3], AB2bis_4, AB4bis_4, AB6bis_4, AB8bis_4) 
-	etns1 = etnsps(b1pt3[0], b2pt3[0], bspt3[0], b3pt3[0], betns1[0][0], AB2bis_1, AB4bis_1, AB6bis_1, AB8bis_1)  
-	etns2 = etnsps(b1pt3[1], b2pt3[1], bspt3[1], b3pt3[1], betns2[0][0], AB2bis_2, AB4bis_2, AB6bis_2, AB8bis_2)  
-	etns3 = etnsps(b1pt3[2], b2pt3[2], bspt3[2], b3pt3[2], betns3[0][0], AB2bis_3, AB4bis_3, AB6bis_3, AB8bis_3)  
-	etns4 = etnsps(b1pt3[3], b2pt3[3], bspt3[3], b3pt3[3], betns4[0][0], AB2bis_4, AB4bis_4, AB6bis_4, AB8bis_4) 
+	etns1 = etnsps(b1pt3[0], b2pt3[0], bspt3[0], b3pt3[0], betns1, AB2bis_1, AB4bis_1, AB6bis_1, AB8bis_1, Npt3[0])  
+	etns2 = etnsps(b1pt3[1], b2pt3[1], bspt3[1], b3pt3[1], betns2, AB2bis_2, AB4bis_2, AB6bis_2, AB8bis_2, Npt3[1])  
+	etns3 = etnsps(b1pt3[2], b2pt3[2], bspt3[2], b3pt3[2], betns3, AB2bis_3, AB4bis_3, AB6bis_3, AB8bis_3, Npt3[2])  
+	etns4 = etnsps(b1pt3[3], b2pt3[3], bspt3[3], b3pt3[3], betns4, AB2bis_4, AB4bis_4, AB6bis_4, AB8bis_4, Npt3[3]) 
 	 
 	#~ e1 = etnsps(m1pt3[0], m1pt3[1], m1pt3[2], m1pt3[3], Betns[0], ab2bis_1, ab4bis_1, ab6bis_1, ab8bis_1,(Bias_eff_t1/Bias_eff0_t1))  
 	#~ e2 = etnsps(m2pt3[0], m2pt3[1], m2pt3[2], m2pt3[3], Betns[1], ab2bis_2, ab4bis_2, ab6bis_2, ab8bis_2,(Bias_eff_t2/Bias_eff0_t2))  
