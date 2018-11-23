@@ -229,7 +229,8 @@ for j in xrange(0,len(z)):
 
 	Pmod_dd, Pmod_dt, Pmod_tt, A, B, C, D, E, F, G, H   = pt_terms(kcamb, Pcamb)
 
-	Pmod_dd, Pmod_dt, Pmod_tt, A, B, C, D, E, F, G, H  = interp_simu(k, kcamb, Pcamb, Pmod_dd, Pmod_dt, Pmod_tt,\
+	### interpolate on simulation k
+	Pmod_dd, Pmod_dt, Pmod_tt, A, B, C, D, E, F, G, H  = interp_simu(z,j ,k, kcamb, Pcamb, Pmod_dd, Pmod_dt, Pmod_tt,\
 	A, B, C, D, E, F, G, H, 2)
 	
 	

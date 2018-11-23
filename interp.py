@@ -28,7 +28,7 @@ from polynomial import poly
 from perturbation import perturb
 
 
-def interp_simu(k,kcamb, Pcamb, Pmod_dd, Pmod_dt, Pmod_tt, A, B, C, D, E, F, G, H, way):
+def interp_simu(z, j, k,kcamb, Pcamb, Pmod_dd, Pmod_dt, Pmod_tt, A, B, C, D, E, F, G, H, way):
 
 	if way == 1:
 		
@@ -82,7 +82,7 @@ def interp_simu(k,kcamb, Pcamb, Pmod_dd, Pmod_dt, Pmod_tt, A, B, C, D, E, F, G, 
 		fid_file.close()
 				
 				
-		expected_CF.expected(j)
+		#~ exp2.expected(j)
 		
 		
 		pte = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/exp/expected1-'+str(z[j])+'.txt')
