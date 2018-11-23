@@ -72,7 +72,7 @@ BoxSize = 1000.0 #Mpc/h                                      
 
 start = time()
 
-for j in xrange(2,len(z)): #chmahe this after test
+for j in xrange(0,len(z)): #chmahe this after test
 ########################################################################
 ########################################################################
 	####################################################################
@@ -92,7 +92,8 @@ for j in xrange(2,len(z)): #chmahe this after test
 #### load data from simualtion 
 
 	kcamb, Pcamb, k, Pmm, PH1, PH2, PH3 , PH4, errPhh1, errPhh2, errPhh3, errPhh4, bias1, bias2, bias3, bias4, \
-	errb1, errb2, errb3, errb4, Pmono1, Pmono2, Pmono3, Pmono4, errPr1, errPr2, errPr3, errPr4 = ld_data(Mnu, z, j)
+	bias1s, bias2s, bias3s, bias4s, errb1, errb2, errb3, errb4, Pmono1, Pmono2, Pmono3, Pmono4, errPr1, errPr2,\
+	errPr3, errPr4 = ld_data(Mnu, z, j)
 
 ####################################################################
 ##### define the maximum scale for the fit 
@@ -143,17 +144,17 @@ for j in xrange(2,len(z)): #chmahe this after test
 		
 		# on interpolated array
 		if kstop < 0.05:
-			toto = np.where(kbis < kstop)[0]
+			toto = np.where(k < kstop)[0]
 		else:
-			toto = np.where(kbis < 0.05)[0]
-		lb1 = np.mean(bias1bis[toto])
-		lb2 = np.mean(bias2bis[toto])
-		lb3 = np.mean(bias3bis[toto])
-		lb4 = np.mean(bias4bis[toto])
-		errlb1 = np.mean(errb1bis[toto])
-		errlb2 = np.mean(errb2bis[toto])
-		errlb3 = np.mean(errb3bis[toto])
-		errlb4 = np.mean(errb4bis[toto])
+			toto = np.where(k < 0.05)[0]
+		lb1 = np.mean(bias1[toto])
+		lb2 = np.mean(bias2[toto])
+		lb3 = np.mean(bias3[toto])
+		lb4 = np.mean(bias4[toto])
+		errlb1 = np.mean(errb1[toto])
+		errlb2 = np.mean(errb2[toto])
+		errlb3 = np.mean(errb3[toto])
+		errlb4 = np.mean(errb4[toto])
 		
 		# on simulation array
 		Toto = np.where(k < 0.05)[0]
@@ -169,24 +170,42 @@ for j in xrange(2,len(z)): #chmahe this after test
 	####################################################################
 	#### compute pt terms
 
-		Pmod_dd, Pmod_dt, Pmod_tt, A, B, C, D, E, F, G, H   = pt_terms(kbis, Plinbis)
+		Pmod_dd, Pmod_dt, Pmod_tt, A, B, C, D, E, F, G, H   = pt_terms(kcamb, Pcamb)
+		
+		Pmod_dd = np.interp(k, kcamb, Pmod_dd)
+		Pmod_dt = np.interp(k, kcamb, Pmod_dt)
+		Pmod_tt = np.interp(k, kcamb, Pmod_tt)
+		A = np.interp(k, kcamb, A)
+		B = np.interp(k, kcamb, B)
+		C = np.interp(k, kcamb, C)
+		D = np.interp(k, kcamb, D)
+		E = np.interp(k, kcamb, E)
+		F = np.interp(k, kcamb, F)
+		G = np.interp(k, kcamb, G)
+		H = np.interp(k, kcamb, H)
 		
 	####################################################################
 	#### get fitted coefficients
 
 
-		biasF1, biasF2, biasF3, biasF4, biasF1bis, biasF2bis, biasF3bis, biasF4bis = poly(kstop, k, lb1, lb2, lb3, lb4,\
-		errlb1, errlb2, errlb3, errlb4, kbis, bias1bis, bias2bis, bias3bis, bias4bis, errb1bis, errb2bis, errb3bis, errb4bis,Mnu, z, j, case)
+		print 'polynomial'
+		biasF1, biasF2, biasF3, biasF4, biasF1bis, biasF2bis, biasF3bis, biasF4bis = poly(kstop, lb1, lb2, lb3, lb4,\
+		errlb1, errlb2, errlb3, errlb4, k, bias1, bias2, bias3, bias4, errb1, errb2, errb3, errb4,Mnu, z, j, case)
 		
 		#~ biasF1, biasF2, biasF3, biasF4 = poly(kstop, k, lb1, lb2, lb3, lb4,\
 		#~ errlb1, errlb2, errlb3, errlb4, kbis, bias1bis, bias2bis, bias3bis, bias4bis, errb1bis, errb2bis, errb3bis, errb4bis,Mnu, z, j, case)
 
 
 	#-------------------------------------------------------------------
-
-		bias2PT1, bias2PT2, bias2PT3, bias2PT4, bias3PT1, bias3PT2, bias3PT3, bias3PT4, bias3PTbis1, bias3PTbis2, bias3PTbis3,\
-		bias3PTbis4 = perturb(kstop, k,  lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, Pmmbis, kbis, bias1bis,\
-		bias2bis, bias3bis, bias4bis, errb1bis, errb2bis, errb3bis, errb4bis, A, B, C, D, E, F,Mnu, z, j, case)
+		print 'perturbation'
+		#~ bias2PT1, bias2PT2, bias2PT3, bias2PT4, bias3PT1, bias3PT2, bias3PT3, bias3PT4, bias3PTbis1,\
+		#~ bias3PTbis2, bias3PTbis3, bias3PTbis4, PsptD1r1, PsptD2r1, PsptD3r1 = perturb(kstop, k,  lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, Pmmbis, kbis, bias1bis,\
+		#~ bias2bis, bias3bis, bias4bis, errb1bis, errb2bis, errb3bis, errb4bis, A, B, C, D, E, F,Mnu, z, j, case)
+		
+		bias2PT1, bias2PT2, bias2PT3, bias2PT4, bias3PT1, bias3PT2, bias3PT3, bias3PT4, bias3PTbis1,\
+		bias3PTbis2, bias3PTbis3, bias3PTbis4 = perturb(kstop,  lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, Pmod_dd, k, bias1,\
+		bias2, bias3, bias4, errb1, errb2, errb3, errb4, A, B, C, D, E, F,Mnu, z, j, case)
+	
 		
 		#~ bins = np.logspace(np.log10(np.min(k)), np.log10(np.max(k)), 50)
 		#~ stats, binedges, binnumber = scipy.stats.binned_statistic(kbis,bias4bis,'mean',bins )
@@ -224,44 +243,44 @@ for j in xrange(2,len(z)): #chmahe this after test
 	####################################################################
 
 		# p is number of free param
-		F1 = (biasF1[lim]-bias1bis[lim])**2/errb1bis[lim]**2
-		F2 = (biasF2[lim]-bias2bis[lim])**2/errb2bis[lim]**2
-		F3 = (biasF3[lim]-bias3bis[lim])**2/errb3bis[lim]**2
-		F4 = (biasF4[lim]-bias4bis[lim])**2/errb4bis[lim]**2
+		F1 = (biasF1[lim]-bias1[lim])**2/errb1[lim]**2
+		F2 = (biasF2[lim]-bias2[lim])**2/errb2[lim]**2
+		F3 = (biasF3[lim]-bias3[lim])**2/errb3[lim]**2
+		F4 = (biasF4[lim]-bias4[lim])**2/errb4[lim]**2
 		chi2F1 = np.sum(F1)
 		chi2F2 = np.sum(F2)
 		chi2F3 = np.sum(F3)
 		chi2F4 = np.sum(F4)
 		#-------------------------------------------------
 
-		PT1 = (bias2PT1[lim]- bias1bis[lim])**2/errb1bis[lim]**2
-		PT2 = (bias2PT2[lim]- bias2bis[lim])**2/errb2bis[lim]**2
-		PT3 = (bias2PT3[lim]- bias3bis[lim])**2/errb3bis[lim]**2
-		PT4 = (bias2PT4[lim]- bias4bis[lim])**2/errb4bis[lim]**2
+		PT1 = (bias2PT1[lim]- bias1[lim])**2/errb1[lim]**2
+		PT2 = (bias2PT2[lim]- bias2[lim])**2/errb2[lim]**2
+		PT3 = (bias2PT3[lim]- bias3[lim])**2/errb3[lim]**2
+		PT4 = (bias2PT4[lim]- bias4[lim])**2/errb4[lim]**2
 		chi2PT1 = np.sum(PT1)
 		chi2PT2 = np.sum(PT2)
 		chi2PT3 = np.sum(PT3)
 		chi2PT4 = np.sum(PT4)
 		#-------------------------------------------------
-		PTbis1 = (bias3PT1[lim]- bias1bis[lim])**2/errb1bis[lim]**2
-		PTbis2 = (bias3PT2[lim]- bias2bis[lim])**2/errb2bis[lim]**2
-		PTbis3 = (bias3PT3[lim]- bias3bis[lim])**2/errb3bis[lim]**2
-		PTbis4 = (bias3PT4[lim]- bias4bis[lim])**2/errb4bis[lim]**2
+		PTbis1 = (bias3PT1[lim]- bias1[lim])**2/errb1[lim]**2
+		PTbis2 = (bias3PT2[lim]- bias2[lim])**2/errb2[lim]**2
+		PTbis3 = (bias3PT3[lim]- bias3[lim])**2/errb3[lim]**2
+		PTbis4 = (bias3PT4[lim]- bias4[lim])**2/errb4[lim]**2
 		chi2PTbis1 = np.sum(PTbis1)
 		chi2PTbis2 = np.sum(PTbis2)
 		chi2PTbis3 = np.sum(PTbis3)
 		chi2PTbis4 = np.sum(PTbis4)
 		#-------------------------------------------------
-		PTter1 = (bias3PTbis1[lim]- bias1bis[lim])**2/errb1bis[lim]**2
-		PTter2 = (bias3PTbis2[lim]- bias2bis[lim])**2/errb2bis[lim]**2
-		PTter3 = (bias3PTbis3[lim]- bias3bis[lim])**2/errb3bis[lim]**2
-		PTter4 = (bias3PTbis4[lim]- bias4bis[lim])**2/errb4bis[lim]**2
+		PTter1 = (bias3PTbis1[lim]- bias1[lim])**2/errb1[lim]**2
+		PTter2 = (bias3PTbis2[lim]- bias2[lim])**2/errb2[lim]**2
+		PTter3 = (bias3PTbis3[lim]- bias3[lim])**2/errb3[lim]**2
+		PTter4 = (bias3PTbis4[lim]- bias4[lim])**2/errb4[lim]**2
 		chi2PTter1 = np.sum(PTter1)
 		chi2PTter2 = np.sum(PTter2)
 		chi2PTter3 = np.sum(PTter3)
 		chi2PTter4 = np.sum(PTter4)
 		
-		cname = 'chi2b_z='+str(z[j])+'.txt'
+		cname = 'chi2a_z='+str(z[j])+'.txt'
 		with open(cname, 'a+') as fid_file:
 
 			fid_file.write('%.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g\n' % (kstop,\
@@ -275,13 +294,12 @@ for j in xrange(2,len(z)): #chmahe this after test
 		#~ biasF1, biasF2, biasF3, biasF4, biasF1bis, biasF2bis, biasF3bis, biasF4bis, bias2PT1, bias2PT2, bias2PT3, bias2PT4,\
 		#~ bias3PT1, bias3PT2, bias3PT3, bias3PT4, bias3PTbis1, bias3PTbis2, bias3PTbis3,bias3PTbis4,F1 ,F2,F3,F4,chi2F1,chi2F2,chi2F3,chi2F4,PT1,PT2,PT3,PT4,chi2PT1,chi2PT2,chi2PT3,chi2PT4,PTbis1,PTbis2,PTbis3\
 		#~ ,PTbis4,chi2PTbis1,chi2PTbis2,chi2PTbis3,chi2PTbis4
-		del  pte, Plin, Tm, Tcb, kbis,\
-		Plinbis, bias1bis, bias2bis, bias3bis, bias4bis, errb1bis, errb2bis,errb3bis,errb4bis, Pmmbis,PH1bis,PH2bis,PH3bis,PH4bis,\
-		errPhh1bis,errPhh2bis,errPhh3bis,errPhh4bis,Pmono1bis,Pmono2bis,Pmono3bis,Pmono4bis,errPr1bis,errPr2bis,errPr3bis,errPr4bis,\
-		biasF1, biasF2, biasF3, biasF4, bias2PT1, bias2PT2, bias2PT3, bias2PT4,\
-		bias3PT1, bias3PT2, bias3PT3, bias3PT4, bias3PTbis1, bias3PTbis2, bias3PTbis3,bias3PTbis4,F1 ,F2,F3,F4,chi2F1,chi2F2,chi2F3,chi2F4,PT1,PT2,PT3,PT4,chi2PT1,chi2PT2,chi2PT3,chi2PT4,PTbis1,PTbis2,PTbis3\
-		,PTbis4,chi2PTbis1,chi2PTbis2,chi2PTbis3,chi2PTbis4
-	#~ kill
+		#~ del  pte, Tm, Tcb, bias1, bias2, bias3, bias4, errb1, errb2,errb3,errb4, Pmm,PH1,PH2,PH3,PH4,\
+		#~ errPhh1,errPhh2,errPhh3,errPhh4,Pmono1,Pmono2,Pmono3,Pmono4,errPr1,errPr2,errPr3,errPr4,\
+		#~ biasF1, biasF2, biasF3, biasF4, bias2PT1, bias2PT2, bias2PT3, bias2PT4,\
+		#~ bias3PT1, bias3PT2, bias3PT3, bias3PT4, bias3PTbis1, bias3PTbis2, bias3PTbis3,bias3PTbis4,F1 ,F2,F3,F4,chi2F1,chi2F2,chi2F3,chi2F4,PT1,PT2,PT3,PT4,chi2PT1,chi2PT2,chi2PT3,chi2PT4,PTbis1,PTbis2,PTbis3\
+		#~ ,PTbis4,chi2PTbis1,chi2PTbis2,chi2PTbis3,chi2PTbis4
+	kill
 end = time()
 print 'total time is '+str((end - start))	 
 

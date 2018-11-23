@@ -14,39 +14,47 @@ Mnu = 0.0
 z = [0.0,0.5,1.0,2.0]
 
 
-#~ bfile = np.loadtxt('3rdorder_0.0.txt')
-#~ ktest = bfile[:,0]
-#~ b1a = bfile[:,1]
-#~ b1b = bfile[:,2]
-#~ b1c = bfile[:,3]
-#~ b1d = bfile[:,4]
-#~ b3a = bfile[:,5]
-#~ b3b = bfile[:,6]
-#~ b3c = bfile[:,7]
-#~ b3d = bfile[:,8]
+bfile = np.loadtxt('3rdorder_0.0.txt')
 
-#~ plt.figure()
-#~ M1, =plt.plot(ktest, b3a/(b1a-1))
-#~ M2, =plt.plot(ktest, b3b/(b1b-1))
-#~ M3, =plt.plot(ktest, b3c/(b1c-1))
-#~ M4, =plt.plot(ktest, b3d/(b1d-1))
-#~ plt.plot(ktest, b1a)
-#~ plt.plot(ktest, b1b)
-#~ plt.plot(ktest, b1c)
-#~ plt.plot(ktest, b1d)
-#~ plt.plot(ktest, b3a)
-#~ plt.plot(ktest, b3b)
-#~ plt.plot(ktest, b3c)
-#~ plt.plot(ktest, b3d)
-#~ plt.figlegend( (M1,M2,M3,M4), ('$M_{1}$','$M_{2}$','$M_{3}$','$M_{4}$'),\
-#~ loc = 'upper center', ncol=5, labelspacing=0., title =r' M$\nu$ = '+str(Mnu), fontsize=14)
-#~ plt.xscale('log')
-#~ plt.ylabel(r'$b_{3nl}$ / $(b_{1} - 1)$ ', fontsize = 14)
-#~ plt.xlabel(r'$k$ [h/Mpc] ', fontsize = 14)
-#~ plt.axhline(32/315., color='k')
-#~ plt.xlim(0.04,0.2)
-#~ plt.ylim(-0.6,0.6)
-#~ plt.show()
+for i in range(0,30,15):
+	print i
+	ktest = bfile[i:i+15,0]
+	b1a = bfile[i:i+15,1]
+	b1b = bfile[i:i+15,2]
+	b1c = bfile[i:i+15,3]
+	b1d = bfile[i:i+15,4]
+	b3a = bfile[i:i+15,5]
+	b3b = bfile[i:i+15,6]
+	b3c = bfile[i:i+15,7]
+	b3d = bfile[i:i+15,8]
+
+
+	M1, =plt.plot(ktest, b3a/(b1a-1))
+	M2, =plt.plot(ktest, b3b/(b1b-1))
+	M3, =plt.plot(ktest, b3c/(b1c-1))
+	M4, =plt.plot(ktest, b3d/(b1d-1))
+	#~ M1 =plt.scatter(ktest, b3a/(b1a-1))
+	#~ M2 =plt.scatter(ktest, b3b/(b1b-1))
+	#~ M3 =plt.scatter(ktest, b3c/(b1c-1))
+	#~ M4 =plt.scatter(ktest, b3d/(b1d-1))
+	#~ plt.plot(ktest, b1a)
+	#~ plt.plot(ktest, b1b)
+	#~ plt.plot(ktest, b1c)
+	#~ plt.plot(ktest, b1d)
+	#~ plt.plot(ktest, b3a)
+	#~ plt.plot(ktest, b3b)
+	#~ plt.plot(ktest, b3c)
+	#~ plt.plot(ktest, b3d)
+	#~ plt.figlegend( (M1,M2,M3,M4), ('$M_{1}$','$M_{2}$','$M_{3}$','$M_{4}$'),\
+	#~ loc = 'upper center', ncol=5, labelspacing=0., title =r' M$\nu$ = '+str(Mnu), fontsize=14)
+plt.xscale('log')
+plt.ylabel(r'$b_{3nl}$ / $(b_{1} - 1)$ ', fontsize = 14)
+plt.xlabel(r'$k$ [h/Mpc] ', fontsize = 14)
+plt.axhline(32/315., color='k')
+plt.xlim(0.05,0.2)
+#~ plt.ylim(0.8,0.9)
+plt.ylim(-0.6,0.6)
+plt.show()
 
 #~ j=0
 #~ cname = 'chi2a_z='+str(z[j])+'.txt'
@@ -68,7 +76,7 @@ z = [0.0,0.5,1.0,2.0]
 #~ plt.xlim(0.04,0.2)
 #~ plt.ylim(0,10)
 #~ plt.show()
-#~ kill
+kill
 ########################################################################
 ############# 	0.0 eV Masseless neutrino 
 ########################################################################
@@ -177,7 +185,7 @@ for j in xrange(0,len(z)):
 	#~ ax2.plot(kmax, chipl3, color='C0')
 	#~ ax2.plot(kmax, chipl4, color='C0')
 	P1, =ax2.plot(kmax, chipl, color='C0', label='z = '+str(z[j]))
-	P1, =ax2.plot(kmax, chiplprime, color='C0', label='z = '+str(z[j]), linestyle ='--')
+	#~ P1, =ax2.plot(kmax, chiplprime, color='C0', label='z = '+str(z[j]), linestyle ='--')
 	#~ ax2.errorbar(kmax, chipl, yerr= echipl,fmt='.')
 	#---------------------------------
 	#~ ax2.plot(kmax, chipt1, color='C1')
@@ -185,7 +193,7 @@ for j in xrange(0,len(z)):
 	#~ ax2.plot(kmax, chipt3, color='C1')
 	#~ ax2.plot(kmax, chipt4, color='C1')
 	P2, =ax2.plot(kmax, chipt, color='C1')
-	P2, =ax2.plot(kmax, chiptprime, color='C1', linestyle ='--')
+	#~ P2, =ax2.plot(kmax, chiptprime, color='C1', linestyle ='--')
 	#~ ax2.errorbar(kmax, chipt, yerr= echipt,fmt='.')
 	#---------------------------------
 	#~ ax2.plot(kmax, chipbis1, color='C2')
@@ -193,7 +201,7 @@ for j in xrange(0,len(z)):
 	#~ ax2.plot(kmax, chipbis3, color='C2')
 	#~ ax2.plot(kmax, chipbis4, color='C2')
 	P3, =ax2.plot(kmax, chipbis, color='C2')
-	P3, =ax2.plot(kmax, chipbisprime, color='C2', linestyle ='--')
+	#~ P3, =ax2.plot(kmax, chipbisprime, color='C2', linestyle ='--')
 	#~ ax2.errorbar(kmax, chipbis, yerr= echipbis,fmt='.')
 	#---------------------------------
 	#~ ax2.plot(kmax, chipter1, color='C3')
@@ -201,7 +209,7 @@ for j in xrange(0,len(z)):
 	#~ ax2.plot(kmax, chipter3, color='C3')
 	#~ ax2.plot(kmax, chipter4, color='C3')
 	P4, =ax2.plot(kmax, chipter, color='C3')
-	P4, =ax2.plot(kmax, chipterprime, color='C3', linestyle ='--')
+	#~ P4, =ax2.plot(kmax, chipterprime, color='C3', linestyle ='--')
 	#~ ax2.errorbar(kmax, chipter, yerr= echipter,fmt='.')
 	#---------------------------------
 	plt.figlegend( (P1,P2, P3, P4), ('Polynomial','2nd order PT',r'3nd order PT with free $b_{s}$,$b_{3nl}$',\

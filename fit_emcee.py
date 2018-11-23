@@ -237,7 +237,7 @@ def coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb1, errlb1, pop, k ,b ,errb):
 	#~ print 'maximum likelihood is '+str(max_l)
 	#~ print 'AIC = '+str(AIC)
 	
-	#~ ndim, nwalkers = len(pop), 200
+	#~ ndim, nwalkers = len(pop), 100
 	#~ pos = [result["x"] + 1e-4*np.random.randn(ndim) for i in range(nwalkers)]
 
 	#~ posnum = 1000
@@ -254,8 +254,6 @@ def coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb1, errlb1, pop, k ,b ,errb):
 	
 
 	#~ b1_mcmc, b2_mcmc, bs_mcmc, N_mcmc = map(lambda v: (v[1], v[2]-v[1], v[1]-v[0]), zip(*np.percentile(samples, [16, 50, 84], axis=0)))
-	#~ b1_mcmc2, b2_mcmc2, bs_mcmc2, N_mcmc2 = np.median(sampler.flatchain, axis=0)
-
 	#~ plt.figure()
 	#~ ax1 = plt.subplot(221)
 	#~ ax1.set_title('b1')
@@ -291,14 +289,13 @@ def coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, pop, k ,b ,errb):
 	
 	#~ lim = np.where(k < kstop)[0]
 	lim = np.where((k < kstop)&(k > 1e-2))[0]
-	lim2 = np.where((k < 0.8)&(k > 1e-2))[0]
 	#~ from scipy.signal import savgol_filter
 	#~ b = savgol_filter(b, 51, 3) 
 	#~ errb = savgol_filter(errb, 51, 6) 
 	
 	def lnlike(theta, x, y, yerr):
 		b1, b2, bs, b3nl, N = theta
-		model = np.sqrt((b1**2 * Pmm[lim]+ b1*b2*A[lim] + 1/4.*b2**2*B[lim] + b1*bs*C[lim] + 1/2.*b2*bs*D[lim] + \
+		model = np.sqrt((b1**2 * Pmm[lim]+ b1*b2*A[lim] + 1/4.*b2**2*B[lim] + b1*bs*C[lim] + 1/8.*b2*bs*D[lim] + \
 		1/4.*bs**2*E[lim] + 2*b1*b3nl*F[lim] + N)/Pmm[lim])
 		inv_sigma2 = 1.0/(yerr[lim]**2)
 		return -0.5*(np.sum((y[lim]-model)**2*inv_sigma2 - np.log(inv_sigma2)))
@@ -309,7 +306,6 @@ def coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, pop, k ,b ,errb):
 			return 0.0
 		return -np.inf
 		
-	
 	def lnprob(theta, x, y, yerr):
 		lp = lnprior(theta, x, y, yerr)
 		if not np.isfinite(lp):
@@ -338,16 +334,10 @@ def coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, pop, k ,b ,errb):
 	#~ print 'maximum likelihood is '+str(max_l)
 	#~ print 'AIC = '+str(AIC)
 	
-	ndim, nwalkers = len(pop), 200
-	pos = [result["x"] + 1e-4*np.random.randn(ndim) for i in range(nwalkers)]
+	#~ ndim, nwalkers = len(pop), 300
+	#~ pos = [result["x"] + 1e-4*np.random.randn(ndim) for i in range(nwalkers)]
 
-	posnum = 1000
-	
-	#~ max_l = lnlike(result["x"], k, b, errb )
-	#~ AIC = 2*3. - 2 * max_l
-	#~ print 'maximum likelihood is '+str(max_l)
-	#~ print 'AIC = '+str(AIC)
-	#--------------------------------
+	#~ posnum = 1000
 	#~ sampler = emcee.EnsembleSampler(nwalkers, ndim, lnprob, args=(k, b, errb), a = 2.)
 	#~ sampler.run_mcmc(pos, posnum)
 	
@@ -361,8 +351,10 @@ def coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, pop, k ,b ,errb):
 	
 
 	#~ b1_mcmc, b2_mcmc, bs_mcmc, b3_mcmc, N_mcmc = map(lambda v: (v[1], v[2]-v[1], v[1]-v[0]), zip(*np.percentile(samples, [16, 50, 84], axis=0)))
-	#~ b1_mcmc2, b2_mcmc2, bs_mcmc2, N_mcmc2 = np.median(sampler.flatchain, axis=0)
-	
+	#~ print(result)
+	#~ print b1_mcmc[0], b2_mcmc[0], bs_mcmc[0], b3_mcmc[0], N_mcmc[0]
+	#~ print pop
+	#~ print b1_ml, b2_ml, bs_ml, b3_ml, N_ml
 	
 
 	#~ plt.figure()
@@ -396,7 +388,7 @@ def coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, pop, k ,b ,errb):
 	#~ ax4.axhline(b3_ml, color='k')
 
 	#~ plt.show()
-
+	#~ kill
 	#~ return b1_mcmc, b2_mcmc, bs_mcmc, b3_mcmc, N_mcmc
 	return b1_ml, b2_ml, bs_ml, b3_ml, N_ml
 ########################################################################
@@ -417,16 +409,25 @@ def coeffit_exp3(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, pop, k ,b ,errb):
 	
 	def lnprior(theta):
 		b1, b2, N = theta
-		if  0 < b1:
-		#~ if lb1 - 3*errlb1 < b1 < lb1 + 3*errlb1  and b1 > 0:
-			return 0.0
-		#~ return 0.0
-		return -np.inf
+		#~ if  0 < b1:
+			#~ return 0.0
+		return 0.0
+		#~ return -np.inf
 	
 	def lnprob(theta, x, y, yerr):
 		lp = lnprior(theta)
 		if not np.isfinite(lp):
 			return -np.inf
+		if lnlike(theta, x, y, yerr) < 0:
+			print ('-- ') + str(lp + lnlike(theta, x, y, yerr))
+			#~ print ('-- ') + str(lp + lnlike(theta, x1,x2,x3,x4,x5,x6,x7,x8, y, yerr))
+			from termcolor import colored
+			print colored(theta, 'red')
+		else:
+			print '!! '+ str(lp + lnlike(theta, x, y, yerr))
+			#~ print '!! '+ str(lp + lnlike(theta, x1,x2,x3,x4,x5,x6,x7,x8, y, yerr))
+			from termcolor import colored
+			print colored(theta, 'blue')
 		return lp + lnlike(theta, x, y, yerr)
 		
 		
@@ -436,22 +437,21 @@ def coeffit_exp3(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, pop, k ,b ,errb):
 	nll = lambda *args: -lnlike(*args)
 	result = op.minimize(nll, [pop],  method='Nelder-Mead', args=(k, b ,errb ),  options={'maxfev': 2000} )
 	b1_ml, b2_ml, N_ml = result["x"]
-	print pop
-	print result
+	
 	
 	#~ max_l = lnlike(result["x"], k, b, errb )
 	#~ AIC = 2*4. - 2 * max_l
 	#~ print 'maximum likelihood is '+str(max_l)
 	#~ print 'AIC = '+str(AIC)
 	
-	#~ ndim, nwalkers = len(pop), 100
+	#~ ndim, nwalkers = len(pop), 300
 	#~ pos = [result["x"] + 1e-4*np.random.randn(ndim) for i in range(nwalkers)]
 
 	#~ posnum = 1000
 	#~ sampler = emcee.EnsembleSampler(nwalkers, ndim, lnprob, args=(k, b, errb))
 	#~ sampler.run_mcmc(pos, posnum)
 	
-	#~ samples = sampler.chain[:, 50:, :].reshape((-1, ndim))
+	#~ samples = sampler.chain[:, 200:, :].reshape((-1, ndim))
 
 	
 	#~ import corner
@@ -461,8 +461,11 @@ def coeffit_exp3(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, pop, k ,b ,errb):
 
 	#~ b1_mcmc, b2_mcmc, N_mcmc = map(lambda v: (v[1], v[2]-v[1], v[1]-v[0]), zip(*np.percentile(samples, [16, 50, 84], axis=0)))
 	
+	#~ print("Mean acceptance fraction: {0:.3f}"
+                #~ .format(np.mean(sampler.acceptance_fraction)))
 	#~ print b1_mcmc, b2_mcmc, N_mcmc
-	
+	#~ print pop
+	#~ print result
 
 	#~ plt.figure()
 	#~ ax1 = plt.subplot(221)
@@ -474,13 +477,12 @@ def coeffit_exp3(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, pop, k ,b ,errb):
 	#~ for i in xrange(0,nwalkers):
 		#~ ax2.plot(np.arange(1000), sampler.chain[i,:,1])
 	#~ ax3 = plt.subplot(223)
-	#~ ax3.set_title('bs')
+	#~ ax3.set_title('N')
 	#~ for i in xrange(0,nwalkers):
 		#~ ax3.plot(np.arange(1000), sampler.chain[i,:,2])
 	
 
 	#~ plt.show()
-
 	#~ return b1_mcmc, b2_mcmc, N_mcmc
 	return b1_ml, b2_ml, N_ml
 
