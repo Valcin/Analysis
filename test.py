@@ -26,7 +26,7 @@ from load_data import ld_data
 from loop_pt import pt_terms
 from polynomial import poly
 from perturbation import perturb
-from interp import interp_simu
+from interp import interp_simu1
 #~ from hmf_test import htest
 from time import time
 from rsd import RSD
@@ -161,8 +161,8 @@ for j in xrange(0,len(z)): #chmahe this after test
 		Pmod_dd, Pmod_dt, Pmod_tt, A, B, C, D, E, F, G, H   = pt_terms(kcamb, Pcamb)
 		
 		### interpolate on simulation k
-		Pmod_dd, Pmod_dt, Pmod_tt, A, B, C, D, E, F, G, H  = interp_simu(z,j ,k, kcamb, Pcamb, Pmod_dd, Pmod_dt, Pmod_tt,\
-		A, B, C, D, E, F, G, H, 1)
+		Pmod_dd, Pmod_dt, Pmod_tt, A, B, C, D, E, F, G, H  = interp_simu1(z,j ,k, kcamb, Pcamb, Pmod_dd, Pmod_dt, Pmod_tt,\
+		A, B, C, D, E, F, G, H, 2)
 		
 	####################################################################
 	#### get fitted coefficients
@@ -184,7 +184,7 @@ for j in xrange(0,len(z)): #chmahe this after test
 		
 		bias2PT1, bias2PT2, bias2PT3, bias2PT4, bias3PT1, bias3PT2, bias3PT3, bias3PT4, bias3PTbis1,\
 		bias3PTbis2, bias3PTbis3, bias3PTbis4 = perturb(kstop,  lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, Pmod_dd, k, bias1,\
-		bias2, bias3, bias4, errb1, errb2, errb3, errb4, A, B, C, D, E, F,Mnu, z, j, case)
+		bias2, bias3, bias4, errb1, errb2, errb3, errb4, A, B, C, D, E, F,Mnu, z, j, case,PH1)
 	
 		
 		#~ bins = np.logspace(np.log10(np.min(k)), np.log10(np.max(k)), 50)
@@ -218,6 +218,115 @@ for j in xrange(0,len(z)): #chmahe this after test
 		#~ plt.show()
 
 		#~ kill
+		
+		
+		####################################################################
+		#######--------- mean and std of bias and ps ratio ------------#####
+		#~ if j == z[0]:
+			#~ fig2 = plt.figure()
+		#~ J = j + 1
+		
+		#~ if len(z) == 1:
+			#~ ax2 = fig2.add_subplot(1, len(z), J)
+		#~ elif len(z) == 2:
+			#~ ax2 = fig2.add_subplot(1, 2, J)
+		#~ elif len(z) > 2:
+			#~ ax2 = fig2.add_subplot(2, 2, J)
+		#~ ######### pl residuals comparison #################
+		#~ ax2.set_ylim(0.9,1.1)
+		#~ ax2.set_yticks(np.linspace(0.9,1.1,5))
+		#~ ax2.axhline(1, color='k', linestyle='--')
+		#~ ax2.axhline(1.01, color='k', linestyle=':')
+		#~ ax2.axhline(0.99, color='k', linestyle=':')
+		#~ B3, = ax2.plot(k, b3, linewidth = 2)
+		#~ B3bis, = ax2.plot(k, b3bis, linewidth = 2)
+		#~ B2, = ax2.plot(k, b2, label='z = '+str(z[j]), color='k')
+		#~ plt.figlegend( (B3bis,B3), (r'$b_{cc} = b_{1} + b_{2}k^{2} + b_{4}k^{4}$ ',\
+		#~ r'$b_{cc} = b_{1} + b_{2}k^{2} + b_{3}k^{3} + b_{4}k^{4}$ '), \
+		####### comparison bias and != models #############################
+		M1 = plt.errorbar(k, bias1, yerr= errb1,fmt='.', label='z = '+str(z[j]))
+		M2 = plt.errorbar(k, bias2, yerr= errb2,fmt='.')
+		M3 = plt.errorbar(k, bias3, yerr= errb3,fmt='.')
+		M4 = plt.errorbar(k, bias4, yerr= errb4,fmt='.')
+		plt.ylim(bias1[0]*0.8,bias4[0]*1.4)
+		#~ Plo, =plt.plot(k, biasF1, color='k')
+		#~ Ple, =plt.plot(k, biasF1bis, color='k', linestyle='--')
+		#~ pt2, =plt.plot(k, bias2PT1, color='k', linestyle='--')
+		pt3, =plt.plot(k, bias3PT1, color='k', linestyle=':')
+		#~ pt3bis, =plt.plot(k, bias3PTbis1, color='k', linestyle='-.')
+		#~ #--------
+		#~ plt.plot(k, biasF2, color='k')
+		#~ plt.plot(k, biasF2bis, color='k', linestyle='--')
+		#~ plt.plot(k, bias2PT2, color='k', linestyle='--' )
+		plt.plot(k, bias3PT2, color='k', linestyle=':')
+		#~ plt.plot(k, bias3PTbis2, color='k', linestyle='-.')
+		#~ #--------
+		#~ plt.plot(k, biasF3, color='k')
+		#~ plt.plot(k, biasF3bis, color='k', linestyle='--')
+		#~ plt.plot(k, bias2PT3, color='k', linestyle='--' )
+		plt.plot(k, bias3PT3, color='k', linestyle=':')
+		#~ plt.plot(k, bias3PTbis3, color='k', linestyle='-.')
+		#--------
+		#~ plt.plot(k, biasF4, color='k')
+		#~ plt.plot(k, biasF4bis, color='k', linestyle='--')
+		#~ plt.plot(k, bias2PT4, color='k', linestyle='--')
+		plt.plot(k, bias3PT4, color='k', linestyle=':')
+		#~ plt.plot(k, bias3PTbis4, color='k', linestyle='-.')
+		#~ #--------
+		#~ plt.figlegend( (M1,M2,M3,M4,Plo, Ple), ('$M_{1}$','$M_{2}$','$M_{3}$','$M_{4}$', 'PL with odd k','PL without odd k'), \
+		#~ plt.figlegend( (M1,M2,M3,M4,Plo, pt2, pt3, pt3bis), ('$M_{1}$','$M_{2}$','$M_{3}$','$M_{4}$', 'PL with odd k'\
+		#~ ,'2nd order bias expansion', r'3rd order with free $b_{3nl}$', r'3rd order with fixed $b_{s}$, $b_{3nl}$'), \
+		#~ ###### compare all power model residuals ##########################
+		#~ plt.set_ylim(0.,2.1)
+		#~ plt.set_ylim(0.9,1.1)
+		#~ plt.set_yticks(np.linspace(0.9,1.1,5))
+		#~ plt.axhline(1, color='k', linestyle='--')
+		#~ plt.axhline(1.01, color='k', linestyle=':')
+		#~ plt.axhline(0.99, color='k', linestyle=':')
+		#~ B3, = plt.plot(k, b3, label='z = '+str(z[j]), color='C0')
+		#~ B1, = plt.plot(k, b1, color='C1')
+		#~ B1bis, = plt.plot(k, b1bis, color='C2')
+		#~ B1ter, = plt.plot(k, b1ter,  color='C3')
+		#~ B2, = plt.plot(k, b2, color='k')
+		
+		#~ B3, = plt.plot(k, b3,label=r'w/ $b_{sim}$', color='C0')
+		#~ B3anal, = plt.plot(k, bb3,label=r'w/ $b_{model}$', color='C0',linestyle='--')
+		#~ B1anal, = plt.plot(k, bb1, color='C1',linestyle='--')
+		#~ B1bisanal, = plt.plot(k, bb1bis, color='C2',linestyle='--')
+		#~ B1teranal, = plt.plot(k, bb1ter,  color='C3',linestyle='--')
+		
+		#~ plt.figlegend( (B1,B1bis,B1ter,B2,B3), ('2nd order expansion',r'3rd order expansion with free $b_{3nl}$',\
+		#~ r'3rd order expansion with fixed $b_{3nl}$', 'N-body','Power law '), \
+		######################################
+		#~ loc = 'upper center', ncol=5, labelspacing=0., title =r' M$\nu$ = '+str(Mnu)+', case '+str(case), fontsize=12)
+		#~ loc = 'upper center', ncol=5, labelspacing=0., title =r' M$\nu$ = '+str(Mnu), fontsize=12)
+		plt.axvspan(kstop, 7, alpha=0.2, color='grey')
+		plt.legend(loc = 'upper left', fancybox=True, fontsize=14)
+		plt.legend(loc = 'upper left', title = 'z = '+str(z[j]), fancybox=True, fontsize=14)
+		plt.subplots_adjust(left=0.1, wspace=0.05, hspace=0.1)
+		plt.xscale('log')
+		#~ if j == 0 :
+			#~ plt.tick_params(bottom='off', labelbottom='off',labelleft=True)
+			#~ plt.set_ylabel(r'$b_{cb}$ / $b_{sim}$', fontsize = 16)
+			#~ plt.set_ylabel(r'$b_{cb}$', fontsize=16)
+		#~ if j == 1 :
+			#~ plt.tick_params(bottom='off', labelbottom='off', labelright=True, right= True, labelleft='off', left='off')
+			#~ plt.set_ylabel(r'$b_{cb}$ / $b_{sim}$', fontsize=16)
+			#~ plt.set_ylabel(r'$b_{cb}$', fontsize=16)
+			#~ plt.yaxis.set_label_position("right")
+		#~ if j == 2 :
+			#~ #ax.tick_params(labelleft=True)
+			#~ plt.set_ylabel(r'$b_{cb}$ / $b_{sim}$', fontsize=16)
+			#~ plt.set_ylabel(r'$b_{cb}$', fontsize=14)
+			#~ plt.set_xlabel('k [h/Mpc]', fontsize=16)
+		#~ if j == 3 :
+			#~ plt.tick_params(labelright=True, right= True, labelleft='off', left='off')
+			#~ plt.set_xlabel('k [h/Mpc]', fontsize=14)
+			#~ plt.set_ylabel(r'$b_{cb}$ / $b_{sim}$', fontsize=16)
+			#~ plt.set_ylabel(r'$b_{cb}$', fontsize=16)
+			#~ plt.yaxis.set_label_position("right")
+		plt.xlim(8e-3,1)
+		plt.show()
 	####################################################################
 	##### compute the chi2 of different quantities
 	####################################################################
@@ -279,7 +388,7 @@ for j in xrange(0,len(z)): #chmahe this after test
 		#~ biasF1, biasF2, biasF3, biasF4, bias2PT1, bias2PT2, bias2PT3, bias2PT4,\
 		#~ bias3PT1, bias3PT2, bias3PT3, bias3PT4, bias3PTbis1, bias3PTbis2, bias3PTbis3,bias3PTbis4,F1 ,F2,F3,F4,chi2F1,chi2F2,chi2F3,chi2F4,PT1,PT2,PT3,PT4,chi2PT1,chi2PT2,chi2PT3,chi2PT4,PTbis1,PTbis2,PTbis3\
 		#~ ,PTbis4,chi2PTbis1,chi2PTbis2,chi2PTbis3,chi2PTbis4
-	kill
+	#~ kill
 end = time()
 print 'total time is '+str((end - start))	 
 

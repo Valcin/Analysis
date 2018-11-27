@@ -14,25 +14,25 @@ Mnu = 0.0
 z = [0.0,0.5,1.0,2.0]
 
 
-bfile = np.loadtxt('3rdorder_0.0.txt')
+#~ bfile = np.loadtxt('3rdorder_0.0.txt')
 
-for i in range(0,30,15):
-	print i
-	ktest = bfile[i:i+15,0]
-	b1a = bfile[i:i+15,1]
-	b1b = bfile[i:i+15,2]
-	b1c = bfile[i:i+15,3]
-	b1d = bfile[i:i+15,4]
-	b3a = bfile[i:i+15,5]
-	b3b = bfile[i:i+15,6]
-	b3c = bfile[i:i+15,7]
-	b3d = bfile[i:i+15,8]
+#~ for i in range(0,30,15):
+	#~ print i
+	#~ ktest = bfile[i:i+15,0]
+	#~ b1a = bfile[i:i+15,1]
+	#~ b1b = bfile[i:i+15,2]
+	#~ b1c = bfile[i:i+15,3]
+	#~ b1d = bfile[i:i+15,4]
+	#~ b3a = bfile[i:i+15,5]
+	#~ b3b = bfile[i:i+15,6]
+	#~ b3c = bfile[i:i+15,7]
+	#~ b3d = bfile[i:i+15,8]
 
 
-	M1, =plt.plot(ktest, b3a/(b1a-1))
-	M2, =plt.plot(ktest, b3b/(b1b-1))
-	M3, =plt.plot(ktest, b3c/(b1c-1))
-	M4, =plt.plot(ktest, b3d/(b1d-1))
+	#~ M1, =plt.plot(ktest, b3a/(b1a-1))
+	#~ M2, =plt.plot(ktest, b3b/(b1b-1))
+	#~ M3, =plt.plot(ktest, b3c/(b1c-1))
+	#~ M4, =plt.plot(ktest, b3d/(b1d-1))
 	#~ M1 =plt.scatter(ktest, b3a/(b1a-1))
 	#~ M2 =plt.scatter(ktest, b3b/(b1b-1))
 	#~ M3 =plt.scatter(ktest, b3c/(b1c-1))
@@ -47,14 +47,14 @@ for i in range(0,30,15):
 	#~ plt.plot(ktest, b3d)
 	#~ plt.figlegend( (M1,M2,M3,M4), ('$M_{1}$','$M_{2}$','$M_{3}$','$M_{4}$'),\
 	#~ loc = 'upper center', ncol=5, labelspacing=0., title =r' M$\nu$ = '+str(Mnu), fontsize=14)
-plt.xscale('log')
-plt.ylabel(r'$b_{3nl}$ / $(b_{1} - 1)$ ', fontsize = 14)
-plt.xlabel(r'$k$ [h/Mpc] ', fontsize = 14)
-plt.axhline(32/315., color='k')
-plt.xlim(0.04,0.2)
+#~ plt.xscale('log')
+#~ plt.ylabel(r'$b_{3nl}$ / $(b_{1} - 1)$ ', fontsize = 14)
+#~ plt.xlabel(r'$k$ [h/Mpc] ', fontsize = 14)
+#~ plt.axhline(32/315., color='k')
+#~ plt.xlim(0.04,0.2)
 #~ plt.ylim(0.8,0.9)
-plt.ylim(-0.6,0.6)
-plt.show()
+#~ plt.ylim(-0.6,0.6)
+#~ plt.show()
 
 #~ j=0
 #~ cname = 'chi2a_z='+str(z[j])+'.txt'
@@ -76,7 +76,7 @@ plt.show()
 #~ plt.xlim(0.04,0.2)
 #~ plt.ylim(0,10)
 #~ plt.show()
-kill
+#~ kill
 ########################################################################
 ############# 	0.0 eV Masseless neutrino 
 ########################################################################
@@ -93,10 +93,8 @@ for j in xrange(0,len(z)):
 	print 'For redshift z = ' + str(z[j])
 
 	cname1 = 'chi2a_z='+str(z[j])+'.txt'
-	cname2 = 'chi2b_z='+str(z[j])+'.txt'
 
 	goodfit1 = np.loadtxt(cname1) 
-	goodfit2 = np.loadtxt(cname2) 
 	kmax = goodfit1[:,0]
 	#--------------------
 	chipl1 = goodfit1[:,1]
@@ -107,13 +105,6 @@ for j in xrange(0,len(z)):
 	chipl = np.mean(Chipl, axis=0)
 	echipl = np.std(Chipl, axis=0)
 	
-	chipl1prime = goodfit2[:,1]
-	chipl2prime = goodfit2[:,2]
-	chipl3prime = goodfit2[:,3]
-	chipl4prime = goodfit2[:,4]
-	Chiplprime = np.array([chipl1prime,chipl2prime,chipl3prime,chipl4prime])
-	chiplprime = np.mean(Chiplprime, axis=0)
-	echiplprime = np.std(Chiplprime, axis=0)
 
 	#--------------------
 	chipt1 = goodfit1[:,5]
@@ -124,13 +115,6 @@ for j in xrange(0,len(z)):
 	chipt = np.mean(Chipt, axis=0)
 	echipt = np.std(Chipt, axis=0)
 	
-	chipt1prime = goodfit2[:,5]
-	chipt2prime = goodfit2[:,6]
-	chipt3prime = goodfit2[:,7]
-	chipt4prime = goodfit2[:,8]
-	Chiptprime = np.array([chipt1prime,chipt2prime,chipt3prime,chipt4prime])
-	chiptprime = np.mean(Chiptprime, axis=0)
-	echiptprime = np.std(Chiptprime, axis=0)
 	
 	#--------------------
 	chipbis1 = goodfit1[:,9]
@@ -141,13 +125,6 @@ for j in xrange(0,len(z)):
 	chipbis = np.mean(Chipbis, axis=0)
 	echipbis = np.std(Chipbis, axis=0)
 	
-	chipbis1prime = goodfit2[:,9]
-	chipbis2prime = goodfit2[:,10]
-	chipbis3prime = goodfit2[:,11]
-	chipbis4prime = goodfit2[:,12]
-	Chipbisprime = np.array([chipbis1prime,chipbis2prime,chipbis3prime,chipbis4prime])
-	chipbisprime = np.mean(Chipbisprime, axis=0)
-	echipbisprime = np.std(Chipbisprime, axis=0)
 	#--------------------
 	chipter1 = goodfit1[:,13]
 	chipter2 = goodfit1[:,14]
@@ -157,13 +134,6 @@ for j in xrange(0,len(z)):
 	chipter = np.mean(Chipter, axis=0)
 	echipter = np.std(Chipter, axis=0)
 	
-	chipter1prime = goodfit2[:,13]
-	chipter2prime = goodfit2[:,14]
-	chipter3prime = goodfit2[:,15]
-	chipter4prime = goodfit2[:,16]
-	Chipterprime = np.array([chipter1prime,chipter2prime,chipter3prime,chipter4prime])
-	chipterprime = np.mean(Chipterprime, axis=0)
-	echipterprime = np.std(Chipterprime, axis=0)
 
 
 
@@ -184,7 +154,7 @@ for j in xrange(0,len(z)):
 	#~ ax2.plot(kmax, chipl2, color='C0')
 	#~ ax2.plot(kmax, chipl3, color='C0')
 	#~ ax2.plot(kmax, chipl4, color='C0')
-	P1, =ax2.plot(kmax, chipl, color='C0', label='z = '+str(z[j]))
+	#~ P1, =ax2.plot(kmax, chipl, color='C0', label='z = '+str(z[j]))
 	#~ P1, =ax2.plot(kmax, chiplprime, color='C0', label='z = '+str(z[j]), linestyle ='--')
 	#~ ax2.errorbar(kmax, chipl, yerr= echipl,fmt='.')
 	#---------------------------------
@@ -192,7 +162,7 @@ for j in xrange(0,len(z)):
 	#~ ax2.plot(kmax, chipt2, color='C1')
 	#~ ax2.plot(kmax, chipt3, color='C1')
 	#~ ax2.plot(kmax, chipt4, color='C1')
-	P2, =ax2.plot(kmax, chipt, color='C1')
+	#~ P2, =ax2.plot(kmax, chipt, color='C1')
 	#~ P2, =ax2.plot(kmax, chiptprime, color='C1', linestyle ='--')
 	#~ ax2.errorbar(kmax, chipt, yerr= echipt,fmt='.')
 	#---------------------------------
@@ -200,7 +170,7 @@ for j in xrange(0,len(z)):
 	#~ ax2.plot(kmax, chipbis2, color='C2')
 	#~ ax2.plot(kmax, chipbis3, color='C2')
 	#~ ax2.plot(kmax, chipbis4, color='C2')
-	P3, =ax2.plot(kmax, chipbis, color='C2')
+	#~ P3, =ax2.plot(kmax, chipbis, color='C2')
 	#~ P3, =ax2.plot(kmax, chipbisprime, color='C2', linestyle ='--')
 	#~ ax2.errorbar(kmax, chipbis, yerr= echipbis,fmt='.')
 	#---------------------------------
@@ -208,14 +178,14 @@ for j in xrange(0,len(z)):
 	#~ ax2.plot(kmax, chipter2, color='C3')
 	#~ ax2.plot(kmax, chipter3, color='C3')
 	#~ ax2.plot(kmax, chipter4, color='C3')
-	P4, =ax2.plot(kmax, chipter, color='C3')
+	#~ P4, =ax2.plot(kmax, chipter, color='C3')
 	#~ P4, =ax2.plot(kmax, chipterprime, color='C3', linestyle ='--')
 	#~ ax2.errorbar(kmax, chipter, yerr= echipter,fmt='.')
 	#---------------------------------
-	plt.figlegend( (P1,P2, P3, P4), ('Polynomial','2nd order PT',r'3nd order PT with free $b_{s}$,$b_{3nl}$',\
-	r'3nd order PT with fixed $b_{s}$,$b_{3nl}$'), \
+	#~ plt.figlegend( (P1,P2, P3, P4), ('Polynomial','2nd order PT',r'3nd order PT with free $b_{s}$,$b_{3nl}$',\
+	#~ r'3nd order PT with fixed $b_{s}$,$b_{3nl}$'), \
 	######################################
-	loc = 'upper center', ncol=5, labelspacing=0., title =r' M$\nu$ = '+str(Mnu), fontsize=14)
+	#~ loc = 'upper center', ncol=5, labelspacing=0., title =r' M$\nu$ = '+str(Mnu), fontsize=14)
 	ax2.legend(loc = 'upper left', fancybox=True, fontsize=14)
 	plt.subplots_adjust(left=0.1, wspace=0.05, hspace=0.1)
 	ax2.set_xscale('log')

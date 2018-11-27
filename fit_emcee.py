@@ -44,8 +44,8 @@ def coeffit_pl2 (kstop,lb1, errlb1, pop, k ,b ,errb):
 	nll = lambda *args: -lnlike(*args)
 	result = op.minimize(nll, [pop],  method='Nelder-Mead', args=(k, b ,errb ),  options={'maxfev': 2000} )
 	b1_ml, b2_ml, b4_ml = result["x"]
-	print pop
-	print result
+	#~ print pop
+	#~ print result
 	#~ max_l = lnlike(result["x"], k, b, errb )
 	#~ AIC = 2*4. - 2 * max_l
 	#~ print 'maximum likelihood is '+str(max_l)
@@ -131,8 +131,8 @@ def coeffit_pl (kstop,lb1, errlb1, pop, k ,b ,errb):
 	nll = lambda *args: -lnlike(*args)
 	result = op.minimize(nll, [pop],  method='Nelder-Mead', args=(k, b ,errb ),  options={'maxfev': 2000} )
 	b1_ml, b2_ml, b3_ml, b4_ml = result["x"]
-	print pop
-	print result
+	#~ print pop
+	#~ print result
 	#~ max_l = lnlike(result["x"], k, b, errb )
 	#~ AIC = 2*4. - 2 * max_l
 	#~ print 'maximum likelihood is '+str(max_l)
@@ -229,8 +229,8 @@ def coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb1, errlb1, pop, k ,b ,errb):
 	nll = lambda *args: -lnlike(*args)
 	result = op.minimize(nll, [pop],  method='Nelder-Mead', args=(k, b ,errb ),  options={'maxfev': 2000} )
 	b1_ml, b2_ml, bs_ml, N_ml = result["x"]
-	print pop
-	print(result)
+	#~ print pop
+	#~ print(result)
 	
 	#~ max_l = lnlike(result["x"], k, b, errb )
 	#~ AIC = 2*3. - 2 * max_l
@@ -295,7 +295,7 @@ def coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, pop, k ,b ,errb):
 	
 	def lnlike(theta, x, y, yerr):
 		b1, b2, bs, b3nl, N = theta
-		model = np.sqrt((b1**2 * Pmm[lim]+ b1*b2*A[lim] + 1/4.*b2**2*B[lim] + b1*bs*C[lim] + 1/8.*b2*bs*D[lim] + \
+		model = np.sqrt((b1**2 * Pmm[lim]+ b1*b2*A[lim] + 1/4.*b2**2*B[lim] + b1*bs*C[lim] + 1/2.*b2*bs*D[lim] + \
 		1/4.*bs**2*E[lim] + 2*b1*b3nl*F[lim] + N)/Pmm[lim])
 		inv_sigma2 = 1.0/(yerr[lim]**2)
 		return -0.5*(np.sum((y[lim]-model)**2*inv_sigma2 - np.log(inv_sigma2)))

@@ -1,4 +1,5 @@
 import numpy as np
+#~ np.set_printoptions(threshold=np.nan)
 import h5py
 import math
 import readsnap
@@ -112,6 +113,7 @@ def perturb(kstop,  lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, Pmm, k, 
 	1/2.*b2y3_mcmc*bsy3_mcmc*D + 1/4.*bsy3_mcmc**2*E + Ny3)/Pmm)
 	bias2PT4 = np.sqrt((b1y4_mcmc**2 * Pmm+ b1y4_mcmc*b2y4_mcmc*A + 1/4.*b2y4_mcmc**2*B + b1y4_mcmc*bsy4_mcmc*C +\
 	1/2.*b2y4_mcmc*bsy4_mcmc*D + 1/4.*bsy4_mcmc**2*E + Ny4)/Pmm)
+	
 
 	#~ # 3rd order free -------------------------------------------------------------------
 	#~ bias3PT1 = np.sqrt((b1z1_mcmc[0]**2 * Pmm+ b1z1_mcmc[0]*b2z1_mcmc[0]*A + 1/4.*b2z1_mcmc[0]**2*B + b1z1_mcmc[0]*bsz1_mcmc[0]*C +\
@@ -130,6 +132,16 @@ def perturb(kstop,  lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, Pmm, k, 
 	1/2.*b2z3_mcmc*bsz3_mcmc*D + 1/4.*bsz3_mcmc**2*E + 2*b1z3_mcmc*b3z3_mcmc*F + Nz3)/Pmm)
 	bias3PT4 = np.sqrt((b1z4_mcmc**2 * Pmm+ b1z4_mcmc*b2z4_mcmc*A + 1/4.*b2z4_mcmc**2*B + b1z4_mcmc*bsz4_mcmc*C +\
 	1/2.*b2z4_mcmc*bsz4_mcmc*D + 1/4.*bsz4_mcmc**2*E + 2*b1z4_mcmc*b3z4_mcmc*F + Nz4)/Pmm)
+	
+	#~ print (b1z1_mcmc**2 * Pmm[lim]+ b1z1_mcmc*b2z1_mcmc*A[lim] + 1/4.*b2z1_mcmc**2*B[lim] + b1z1_mcmc*bsz1_mcmc*C[lim] +\
+	#~ 1/2.*b2z1_mcmc*bsz1_mcmc*D[lim] + 1/4.*bsz1_mcmc**2*E[lim] + 2*b1z1_mcmc*b3z1_mcmc*F[lim] + Nz1)/Pmm[lim]
+	#~ print (b1z2_mcmc**2 * Pmm[lim]+ b1z2_mcmc*b2z2_mcmc*A[lim] + 1/4.*b2z2_mcmc**2*B[lim] + b1z2_mcmc*bsz2_mcmc*C[lim] +\
+	#~ 1/2.*b2z2_mcmc*bsz2_mcmc*D[lim] + 1/4.*bsz2_mcmc**2*E[lim] + 2*b1z2_mcmc*b3z2_mcmc*F[lim] + Nz2)/Pmm[lim]
+	#~ print (b1z3_mcmc**2 * Pmm[lim]+ b1z3_mcmc*b2z3_mcmc*A[lim] + 1/4.*b2z3_mcmc**2*B[lim] + b1z3_mcmc*bsz3_mcmc*C[lim] +\
+	#~ 1/2.*b2z3_mcmc*bsz3_mcmc*D[lim] + 1/4.*bsz3_mcmc**2*E[lim] + 2*b1z3_mcmc*b3z3_mcmc*F[lim] + Nz3)/Pmm[lim]
+	#~ print (b1z4_mcmc**2 * Pmm[lim]+ b1z4_mcmc*b2z4_mcmc*A[lim] + 1/4.*b2z4_mcmc**2*B[lim] + b1z4_mcmc*bsz4_mcmc*C[lim] +\
+	#~ 1/2.*b2z4_mcmc*bsz4_mcmc*D[lim] + 1/4.*bsz4_mcmc**2*E[lim] + 2*b1z4_mcmc*b3z4_mcmc*F[lim] + Nz4)/Pmm[lim]
+
 	#~ # 3rd order fixed --------------------------------------------------------------------------------
 	#~ BsTa = -4/7.*(b1u1_mcmc[0]-1)
 	#~ BsTb = -4/7.*(b1u2_mcmc[0]-1)

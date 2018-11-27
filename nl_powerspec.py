@@ -318,12 +318,12 @@ for j in xrange(0,len(z)):
 	#~ ax2.plot(k, bias2PT4, color='k', linestyle='--')
 	#~ ax2.plot(k, bias3PT4, color='k', linestyle=':')
 	#~ ax2.plot(k, bias3PTbis4, color='k', linestyle='-.')
-	#~ #--------
+	#--------
 	#~ plt.figlegend( (M1,M2,M3,M4,Plo, Ple), ('$M_{1}$','$M_{2}$','$M_{3}$','$M_{4}$', 'PL with odd k','PL without odd k'), \
 	#~ plt.figlegend( (M1,M2,M3,M4,Plo, pt2, pt3, pt3bis), ('$M_{1}$','$M_{2}$','$M_{3}$','$M_{4}$', 'PL with odd k'\
 	#~ ,'2nd order bias expansion', r'3rd order with free $b_{3nl}$', r'3rd order with fixed $b_{s}$, $b_{3nl}$'), \
 	#~ ###### compare all power model residuals ##########################
-	#~ ax2.set_ylim(0.,2.1)
+	ax2.set_ylim(0.,2.1)
 	ax2.set_ylim(0.9,1.1)
 	ax2.set_yticks(np.linspace(0.9,1.1,5))
 	ax2.axhline(1, color='k', linestyle='--')
@@ -354,22 +354,22 @@ for j in xrange(0,len(z)):
 	if j == 0 :
 		ax2.tick_params(bottom='off', labelbottom='off',labelleft=True)
 		ax2.set_ylabel(r'$b_{cb}$ / $b_{sim}$', fontsize = 16)
-		#~ ax2.set_ylabel(r'$b_{cb}$', fontsize=16)
+		ax2.set_ylabel(r'$b_{cb}$', fontsize=16)
 	if j == 1 :
 		ax2.tick_params(bottom='off', labelbottom='off', labelright=True, right= True, labelleft='off', left='off')
 		ax2.set_ylabel(r'$b_{cb}$ / $b_{sim}$', fontsize=16)
-		#~ ax2.set_ylabel(r'$b_{cb}$', fontsize=16)
+		ax2.set_ylabel(r'$b_{cb}$', fontsize=16)
 		ax2.yaxis.set_label_position("right")
 	if j == 2 :
 		#ax.tick_params(labelleft=True)
 		ax2.set_ylabel(r'$b_{cb}$ / $b_{sim}$', fontsize=16)
-		#~ ax2.set_ylabel(r'$b_{cb}$', fontsize=14)
+		ax2.set_ylabel(r'$b_{cb}$', fontsize=14)
 		ax2.set_xlabel('k [h/Mpc]', fontsize=16)
 	if j == 3 :
 		ax2.tick_params(labelright=True, right= True, labelleft='off', left='off')
 		ax2.set_xlabel('k [h/Mpc]', fontsize=14)
 		ax2.set_ylabel(r'$b_{cb}$ / $b_{sim}$', fontsize=16)
-		#~ ax2.set_ylabel(r'$b_{cb}$', fontsize=16)
+		ax2.set_ylabel(r'$b_{cb}$', fontsize=16)
 		ax2.yaxis.set_label_position("right")
 	ax2.set_xlim(8e-3,1)
 	if j == len(z) -1:
