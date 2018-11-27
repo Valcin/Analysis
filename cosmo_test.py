@@ -109,8 +109,8 @@ for j in xrange(0,len(z)):
 	#~ #--------- halo real space -------------------------
 	#~ #---------------------------------------------------
 	# fourth mass range
-	#~ d4 = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/Phh4_realisation_z='+str(z[j])+'.txt')
-	d4 = np.loadtxt('/home/david/codes/Analysis/cosmo_test/Phh4_realisation_0.0_z=0.0.txt')
+	d4 = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/Phh4_realisation_z='+str(z[j])+'.txt')
+	#~ d4 = np.loadtxt('/home/david/codes/Analysis/cosmo_test/Phh4_realisation_0.0_z=0.0.txt')
 	k = d4[:,19]
 	Phh4 = np.zeros((len(k),10))
 	Pshot4 = np.zeros((10))
@@ -119,26 +119,41 @@ for j in xrange(0,len(z)):
 	for i in xrange(0,10):
 		Phh4[:,i]= d4[:,pnum1[i]]
 		Pshot4[i]= d4[0,pnum2[i]]
+		
+	# fourth mass range
+	d4bis = np.loadtxt('/home/david/Documents/PhD/plots/from-simu/0.15eV/real space/Phh4_realisation_0.0_z='+str(z[j])+'.txt')
+	#~ d4 = np.loadtxt('/home/david/codes/Analysis/cosmo_test/Phh4_realisation_0.0_z=0.0.txt')
+	kbis = d4bis[:,19]
+	Phh4bis = np.zeros((len(kbis),10))
+	Pshot4bis = np.zeros((10))
+	pnum1bis = [0,2,4,6,8,10,12,14,16,18]
+	pnum2bis = [1,3,5,7,9,11,13,15,17,20]
+	for i in xrange(0,10):
+		Phh4bis[:,i]= d4bis[:,pnum1bis[i]]
+		Pshot4bis[i]= d4bis[0,pnum2bis[i]]
 	
 	#~ #-------------------------------------------------------------------
 	#~ #----remove shot noise, compute bias and bias variance -------------
 	#~ #-------------------------------------------------------------------
 	bhh4 = np.zeros((len(k),10))
-	
-	
 	for i in xrange(0,10):
 		Phh4[:,i] = Phh4[:,i]-Pshot4[i]
 		nul4 = np.where(Phh4[:,i] < 0)[0]
 		Phh4[nul4,i] = 0
 		bhh4[:,i] = np.sqrt(Phh4[:,i]/Pmat[:,i])
-		
-
 	#~ ### do the mean over quantitites ###
-	
 	Pmm = np.mean(Pmat[:,0:11], axis=1)
 	ePmm = np.std(Pmat[:,0:11], axis=1)
 	PH4 = np.mean(Phh4[:,0:11], axis=1)
 	
+	bhh4bis = np.zeros((len(kbis),10))
+	for i in xrange(0,10):
+		Phh4bis[:,i] = Phh4bis[:,i]-Pshot4bis[i]
+		nul4bis = np.where(Phh4bis[:,i] < 0)[0]
+		Phh4bis[nul4bis,i] = 0
+	#~ ### do the mean over quantitites ###
+	PH4bis = np.mean(Phh4bis[:,0:11], axis=1)
+
 	bias4 = np.mean(bhh4[:,0:11], axis=1)
 	errb4 = np.std(bhh4[:,0:11], axis=1)
 	
@@ -162,18 +177,17 @@ for j in xrange(0,len(z)):
 	fid2 = np.loadtxt('/home/david/codes/Analysis/cosmo_test/Pk_z=0.txt')
 	Pmmfid = fid2[:,1]
 	
-	#~ plt.plot(k,PH4)
-	#~ plt.plot(k,np.sqrt(PH4/Pmm))
-	#~ plt.plot(kfid, bfid)
+	plt.plot(k,PH4, c='k')
+	plt.plot(kbis,PH4bis, c='b')
 	#~ plt.fill_between(kfid, bfid -efid, bfid + efid, alpha = 0.6)
 	#~ plt.plot(k, bias4)
 	#~ plt.fill_between(k, bias4 -errb4, bias4 + errb4, alpha = 0.6)
-	#~ plt.yscale('log')
-	#~ plt.xscale('log')
-	#~ plt.xlim(1e-2, 0.4)
-	#~ plt.ylim(0.7, 0.9)
-	#~ plt.show()
-	#~ kill
+	plt.yscale('log')
+	plt.xscale('log')
+	plt.xlim(1e-2, 0.4)
+	plt.ylim(1e4, 1e5)
+	plt.show()
+	kill
 	
 
 	test1 = np.loadtxt('/home/david/codes/Analysis/cosmo_test/s8_p/b_z=0.txt')

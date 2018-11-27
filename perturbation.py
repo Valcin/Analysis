@@ -31,7 +31,7 @@ from fit_emcee import coeffit_pl,coeffit_pl2,coeffit_exp1, coeffit_exp2, coeffit
 
 
 def perturb(kstop,  lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, Pmm, k, bias1,\
-	bias2, bias3, bias4, errb1, errb2, errb3, errb4, A, B, C, D, E, F,Mnu, z, j, case):
+	bias2, bias3, bias4, errb1, errb2, errb3, errb4, A, B, C, D, E, F,Mnu, z, j, case, PH1):
 	lim = np.where((k < kstop)&(k > 1e-2))[0]
 
 	
@@ -168,10 +168,10 @@ def perturb(kstop,  lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, Pmm, k, 
 		#~ fid_file.write('%.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g\n' % (kstop, b1z1_mcmc[0], b1z2_mcmc[0], b1z3_mcmc[0],\
 		#~ b1z4_mcmc[0], b3z1_mcmc[0], b3z2_mcmc[0], b3z3_mcmc[0], b3z4_mcmc[0]))
 	#~ fid_file.close()
-	with open('3rdorder_'+str(z[j])+'.txt', 'a') as fid_file:
-		fid_file.write('%.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g\n' % (kstop, b1z1_mcmc, b1z2_mcmc, b1z3_mcmc,\
-		b1z4_mcmc, b3z1_mcmc, b3z2_mcmc, b3z3_mcmc, b3z4_mcmc))
-	fid_file.close()
+	#~ with open('3rdorder_'+str(z[j])+'.txt', 'a') as fid_file:
+		#~ fid_file.write('%.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g\n' % (kstop, b1z1_mcmc, b1z2_mcmc, b1z3_mcmc,\
+		#~ b1z4_mcmc, b3z1_mcmc, b3z2_mcmc, b3z3_mcmc, b3z4_mcmc))
+	#~ fid_file.close()
 
 ##########################################################################
 ##########################################################################
@@ -246,6 +246,81 @@ def perturb(kstop,  lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, Pmm, k, 
 
 #####################################################################
 #####################################################################
+####################################################################
+	#~ PsptD1r1 = b1y1_mcmc**2 * Pmm+ b1y1_mcmc*b2y1_mcmc*A + 1/4.*b2y1_mcmc**2*B + b1y1_mcmc*bsy1_mcmc*C +\
+	#~ 1/2.*b2y1_mcmc*bsy1_mcmc*D + 1/4.*bsy1_mcmc**2*E + Ny1
+	#~ #------------------------------------------------------
+	#~ PsptD2r1 = b1z1_mcmc**2 * Pmm+ b1z1_mcmc*b2z1_mcmc*A + 1/4.*b2z1_mcmc**2*B + b1z1_mcmc*bsz1_mcmc*C +\
+	#~ 1/2.*b2z1_mcmc*bsz1_mcmc*D + 1/4.*bsz1_mcmc**2*E + 2*b1z1_mcmc*b3z1_mcmc*F + Nz1
+	#------------------------------------------------------
+	#~ PsptD3r1 =  b1u1_mcmc**2 * Pmm+ b1u1_mcmc*b2u1_mcmc*A + 1/4.*b2u1_mcmc**2*B + b1u1_mcmc*BsTa*C +\
+	#~ 1/2.*b2u1_mcmc*BsTa*D + 1/4.*BsTa**2*E + 2*b1u1_mcmc*B3nlTa*F + Nu1
+
+	#~ Nl1 = b1z1_mcmc*b2z1_mcmc*A + 1/4.*b2z1_mcmc**2*B + b1z1_mcmc*bsz1_mcmc*C +\
+	#~ 1/2.*b2z1_mcmc*bsz1_mcmc*D + 1/4.*bsz1_mcmc**2*E + 2*b1z1_mcmc*b3z1_mcmc*F + Nz1
+	#~ Nl2 = b1z2_mcmc*b2z2_mcmc*A + 1/4.*b2z2_mcmc**2*B + b1z2_mcmc*bsz2_mcmc*C +\
+	#~ 1/2.*b2z2_mcmc*bsz2_mcmc*D + 1/4.*bsz2_mcmc**2*E + 2*b1z2_mcmc*b3z2_mcmc*F + Nz2
+	#~ Nl3 = b1z3_mcmc*b2z3_mcmc*A + 1/4.*b2z3_mcmc**2*B + b1z3_mcmc*bsz3_mcmc*C +\
+	#~ 1/2.*b2z3_mcmc*bsz3_mcmc*D + 1/4.*bsz3_mcmc**2*E + 2*b1z3_mcmc*b3z3_mcmc*F + Nz3
+	#~ Nl4 = b1z4_mcmc*b2z4_mcmc*A + 1/4.*b2z4_mcmc**2*B + b1z4_mcmc*bsz4_mcmc*C +\
+	#~ 1/2.*b2z4_mcmc*bsz4_mcmc*D + 1/4.*bsz4_mcmc**2*E + 2*b1z4_mcmc*b3z4_mcmc*F + Nz4
+	
+	#~ Nl1bis = b1u1_mcmc*b2u1_mcmc*A + 1/4.*b2u1_mcmc**2*B + b1u1_mcmc*BsTa*C +\
+	#~ 1/2.*b2u1_mcmc*BsTa*D + 1/4.*BsTa**2*E + 2*b1u1_mcmc*B3nlTa*F + Nu1
+	#~ Nl2bis = b1u2_mcmc*b2u2_mcmc*A + 1/4.*b2u2_mcmc**2*B + b1u2_mcmc*BsTb*C +\
+	#~ 1/2.*b2u2_mcmc*BsTb*D + 1/4.*BsTb**2*E + 2*b1u2_mcmc*B3nlTb*F + Nu2
+	#~ Nl3bis = b1u3_mcmc*b2u3_mcmc*A + 1/4.*b2u3_mcmc**2*B + b1u3_mcmc*BsTc*C +\
+	#~ 1/2.*b2u3_mcmc*BsTc*D + 1/4.*BsTc**2*E + 2*b1u3_mcmc*B3nlTc*F + Nu3
+	#~ Nl4bis = b1u4_mcmc*b2u4_mcmc*A + 1/4.*b2u4_mcmc**2*B + b1u4_mcmc*BsTd*C +\
+	#~ 1/2.*b2u4_mcmc*BsTd*D + 1/4.*BsTd**2*E + 2*b1u4_mcmc*B3nlTd*F + Nu4
+
+#### compare the third order influence
+	#~ plt.figure()
+	#-----------------------------
+	#~ plt.ylabel(r'$2 \times b_{1} \times b_{3nl}\times \sigma_{3}^{2} \times P^{lin}$ ', fontsize = 14)
+	#~ plt.ylabel('Non linear corrections ', fontsize = 14)
+	#~ plt.xlabel(r'$k$ [h/Mpc] ', fontsize = 14)
+	#~ M1, =plt.plot(k,Nl1, label=r'free bs, b3nl', color='C0', linestyle ='--' )
+	#~ plt.plot(k,Nl1bis, label=r'fixed bs, b3nl', color='C0')
+	#~ M2, =plt.plot(k,Nl2,  color='C1', linestyle ='--' )
+	#~ plt.plot(k,Nl2bis, color='C1')
+	#~ M3, =plt.plot(k,Nl3,  color='C2', linestyle ='--' )
+	#~ plt.plot(k,Nl3bis, color='C2')
+	#~ M4, =plt.plot(k,Nl4,  color='C3', linestyle ='--' )
+	#~ plt.plot(k,Nl4bis, color='C3')
+	#~ plt.xlim(0.03,0.2)
+	#~ plt.figlegend( (M1,M2,M3,M4), ('$M_{1}$','$M_{2}$','$M_{3}$','$M_{4}$'), \
+	#~ loc = 'upper center', ncol=5, labelspacing=0., title ='z = '+str(z[j])+', case '+str(case), fontsize=14)
+	#-----------------------------------------
+	#~ plt.plot(k, PsptD1r1 , c='C0', label = '2nd order exp. with free $b_{s}$')
+	#~ plt.plot(k, PsptD2r1 , c='C2', label = r'3nd order exp. with free $b_{s}$, $b_{3nl}$')
+	#~ plt.plot(k, PsptD3r1, c='C3', label = '3nd order exp. with fixed $b_{s}$, $b_{3nl}$')
+	#~ plt.plot(k,PH1, c='k', label = 'N-body')
+	#~ plt.plot(k, bias3PT2, c='C0')
+	#~ plt.plot(k, bias3PTbis2, c='C3')
+	#~ plt.plot(k, bias3PT3, c='C0')
+	#~ plt.plot(k, bias3PTbis3, c='C3')
+	#~ plt.plot(k, bias3PT4, c='C0')
+	#~ plt.plot(k, bias3PTbis4, c='C3')
+	#~ plt.ylabel('P(k)', fontsize=14)
+	#~ plt.yscale('log')
+	#~ plt.ylim(1e1, 1e5)
+	#~ plt.title('z = '+str(z[j])+', $k_{max}$ = 0.12, mass range M1', fontsize = 14 )
+	#-----------------------------------
+	#~ plt.xlabel('k [h/Mpc]', fontsize=14)
+	#~ plt.xscale('log')
+	#~ plt.xlim(1e-2, 1)
+	#~ #--------------------------------------------
+	#~ plt.axvspan(kstop, 7, alpha=0.2, color='grey')
+	#~ plt.xscale('log')
+	
+	#~ plt.legend(loc='lower left', fontsize = 14) 
+	#~ plt.show()
+
+	#~ kill
+
+#####################################################################
+#####################################################################
 	
 	
 	#~ Mpt2 = np.loadtxt('/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+\
@@ -307,13 +382,7 @@ def perturb(kstop,  lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, Pmm, k, 
 	#~ bias3PTbis4 = np.sqrt((b1pt3bis[3]**2 * Pmmbis+ b1pt3bis[3]*b2pt3bis[3]*A + 1/4.*b2pt3bis[3]**2*B + b1pt3bis[3]*bspt3bis[3]*C +\
 	#~ 1/2.*b2pt3bis[3]*bspt3bis[3]*D + 1/4.*bspt3bis[3]**2*E + 2*b1pt3bis[3]*B3nlTd*F)/Pmmbis)
 	
-#~ ####################################################################
-	#~ PsptD1r1 = b1pt2[0]**2 * Pmmbis+ b1pt2[0]*b2pt2[0]*A + 1/4.*b2pt2[0]**2*B + b1pt2[0]*bspt2[0]*C +\
-	#~ 1/2.*b2pt2[0]*bspt2[0]*D + 1/4.*bspt2[0]**2*E 
-	#~ #------------------------------------------------------
-	#~ PsptD2r1 = 2*b1pt3[0]*b3pt3[0]*F
-	#------------------------------------------------------
-	#~ PsptD3r1 =  2*b1pt3bis[0]*B3nlTa*F
+#
 	
 
 ####################################################################

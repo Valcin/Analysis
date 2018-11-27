@@ -548,9 +548,6 @@ def coeffit_Kaiser(j, fcc, kstop, Pmm, lb1, k ,b ,errb):
 
 	#~ sampler = emcee.EnsembleSampler(nwalkers, ndim, lnprob, args=(k, b, errb))
 	#~ sampler.run_mcmc(pos, 1000)
-	
-     
-
 	#~ samples = sampler.chain[:, 200:, :].reshape((-1, ndim))
 
 	

@@ -26,6 +26,7 @@ from load_data import ld_data
 from loop_pt import pt_terms
 from polynomial import poly
 from perturbation import perturb
+from interp import interp_simu
 #~ from hmf_test import htest
 from time import time
 from rsd import RSD
@@ -93,7 +94,7 @@ for j in xrange(0,len(z)): #chmahe this after test
 
 	kcamb, Pcamb, k, Pmm, PH1, PH2, PH3 , PH4, errPhh1, errPhh2, errPhh3, errPhh4, bias1, bias2, bias3, bias4, \
 	bias1s, bias2s, bias3s, bias4s, errb1, errb2, errb3, errb4, Pmono1, Pmono2, Pmono3, Pmono4, errPr1, errPr2,\
-	errPr3, errPr4 = ld_data(Mnu, z, j)
+	errPr3, errPr4, kclass, Tm, Tcb = ld_data(Mnu, z, j)
 
 ####################################################################
 ##### define the maximum scale for the fit 
@@ -119,19 +120,6 @@ for j in xrange(0,len(z)): #chmahe this after test
 	for kstop in ktest:
 		print kstop
 	
-	####################################################################
-		Plin = Pcamb
-		klin = kcamb
-
-	#######################################################################
-		if Mnu == 0.0:
-				
-			pte = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/exp/expected1-'+str(z[j])+'.txt')
-			Plin = pte[:,1]
-			pte = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/exp/expected2-'+str(z[j])+'.txt')
-			Tm = pte[:,1]
-			pte = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/exp/expected3-'+str(z[j])+'.txt')
-			Tcb = pte[:,1]
 		
 		# interpolate to have more points and create an evenly logged array
 		#~ kbis = np.logspace(np.log10(np.min(k)), np.log10(np.max(k)), 200)
@@ -172,17 +160,9 @@ for j in xrange(0,len(z)): #chmahe this after test
 
 		Pmod_dd, Pmod_dt, Pmod_tt, A, B, C, D, E, F, G, H   = pt_terms(kcamb, Pcamb)
 		
-		Pmod_dd = np.interp(k, kcamb, Pmod_dd)
-		Pmod_dt = np.interp(k, kcamb, Pmod_dt)
-		Pmod_tt = np.interp(k, kcamb, Pmod_tt)
-		A = np.interp(k, kcamb, A)
-		B = np.interp(k, kcamb, B)
-		C = np.interp(k, kcamb, C)
-		D = np.interp(k, kcamb, D)
-		E = np.interp(k, kcamb, E)
-		F = np.interp(k, kcamb, F)
-		G = np.interp(k, kcamb, G)
-		H = np.interp(k, kcamb, H)
+		### interpolate on simulation k
+		Pmod_dd, Pmod_dt, Pmod_tt, A, B, C, D, E, F, G, H  = interp_simu(z,j ,k, kcamb, Pcamb, Pmod_dd, Pmod_dt, Pmod_tt,\
+		A, B, C, D, E, F, G, H, 1)
 		
 	####################################################################
 	#### get fitted coefficients

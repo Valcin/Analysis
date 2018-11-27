@@ -95,15 +95,15 @@ def poly(kstop, lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, k, bias1,\
 #~ ###########################################################################
 ###########################################################################
 
-	#~ cname1 = '/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+str(mv)+'eV/coeff_pl_'+str(mv)+'_z='+str(z[j])+'.txt'
-	#~ cname1err = '/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+str(mv)+'eV/err_pl_'+str(mv)+'_z='+str(z[j])+'.txt'
-	#~ cname1bis = '/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+str(mv)+'eV/coeff_ple_'+str(mv)+'_z='+str(z[j])+'.txt'
-	#~ cname1errbis = '/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+str(mv)+'eV/err_ple_'+str(mv)+'_z='+str(z[j])+'.txt'
+	cname1 = '/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+str(mv)+'eV/coeff_pl_'+str(mv)+'_z='+str(z[j])+'.txt'
+	cname1err = '/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+str(mv)+'eV/err_pl_'+str(mv)+'_z='+str(z[j])+'.txt'
+	cname1bis = '/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+str(mv)+'eV/coeff_ple_'+str(mv)+'_z='+str(z[j])+'.txt'
+	cname1errbis = '/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+str(mv)+'eV/err_ple_'+str(mv)+'_z='+str(z[j])+'.txt'
 	
-	cname1 = '/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+str(mv)+'eV/case'+str(case)+'/coeff_pl_'+str(mv)+'_z='+str(z[j])+'.txt'
-	cname1err = '/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+str(mv)+'eV/case'+str(case)+'/err_pl_'+str(mv)+'_z='+str(z[j])+'.txt'
-	cname1bis = '/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+str(mv)+'eV/case'+str(case)+'/coeff_ple_'+str(mv)+'_z='+str(z[j])+'.txt'
-	cname1errbis = '/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+str(mv)+'eV/case'+str(case)+'/err_ple_'+str(mv)+'_z='+str(z[j])+'.txt'
+	#~ cname1 = '/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+str(mv)+'eV/case'+str(case)+'/coeff_pl_'+str(mv)+'_z='+str(z[j])+'.txt'
+	#~ cname1err = '/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+str(mv)+'eV/case'+str(case)+'/err_pl_'+str(mv)+'_z='+str(z[j])+'.txt'
+	#~ cname1bis = '/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+str(mv)+'eV/case'+str(case)+'/coeff_ple_'+str(mv)+'_z='+str(z[j])+'.txt'
+	#~ cname1errbis = '/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+str(mv)+'eV/case'+str(case)+'/err_ple_'+str(mv)+'_z='+str(z[j])+'.txt'
 		
 	with open(cname1, 'w') as fid_file:
 		fid_file.write('%.8g %.8g %.8g %.8g\n' % (b1x1_mcmc, b2x1_mcmc, b3x1_mcmc, b4x1_mcmc))

@@ -6,8 +6,8 @@ import sys,os
 ################################## INPUT ######################################
 # neutrino parameters
 hierarchy = 'degenerate' #'degenerate', 'normal', 'inverted'
-Mnu       = 0.0  #eV
-Nnu       = 0  #number of massive neutrinos
+Mnu       = 0.15  #eV
+Nnu       = 3  #number of massive neutrinos
 Neff      = 3.046
 
 # cosmological parameters

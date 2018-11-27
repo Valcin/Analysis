@@ -271,25 +271,25 @@ def ld_data(mv, z, j):
 		bias3 = np.mean(bhh3[:,0:11], axis=1)
 		bias4 = np.mean(bhh4[:,0:11], axis=1)
 		
-		hsize = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/hsize_z='+str(z[j])+'.txt')
-		hsize_m1 = hsize[:,0]
-		hsize_m2 = hsize[:,1]
-		hsize_m3 = hsize[:,2]
-		hsize_m4 = hsize[:,3]
-		mostmass = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/mostmass_z='+str(z[j])+'.txt')
-		mostmass_m1 = mostmass[:,0]
-		mostmass_m2 = mostmass[:,1]
-		mostmass_m3 = mostmass[:,2]
-		mostmass_m4 = mostmass[:,3]
+		#~ hsize = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/hsize_z='+str(z[j])+'.txt')
+		#~ hsize_m1 = hsize[:,0]
+		#~ hsize_m2 = hsize[:,1]
+		#~ hsize_m3 = hsize[:,2]
+		#~ hsize_m4 = hsize[:,3]
+		#~ mostmass = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/mostmass_z='+str(z[j])+'.txt')
+		#~ mostmass_m1 = mostmass[:,0]
+		#~ mostmass_m2 = mostmass[:,1]
+		#~ mostmass_m3 = mostmass[:,2]
+		#~ mostmass_m4 = mostmass[:,3]
 		
 		
-		sn1 = Phh1[:,0:11]/Pshot1[0:11]
-		sn2 = Phh2[:,0:11]/Pshot2[0:11]
-		sn3 = Phh3[:,0:11]/Pshot3[0:11]
-		sn4 = Phh4[:,0:11]/Pshot4[0:11]
+		#~ sn1 = Phh1[:,0:11]/Pshot1[0:11]
+		#~ sn2 = Phh2[:,0:11]/Pshot2[0:11]
+		#~ sn3 = Phh3[:,0:11]/Pshot3[0:11]
+		#~ sn4 = Phh4[:,0:11]/Pshot4[0:11]
 		
-		Sn1 = np.sum(sn1,axis=1)
-		wei1 = sn1/Sn1[:,None]
+		#~ Sn1 = np.sum(sn1,axis=1)
+		#~ wei1 = sn1/Sn1[:,None]
 		
 	
 		
@@ -535,7 +535,8 @@ def ld_data(mv, z, j):
 		errPr4 = np.std(Pmono4temp[:,0:11], axis=1)
 
 		return kcamb, Pcamb, k, Pmm, PH1, PH2, PH3 , PH4, errPhh1, errPhh2, errPhh3, errPhh4, bias1, bias2, bias3, bias4, \
-		bias1s, bias2s, bias3s, bias4s, errb1, errb2, errb3, errb4, Pmono1, Pmono2, Pmono3, Pmono4, errPr1, errPr2, errPr3, errPr4
+		bias1s, bias2s, bias3s, bias4s, errb1, errb2, errb3, errb4, Pmono1, Pmono2, Pmono3, Pmono4, errPr1, errPr2, errPr3,\
+		errPr4, kclass, Tm, Tcb
 		#~ return kcamb, Pcamb, k, Pmm, PH1, PH2, PH3 , PH4, errPhh1, errPhh2, errPhh3, errPhh4, bias1s, bias2s, bias3s, bias4s, \
 		#~ errb1, errb2, errb3, errb4, Pmono1, Pmono2, Pmono3, Pmono4, errPr1, errPr2, errPr3, errPr4
 		
@@ -940,6 +941,7 @@ def ld_data(mv, z, j):
 		errPr4 = np.std(Pmono4temp[:,0:11], axis=1)
 		
 		return kcamb, Pcamb, k, Pmm, PH1, PH2, PH3 , PH4, errPhh1, errPhh2, errPhh3, errPhh4, bias1, bias2, bias3, bias4, \
-		bias1s, bias2s, bias3s, bias4s, errb1, errb2, errb3, errb4, Pmono1, Pmono2, Pmono3, Pmono4, errPr1, errPr2, errPr3, errPr4
+		bias1s, bias2s, bias3s, bias4s, errb1, errb2, errb3, errb4, Pmono1, Pmono2, Pmono3, Pmono4, errPr1, errPr2, errPr3,\
+		errPr4, kclass, Tm, Tcb
 		#~ return kcamb, Pcamb, k, Pmm, PH1, PH2, PH3 , PH4, errPhh1, errPhh2, errPhh3, errPhh4, bias1s, bias2s, bias3s, bias4s, \
 		#~ errb1, errb2, errb3, errb4, Pmono1, Pmono2, Pmono3, Pmono4, errPr1, errPr2, errPr3, errPr4
