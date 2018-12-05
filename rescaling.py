@@ -27,7 +27,7 @@ from polynomial import poly
 from perturbation import perturb
 #~ from hmf_test import htest
 from time import time
-from rsd import RSD
+from rsd import RSD1
 from bias_library import halo_bias, bias
 from scipy.optimize import curve_fit
 from scipy.interpolate import interp1d
@@ -230,7 +230,7 @@ def rescal(j, case):
 	#~ return kai1*sca1, kai2*sca2, kai3*sca3, kai4*sca4, sco1*sca1, sco2*sca2, sco3*sca3, sco4*sca4, tns1*sca1, tns2*sca2,\
 	#~ tns3*sca3, tns4*sca4, etns1*sca1, etns2*sca2, etns3*sca3, etns4*sca4
 	#---------------------------------------------------
-	kai1, kai2, kai3, kai4, sco1, sco2, sco3, sco4, tns1, tns2, tns3, tns4, etns1, etns2, etns3, etns4 = RSD(fz,fcc, Dz[ind]\
+	kai1, kai2, kai3, kai4, sco1, sco2, sco3, sco4, tns1, tns2, tns3, tns4, etns1, etns2, etns3, etns4 = RSD1(fz,fcc, Dz[ind]\
 	, j, kstop, Pmmbis, bF1, bF2, bF3, bF4, kbis, Plinbis, Pmono1bis, Pmono2bis, Pmono3bis, Pmono4bis, errPr1bis, errPr2bis,\
 	errPr3bis, errPr4bis, Pmod_dt, Pmod_tt, case,z,0.0, A, B, C, D, E, F, G, H, sca1, sca2, sca3, sca4 )
 	

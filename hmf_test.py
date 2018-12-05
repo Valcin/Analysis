@@ -368,29 +368,29 @@ for j in xrange(0,len(z)):
 		#~ DndM3=MFL.Tinker_2010_mass_function(kcamb,Pcamb,Omega_m,z[j],limM[2],limM[4],len(m_middle3), Masses = m_middle3)[1]
 		#~ DndM4=MFL.Tinker_2010_mass_function(kcamb,Pcamb,Omega_m,z[j],limM[3],limM[4],len(m_middle4), Masses = m_middle4)[1]
 		#~ #-------------------------------------------------------------
-		#~ dndMbis1=MFL.Crocce_mass_function(kcamb,Pcamb,Omega_m,z[j],limM[0],limM[4],len(m_middle1), Masses = m_middle1)[1]
-		#~ dndMbis2=MFL.Crocce_mass_function(kcamb,Pcamb,Omega_m,z[j],limM[1],limM[4],len(m_middle2), Masses = m_middle2)[1]
-		#~ dndMbis3=MFL.Crocce_mass_function(kcamb,Pcamb,Omega_m,z[j],limM[2],limM[4],len(m_middle3), Masses = m_middle3)[1]
-		#~ dndMbis4=MFL.Crocce_mass_function(kcamb,Pcamb,Omega_m,z[j],limM[3],limM[4],len(m_middle4), Masses = m_middle4)[1]
+		dndMbis1=MFL.Crocce_mass_function(kcamb,Pcamb,Omega_m,z[j],limM[0],limM[4],len(m_middle1), Masses = m_middle1)[1]
+		dndMbis2=MFL.Crocce_mass_function(kcamb,Pcamb,Omega_m,z[j],limM[1],limM[4],len(m_middle2), Masses = m_middle2)[1]
+		dndMbis3=MFL.Crocce_mass_function(kcamb,Pcamb,Omega_m,z[j],limM[2],limM[4],len(m_middle3), Masses = m_middle3)[1]
+		dndMbis4=MFL.Crocce_mass_function(kcamb,Pcamb,Omega_m,z[j],limM[3],limM[4],len(m_middle4), Masses = m_middle4)[1]
 		
 		#~ dndM1 = np.nan_to_num(dndM1)
 		#~ dndM2 = np.nan_to_num(dndM2)
 		#~ dndM3 = np.nan_to_num(dndM3)
 		#~ dndM4 = np.nan_to_num(dndM4)
-		#~ dndMbis1 = np.nan_to_num(dndMbis1)
-		#~ dndMbis2 = np.nan_to_num(dndMbis2)
-		#~ dndMbis3 = np.nan_to_num(dndMbis3)
-		#~ dndMbis4 = np.nan_to_num(dndMbis4)
+		dndMbis1 = np.nan_to_num(dndMbis1)
+		dndMbis2 = np.nan_to_num(dndMbis2)
+		dndMbis3 = np.nan_to_num(dndMbis3)
+		dndMbis4 = np.nan_to_num(dndMbis4)
 		
-		#~ bt1=np.empty(len(m_middle1),dtype=np.float64)
-		#~ bt2=np.empty(len(m_middle2),dtype=np.float64)
-		#~ bt3=np.empty(len(m_middle3),dtype=np.float64)
-		#~ bt4=np.empty(len(m_middle4),dtype=np.float64)
-		#~ for i in range(len(m_middle1)):
-			#~ bt1[i]=bias(kcamb,Pcamb,Omega_m,m_middle1[i],'Tinker')
-			#~ bt2[i]=bias(kcamb,Pcamb,Omega_m,m_middle2[i],'Tinker')
-			#~ bt3[i]=bias(kcamb,Pcamb,Omega_m,m_middle3[i],'Tinker')
-			#~ bt4[i]=bias(kcamb,Pcamb,Omega_m,m_middle4[i],'Tinker')
+		bt1=np.empty(len(m_middle1),dtype=np.float64)
+		bt2=np.empty(len(m_middle2),dtype=np.float64)
+		bt3=np.empty(len(m_middle3),dtype=np.float64)
+		bt4=np.empty(len(m_middle4),dtype=np.float64)
+		for i in range(len(m_middle1)):
+			bt1[i]=bias(kcamb,Pcamb,Omega_m,m_middle1[i],'Tinker')
+			bt2[i]=bias(kcamb,Pcamb,Omega_m,m_middle2[i],'Tinker')
+			bt3[i]=bias(kcamb,Pcamb,Omega_m,m_middle3[i],'Tinker')
+			bt4[i]=bias(kcamb,Pcamb,Omega_m,m_middle4[i],'Tinker')
 			#~ #-------------------------------------------
 			#~ bst1[i]=bias(kcamb,Pcamb,Omega_m,m_middle1[i],'Crocce')
 			#~ bst2[i]=bias(kcamb,Pcamb,Omega_m,m_middle2[i],'Crocce')
@@ -466,13 +466,6 @@ for j in xrange(0,len(z)):
 		kcamb0, Pcamb0, k0, Pmm0, PH10, PH20, PH30 , PH40, errPhh10, errPhh20, errPhh30, errPhh40, bias1_0ev, bias2_0ev,\
 		bias3_0ev, bias4_0ev, bias1s0, bias2s0, bias3s0, bias4s0, errb1, errb2, errb3, errb4, Pmono10, Pmono20, Pmono30, Pmono40, errPr1,\
 		errPr2, errPr3, errPr4, kclass, Tm, Tcb = ld_data(0.0, z, j)
-		#~ bias_0ev = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/large_scale/bcc_z='+str(z[j])+'_.txt')
-		#~ bias1_0ev = bias_0ev[:,1]
-		#~ bias2_0ev = bias_0ev[:,2]
-		#~ bias3_0ev = bias_0ev[:,3]
-		#~ bias4_0ev = bias_0ev[:,4]
-
-		als = np.where(k < 0.5)[0]
 
 
 		dndM0bis = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/hmf/chmf_z='+str(z[j])+'.txt')
@@ -512,13 +505,22 @@ for j in xrange(0,len(z)):
 		#~ bias_eff_t2=np.sum(DndM2*dm2*bt2)/np.sum(dm2*DndM2)
 		#~ bias_eff_t3=np.sum(DndM3*dm3*bt3)/np.sum(dm3*DndM3)
 		#~ bias_eff_t4=np.sum(DndM4*dm4*bt4)/np.sum(dm4*DndM4)
-		#~ #------------------------------
-		#~ Bias_eff_t1=np.sum(dndMbis1*dm1*bt1)/np.sum(dm1*dndMbis1)
-		#~ Bias_eff_t2=np.sum(dndMbis2*dm2*bt2)/np.sum(dm2*dndMbis2)
-		#~ Bias_eff_t3=np.sum(dndMbis3*dm3*bt3)/np.sum(dm3*dndMbis3)
-		#~ Bias_eff_t4=np.sum(dndMbis4*dm4*bt4)/np.sum(dm4*dndMbis4)
+		#------------------------------
+		Bias_eff_t1=np.sum(dndMbis1*dm1*bt1)/np.sum(dm1*dndMbis1)
+		Bias_eff_t2=np.sum(dndMbis2*dm2*bt2)/np.sum(dm2*dndMbis2)
+		Bias_eff_t3=np.sum(dndMbis3*dm3*bt3)/np.sum(dm3*dndMbis3)
+		Bias_eff_t4=np.sum(dndMbis4*dm4*bt4)/np.sum(dm4*dndMbis4)
 		
 		
+		
+		br1 = bias1_0ev *Bias_eff_t1/Bias_eff0_t1
+		br2 = bias2_0ev *Bias_eff_t2/Bias_eff0_t2
+		br3 = bias3_0ev *Bias_eff_t3/Bias_eff0_t3
+		br4 = bias4_0ev *Bias_eff_t4/Bias_eff0_t4
+		
+		
+		Br = np.array([br1/bias1, br2/bias2, br3/bias3, br4/bias4])
+		br = np.mean(Br,axis=0)
 		#~ with open('/home/david/codes/montepython_public/BE_HaPPy/coefficients/0.0eV/large_scale/LS_z='+str(z[j])+'_.txt', 'w+') as fid_file:
 			#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (Bias_eff0_t1,Bias_eff0_t2, Bias_eff0_t3, Bias_eff0_t4))
 		#~ fid_file.close()
@@ -548,12 +550,12 @@ for j in xrange(0,len(z)):
 		
 	#~ plt.plot(k,Pmm)
 	#~ plt.plot(k,Pmm/Pmm0)
-	plt.plot(k,PH1/PH10)
-	plt.plot(k,PH2/PH20)
-	plt.plot(k,PH3/PH30)
-	plt.plot(k,PH4/PH40)
-	plt.xscale('log')
-	plt.ylim(0.5,1.5)
+	#~ plt.plot(k,PH1/PH10)
+	#~ plt.plot(k,PH2/PH20)
+	#~ plt.plot(k,PH3/PH30)
+	#~ plt.plot(k,PH4/PH40)
+	#~ plt.xscale('log')
+	#~ plt.ylim(0.5,1.5)
 	#~ plt.yscale('log')
 	############################################################
 	#~ ax2.scatter(m_middle1, hmf1*m_middle1**2, marker='.', color='C0', label='Sim')
@@ -643,27 +645,20 @@ for j in xrange(0,len(z)):
 	#~ ax2.plot(k, bias2_0ev*bias_eff_t2/bias_eff0_t2, linestyle = '--', color='C1')
 	#~ ax2.plot(k, bias3_0ev*bias_eff_t3/bias_eff0_t3, linestyle = '--', color='C2')
 	#~ ax2.plot(k, bias4_0ev*bias_eff_t4/bias_eff0_t4, linestyle = '--', color='C3')
-	#~ #-------------------------------------------------------------
-	#~ bres, = ax2.plot(k, bias1_0ev*bias_eff_t1/bias_eff0_t1, linestyle = '--', color='C0', label=r'$Tinker 2010 MF$')
-	#~ bres2, = ax2.plot(k, bias1s0*bias_eff_t1/bias_eff0_t1, linestyle = ':', color='C0')
-	#~ ax2.plot(k, bias2s0*bias_eff_t2/bias_eff0_t2, linestyle = ':', color='C1')
-	#~ ax2.plot(k, bias3s0*bias_eff_t3/bias_eff0_t3, linestyle = ':', color='C2')
-	#~ ax2.plot(k, bias4s0*bias_eff_t4/bias_eff0_t4, linestyle = ':', color='C3')
-	#~ #-------------------------------------------------------------
+	#-------------------------------------------------------------
 	#~ ax2.plot(k, bias1_0ev*Bias_eff_t1/Bias_eff0_t1, linestyle = ':', color='C0', label=r'$Crocce MF$')
 	#~ ax2.plot(k, bias1_0ev*Bias_eff_t1/Bias_eff0_t1, linestyle = ':', color='C0', label=r'$b_{model}$')
 	#~ ax2.plot(k, bias2_0ev*Bias_eff_t2/Bias_eff0_t2, linestyle = ':', color='C1')
 	#~ ax2.plot(k, bias3_0ev*Bias_eff_t3/Bias_eff0_t3, linestyle = ':', color='C2')
 	#~ ax2.plot(k, bias4_0ev*Bias_eff_t4/Bias_eff0_t4, linestyle = ':', color='C3')
-	#~ #--------------------------------------------------------
+	#--------------------------------------------------------
 	#~ ax2.fill_between(k,bias1-errb1, bias1+errb1, alpha=0.6)
 	#~ ax2.fill_between(k,bias2-errb2, bias2+errb2, alpha=0.6)
 	#~ ax2.fill_between(k,bias3-errb3, bias3+errb3, alpha=0.6)
 	#~ ax2.fill_between(k,bias4-errb4, bias4+errb4, alpha=0.6)
-	#~ #---------------------------------------------------------
+	#---------------------------------------------------------
 	#~ ax2.set_ylim(bias1[0]*0.8,bias4[0]*1.4)
 	#~ ax2.set_xlim(8e-3,1)
-	#~ plt.figlegend( (M1,M2,M3,M4, bres1,bres2), ('$M_{1}$','$M_{2}$','$M_{3}$','$M_{4}$', r'$b_{model}$', r'$b_{model}$ smoothed '), \
 	#~ plt.figlegend( (M1,M2,M3,M4), ('$M_{1}$','$M_{2}$','$M_{3}$','$M_{4}$'), \
 	####################################################################
 	#~ ax2.scatter(k,bias1/bias1_0ev, color='b', marker='.')
@@ -680,31 +675,27 @@ for j in xrange(0,len(z)):
 	#~ ax2.plot(k,bias3s/bias3s0, color='g')
 	#~ ax2.plot(k,bias4s/bias4s0, color='c')
 	#~ #-------------------------------------
-	#~ ax2.axhline(1, color='k')
-	#~ M1, =ax2.plot(k,bias1/(bias1_0ev *bias_eff_t1/bias_eff0_t1), color='b', linestyle='--', label='Tinker 2010')
-	#~ M2, =ax2.plot(k,bias2/(bias2_0ev *bias_eff_t2/bias_eff0_t2), color='r', linestyle='--')
-	#~ M3, =ax2.plot(k,bias3/(bias3_0ev *bias_eff_t3/bias_eff0_t3), color='g', linestyle='--')
-	#~ M4, =ax2.plot(k,bias4/(bias4_0ev *bias_eff_t4/bias_eff0_t4), color='C3', linestyle='--')
-	#-------------------------------------
-	#~ M1, =ax2.plot(k,bias1/(bias1_0ev *bias_eff_t1/bias_eff0_t1), color='b', linestyle='--', label='Tinker 2010')
-	#~ M2, =ax2.plot(k,bias2/(bias2_0ev *bias_eff_t2/bias_eff0_t2), color='r', linestyle='--')
-	#~ M3, =ax2.plot(k,bias3/(bias3_0ev *bias_eff_t3/bias_eff0_t3), color='g', linestyle='--')
-	#~ M4, =ax2.plot(k,bias4/(bias4s0 *bias_eff_t4/bias_eff0_t4), color='C3', linestyle=':')
-	#~ #-------------------------------------
-	#~ M1, =ax2.plot(k,bias1s/(bias1_0ev *bias_eff_t1/bias_eff0_t1), color='b', linestyle='--', label='Tinker 2010')
-	#~ M2, =ax2.plot(k,bias2s/(bias2_0ev *bias_eff_t2/bias_eff0_t2), color='r', linestyle='--')
-	#~ M3, =ax2.plot(k,bias3s/(bias3_0ev *bias_eff_t3/bias_eff0_t3), color='g', linestyle='--')
-	#~ M4, =ax2.plot(k,bias4s/(bias4s0 *bias_eff_t4/bias_eff0_t4), color='C3')
+	ax2.axhline(1, color='k')
+	ax2.axhline(0.99, color='k', linestyle=':')
+	ax2.axhline(1.01, color='k', linestyle=':')
+	#~ M1, =ax2.plot(k,bias1/br1, color='b', linestyle='--', label='Tinker 2010')
+	#~ M2, =ax2.plot(k,bias2/br2, color='r', linestyle='--')
+	#~ M3, =ax2.plot(k,bias3/br3, color='g', linestyle='--')
+	#~ M4, =ax2.plot(k,bias4/br4, color='C3', linestyle='--')
+	M1, =ax2.plot(k,bias1/bias1, color='k', label='z = '+str(z[j]))
+	M2, =ax2.plot(k,br, color='b')
+	ax2.set_xlim(8e-3,1)
 	#-------------------------------------
 	
 	#~ ax2.set_ylim(1.02,1.1)
-	#~ ax2.set_ylim(0.95,1.05)
+	ax2.set_ylim(0.9,1.1)
 	#~ ax2.set_xlim(0.008,0.2)
 	
 	#~ plt.figlegend( (M1,M2,M3,M4), ('$M_{1}$','$M_{2}$','$M_{3}$','$M_{4}$'), \
+	plt.figlegend( (M1, M2), ('N-body','rescaled bias'), \
 	#######################################
-	#~ loc = 'upper center', ncol=5, labelspacing=0., title =r' M$\nu$ = '+str(Mnu)+',  bins = '+str(len(m_middle1)), fontsize=14)
-	ax2.legend(loc = 'upper left', title='z = '+str(z[j]), fancybox=True, ncol=3, fontsize=14)
+	loc = 'upper center', ncol=5, labelspacing=0., title =r' M$\nu$ = '+str(Mnu)+',  bins = '+str(len(m_middle1)), fontsize=14)
+	ax2.legend(loc = 'upper left', fancybox=True, fontsize=14, handlelength=0, handletextpad=0)
 	plt.subplots_adjust(left=0.1, wspace=0.05, hspace=0.1)
 	ax2.set_xscale('log')
 	#----------------------------

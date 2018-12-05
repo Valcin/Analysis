@@ -93,7 +93,7 @@ for j in xrange(0,len(z)):
 
 	kcamb, Pcamb, k, Pmm, _, _, _ , _, _, _, _, _, _, _,_, _, \
 	_, _, _, _, _, _, _, _, _, _, _, _, _, _,\
-	_, _ = ld_data(Mnu, z, j)
+	_, _, _, _, _ = ld_data(Mnu, z, j)
 	
 	#-------------------------------------------------
 	#------------matter  Real space --------
@@ -109,8 +109,8 @@ for j in xrange(0,len(z)):
 	#~ #--------- halo real space -------------------------
 	#~ #---------------------------------------------------
 	# fourth mass range
-	d4 = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/Phh4_realisation_z='+str(z[j])+'.txt')
-	#~ d4 = np.loadtxt('/home/david/codes/Analysis/cosmo_test/Phh4_realisation_0.0_z=0.0.txt')
+	#~ d4 = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/Phh4_realisation_z='+str(z[j])+'.txt')
+	d4 = np.loadtxt('/home/david/codes/Analysis/cosmo_test/Phh4_realisation_0.0_z='+str(z[j])+'.txt')
 	k = d4[:,19]
 	Phh4 = np.zeros((len(k),10))
 	Pshot4 = np.zeros((10))
@@ -119,18 +119,7 @@ for j in xrange(0,len(z)):
 	for i in xrange(0,10):
 		Phh4[:,i]= d4[:,pnum1[i]]
 		Pshot4[i]= d4[0,pnum2[i]]
-		
-	# fourth mass range
-	d4bis = np.loadtxt('/home/david/Documents/PhD/plots/from-simu/0.15eV/real space/Phh4_realisation_0.0_z='+str(z[j])+'.txt')
-	#~ d4 = np.loadtxt('/home/david/codes/Analysis/cosmo_test/Phh4_realisation_0.0_z=0.0.txt')
-	kbis = d4bis[:,19]
-	Phh4bis = np.zeros((len(kbis),10))
-	Pshot4bis = np.zeros((10))
-	pnum1bis = [0,2,4,6,8,10,12,14,16,18]
-	pnum2bis = [1,3,5,7,9,11,13,15,17,20]
-	for i in xrange(0,10):
-		Phh4bis[:,i]= d4bis[:,pnum1bis[i]]
-		Pshot4bis[i]= d4bis[0,pnum2bis[i]]
+
 	
 	#~ #-------------------------------------------------------------------
 	#~ #----remove shot noise, compute bias and bias variance -------------
@@ -146,21 +135,73 @@ for j in xrange(0,len(z)):
 	ePmm = np.std(Pmat[:,0:11], axis=1)
 	PH4 = np.mean(Phh4[:,0:11], axis=1)
 	
-	bhh4bis = np.zeros((len(kbis),10))
-	for i in xrange(0,10):
-		Phh4bis[:,i] = Phh4bis[:,i]-Pshot4bis[i]
-		nul4bis = np.where(Phh4bis[:,i] < 0)[0]
-		Phh4bis[nul4bis,i] = 0
-	#~ ### do the mean over quantitites ###
-	PH4bis = np.mean(Phh4bis[:,0:11], axis=1)
 
 	bias4 = np.mean(bhh4[:,0:11], axis=1)
 	errb4 = np.std(bhh4[:,0:11], axis=1)
 	
+	####################################################################
+	####################################################################
+	#-----------------------------------------------------------------------
+	#~ #---------------- matter neutrino Real space ---------------------------
+	#~ #-----------------------------------------------------------------------
+	d = np.loadtxt('/home/david/codes/Paco/data2/0.15eV/NCV1/analysis/Pk_c_z='+str(z[j])+'.txt')
+	e = np.loadtxt('/home/david/codes/Paco/data2/0.15eV/NCV2/analysis/Pk_c_z='+str(z[j])+'.txt')
+	k1 = d[:,0]
+	p1 = d[:,1]
+	k2 = e[:,0]
+	p2 = e[:,1]
+
+
+	d = np.loadtxt('/home/david/codes/Paco/data2/0.15eV/Pcc_realisation_0.15_z='+str(z[j])+'.txt')
+	kmat = d[:,8]
+	Pmat = np.zeros((len(kmat),10))
+	for i in xrange(0,8):
+		Pmat[:,i]= d[:,i]
 	
-	kfid = k
-	bfid = bias4
-	efid = errb4
+	Pmat[:,8] = p1
+	Pmat[:,9] = p2
+
+
+	
+	
+	#~ #---------------------------------------------------
+	#~ #--------- halo real space neutrino -------------------------
+	#~ #---------------------------------------------------
+	# fourth mass range
+	#~ d4 = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/Phh4_realisation_z='+str(z[j])+'.txt')
+	d4r = np.loadtxt('/home/david/codes/Analysis/cosmo_test/Phh4_realisation_0.15_z='+str(z[j])+'.txt')
+	k = d4r[:,19]
+	Phh4r = np.zeros((len(k),10))
+	Pshot4r = np.zeros((10))
+	pnum1 = [0,2,4,6,8,10,12,14,16,18]
+	pnum2 = [1,3,5,7,9,11,13,15,17,20]
+	for i in xrange(0,10):
+		Phh4r[:,i]= d4r[:,pnum1[i]]
+		Pshot4r[i]= d4r[0,pnum2[i]]
+
+	
+	#~ #-------------------------------------------------------------------
+	#~ #----remove shot noise, compute bias and bias variance -------------
+	#~ #-------------------------------------------------------------------
+	bhh4r = np.zeros((len(k),10))
+	for i in xrange(0,10):
+		Phh4r[:,i] = Phh4r[:,i]-Pshot4r[i]
+		nul4r = np.where(Phh4r[:,i] < 0)[0]
+		Phh4r[nul4r,i] = 0
+		bhh4r[:,i] = np.sqrt(Phh4r[:,i]/Pmat[:,i])
+	#~ ### do the mean over quantitites ###
+	Pmm = np.mean(Pmat[:,0:11], axis=1)
+	ePmm = np.std(Pmat[:,0:11], axis=1)
+	PH4r = np.mean(Phh4r[:,0:11], axis=1)
+	
+
+	bias4r = np.mean(bhh4r[:,0:11], axis=1)
+	errb4r = np.std(bhh4r[:,0:11], axis=1)
+	
+	
+	#~ kfid = k
+	#~ bfid = bias4
+	#~ efid = errb4
 	
 	
 	####################################################################
@@ -177,24 +218,14 @@ for j in xrange(0,len(z)):
 	fid2 = np.loadtxt('/home/david/codes/Analysis/cosmo_test/Pk_z=0.txt')
 	Pmmfid = fid2[:,1]
 	
-	plt.plot(k,PH4, c='k')
-	plt.plot(kbis,PH4bis, c='b')
-	#~ plt.fill_between(kfid, bfid -efid, bfid + efid, alpha = 0.6)
-	#~ plt.plot(k, bias4)
-	#~ plt.fill_between(k, bias4 -errb4, bias4 + errb4, alpha = 0.6)
-	plt.yscale('log')
-	plt.xscale('log')
-	plt.xlim(1e-2, 0.4)
-	plt.ylim(1e4, 1e5)
-	plt.show()
-	kill
 	
 
 	test1 = np.loadtxt('/home/david/codes/Analysis/cosmo_test/s8_p/b_z=0.txt')
 	ktest1 = test1[:,0]
 	btest1_square = test1[:,1]
 	btest1 = np.sqrt(btest1_square)
-	test2 = np.loadtxt('/home/david/codes/Analysis/cosmo_test/s8_m/b_z=0.txt')
+	zbis = ['0','0.5','1','2']
+	test2 = np.loadtxt('/home/david/codes/Analysis/cosmo_test/s8_m/b_z='+zbis[j]+'.txt')
 	ktest2 = test2[:,0]
 	btest2_square = test2[:,1]
 	btest2 = np.sqrt(btest2_square)
@@ -272,7 +303,7 @@ for j in xrange(0,len(z)):
 	Pmod_dd, Pmod_dt, Pmod_tt, A, B, C, D, E, F, G, H   = pt_terms(kcamb, Pcamb)
 	
 	### interpolate to create more point and for comparison
-	k2= np.logspace(np.log10(np.min(kfid)), np.log10(np.max(kfid)), 500)
+	#~ k2= np.logspace(np.log10(np.min(kfid)), np.log10(np.max(kfid)), 500)
 	#~ bfid = np.interp(k2, kfid, bfid)
 	#~ efid = np.interp(k2, kfid, efid)
 	
@@ -346,48 +377,31 @@ for j in xrange(0,len(z)):
 	
 	
 	# here kh because the simu scale
-	popF4, pcovF4 = curve_fit(funcb, kfid[lim], bfid[lim], sigma = efid[lim],  check_finite=True, maxfev=500000)
-	b1x4_ml, b2x4_ml, b3x4_ml, b4x4_ml = coeffit_pl(kstop, lb4, errlb4, popF4, kfid, bfid, efid)
-	biasF4 = b1x4_ml + b2x4_ml * kfid**2 + b3x4_ml * kfid**3 + b4x4_ml * kfid**4
+	#~ popF4, pcovF4 = curve_fit(funcb, kfid[lim], bfid[lim], sigma = efid[lim],  check_finite=True, maxfev=500000)
+	#~ b1x4_ml, b2x4_ml, b3x4_ml, b4x4_ml = coeffit_pl(kstop, lb4, errlb4, popF4, kfid, bfid, efid)
+	#~ biasF4 = b1x4_ml + b2x4_ml * kfid**2 + b3x4_ml * kfid**3 + b4x4_ml * kfid**4
 	
 
 #-------------------------------------------------------------------
 
 	print 'perturbation'
-	popbis4 = [lb4, -25.,-4/7.*(lb4-1),32/315.*(lb4-1)]
-	
-	
-	#~ popbis4 = [lb4,1]
-	
-	#~ print efid
-	#~ print bfid
-	#~ kill
-	#3rd order free -----------------------------------------------------------------------------------------------
-	
-	
-	
-	popbis4 = [lb4, 1.,-4/7.*(lb4-1),32/315.*(lb4-1),100]
-	b1z4_ml, b2z4_ml, bsz4_ml, b3z4_ml, N_ml  = coeffit_exp2(kstop, Pmod_dd, A, B, C, D, E, F, lb4, errlb4, popbis4,\
-	kfid ,bfid ,efid)
-	bias3PT4 = np.sqrt((b1z4_ml**2 * Pmod_dd+ b1z4_ml*b2z4_ml*A + 1/4.*b2z4_ml**2*B + b1z4_ml*bsz4_ml*C +\
-	1/2.*b2z4_ml*bsz4_ml*D + 1/4.*bsz4_ml**2*E + 2*b1z4_ml*b3z4_ml*F + N_ml)/Pmod_dd)
-	
-	#~ popbis4 = [lb4, 1.,-4/7.*(lb4-1),100]
-	#~ b1z4_mcmc, b2z4_mcmc, bsz4_mcmc, N, b1z4_ml, b2z4_ml, bsz4_ml, N_ml = coeffit_exp1(kstop, Pmod_dd, A, B, C, D, E, lb4, errlb4, popbis4,\
+		
+	#~ popbis4 = [lb4, 1.,-4/7.*(lb4-1),32/315.*(lb4-1),100]
+	#~ b1z4_ml, b2z4_ml, bsz4_ml, b3z4_ml, N_ml  = coeffit_exp2(kstop, Pmod_dd, A, B, C, D, E, F, lb4, errlb4, popbis4,\
 	#~ kfid ,bfid ,efid)
-	#~ bias3PT4 = np.sqrt((b1z4_mcmc[0]**2 * Pmod_dd+ b1z4_mcmc[0]*b2z4_mcmc[0]*A + 1/4.*b2z4_mcmc[0]**2*B + b1z4_mcmc[0]*bsz4_mcmc[0]*C +\
-	#~ 1/2.*b2z4_mcmc[0]*bsz4_mcmc[0]*D + 1/4.*bsz4_mcmc[0]**2*E + N[0])/Pmod_dd)
-	#~ bias3PT4bis = np.sqrt((b1z4_ml**2 * Pmod_dd+ b1z4_ml*b2z4_ml*A + 1/4.*b2z4_ml**2*B + b1z4_ml*bsz4_ml*C +\
-	#~ 1/2.*b2z4_ml*bsz4_ml*D + 1/4.*bsz4_ml**2*E + N_ml)/Pmod_dd)
+	#~ bias3PT4 = np.sqrt((b1z4_ml**2 * Pmod_dd+ b1z4_ml*b2z4_ml*A + 1/4.*b2z4_ml**2*B + b1z4_ml*bsz4_ml*C +\
+	#~ 1/2.*b2z4_ml*bsz4_ml*D + 1/4.*bsz4_ml**2*E + 2*b1z4_ml*b3z4_ml*F + N_ml)/Pmod_dd)
+
 	
 		
 	
 	####################################################################
 	#~ plt.figure()
-	#~ plt.plot(k, bias4)
+	#~ plt.plot(k, bias4,c='r')
+	#~ plt.plot(k, bias4r,c='b')
 	#~ plt.plot(kfid, bfid, c='k')
 	#~ plt.plot(ktest1, btest1)
-	#~ plt.plot(ktest2, btest2)
+	#~ plt.plot(ktest2, btest2, c='g')
 	#~ plt.plot(ktest3, btest3)
 	#~ plt.plot(ktest4, btest4)
 
@@ -395,36 +409,175 @@ for j in xrange(0,len(z)):
 	#~ plt.plot(kbis, bias3PT4, c='C1')
 	#~ plt.xscale('log')
 	#~ plt.xlim(1e-2, 1)
-	#~ plt.ylim(1.6,2.2)
+	#~ plt.ylim(1.,3.)
 	#~ plt.show()
 	
 	#~ plt.figure()
-	plt.axhline(1, c='k')
-	r1, =plt.plot(kfid, biasF4/bfid, c='k', label = 'Polynomial')
-	r2, =plt.plot(kfid, biasF4/btest1, c='C0')
-	r3, =plt.plot(kfid, biasF4/btest2, c='C1')
-	r4, =plt.plot(kfid, biasF4/btest3, c='C2')
-	r5, =plt.plot(kfid, biasF4/btest4, c='C3')
-	#--------------------------------------------
-	r1, =plt.plot(kfid, bias3PT4/bfid, c='k', label = 'Perturbation theory', linestyle='--')
-	r2, =plt.plot(kfid, bias3PT4/btest1, c='C0', linestyle='--')
-	r3, =plt.plot(kfid, bias3PT4/btest2, c='C1', linestyle='--')
-	r4, =plt.plot(kfid, bias3PT4/btest3, c='C2', linestyle='--')
-	r5, =plt.plot(kfid, bias3PT4/btest4, c='C3', linestyle='--')
-	plt.axhline(1.01, linestyle = ':', c='k')
-	plt.axhline(0.99, linestyle = ':', c='k')
-	plt.axvspan(kstop, 7, alpha=0.2, color='grey')
+	#~ plt.axhline(1, c='k')
+	#~ r1, =plt.plot(kfid, biasF4/bfid, c='k', label = 'Polynomial')
+	#~ r2, =plt.plot(kfid, biasF4/btest1, c='C0')
+	#~ r3, =plt.plot(kfid, biasF4/btest2, c='C1')
+	#~ r4, =plt.plot(kfid, biasF4/btest3, c='C2')
+	#~ r5, =plt.plot(kfid, biasF4/btest4, c='C3')
+	#~ #--------------------------------------------
+	#~ r1, =plt.plot(kfid, bias3PT4/bfid, c='k', label = 'Perturbation theory', linestyle='--')
+	#~ r2, =plt.plot(kfid, bias3PT4/btest1, c='C0', linestyle='--')
+	#~ r3, =plt.plot(kfid, bias3PT4/btest2, c='C1', linestyle='--')
+	#~ r4, =plt.plot(kfid, bias3PT4/btest3, c='C2', linestyle='--')
+	#~ r5, =plt.plot(kfid, bias3PT4/btest4, c='C3', linestyle='--')
+	#~ plt.axhline(1.01, linestyle = ':', c='k')
+	#~ plt.axhline(0.99, linestyle = ':', c='k')
+	#~ plt.axvspan(kstop, 7, alpha=0.2, color='grey')
 	#~ plt.figlegend( (r1, r2, r3, r4, r5), ('fiducial', r'$\Omega_m$ = 0.3175, $\sigma_8$ = 0.849',\
 	#~ r'$\Omega_m$ = 0.3175, $\sigma_8$ = 0.819', r'$\Omega_m$ = 0.3075, $\sigma_8$ = 0.834',\
 	#~ r'$\Omega_m$ = 0.3275, $\sigma_8$ = 0.834'), loc = 'upper center', ncol=5, labelspacing=0.,\
 	#~ title =r' M$\nu$ = '+str(Mnu)+', case '+str(case), fontsize=12)
-	plt.legend(loc = 'upper left', title = 'z = '+str(z[j]), fancybox=True, fontsize=14)
-	plt.xscale('log')
-	plt.xlabel('k [h/Mpc]', fontsize=16)
-	plt.ylabel(r'$b_{fit}$ / $b_{cosmo}$', fontsize=18)
-	plt.xlim(1e-2, 1)
-	plt.ylim(0.85,1.15)
-	plt.show()
+	#~ plt.legend(loc = 'upper left', title = 'z = '+str(z[j]), fancybox=True, fontsize=14)
+	#~ plt.xscale('log')
+	#~ plt.xlabel('k [h/Mpc]', fontsize=16)
+	#~ plt.ylabel(r'$b_{fit}$ / $b_{cosmo}$', fontsize=18)
+	#~ plt.xlim(1e-2, 1)
+	#~ plt.ylim(0.85,1.15)
+	#~ plt.show()
 	
-	kill
+	######################################################################
+	######################################################################
+	######################################################################
+	### Rescaling 
+	
+	limM = [5e11,1e12,3e12,5e13, 5e15]
+	fakearray = [1e15, 2e14, 6e13, 7e15]
+	bins4 = np.logspace(np.log10(limM[3]),np.log10(5e15),16)
+	hist4, binedge4 = np.histogram(fakearray, bins4)
+	dm4=binedge4[1:]-binedge4[:-1] #size of the bin
+	m_middle4=10**(0.5*(np.log10(binedge4[1:])+np.log10(binedge4[:-1]))) #center of the bin
+	
+	#-------------------------------------------------------------------
+	### massless case
+	camb1 = np.loadtxt('/home/david/codes/Analysis/CAMB/Pk_cb_z='+str(z[j])+'00.txt')
+	camb2 = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/CAMB/Pk_cb_z='+str(z[j])+'00.txt')
+	kcamb1 = camb1[:,0]
+	kcamb2 = camb2[:,0]
+	Pcamb1 = camb1[:,1]
+	Pcamb2 = camb2[:,1]
+	
+	hmf1=MFL.Crocce_mass_function(kcamb1,Pcamb1,Omega_m,z[j],limM[3],limM[4],len(m_middle4), Masses = m_middle4)[1]
+	hmf2=MFL.Crocce_mass_function(kcamb2,Pcamb2,Omega_m,z[j],limM[3],limM[4],len(m_middle4), Masses = m_middle4)[1]
+	
+	bt1=np.empty(len(m_middle4),dtype=np.float64)
+	bt2=np.empty(len(m_middle4),dtype=np.float64)
+	for i in range(len(m_middle4)):
+		bt1[i]=bias(kcamb1,Pcamb1,Omega_m,m_middle4[i],'Tinker')
+		bt2[i]=bias(kcamb2,Pcamb2,Omega_m,m_middle4[i],'Tinker')
+			
+	Bias_eff_t1=np.sum(hmf1*dm4*bt1)/np.sum(dm4*hmf1)
+	Bias_eff_t2=np.sum(hmf2*dm4*bt2)/np.sum(dm4*hmf2)
+	
+	#-------------------------------------------------------------
+	### massive case
+	# neutrino parameters
+	hierarchy = 'degenerate' #'degenerate', 'normal', 'inverted'
+	Mnun       = 0.15 #eV
+	Nnun       = 3  #number of massive neutrinos
+	Neffn      = 3.046
+
+	# cosmological parameters
+	hn       = 0.6711
+	Omega_cn = 0.2685 - Mnu/(93.14*h**2)
+	Omega_bn = 0.049
+	Omega_ln = 0.6825
+	Omega_kn = 0.0
+	Omega_mn = Omega_c + Omega_b
+	taun     = None
+	
+	camb = np.loadtxt('/home/david/codes/Paco/data2/0.15eV/CAMB/Pk_cb_z='+str(z[j])+'00.txt')
+	kcamb = camb[:,0]
+	Pcamb = camb[:,1]
+	
+	hmf=MFL.Crocce_mass_function(kcamb,Pcamb,Omega_mn,z[j],limM[3],limM[4],len(m_middle4), Masses = m_middle4)[1]
+	
+	bt=np.empty(len(m_middle4),dtype=np.float64)
+	for i in range(len(m_middle4)):
+		bt[i]=bias(kcamb,Pcamb,Omega_mn,m_middle4[i],'Tinker')
+			
+			
+	Bias_eff_t=np.sum(hmf*dm4*bt)/np.sum(dm4*hmf)
+	
+	
+	####### comparison bias and != models #############################
+
+	#### plot all different bias test
+	if j == z[0]:
+		fig2 = plt.figure()
+	J = j + 1
+	
+	if len(z) == 1:
+		ax2 = fig2.add_subplot(1, len(z), J)
+	elif len(z) == 2:
+		ax2 = fig2.add_subplot(1, 2, J)
+	elif len(z) > 2:
+		ax2 = fig2.add_subplot(2, 2, J)
+	#####################################################################
+	####### comparison bias and != models #############################
+	M1, = ax2.plot(k, bias4r, c='k')
+	#~ ax2.scatter(k, bias4r, c='k', marker='.')
+	M1 = ax2.errorbar(k, bias4r, yerr= errb4r, color='k',fmt='.')
+	#---------------------------------------------------------
+	M2, =ax2.plot(k, bias4*Bias_eff_t/Bias_eff_t2, color='C3', label='z = '+str(z[j]))
+	#~ ax2.plot(kfid, bfid*Bias_eff_t/Bias_eff_t2, linestyle = '--', color='C3')
+	M3, =ax2.plot(ktest2, btest2*Bias_eff_t/Bias_eff_t1, color='C0')
+	#~ #--------------------------------------------------------
+	#~ ax2.fill_between(k,bias4r-errb4r, bias4r+errb4r, color='k' ,alpha=0.5)
+	ax2.set_ylim(bias4[5]*0.8,bias4[5]*1.2)
+	ax2.set_xlim(8e-3,1)
+	plt.figlegend( (M1,M2,M3), (r'$M_{\nu}$ = 0.15eV, s8 = 0.806',r'$M_{\nu}$ = 0.0eV, s8 = 0.834',r'$M_{\nu}$ = 0.0eV, s8 = 0.819'), \
+	#~ #######################################
+	loc = 'upper center', ncol=5, labelspacing=0., title =r' M$\nu$ = '+str(Mnu), fontsize=14)
+	ax2.legend(loc = 'upper left', fancybox=True, fontsize=14, handlelength=0, handletextpad=0)
+	plt.subplots_adjust(left=0.1, wspace=0.05, hspace=0.1)
+	ax2.set_xscale('log')
+	#----------------------------
+	if j == 0 :
+		ax2.tick_params(bottom='off', labelbottom='off')
+		ax2.set_ylabel(r'$b_{eff}$ / $b_{sim}$', fontsize = 16)
+		ax2.set_ylabel(r'$b_{sim, 0.15}$ / $b_{sim, 0.0}$', fontsize = 16)
+		ax2.set_ylabel(r'$b_{cb}$', fontsize = 16)
+		#~ ax2.set_ylabel(r'$M^2 n(M)$', fontsize = 16)
+		ax2.set_ylim(bias4[5]*0.8,bias4[5]*1.2)
+		#ax2.grid()
+	if j == 1 :
+		ax2.tick_params(bottom='off', labelbottom='off', labelright=True, right= True, labelleft='off', left='off')
+		ax2.set_ylabel(r'$b_{eff}$ / $b_{sim}$', fontsize = 16)
+		ax2.set_ylabel(r'$b_{sim, 0.15}$ / $b_{sim, 0.0}$', fontsize = 16)
+		ax2.set_ylabel(r'$b_{cb}$', fontsize = 16)
+		#~ ax2.set_ylabel(r'$M^2 n(M)$', fontsize = 16)
+		ax2.set_ylim(bias4[5]*0.7,bias4[5]*1.3)
+		ax2.yaxis.set_label_position("right")
+		#ax2.grid()
+	if j == 2 :
+		#~ #ax.tick_params(labelleft=True)
+		ax2.set_ylabel(r'$b_{eff}$ / $b_{sim}$', fontsize = 16)
+		ax2.set_ylabel(r'$b_{sim, 0.15}$ / $b_{sim, 0.0}$', fontsize = 16)
+		ax2.set_ylabel(r'$b_{cb}$', fontsize = 16)
+		#~ ax2.set_ylabel(r'$M^2 n(M)$', fontsize = 16)
+		ax2.set_xlabel('k [h/Mpc]', fontsize = 14)
+		ax2.set_ylim(bias4[5]*0.8,bias4[5]*1.3)
+		#~ ax2.set_xlabel(r'M [$h^{-1} M_{\odot}$]', fontsize = 14)
+		#ax2.grid()
+	if j == 3 :
+		ax2.tick_params(labelright=True, right= True, labelleft='off', left='off')
+		ax2.set_xlabel('k [h/Mpc]', fontsize = 16)
+		#~ ax2.set_xlabel(r'M [$h^{-1} M_{\odot}$]', fontsize = 16)
+		ax2.set_ylabel(r'$b_{eff}$ / $b_{sim}$', fontsize = 16)
+		ax2.set_ylabel(r'$b_{sim, 0.15}$ / $b_{sim, 0.0}$', fontsize = 16)
+		ax2.set_ylabel(r'$b_{cb}$', fontsize = 16)
+		ax2.set_ylim(bias4[5]*0.6,bias4[5]*2.2)
+		#~ ax2.set_ylabel(r'$M^2 n(M)$', fontsize = 14)
+		ax2.yaxis.set_label_position("right")
+		#ax2.grid()
+	#ax2.set_xlim(8e-3,0.05)
+	if j == len(z) -1:
+		plt.show()
+	
+	#~ kill
 	

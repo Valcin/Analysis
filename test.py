@@ -29,7 +29,7 @@ from perturbation import perturb
 from interp import interp_simu1
 #~ from hmf_test import htest
 from time import time
-from rsd import RSD
+from rsd import RSD1, RSD2
 from bias_library import halo_bias, bias
 from scipy.optimize import curve_fit
 from scipy.interpolate import interp1d
@@ -116,7 +116,7 @@ for j in xrange(0,len(z)): #chmahe this after test
 #~ #*********************************************************************************************
 #~ #*********************************************************************************************
 	#~ ktest = np.logspace(np.log10(0.05),np.log10(0.55),15)
-	ktest = np.logspace(np.log10(0.04),np.log10(0.5),15)
+	ktest = np.logspace(np.log10(0.04),np.log10(0.5),50)
 	for kstop in ktest:
 		print kstop
 	
@@ -125,6 +125,7 @@ for j in xrange(0,len(z)): #chmahe this after test
 		#~ kbis = np.logspace(np.log10(np.min(k)), np.log10(np.max(k)), 200)
 		#~ Plinbis = np.interp(kbis, k, Plin)
 		lim = np.where((k < kstop)&(k > 1e-2))[0]
+		
 
 		
 	####################################################################
@@ -244,33 +245,33 @@ for j in xrange(0,len(z)): #chmahe this after test
 		#~ plt.figlegend( (B3bis,B3), (r'$b_{cc} = b_{1} + b_{2}k^{2} + b_{4}k^{4}$ ',\
 		#~ r'$b_{cc} = b_{1} + b_{2}k^{2} + b_{3}k^{3} + b_{4}k^{4}$ '), \
 		####### comparison bias and != models #############################
-		M1 = plt.errorbar(k, bias1, yerr= errb1,fmt='.', label='z = '+str(z[j]))
-		M2 = plt.errorbar(k, bias2, yerr= errb2,fmt='.')
-		M3 = plt.errorbar(k, bias3, yerr= errb3,fmt='.')
-		M4 = plt.errorbar(k, bias4, yerr= errb4,fmt='.')
-		plt.ylim(bias1[0]*0.8,bias4[0]*1.4)
+		#~ M1 = plt.errorbar(k, bias1, yerr= errb1,fmt='.', label='z = '+str(z[j]))
+		#~ M2 = plt.errorbar(k, bias2, yerr= errb2,fmt='.')
+		#~ M3 = plt.errorbar(k, bias3, yerr= errb3,fmt='.')
+		#~ M4 = plt.errorbar(k, bias4, yerr= errb4,fmt='.')
+		#~ plt.ylim(bias1[0]*0.8,bias4[0]*1.4)
 		#~ Plo, =plt.plot(k, biasF1, color='k')
 		#~ Ple, =plt.plot(k, biasF1bis, color='k', linestyle='--')
 		#~ pt2, =plt.plot(k, bias2PT1, color='k', linestyle='--')
-		pt3, =plt.plot(k, bias3PT1, color='k', linestyle=':')
+		#~ pt3, =plt.plot(k, bias3PT1, color='k', linestyle=':')
 		#~ pt3bis, =plt.plot(k, bias3PTbis1, color='k', linestyle='-.')
 		#~ #--------
 		#~ plt.plot(k, biasF2, color='k')
 		#~ plt.plot(k, biasF2bis, color='k', linestyle='--')
 		#~ plt.plot(k, bias2PT2, color='k', linestyle='--' )
-		plt.plot(k, bias3PT2, color='k', linestyle=':')
+		#~ plt.plot(k, bias3PT2, color='k', linestyle=':')
 		#~ plt.plot(k, bias3PTbis2, color='k', linestyle='-.')
 		#~ #--------
 		#~ plt.plot(k, biasF3, color='k')
 		#~ plt.plot(k, biasF3bis, color='k', linestyle='--')
 		#~ plt.plot(k, bias2PT3, color='k', linestyle='--' )
-		plt.plot(k, bias3PT3, color='k', linestyle=':')
+		#~ plt.plot(k, bias3PT3, color='k', linestyle=':')
 		#~ plt.plot(k, bias3PTbis3, color='k', linestyle='-.')
 		#--------
 		#~ plt.plot(k, biasF4, color='k')
 		#~ plt.plot(k, biasF4bis, color='k', linestyle='--')
 		#~ plt.plot(k, bias2PT4, color='k', linestyle='--')
-		plt.plot(k, bias3PT4, color='k', linestyle=':')
+		#~ plt.plot(k, bias3PT4, color='k', linestyle=':')
 		#~ plt.plot(k, bias3PTbis4, color='k', linestyle='-.')
 		#~ #--------
 		#~ plt.figlegend( (M1,M2,M3,M4,Plo, Ple), ('$M_{1}$','$M_{2}$','$M_{3}$','$M_{4}$', 'PL with odd k','PL without odd k'), \
@@ -300,11 +301,11 @@ for j in xrange(0,len(z)): #chmahe this after test
 		######################################
 		#~ loc = 'upper center', ncol=5, labelspacing=0., title =r' M$\nu$ = '+str(Mnu)+', case '+str(case), fontsize=12)
 		#~ loc = 'upper center', ncol=5, labelspacing=0., title =r' M$\nu$ = '+str(Mnu), fontsize=12)
-		plt.axvspan(kstop, 7, alpha=0.2, color='grey')
-		plt.legend(loc = 'upper left', fancybox=True, fontsize=14)
-		plt.legend(loc = 'upper left', title = 'z = '+str(z[j]), fancybox=True, fontsize=14)
-		plt.subplots_adjust(left=0.1, wspace=0.05, hspace=0.1)
-		plt.xscale('log')
+		#~ plt.axvspan(kstop, 7, alpha=0.2, color='grey')
+		#~ plt.legend(loc = 'upper left', fancybox=True, fontsize=14)
+		#~ plt.legend(loc = 'upper left', title = 'z = '+str(z[j]), fancybox=True, fontsize=14)
+		#~ plt.subplots_adjust(left=0.1, wspace=0.05, hspace=0.1)
+		#~ plt.xscale('log')
 		#~ if j == 0 :
 			#~ plt.tick_params(bottom='off', labelbottom='off',labelleft=True)
 			#~ plt.set_ylabel(r'$b_{cb}$ / $b_{sim}$', fontsize = 16)
@@ -325,8 +326,8 @@ for j in xrange(0,len(z)): #chmahe this after test
 			#~ plt.set_ylabel(r'$b_{cb}$ / $b_{sim}$', fontsize=16)
 			#~ plt.set_ylabel(r'$b_{cb}$', fontsize=16)
 			#~ plt.yaxis.set_label_position("right")
-		plt.xlim(8e-3,1)
-		plt.show()
+		#~ plt.xlim(8e-3,1)
+		#~ plt.show()
 	####################################################################
 	##### compute the chi2 of different quantities
 	####################################################################
@@ -371,11 +372,10 @@ for j in xrange(0,len(z)): #chmahe this after test
 		
 		cname = 'chi2a_z='+str(z[j])+'.txt'
 		with open(cname, 'a+') as fid_file:
-
-			fid_file.write('%.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g\n' % (kstop,\
+			fid_file.write('%.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g\n' % (kstop,\
 			chi2F1, chi2F2, chi2F3, chi2F4, chi2PT1, chi2PT2, chi2PT3, chi2PT4, chi2PTbis1, chi2PTbis2, chi2PTbis3, chi2PTbis4,\
-			chi2PTter1, chi2PTter2, chi2PTter3, chi2PTter4))
-		print '\n'
+			chi2PTter1, chi2PTter2, chi2PTter3, chi2PTter4, len(lim)))
+		fid_file.close()
 
 		#~ del  pte, Plin, Tm, Tcb, kbis,\
 		#~ Plinbis, bias1bis, bias2bis, bias3bis, bias4bis, errb1bis, errb2bis,errb3bis,errb4bis, Pmmbis,PH1bis,PH2bis,PH3bis,PH4bis,\

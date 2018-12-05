@@ -6,8 +6,8 @@ import sys,os
 ################################## INPUT ######################################
 # neutrino parameters
 hierarchy = 'degenerate' #'degenerate', 'normal', 'inverted'
-Mnu       = 0.15  #eV
-Nnu       = 3  #number of massive neutrinos
+Mnu       = 0.0  #eV
+Nnu       = 0  #number of massive neutrinos
 Neff      = 3.046
 
 # cosmological parameters
@@ -19,7 +19,7 @@ tau     = None
 
 # initial P(k) parameters
 ns           = 0.9624
-As           = 2.13e-9
+As           = 2.058e-9
 pivot_scalar = 0.05
 pivot_tensor = 0.05
 

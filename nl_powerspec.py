@@ -29,13 +29,13 @@ from perturbation import perturb
 from interp import interp_simu1, interp_simu3
 #~ from hmf_test import htest
 from time import time
-from rsd import RSD
+from rsd import RSD1, RSD2
 from bias_library import halo_bias, bias
 from scipy.optimize import curve_fit
 from scipy.interpolate import interp1d
 from scipy.special import erf
 from scipy.special import gamma
-from fit_emcee import coeffit_pl,coeffit_pl2,coeffit_exp1, coeffit_exp2, coeffit_exp3,coeffit_Kaiser, coeffit_Scocci, coeffit_TNS, coeffit_eTNS
+
 
 
 z = [0.0,0.5,1.0,2.0]
@@ -101,7 +101,7 @@ for j in xrange(0,len(z)):
 	kstop3 = [0.15,0.15,0.15,0.15]
 	
 #### the case 
-	case = 2
+	case = 3
 	
 	if case == 1:
 		kstop = kstop1[ind]
@@ -112,8 +112,9 @@ for j in xrange(0,len(z)):
 		
 		
 #### other kstop
-	#~ kstoplim = [0.5,0.5,0.5,0.4]
-	#~ kstop = kstoplim[ind]
+	kstoplim = [0.5,0.5,0.5,0.4]
+	kstoplim = [0.25,0.25,0.25,0.25]
+	kstop = kstoplim[ind]
 	
 	print kstop
 	
@@ -268,16 +269,16 @@ for j in xrange(0,len(z)):
 	
 	####################################################################
 	#######--------- mean and std of bias and ps ratio ------------#####
-	if j == z[0]:
-		fig2 = plt.figure()
-	J = j + 1
+	#~ if j == z[0]:
+		#~ fig2 = plt.figure()
+	#~ J = j + 1
 	
-	if len(z) == 1:
-		ax2 = fig2.add_subplot(1, len(z), J)
-	elif len(z) == 2:
-		ax2 = fig2.add_subplot(1, 2, J)
-	elif len(z) > 2:
-		ax2 = fig2.add_subplot(2, 2, J)
+	#~ if len(z) == 1:
+		#~ ax2 = fig2.add_subplot(1, len(z), J)
+	#~ elif len(z) == 2:
+		#~ ax2 = fig2.add_subplot(1, 2, J)
+	#~ elif len(z) > 2:
+		#~ ax2 = fig2.add_subplot(2, 2, J)
 	#~ ######### pl residuals comparison #################
 	#~ ax2.set_ylim(0.9,1.1)
 	#~ ax2.set_yticks(np.linspace(0.9,1.1,5))
@@ -290,23 +291,23 @@ for j in xrange(0,len(z)):
 	#~ plt.figlegend( (B3bis,B3), (r'$b_{cc} = b_{1} + b_{2}k^{2} + b_{4}k^{4}$ ',\
 	#~ r'$b_{cc} = b_{1} + b_{2}k^{2} + b_{3}k^{3} + b_{4}k^{4}$ '), \
 	####### comparison bias and != models #############################
-	#~ M1 = ax2.errorbar(k, bias1, yerr= errb1,fmt='.', label='z = '+str(z[j]))
+	#~ M1 = ax2.errorbar(k, bias1, yerr= errb1,fmt='.')
 	#~ M2 = ax2.errorbar(k, bias2, yerr= errb2,fmt='.')
 	#~ M3 = ax2.errorbar(k, bias3, yerr= errb3,fmt='.')
 	#~ M4 = ax2.errorbar(k, bias4, yerr= errb4,fmt='.')
 	#~ ax2.set_ylim(bias1[0]*0.8,bias4[0]*1.4)
-	#~ Plo, =ax2.plot(k, biasF1, color='k')
+	#~ Plo, =ax2.plot(k, biasF1, color='k', label='z = '+str(z[j]))
 	#~ Ple, =ax2.plot(k, biasF1bis, color='k', linestyle='--')
 	#~ pt2, =ax2.plot(k, bias2PT1, color='k', linestyle='--')
 	#~ pt3, =ax2.plot(k, bias3PT1, color='k', linestyle=':')
 	#~ pt3bis, =ax2.plot(k, bias3PTbis1, color='k', linestyle='-.')
-	#--------
+	#~ #--------
 	#~ ax2.plot(k, biasF2, color='k')
 	#~ ax2.plot(k, biasF2bis, color='k', linestyle='--')
 	#~ ax2.plot(k, bias2PT2, color='k', linestyle='--' )
 	#~ ax2.plot(k, bias3PT2, color='k', linestyle=':')
 	#~ ax2.plot(k, bias3PTbis2, color='k', linestyle='-.')
-	#--------
+	#~ #--------
 	#~ ax2.plot(k, biasF3, color='k')
 	#~ ax2.plot(k, biasF3bis, color='k', linestyle='--')
 	#~ ax2.plot(k, bias2PT3, color='k', linestyle='--' )
@@ -323,17 +324,17 @@ for j in xrange(0,len(z)):
 	#~ plt.figlegend( (M1,M2,M3,M4,Plo, pt2, pt3, pt3bis), ('$M_{1}$','$M_{2}$','$M_{3}$','$M_{4}$', 'PL with odd k'\
 	#~ ,'2nd order bias expansion', r'3rd order with free $b_{3nl}$', r'3rd order with fixed $b_{s}$, $b_{3nl}$'), \
 	#~ ###### compare all power model residuals ##########################
-	ax2.set_ylim(0.,2.1)
-	ax2.set_ylim(0.9,1.1)
-	ax2.set_yticks(np.linspace(0.9,1.1,5))
-	ax2.axhline(1, color='k', linestyle='--')
-	ax2.axhline(1.01, color='k', linestyle=':')
-	ax2.axhline(0.99, color='k', linestyle=':')
-	B3, = ax2.plot(k, b3, label='z = '+str(z[j]), color='C0')
-	B1, = ax2.plot(k, b1, color='C1')
-	B1bis, = ax2.plot(k, b1bis, color='C2')
-	B1ter, = ax2.plot(k, b1ter,  color='C3')
-	B2, = ax2.plot(k, b2, color='k')
+	#~ ax2.set_ylim(0.,2.1)
+	#~ ax2.set_ylim(0.9,1.1)
+	#~ ax2.set_yticks(np.linspace(0.9,1.1,5))
+	#~ ax2.axhline(1, color='k', linestyle='--')
+	#~ ax2.axhline(1.01, color='k', linestyle=':')
+	#~ ax2.axhline(0.99, color='k', linestyle=':')
+	#~ B3, = ax2.plot(k, b3, label='z = '+str(z[j]), color='C0')
+	#~ B1, = ax2.plot(k, b1, color='C1')
+	#~ B1bis, = ax2.plot(k, b1bis, color='C2')
+	#~ B1ter, = ax2.plot(k, b1ter,  color='C3')
+	#~ B2, = ax2.plot(k, b2, color='k')
 	
 	#~ B3, = ax2.plot(k, b3,label=r'w/ $b_{sim}$', color='C0')
 	#~ B3anal, = ax2.plot(k, bb3,label=r'w/ $b_{model}$', color='C0',linestyle='--')
@@ -341,60 +342,77 @@ for j in xrange(0,len(z)):
 	#~ B1bisanal, = ax2.plot(k, bb1bis, color='C2',linestyle='--')
 	#~ B1teranal, = ax2.plot(k, bb1ter,  color='C3',linestyle='--')
 	
-	plt.figlegend( (B1,B1bis,B1ter,B2,B3), ('2nd order expansion',r'3rd order expansion with free $b_{3nl}$',\
-	r'3rd order expansion with fixed $b_{3nl}$', 'N-body','Power law '), \
+	#~ plt.figlegend( (B1,B1bis,B1ter,B2,B3), ('2nd order expansion',r'3rd order expansion with free $b_{3nl}$',\
+	#~ r'3rd order expansion with fixed $b_{3nl}$', 'N-body','Power law '), \
 	######################################
-	loc = 'upper center', ncol=5, labelspacing=0., title =r' M$\nu$ = '+str(Mnu)+', case '+str(case), fontsize=12)
+	#~ loc = 'upper center', ncol=5, labelspacing=0., title =r' M$\nu$ = '+str(Mnu)+', case '+str(case), fontsize=12)
 	#~ loc = 'upper center', ncol=5, labelspacing=0., title =r' M$\nu$ = '+str(Mnu), fontsize=12)
-	ax2.axvspan(kstop, 7, alpha=0.2, color='grey')
-	ax2.legend(loc = 'upper left', fancybox=True, fontsize=14)
+	#~ ax2.axvspan(kstop, 7, alpha=0.2, color='grey')
+	#~ ax2.legend(loc = 'upper left', fancybox=True, fontsize=14, handlelength=0, handletextpad=0)
 	#~ ax2.legend(loc = 'upper left', title = 'z = '+str(z[j]), fancybox=True, fontsize=14)
-	plt.subplots_adjust(left=0.1, wspace=0.05, hspace=0.1)
-	ax2.set_xscale('log')
-	if j == 0 :
-		ax2.tick_params(bottom='off', labelbottom='off',labelleft=True)
-		ax2.set_ylabel(r'$b_{cb}$ / $b_{sim}$', fontsize = 16)
-		ax2.set_ylabel(r'$b_{cb}$', fontsize=16)
-	if j == 1 :
-		ax2.tick_params(bottom='off', labelbottom='off', labelright=True, right= True, labelleft='off', left='off')
-		ax2.set_ylabel(r'$b_{cb}$ / $b_{sim}$', fontsize=16)
-		ax2.set_ylabel(r'$b_{cb}$', fontsize=16)
-		ax2.yaxis.set_label_position("right")
-	if j == 2 :
-		#ax.tick_params(labelleft=True)
-		ax2.set_ylabel(r'$b_{cb}$ / $b_{sim}$', fontsize=16)
-		ax2.set_ylabel(r'$b_{cb}$', fontsize=14)
-		ax2.set_xlabel('k [h/Mpc]', fontsize=16)
-	if j == 3 :
-		ax2.tick_params(labelright=True, right= True, labelleft='off', left='off')
-		ax2.set_xlabel('k [h/Mpc]', fontsize=14)
-		ax2.set_ylabel(r'$b_{cb}$ / $b_{sim}$', fontsize=16)
-		ax2.set_ylabel(r'$b_{cb}$', fontsize=16)
-		ax2.yaxis.set_label_position("right")
-	ax2.set_xlim(8e-3,1)
-	if j == len(z) -1:
-		plt.show()
+	#~ plt.subplots_adjust(left=0.1, wspace=0.05, hspace=0.1)
+	#~ ax2.set_xscale('log')
+	#~ if j == 0 :
+		#~ ax2.tick_params(bottom='off', labelbottom='off',labelleft=True)
+		#~ ax2.set_ylabel(r'$b_{cb}$ / $b_{sim}$', fontsize = 16)
+		#~ ax2.set_ylabel(r'$b_{cb}$', fontsize=16)
+	#~ if j == 1 :
+		#~ ax2.tick_params(bottom='off', labelbottom='off', labelright=True, right= True, labelleft='off', left='off')
+		#~ ax2.set_ylabel(r'$b_{cb}$ / $b_{sim}$', fontsize=16)
+		#~ ax2.set_ylabel(r'$b_{cb}$', fontsize=16)
+		#~ ax2.yaxis.set_label_position("right")
+	#~ if j == 2 :
+		#~ #ax.tick_params(labelleft=True)
+		#~ ax2.set_ylabel(r'$b_{cb}$ / $b_{sim}$', fontsize=16)
+		#~ ax2.set_ylabel(r'$b_{cb}$', fontsize=14)
+		#~ ax2.set_xlabel('k [h/Mpc]', fontsize=16)
+	#~ if j == 3 :
+		#~ ax2.tick_params(labelright=True, right= True, labelleft='off', left='off')
+		#~ ax2.set_xlabel('k [h/Mpc]', fontsize=14)
+		#~ ax2.set_ylabel(r'$b_{cb}$ / $b_{sim}$', fontsize=16)
+		#~ ax2.set_ylabel(r'$b_{cb}$', fontsize=16)
+		#~ ax2.yaxis.set_label_position("right")
+	#~ ax2.set_xlim(8e-3,1)
+	#~ if j == len(z) -1:
+		#~ plt.show()
 	
 #####################################################################
 #### compute fcc with transfer function
 	Tm, Tcb = interp_simu3(z,j ,k, kclass, Tm, Tcb, 2)
 	fcc = fz * (Tm/ Tcb)
 	
-	#~ kai1, kai2, kai3, kai4, sco1, sco2, sco3, sco4, tns1, tns2, tns3, tns4, etns1, etns2, etns3, etns4 = RSD(fz,fcc, Dz[ind]\
-	#~ , j, kstop, kcamb, Pcamb, Pmod_dd, biasF1, biasF2, biasF3, biasF4, k, Pmono1, Pmono2, Pmono3, \
-	#~ Pmono4, errPr1, errPr2, errPr3, errPr4, Pmod_dt, Pmod_tt, case,z,Mnu, A, B, C, D, E, F, G, H )
+#####################################################################
+### only sigma is a free parameter
+	kai1, kai2, kai3, kai4, sco1, sco2, sco3, sco4, tns1, tns2, tns3, tns4, etns1, etns2, etns3, etns4 = RSD1(fz,fcc, Dz[ind]\
+	, j, kstop, kcamb, Pcamb, Pmod_dd, biasF1, biasF2, biasF3, biasF4, k, Pmono1, Pmono2, Pmono3, \
+	Pmono4, errPr1, errPr2, errPr3, errPr4, Pmod_dt, Pmod_tt, case,z,Mnu, A, B, C, D, E, F, G, H )
+
+	p1 = np.array([Pmono1/Pmono1, Pmono2/Pmono2, Pmono3/Pmono3, Pmono4/Pmono4])
+	P1 = np.mean(p1, axis=0)
+	p2 = np.array([kai1/Pmono1, kai2/Pmono2, kai3/Pmono3, kai4/Pmono4])
+	P2 = np.mean(p2, axis=0)
+	p3 = np.array([sco1/Pmono1, sco2/Pmono2, sco3/Pmono3, sco4/Pmono4])
+	P3 = np.mean(p3, axis=0)
+	p4 = np.array([tns1/Pmono1, tns2/Pmono2, tns3/Pmono3, tns4/Pmono4])
+	P4 = np.mean(p4, axis=0)
+	p6 = np.array([etns1/Pmono1, etns2/Pmono2, etns3/Pmono3, etns4/Pmono4])
+	P6 = np.mean(p6, axis=0)
+	
+###########################################################################
+### bias is also a free parameter
+	kai1f, kai2f, kai3f, kai4f, sco1f, sco2f, sco3f, sco4f, tns1f, tns2f, tns3f, tns4f, etns1f, etns2f,\
+	etns3f, etns4f = RSD2(fz,fcc, Dz[ind], j, kstop, kcamb, Pcamb, Pmod_dd, biasF1, biasF2, biasF3, biasF4,\
+	k, Pmono1, Pmono2, Pmono3, Pmono4, errPr1, errPr2, errPr3, errPr4, Pmod_dt, Pmod_tt, case,z,Mnu, A, B, C, D, E, F, G, H )
 
 
-	#~ p1 = np.array([Pmono1/Pmono1, Pmono2/Pmono2, Pmono3/Pmono3, Pmono4/Pmono4])
-	#~ P1 = np.mean(p1, axis=0)
-	#~ p2 = np.array([kai1/Pmono1, kai2/Pmono2, kai3/Pmono3, kai4/Pmono4])
-	#~ P2 = np.mean(p2, axis=0)
-	#~ p3 = np.array([sco1/Pmono1, sco2/Pmono2, sco3/Pmono3, sco4/Pmono4])
-	#~ P3 = np.mean(p3, axis=0)
-	#~ p4 = np.array([tns1/Pmono1, tns2/Pmono2, tns3/Pmono3, tns4/Pmono4])
-	#~ P4 = np.mean(p4, axis=0)
-	#~ p6 = np.array([etns1/Pmono1, etns2/Pmono2, etns3/Pmono3, etns4/Pmono4])
-	#~ P6 = np.mean(p6, axis=0)
+	p2f = np.array([kai1f/Pmono1, kai2f/Pmono2, kai3f/Pmono3, kai4f/Pmono4])
+	P2f = np.mean(p2f, axis=0)
+	p3f = np.array([sco1f/Pmono1, sco2f/Pmono2, sco3f/Pmono3, sco4f/Pmono4])
+	P3f = np.mean(p3f, axis=0)
+	p4f = np.array([tns1f/Pmono1, tns2f/Pmono2, tns3f/Pmono3, tns4f/Pmono4])
+	P4f = np.mean(p4f, axis=0)
+	p6f = np.array([etns1f/Pmono1, etns2f/Pmono2, etns3f/Pmono3, etns4f/Pmono4])
+	P6f = np.mean(p6f, axis=0)
 	
 
 
@@ -428,29 +446,33 @@ for j in xrange(0,len(z)):
 ############################################################################################################
 	
 	#~ #######--------- mean and std of bias and ps ratio ------------#####
-	#~ if j == z[0]:
-		#~ fig2 = plt.figure()
-	#~ J = j + 1
+	if j == z[0]:
+		fig2 = plt.figure()
+	J = j + 1
 	
-	#~ if len(z) == 1:
-		#~ ax2 = fig2.add_subplot(1, len(z), J)
-	#~ elif len(z) == 2:
-		#~ ax2 = fig2.add_subplot(1, 2, J)
-	#~ elif len(z) > 2:
-		#~ ax2 = fig2.add_subplot(2, 2, J)
+	if len(z) == 1:
+		ax2 = fig2.add_subplot(1, len(z), J)
+	elif len(z) == 2:
+		ax2 = fig2.add_subplot(1, 2, J)
+	elif len(z) > 2:
+		ax2 = fig2.add_subplot(2, 2, J)
 	########### power spectrum ########
-	#~ ax2.set_ylim(0.9,1.1)
-	#~ ax2.set_yticks(np.linspace(0.9,1.1,5))
-	#~ ax2.axhline(1, color='k', linestyle='--')
-	#~ ax2.axhline(1.01, color='k', linestyle=':')
-	#~ ax2.axhline(0.99, color='k', linestyle=':')
-	#~ P1, =ax2.plot(k,P1, color='k')
-	#~ P2, =ax2.plot(k,P2, color='C3',label=r'w/ $b_{sim}$')
-	#~ P2, =ax2.plot(k,P2, color='C3', label='z = '+str(z[j]))
-	#~ P3, =ax2.plot(k,P3, color='C0')
-	#~ P4, =ax2.plot(k,P4, color='C1')
-	#~ P6, =ax2.plot(k,P6, color='c')
-	#~ #-------------------------------
+	ax2.set_ylim(0.9,1.1)
+	ax2.set_yticks(np.linspace(0.9,1.1,5))
+	ax2.axhline(1, color='k', linestyle='--')
+	ax2.axhline(1.01, color='k', linestyle=':')
+	ax2.axhline(0.99, color='k', linestyle=':')
+	Ps1, =ax2.plot(k,P1, color='k')
+	Ps2, =ax2.plot(k,P2, color='C3')
+	Ps3, =ax2.plot(k,P3, color='C0')
+	Ps4, =ax2.plot(k,P4, color='C1')
+	Ps6, =ax2.plot(k,P6, color='c')
+	#--------------------------------
+	#~ ax2.plot(k,P2f, color='C3', label='z = '+str(z[j]), linestyle='--')
+	#~ ax2.plot(k,P3f, color='C0', linestyle='--')
+	#~ ax2.plot(k,P4f, color='C1', linestyle='--')
+	ax2.plot(k,P6f, color='c', linestyle='--')
+	#-------------------------------
 	#~ ax2.plot(k,P2bis, color='C3', linestyle='--',label=r'w/ $b_{model}$ and $\sigma_v$ free')
 	#~ ax2.plot(k,P3bis, color='C0', linestyle='--')
 	#~ ax2.plot(k,P4bis, color='C1', linestyle='--')
@@ -461,15 +483,15 @@ for j in xrange(0,len(z)):
 	#~ ax2.plot(k,P4ter, color='C1', linestyle='--')
 	#~ ax2.plot(k,P6ter, color='c', linestyle='--')
 	
-	#~ plt.figlegend( (P1,P2, P3, P4,P6), ('N-body','Power law + Kaiser','Power law + Scoccimarro','Power law + TNS','eTNS'), \
+	plt.figlegend( (Ps1,Ps2, Ps3, Ps4,Ps6), ('N-body','Polyn. + Kaiser','Polyn. + Scoccimarro','Polyn. + TNS','eTNS'), \
 	####### comparison bias and != models #############################
 	#~ ax2.set_yscale('log')
 	#~ plt.ylim(2e2,3e5)
-	#~ M1 = ax2.errorbar(k, Pmono1bis, yerr= errPr1bis,fmt='.', label='z = '+str(z[j]))
-	#~ M2 = ax2.errorbar(k, Pmono2bis, yerr= errPr2bis,fmt='.')
-	#~ M3 = ax2.errorbar(k, Pmono3bis, yerr= errPr3bis,fmt='.')
-	#~ M4 = ax2.errorbar(k, Pmono4bis, yerr= errPr4bis,fmt='.')
-	#~ nlk, = ax2.plot(k, kai1, color='k')
+	#~ M1 = ax2.errorbar(k, Pmono1, yerr= errPr1,fmt='.')
+	#~ M2 = ax2.errorbar(k, Pmono2, yerr= errPr2,fmt='.')
+	#~ M3 = ax2.errorbar(k, Pmono3, yerr= errPr3,fmt='.')
+	#~ M4 = ax2.errorbar(k, Pmono4, yerr= errPr4,fmt='.')
+	#~ nlk, = ax2.plot(k, kai1, color='k', label='z = '+str(z[j]))
 	#~ sco, = ax2.plot(k, sco1, color='k', linestyle='--')
 	#~ tns, = ax2.plot(k, tns1, color='k', linestyle=':')
 	#~ etns, = ax2.plot(k, etns1, color='k', linestyle='-.')
@@ -492,36 +514,36 @@ for j in xrange(0,len(z)):
 	#~ plt.figlegend( (M1,M2,M3,M4,nlk,sco, tns, etns), ('$M_{1}$','$M_{2}$','$M_{3}$','$M_{4}$', 'non linear kaiser + PL'\
 	#~ ,'Scoccimarro + PL', r'TNS + PL', r'eTNS'), \
 	######################################
-	#~ loc = 'upper center', ncol=5, labelspacing=0., title =r' M$\nu$ = '+str(Mnu)+', case '+str(case), fontsize=14)
-	#~ ax2.axvspan(kstop, 7, alpha=0.2, color='grey')
-	#~ ax2.legend(loc = 'upper left', title='z = '+str(z[j]), fancybox=True, fontsize=14)
-	#~ ax2.legend(loc = 'upper left', fancybox=True, fontsize=14)
-	#~ plt.subplots_adjust(left=0.1, wspace=0.05, hspace=0.1)
-	#~ ax2.set_xscale('log')
-	#~ if j == 0 :
-		#~ ax2.tick_params(bottom='off', labelbottom='off')
-		#~ ax2.set_ylabel(r'P(k) / $P_{sim}$', fontsize=16)
-		#~ ax2.set_ylabel(r'$P_{cc}$', fontsize=16)
-	#~ if j == 1 :
-		#~ ax2.tick_params(bottom='off', labelbottom='off', labelright=True, right= True, labelleft='off', left='off')
-		#~ ax2.set_ylabel(r'P(k) / $P_{sim}$', fontsize=16)
-		#~ ax2.set_ylabel(r'$P_{cc}$', fontsize=16)
-		#~ ax2.yaxis.set_label_position("right")
-	#~ if j == 2 :
-		#~ #ax.tick_params(labelleft=True)
-		#~ ax2.set_ylabel(r'P(k) / $P_{sim}$', fontsize=16)
-		#~ ax2.set_ylabel(r'$P_{cc}$', fontsize=16)
-		#~ ax2.set_xlabel('k [h/Mpc]', fontsize=14)
-	#~ if j == 3 :
-		#~ ax2.tick_params(labelright=True, right= True, labelleft='off', left='off')
-		#~ ax2.set_xlabel('k [h/Mpc]', fontsize=14)
-		#~ ax2.set_ylabel(r'P(k) / $P_{sim}$', fontsize=16)
-		#~ ax2.set_ylabel(r'$P_{cc}$', fontsize=16)
-		#~ ax2.yaxis.set_label_position("right")
-	#~ ax2.set_xlim(8e-3,1.)
-	#plt.ylim(0.7,1.3)
-	#~ if j == len(z) -1:
-		#~ plt.show()
+	loc = 'upper center', ncol=5, labelspacing=0., title =r' M$\nu$ = '+str(Mnu)+', case '+str(case), fontsize=14)
+	ax2.axvspan(kstop, 7, alpha=0.2, color='grey')
+	ax2.legend(loc = 'upper left', title='z = '+str(z[j]), fancybox=True, fontsize=14)
+	ax2.legend(loc = 'lower left', fancybox=True, fontsize=14, handlelength=0, handletextpad=0)
+	plt.subplots_adjust(left=0.1, wspace=0.05, hspace=0.1)
+	ax2.set_xscale('log')
+	if j == 0 :
+		ax2.tick_params(bottom='off', labelbottom='off')
+		ax2.set_ylabel(r'P(k) / $P_{sim}$', fontsize=16)
+		#~ ax2.set_ylabel(r'$P_{cb}$', fontsize=16)
+	if j == 1 :
+		ax2.tick_params(bottom='off', labelbottom='off', labelright=True, right= True, labelleft='off', left='off')
+		ax2.set_ylabel(r'P(k) / $P_{sim}$', fontsize=16)
+		#~ ax2.set_ylabel(r'$P_{cb}$', fontsize=16)
+		ax2.yaxis.set_label_position("right")
+	if j == 2 :
+		#ax.tick_params(labelleft=True)
+		ax2.set_ylabel(r'P(k) / $P_{sim}$', fontsize=16)
+		#~ ax2.set_ylabel(r'$P_{cb}$', fontsize=16)
+		ax2.set_xlabel('k [h/Mpc]', fontsize=14)
+	if j == 3 :
+		ax2.tick_params(labelright=True, right= True, labelleft='off', left='off')
+		ax2.set_xlabel('k [h/Mpc]', fontsize=14)
+		ax2.set_ylabel(r'P(k) / $P_{sim}$', fontsize=16)
+		#~ ax2.set_ylabel(r'$P_{cb}$', fontsize=16)
+		ax2.yaxis.set_label_position("right")
+	ax2.set_xlim(8e-3,1.)
+	#~ #plt.ylim(0.7,1.3)
+	if j == len(z) -1:
+		plt.show()
 	
 		
 	#~ kill

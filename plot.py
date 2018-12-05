@@ -96,47 +96,78 @@ for j in xrange(0,len(z)):
 
 	goodfit1 = np.loadtxt(cname1) 
 	kmax = goodfit1[:,0]
+	nbpoints = goodfit1[:,17]
+	#~ print nbpoints
 	#--------------------
-	chipl1 = goodfit1[:,1]
-	chipl2 = goodfit1[:,2]
-	chipl3 = goodfit1[:,3]
-	chipl4 = goodfit1[:,4]
+	chipl1 = goodfit1[:,1]/(nbpoints - 4.)
+	chipl2 = goodfit1[:,2]/(nbpoints - 4.)
+	chipl3 = goodfit1[:,3]/(nbpoints - 4.)
+	chipl4 = goodfit1[:,4]/(nbpoints - 4.)
+	chipl1_ = goodfit1[:,1]/( 4.)
+	chipl2_ = goodfit1[:,2]/( 4.)
+	chipl3_ = goodfit1[:,3]/( 4.)
+	chipl4_ = goodfit1[:,4]/( 4.)
 	Chipl = np.array([chipl1,chipl2,chipl3,chipl4])
 	chipl = np.mean(Chipl, axis=0)
 	echipl = np.std(Chipl, axis=0)
 	
 
 	#--------------------
-	chipt1 = goodfit1[:,5]
-	chipt2 = goodfit1[:,6]
-	chipt3 = goodfit1[:,7]
-	chipt4 = goodfit1[:,8]
+	chipt1 = goodfit1[:,5]/(nbpoints - 3.)
+	chipt2 = goodfit1[:,6]/(nbpoints - 3.)
+	chipt3 = goodfit1[:,7]/(nbpoints - 3.)
+	chipt4 = goodfit1[:,8]/(nbpoints - 3.)
+	chipt1_ = goodfit1[:,5]/( 3.)
+	chipt2_ = goodfit1[:,6]/( 3.)
+	chipt3_ = goodfit1[:,7]/( 3.)
+	chipt4_ = goodfit1[:,8]/( 3.)
 	Chipt = np.array([chipt1,chipt2,chipt3,chipt4])
 	chipt = np.mean(Chipt, axis=0)
 	echipt = np.std(Chipt, axis=0)
 	
 	
 	#--------------------
-	chipbis1 = goodfit1[:,9]
-	chipbis2 = goodfit1[:,10]
-	chipbis3 = goodfit1[:,11]
-	chipbis4 = goodfit1[:,12]
+	chipbis1 = goodfit1[:,9]/(nbpoints - 4.)
+	chipbis2 = goodfit1[:,10]/(nbpoints - 4.)
+	chipbis3 = goodfit1[:,11]/(nbpoints - 4.)
+	chipbis4 = goodfit1[:,12]/(nbpoints - 4.)
+	chipbis1_ = goodfit1[:,9]/( 4.)
+	chipbis2_ = goodfit1[:,10]/( 4.)
+	chipbis3_ = goodfit1[:,11]/( 4.)
+	chipbis4_ = goodfit1[:,12]/( 4.)
 	Chipbis = np.array([chipbis1,chipbis2,chipbis3,chipbis4])
 	chipbis = np.mean(Chipbis, axis=0)
 	echipbis = np.std(Chipbis, axis=0)
 	
 	#--------------------
-	chipter1 = goodfit1[:,13]
-	chipter2 = goodfit1[:,14]
-	chipter3 = goodfit1[:,15]
-	chipter4 = goodfit1[:,16]
+	chipter1 = goodfit1[:,13]/(nbpoints - 2.)
+	chipter2 = goodfit1[:,14]/(nbpoints - 2.)
+	chipter3 = goodfit1[:,15]/(nbpoints - 2.)
+	chipter4 = goodfit1[:,16]/(nbpoints - 2.)
+	chipter1_ = goodfit1[:,13]/( 2.)
+	chipter2_ = goodfit1[:,14]/( 2.)
+	chipter3_ = goodfit1[:,15]/( 2.)
+	chipter4_ = goodfit1[:,16]/( 2.)
 	Chipter = np.array([chipter1,chipter2,chipter3,chipter4])
 	chipter = np.mean(Chipter, axis=0)
 	echipter = np.std(Chipter, axis=0)
 	
+	
+	value = 1.5
+	idxpl = (np.abs(chipl4-value)).argmin()
 
-
-
+	
+	#~ plt.figure()
+	#~ plt.scatter(kmax,goodfit1[:,8]/(nbpoints - 3.), c='r', marker='.')
+	#~ plt.scatter(kmax,goodfit1[:,12]/(nbpoints - 4.), c='b', marker='.')
+	#~ plt.scatter(kmax,goodfit1[:,16]/(nbpoints - 2.), c='g', marker='.')
+	#~ plt.plot(kmax,goodfit1[:,8]/(nbpoints - 3.), c='r')
+	#~ plt.plot(kmax,goodfit1[:,12]/(nbpoints - 4.), c='b')
+	#~ plt.plot(kmax,goodfit1[:,16]/(nbpoints - 2.), c='g')
+	#~ plt.xscale('log')
+	#~ plt.ylim(0,0.5)
+	#~ plt.show()
+	#~ kill
 ####################################################################
 	#######--------- mean and std of bias and ps ratio ------------#####
 	if j == z[0]:
@@ -153,7 +184,8 @@ for j in xrange(0,len(z)):
 	#~ ax2.plot(kmax, chipl1, color='C0')
 	#~ ax2.plot(kmax, chipl2, color='C0')
 	#~ ax2.plot(kmax, chipl3, color='C0')
-	#~ ax2.plot(kmax, chipl4, color='C0')
+	P1, =ax2.plot(kmax, chipl4, color='C0', label='z = '+str(z[j]))
+	#~ P1, =ax2.plot(kmax, chipl4_, color='C0', linestyle ='--')
 	#~ P1, =ax2.plot(kmax, chipl, color='C0', label='z = '+str(z[j]))
 	#~ P1, =ax2.plot(kmax, chiplprime, color='C0', label='z = '+str(z[j]), linestyle ='--')
 	#~ ax2.errorbar(kmax, chipl, yerr= echipl,fmt='.')
@@ -161,7 +193,8 @@ for j in xrange(0,len(z)):
 	#~ ax2.plot(kmax, chipt1, color='C1')
 	#~ ax2.plot(kmax, chipt2, color='C1')
 	#~ ax2.plot(kmax, chipt3, color='C1')
-	#~ ax2.plot(kmax, chipt4, color='C1')
+	P2, =ax2.plot(kmax, chipt4, color='C1')
+	#~ P2, =ax2.plot(kmax, chipt4_, color='C1', linestyle ='--')
 	#~ P2, =ax2.plot(kmax, chipt, color='C1')
 	#~ P2, =ax2.plot(kmax, chiptprime, color='C1', linestyle ='--')
 	#~ ax2.errorbar(kmax, chipt, yerr= echipt,fmt='.')
@@ -169,7 +202,8 @@ for j in xrange(0,len(z)):
 	#~ ax2.plot(kmax, chipbis1, color='C2')
 	#~ ax2.plot(kmax, chipbis2, color='C2')
 	#~ ax2.plot(kmax, chipbis3, color='C2')
-	#~ ax2.plot(kmax, chipbis4, color='C2')
+	P3, =ax2.plot(kmax, chipbis4, color='C2')
+	#~ P3, =ax2.plot(kmax, chipbis4_, color='C2', linestyle ='--')
 	#~ P3, =ax2.plot(kmax, chipbis, color='C2')
 	#~ P3, =ax2.plot(kmax, chipbisprime, color='C2', linestyle ='--')
 	#~ ax2.errorbar(kmax, chipbis, yerr= echipbis,fmt='.')
@@ -177,36 +211,38 @@ for j in xrange(0,len(z)):
 	#~ ax2.plot(kmax, chipter1, color='C3')
 	#~ ax2.plot(kmax, chipter2, color='C3')
 	#~ ax2.plot(kmax, chipter3, color='C3')
-	#~ ax2.plot(kmax, chipter4, color='C3')
+	P4, = ax2.plot(kmax, chipter4, color='C3')
+	#~ P4, = ax2.plot(kmax, chipter4_, color='C3', linestyle ='--')
 	#~ P4, =ax2.plot(kmax, chipter, color='C3')
 	#~ P4, =ax2.plot(kmax, chipterprime, color='C3', linestyle ='--')
 	#~ ax2.errorbar(kmax, chipter, yerr= echipter,fmt='.')
 	#---------------------------------
-	#~ plt.figlegend( (P1,P2, P3, P4), ('Polynomial','2nd order PT',r'3nd order PT with free $b_{s}$,$b_{3nl}$',\
-	#~ r'3nd order PT with fixed $b_{s}$,$b_{3nl}$'), \
+	plt.figlegend( (P1,P2, P3, P4), ('Polynomial','2nd order PT with free $b_{s}$',r'3nd order PT with free $b_{s}$,$b_{3nl}$',\
+	r'3nd order PT with fixed $b_{s}$,$b_{3nl}$'), \
 	######################################
-	#~ loc = 'upper center', ncol=5, labelspacing=0., title =r' M$\nu$ = '+str(Mnu), fontsize=14)
-	ax2.legend(loc = 'upper left', fancybox=True, fontsize=14)
+	loc = 'upper center', ncol=5, labelspacing=0., title =r' M$\nu$ = '+str(Mnu)+ ', for mass range M4', fontsize=14)
+	ax2.legend(loc = 'upper left', fancybox=True, fontsize=14, handlelength=0, handletextpad=0)
 	plt.subplots_adjust(left=0.1, wspace=0.05, hspace=0.1)
 	ax2.set_xscale('log')
+	ax2.axhline(1.5, c='k')
 	#~ ax2.set_yscale('log')
-	ax2. set_xlim(0.04,0.5)
-	ax2. set_ylim(0,30)
+	ax2. set_xlim(0.04,0.8)
+	ax2. set_ylim(0,50)
 	if j == 0 :
 		ax2.tick_params(bottom='off', labelbottom='off',labelleft=True)
-		ax2.set_ylabel(r'$\chi^2$', fontsize=16)
+		ax2.set_ylabel(r'$\chi^2/dof$', fontsize=16)
 	if j == 1 :
 		ax2.tick_params(bottom='off', labelbottom='off', labelright=True, right= True, labelleft='off', left='off')
-		ax2.set_ylabel(r'$\chi^2$', fontsize=16)
+		ax2.set_ylabel(r'$\chi^2$/dof', fontsize=16)
 		ax2.yaxis.set_label_position("right")
 	if j == 2 :
 		#ax.tick_params(labelleft=True)
-		ax2.set_ylabel(r'$\chi^2$', fontsize=16)
+		ax2.set_ylabel(r'$\chi^2/dof$', fontsize=16)
 		ax2.set_xlabel('k [h/Mpc]', fontsize=16)
 	if j == 3 :
 		ax2.tick_params(labelright=True, right= True, labelleft='off', left='off')
 		ax2.set_xlabel('k [h/Mpc]', fontsize=16)
-		ax2.set_ylabel(r'$\chi^2$', fontsize=16)
+		ax2.set_ylabel(r'$\chi^2/dof$', fontsize=16)
 		ax2.yaxis.set_label_position("right")
 	if j == len(z) -1:
 		plt.show()
