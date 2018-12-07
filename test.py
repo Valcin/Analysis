@@ -94,7 +94,7 @@ for j in xrange(0,len(z)): #chmahe this after test
 
 	kcamb, Pcamb, k, Pmm, PH1, PH2, PH3 , PH4, errPhh1, errPhh2, errPhh3, errPhh4, bias1, bias2, bias3, bias4, \
 	bias1s, bias2s, bias3s, bias4s, errb1, errb2, errb3, errb4, Pmono1, Pmono2, Pmono3, Pmono4, errPr1, errPr2,\
-	errPr3, errPr4, kclass, Tm, Tcb = ld_data(Mnu, z, j)
+	errPr3, errPr4, kclass, Tm, Tcb, noise1, noise2, noise3, noise4 = ld_data(Mnu, z, j)
 
 ####################################################################
 ##### define the maximum scale for the fit 
@@ -116,7 +116,7 @@ for j in xrange(0,len(z)): #chmahe this after test
 #~ #*********************************************************************************************
 #~ #*********************************************************************************************
 	#~ ktest = np.logspace(np.log10(0.05),np.log10(0.55),15)
-	ktest = np.logspace(np.log10(0.04),np.log10(0.5),50)
+	ktest = np.logspace(np.log10(0.04),np.log10(0.5),15)
 	for kstop in ktest:
 		print kstop
 	
@@ -125,6 +125,7 @@ for j in xrange(0,len(z)): #chmahe this after test
 		#~ kbis = np.logspace(np.log10(np.min(k)), np.log10(np.max(k)), 200)
 		#~ Plinbis = np.interp(kbis, k, Plin)
 		lim = np.where((k < kstop)&(k > 1e-2))[0]
+		#~ lim = np.where((k < kstop))[0]
 		
 
 		
@@ -185,7 +186,7 @@ for j in xrange(0,len(z)): #chmahe this after test
 		
 		bias2PT1, bias2PT2, bias2PT3, bias2PT4, bias3PT1, bias3PT2, bias3PT3, bias3PT4, bias3PTbis1,\
 		bias3PTbis2, bias3PTbis3, bias3PTbis4 = perturb(kstop,  lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, Pmod_dd, k, bias1,\
-		bias2, bias3, bias4, errb1, errb2, errb3, errb4, A, B, C, D, E, F,Mnu, z, j, case,PH1)
+		bias2, bias3, bias4, errb1, errb2, errb3, errb4, A, B, C, D, E, F,Mnu, z, j, case,PH1, noise1, noise2, noise3, noise4)
 	
 		
 		#~ bins = np.logspace(np.log10(np.min(k)), np.log10(np.max(k)), 50)
@@ -195,30 +196,7 @@ for j in xrange(0,len(z)): #chmahe this after test
 		#~ bin_centers = binedges[1:] - bin_width/2
 		#~ print binmean
 		
-		#~ plt.figure()
-		#~ plt.plot(kbis,bias1bis)
-		#~ plt.plot(kbis,bias3PT1)
-		#~ plt.ylim(0.7, 0.9)
-		#-------------------
-		#~ plt.plot(kbis,bias2bis)
-		#~ plt.plot(kbis,bias3PT2)
-		#~ plt.ylim(0.75, 0.95)
-		#~ #-------------------
-		#~ plt.plot(kbis,bias3bis)
-		#~ plt.plot(kbis,bias3PT3)
-		#~ plt.ylim(0.9, 1.1)
-		#-------------------
-		#~ plt.plot(kbis,bias4bis)
-		#~ plt.plot(kbis,bias3PT4)
-		#~ plt.ylim(1.2, 1.4)
-		#--------------------
-		#~ plt.xlim(1e-2, kstop)
-		#~ plt.xscale('log')
-		#~ plt.axvline(0.15)
-		#~ plt.axvspan(kstop, 7, alpha=0.2, color='grey')
-		#~ plt.show()
-
-		#~ kill
+		
 		
 		
 		####################################################################
@@ -376,6 +354,37 @@ for j in xrange(0,len(z)): #chmahe this after test
 			chi2F1, chi2F2, chi2F3, chi2F4, chi2PT1, chi2PT2, chi2PT3, chi2PT4, chi2PTbis1, chi2PTbis2, chi2PTbis3, chi2PTbis4,\
 			chi2PTter1, chi2PTter2, chi2PTter3, chi2PTter4, len(lim)))
 		fid_file.close()
+		
+#-------------------------------------------------------------------------------------
+		plt.figure()
+		#~ plt.plot(k,bias1)
+		#~ plt.plot(k,bias3PT1)
+		#~ plt.ylim(0.7, 0.9)
+		#-------------------
+		#~ plt.plot(kbis,bias2bis)
+		#~ plt.plot(kbis,bias3PT2)
+		#~ plt.ylim(0.75, 0.95)
+		#~ #-------------------
+		#~ plt.plot(kbis,bias3bis)
+		#~ plt.plot(kbis,bias3PT3)
+		#~ plt.ylim(0.9, 1.1)
+		#-------------------
+		plt.plot(k,bias4, label=str(bias2PT4[2]- bias4[2])+ ', PT4 = '+ str(PT4[2])+', N = '+ str(len(lim)))
+		plt.scatter(k,bias4)
+		plt.plot(k,bias2PT4)
+		plt.scatter(k,bias2PT4)
+		plt.ylim(bias4[15]*0.8, bias4[15]*1.4)
+		plt.fill_between(k,bias4-errb4, bias4+errb4, alpha=0.6)
+		#--------------------
+		#~ plt.xlim(1e-2, kstop)
+		plt.xlim(0.008, kstop)
+		plt.xscale('log')
+		plt.title('z = '+str(z[j])+', kstop = '+str(kstop)+ ' ,chi2 = '+str(chi2PT4/(len(lim) -3.)), fontsize=14)
+		plt.legend(loc=2)
+		plt.axvspan(kstop, 7, alpha=0.2, color='grey')
+		#~ plt.show()
+
+		#~ kill
 
 		#~ del  pte, Plin, Tm, Tcb, kbis,\
 		#~ Plinbis, bias1bis, bias2bis, bias3bis, bias4bis, errb1bis, errb2bis,errb3bis,errb4bis, Pmmbis,PH1bis,PH2bis,PH3bis,PH4bis,\

@@ -92,7 +92,7 @@ for j in xrange(0,len(z)):
 
 	kcamb, Pcamb, k, Pmm, PH1, PH2, PH3 , PH4, errPhh1, errPhh2, errPhh3, errPhh4, bias1, bias2, bias3, bias4, \
 	bias1s, bias2s, bias3s, bias4s, errb1, errb2, errb3, errb4, Pmono1, Pmono2, Pmono3, Pmono4, errPr1, errPr2, errPr3,\
-	errPr4, kclass, Tm, Tcb = ld_data(Mnu, z, j)
+	errPr4, kclass, Tm, Tcb, noise1, noise2, noise3, noise4 = ld_data(Mnu, z, j)
 	
 ####################################################################
 ##### define the maximum scale for the fit 
@@ -203,7 +203,7 @@ for j in xrange(0,len(z)):
 	
 	bias2PT1, bias2PT2, bias2PT3, bias2PT4, bias3PT1, bias3PT2, bias3PT3, bias3PT4, bias3PTbis1,\
 	bias3PTbis2, bias3PTbis3, bias3PTbis4 = perturb(kstop,  lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, Pmod_dd, k, bias1,\
-	bias2, bias3, bias4, errb1, errb2, errb3, errb4, A, B, C, D, E, F,Mnu, z, j, case, PH1)
+	bias2, bias3, bias4, errb1, errb2, errb3, errb4, A, B, C, D, E, F,Mnu, z, j, case, PH1, noise1, noise2, noise3, noise4)
 	
 	#~ bias2PT1s, bias2PT2s, bias2PT3s, bias2PT4s, bias3PT1s, bias3PT2s, bias3PT3s, bias3PT4s, bias3PTbis1s,\
 	#~ bias3PTbis2s, bias3PTbis3s, bias3PTbis4s = perturb(kstop, k,  lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, Pmmbis,\

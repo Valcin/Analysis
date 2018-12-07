@@ -219,15 +219,15 @@ for j in xrange(0,len(z)):
 	#---------------------------------
 	plt.figlegend( (P1,P2, P3, P4), ('Polynomial','2nd order PT with free $b_{s}$',r'3nd order PT with free $b_{s}$,$b_{3nl}$',\
 	r'3nd order PT with fixed $b_{s}$,$b_{3nl}$'), \
-	######################################
+	#~ ######################################
 	loc = 'upper center', ncol=5, labelspacing=0., title =r' M$\nu$ = '+str(Mnu)+ ', for mass range M4', fontsize=14)
 	ax2.legend(loc = 'upper left', fancybox=True, fontsize=14, handlelength=0, handletextpad=0)
 	plt.subplots_adjust(left=0.1, wspace=0.05, hspace=0.1)
 	ax2.set_xscale('log')
 	ax2.axhline(1.5, c='k')
 	#~ ax2.set_yscale('log')
-	ax2. set_xlim(0.04,0.8)
-	ax2. set_ylim(0,50)
+	ax2. set_xlim(0.04,0.5)
+	ax2. set_ylim(0,3)
 	if j == 0 :
 		ax2.tick_params(bottom='off', labelbottom='off',labelleft=True)
 		ax2.set_ylabel(r'$\chi^2/dof$', fontsize=16)

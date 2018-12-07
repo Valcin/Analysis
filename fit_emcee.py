@@ -187,9 +187,10 @@ def coeffit_pl (kstop,lb1, errlb1, pop, k ,b ,errb):
 ########################################################################
 ######### bias expansion 2nd order
 ########################################################################
-def coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb1, errlb1, pop, k ,b ,errb):
+def coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb1, errlb1, pop, k ,b ,errb, noise):
 	#~ lim = np.where(k < kstop)[0]
 	lim = np.where((k < kstop)&(k > 1e-2))[0]
+	#~ lim = np.where((k < kstop))[0]
 	from scipy.signal import savgol_filter
 	b = savgol_filter(b, 51, 3) 
 	errb = savgol_filter(errb, 51, 6) 
@@ -227,10 +228,11 @@ def coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb1, errlb1, pop, k ,b ,errb):
 
 
 	nll = lambda *args: -lnlike(*args)
-	result = op.minimize(nll, [pop],  method='Nelder-Mead', args=(k, b ,errb ),  bounds=((0,None)),  options={'maxfev': 2000} )
+	#~ result = op.minimize(nll, [pop],  method='Nelder-Mead', args=(k, b ,errb ),  options={'maxfev': 2000} )
+	result = op.minimize(nll, [pop],method='SLSQP', args=(k, b ,errb ),  bounds=((0, None), (None,None), (None,None), (-3*noise,3*noise)),  options={'maxfev': 5000} )
 	b1_ml, b2_ml, bs_ml, N_ml = result["x"]
-	#~ print pop
-	#~ print(result)
+	print pop
+	print(result)
 	
 	#~ max_l = lnlike(result["x"], k, b, errb )
 	#~ AIC = 2*3. - 2 * max_l
@@ -285,7 +287,7 @@ def coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb1, errlb1, pop, k ,b ,errb):
 ########################################################################
 ######### bias expansion 3rd order free
 ########################################################################
-def coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, pop, k ,b ,errb):
+def coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, pop, k ,b ,errb, noise):
 	
 	#~ lim = np.where(k < kstop)[0]
 	lim = np.where((k < kstop)&(k > 1e-2))[0]
@@ -324,10 +326,11 @@ def coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, pop, k ,b ,errb):
 
 	
 	nll = lambda *args: -lnlike(*args)
-	result = op.minimize(nll, [pop],  method='Nelder-Mead', args=(k, b ,errb ),  options={'maxfev': 5000} )
+	#~ result = op.minimize(nll, [pop],  method='Nelder-Mead', args=(k, b ,errb ),  options={'maxfev': 5000} )
+	result = op.minimize(nll, [pop],method='SLSQP', args=(k, b ,errb ),  bounds=((0, None), (None,None), (None,None), (None,None), (-3*noise,3*noise)),  options={'maxfev': 5000} )
 	b1_ml, b2_ml, bs_ml, b3_ml, N_ml = result["x"]
-	print pop
-	print(result)
+	#~ print pop
+	#~ print(result)
 	
 	#~ max_l = lnlike(result["x"], k, b, errb )
 	#~ AIC = 2*3. - 2 * max_l
@@ -394,7 +397,7 @@ def coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, pop, k ,b ,errb):
 ########################################################################
 ######### bias expansion 3rd order fixed
 ########################################################################
-def coeffit_exp3(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, pop, k ,b ,errb):
+def coeffit_exp3(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, pop, k ,b ,errb, noise):
 	
 	#~ lim = np.where(k < kstop)[0]
 	lim = np.where((k < kstop)&(k > 1e-2))[0]
@@ -435,7 +438,9 @@ def coeffit_exp3(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, pop, k ,b ,errb):
 	
 
 	nll = lambda *args: -lnlike(*args)
-	result = op.minimize(nll, [pop],  method='Nelder-Mead', args=(k, b ,errb ),  options={'maxfev': 2000} )
+	#~ result = op.minimize(nll, [pop],  method='Nelder-Mead', args=(k, b ,errb ),  options={'maxfev': 2000} )
+	#~ result = op.minimize(nll, [pop],  method='Nelder-Mead', args=(k, b ,errb ),  options={'maxfev': 2000} )
+	result = op.minimize(nll, [pop],method='SLSQP', args=(k, b ,errb ),  bounds=((0, None), (None,None), (-3*noise,3*noise)),  options={'maxfev': 5000} )
 	b1_ml, b2_ml, N_ml = result["x"]
 	
 	

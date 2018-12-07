@@ -694,7 +694,7 @@ for j in xrange(0,len(z)):
 	#~ plt.figlegend( (M1,M2,M3,M4), ('$M_{1}$','$M_{2}$','$M_{3}$','$M_{4}$'), \
 	plt.figlegend( (M1, M2), ('N-body','rescaled bias'), \
 	#######################################
-	loc = 'upper center', ncol=5, labelspacing=0., title =r' M$\nu$ = '+str(Mnu)+',  bins = '+str(len(m_middle1)), fontsize=14)
+	loc = 'upper center', ncol=5, labelspacing=0., title =r' M$\nu$ = '+str(Mnu), fontsize=14)
 	ax2.legend(loc = 'upper left', fancybox=True, fontsize=14, handlelength=0, handletextpad=0)
 	plt.subplots_adjust(left=0.1, wspace=0.05, hspace=0.1)
 	ax2.set_xscale('log')
@@ -702,23 +702,23 @@ for j in xrange(0,len(z)):
 	if j == 0 :
 		ax2.tick_params(bottom='off', labelbottom='off')
 		ax2.set_ylabel(r'$b_{eff}$ / $b_{sim}$', fontsize = 16)
-		ax2.set_ylabel(r'$b_{sim, 0.15}$ / $b_{sim, 0.0}$', fontsize = 16)
-		ax2.set_ylabel(r'$b_{cc}$', fontsize = 16)
+		ax2.set_ylabel(r'$b_{\rm model}$ / $b_{\rm sim}$', fontsize = 16)
+		#~ ax2.set_ylabel(r'$b_{cc}$', fontsize = 16)
 		#~ ax2.set_ylabel(r'$M^2 n(M)$', fontsize = 16)
 		#ax2.grid()
 	if j == 1 :
 		ax2.tick_params(bottom='off', labelbottom='off', labelright=True, right= True, labelleft='off', left='off')
 		ax2.set_ylabel(r'$b_{eff}$ / $b_{sim}$', fontsize = 16)
-		ax2.set_ylabel(r'$b_{sim, 0.15}$ / $b_{sim, 0.0}$', fontsize = 16)
-		ax2.set_ylabel(r'$b_{cc}$', fontsize = 16)
+		ax2.set_ylabel(r'$b_{\rm model}$ / $b_{\rm sim}$', fontsize = 16)
+		#~ ax2.set_ylabel(r'$b_{cc}$', fontsize = 16)
 		#~ ax2.set_ylabel(r'$M^2 n(M)$', fontsize = 16)
 		ax2.yaxis.set_label_position("right")
 		#ax2.grid()
 	if j == 2 :
 		#~ #ax.tick_params(labelleft=True)
 		ax2.set_ylabel(r'$b_{eff}$ / $b_{sim}$', fontsize = 16)
-		ax2.set_ylabel(r'$b_{sim, 0.15}$ / $b_{sim, 0.0}$', fontsize = 16)
-		ax2.set_ylabel(r'$b_{cc}$', fontsize = 16)
+		ax2.set_ylabel(r'$b_{\rm model}$ / $b_{\rm sim}$', fontsize = 16)
+		#~ ax2.set_ylabel(r'$b_{cc}$', fontsize = 16)
 		#~ ax2.set_ylabel(r'$M^2 n(M)$', fontsize = 16)
 		ax2.set_xlabel('k [h/Mpc]', fontsize = 14)
 		#~ ax2.set_xlabel(r'M [$h^{-1} M_{\odot}$]', fontsize = 14)
@@ -728,8 +728,7 @@ for j in xrange(0,len(z)):
 		ax2.set_xlabel('k [h/Mpc]', fontsize = 16)
 		#~ ax2.set_xlabel(r'M [$h^{-1} M_{\odot}$]', fontsize = 16)
 		ax2.set_ylabel(r'$b_{eff}$ / $b_{sim}$', fontsize = 16)
-		ax2.set_ylabel(r'$b_{sim, 0.15}$ / $b_{sim, 0.0}$', fontsize = 16)
-		ax2.set_ylabel(r'$b_{cc}$', fontsize = 16)
+		ax2.set_ylabel(r'$b_{\rm model}$ / $b_{\rm sim}$', fontsize = 16)
 		#~ ax2.set_ylabel(r'$M^2 n(M)$', fontsize = 14)
 		ax2.yaxis.set_label_position("right")
 		#ax2.grid()

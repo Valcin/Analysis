@@ -32,7 +32,7 @@ from fit_emcee import coeffit_pl,coeffit_pl2,coeffit_exp1, coeffit_exp2, coeffit
 
 
 def perturb(kstop,  lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, Pmm, k, bias1,\
-	bias2, bias3, bias4, errb1, errb2, errb3, errb4, A, B, C, D, E, F,Mnu, z, j, case, PH1):
+	bias2, bias3, bias4, errb1, errb2, errb3, errb4, A, B, C, D, E, F,Mnu, z, j, case, PH1, noise1, noise2, noise3, noise4):
 	lim = np.where((k < kstop)&(k > 1e-2))[0]
 
 	
@@ -48,20 +48,21 @@ def perturb(kstop,  lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, Pmm, k, 
 		#~ return np.sqrt((b1**2*Pdd + b1*b2*A[lim] + 1/4.*b2**2*B[lim] + b1*bs*C[lim] + 1/2.*b2*bs*D[lim] + 1/4.*bs**2*E[lim] \
 		#~ + 2*b1*b3nl*F[lim])/Pdd)
 			
-	pop1 = [lb1,1,-4/7.*(lb1-1), 1]
-	pop2 = [lb2,1,-4/7.*(lb2-1), 1]
-	pop3 = [lb3,1,-4/7.*(lb3-1), 1]
-	pop4 = [lb4,1,-4/7.*(lb4-1), 1]
+	pop1 = [lb1,1,-4/7.*(lb1-1), 0]
+	pop2 = [lb2,1,-4/7.*(lb2-1), 0]
+	pop3 = [lb3,1,-4/7.*(lb3-1), 0]
+	pop4 = [lb4,1,-4/7.*(lb4-1), 0]
+	#~ pop4 = [lb4,1,10, 1]
 
-	popbis1 = [lb1,1,-4/7.*(lb1-1),32/315.*(lb1-1), 1]
-	popbis2 = [lb2,1,-4/7.*(lb2-1),32/315.*(lb2-1), 1]
-	popbis3 = [lb3,1,-4/7.*(lb3-1),32/315.*(lb3-1), 1]
-	popbis4 = [lb4,1,-4/7.*(lb4-1),32/315.*(lb4-1), 1]
+	popbis1 = [lb1,1,-4/7.*(lb1-1),32/315.*(lb1-1), 0]
+	popbis2 = [lb2,1,-4/7.*(lb2-1),32/315.*(lb2-1), 0]
+	popbis3 = [lb3,1,-4/7.*(lb3-1),32/315.*(lb3-1), 0]
+	popbis4 = [lb4,1,-4/7.*(lb4-1),32/315.*(lb4-1), 0]
 
-	popter1 = [lb1,1, 1]
-	popter2 = [lb2,1, 1]
-	popter3 = [lb3,1, 1]
-	popter4 = [lb4,1, 1]
+	popter1 = [lb1,1, 0]
+	popter2 = [lb2,1, 0]
+	popter3 = [lb3,1, 0]
+	popter4 = [lb4,1, 0]
 
 
 
@@ -71,28 +72,28 @@ def perturb(kstop,  lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, Pmm, k, 
 ##### compute coefficient with emcee
 ####################################################################
 	# 2nd order bias ----------------------------------------------------------------------------------------------
-	b1y1_mcmc, b2y1_mcmc, bsy1_mcmc, Ny1= coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb1,errlb1, pop1, k ,bias1 ,errb1)
-	b1y2_mcmc, b2y2_mcmc, bsy2_mcmc, Ny2 = coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb2,errlb2, pop2, k ,bias2 ,errb2)
-	b1y3_mcmc, b2y3_mcmc, bsy3_mcmc, Ny3 = coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb3,errlb3, pop3, k ,bias3 ,errb3)
-	b1y4_mcmc, b2y4_mcmc, bsy4_mcmc, Ny4 = coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb4,errlb4, pop4, k ,bias4 ,errb4)
+	b1y1_mcmc, b2y1_mcmc, bsy1_mcmc, Ny1= coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb1,errlb1, pop1, k ,bias1 ,errb1, noise1)
+	b1y2_mcmc, b2y2_mcmc, bsy2_mcmc, Ny2 = coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb2,errlb2, pop2, k ,bias2 ,errb2, noise2)
+	b1y3_mcmc, b2y3_mcmc, bsy3_mcmc, Ny3 = coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb3,errlb3, pop3, k ,bias3 ,errb3, noise3)
+	b1y4_mcmc, b2y4_mcmc, bsy4_mcmc, Ny4 = coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb4,errlb4, pop4, k ,bias4 ,errb4, noise4)
 	#~ #3rd order free -----------------------------------------------------------------------------------------------
 	b1z1_mcmc, b2z1_mcmc, bsz1_mcmc, b3z1_mcmc, Nz1 = coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, popbis1,\
-	k ,bias1 ,errb1)
+	k ,bias1 ,errb1, noise1)
 	b1z2_mcmc, b2z2_mcmc, bsz2_mcmc, b3z2_mcmc, Nz2 = coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb2, errlb2, popbis2,\
-	k ,bias2 ,errb2)
+	k ,bias2 ,errb2, noise2)
 	b1z3_mcmc, b2z3_mcmc, bsz3_mcmc, b3z3_mcmc, Nz3 = coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb3, errlb3, popbis3,\
-	k ,bias3 ,errb3)
+	k ,bias3 ,errb3, noise3)
 	b1z4_mcmc, b2z4_mcmc, bsz4_mcmc, b3z4_mcmc, Nz4 = coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb4, errlb4, popbis4,\
-	k ,bias4 ,errb4)
+	k ,bias4 ,errb4, noise4)
 	#~ #-3rd order fixed -------------------------------------------------------------------------------------------------
 	b1u1_mcmc, b2u1_mcmc, Nu1= coeffit_exp3(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, popter1,\
-	k ,bias1 ,errb1)
+	k ,bias1 ,errb1, noise1)
 	b1u2_mcmc, b2u2_mcmc, Nu2 = coeffit_exp3(kstop, Pmm, A, B, C, D, E, F, lb2, errlb2, popter2,\
-	k ,bias2 ,errb2)
+	k ,bias2 ,errb2, noise2)
 	b1u3_mcmc, b2u3_mcmc, Nu3 = coeffit_exp3(kstop, Pmm, A, B, C, D, E, F, lb3, errlb3, popter3,\
-	k ,bias3 ,errb3)
+	k ,bias3 ,errb3, noise3)
 	b1u4_mcmc, b2u4_mcmc, Nu4 = coeffit_exp3(kstop, Pmm, A, B, C, D, E, F, lb4, errlb4, popter4,\
-	k ,bias4 ,errb4)
+	k ,bias4 ,errb4, noise4)
 		
 #~ ########################################################################
 #~ ########################################################################

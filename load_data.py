@@ -305,6 +305,11 @@ def ld_data(mv, z, j):
 		errPhh3 = np.std(Phh3[:,0:11], axis=1)
 		errPhh4 = np.std(Phh4[:,0:11], axis=1)
 		
+		noise1 = np.std(Pshot1[0:11])
+		noise2 = np.std(Pshot2[0:11])
+		noise3 = np.std(Pshot3[0:11])
+		noise4 = np.std(Pshot4[0:11])
+		
 		### smooth the curve
 		from scipy.signal import savgol_filter
 		bias1s = savgol_filter(bias1, 51, 3) 
@@ -536,7 +541,7 @@ def ld_data(mv, z, j):
 
 		return kcamb, Pcamb, k, Pmm, PH1, PH2, PH3 , PH4, errPhh1, errPhh2, errPhh3, errPhh4, bias1, bias2, bias3, bias4, \
 		bias1s, bias2s, bias3s, bias4s, errb1, errb2, errb3, errb4, Pmono1, Pmono2, Pmono3, Pmono4, errPr1, errPr2, errPr3,\
-		errPr4, kclass, Tm, Tcb
+		errPr4, kclass, Tm, Tcb, noise1, noise2, noise3, noise4
 		#~ return kcamb, Pcamb, k, Pmm, PH1, PH2, PH3 , PH4, errPhh1, errPhh2, errPhh3, errPhh4, bias1s, bias2s, bias3s, bias4s, \
 		#~ errb1, errb2, errb3, errb4, Pmono1, Pmono2, Pmono3, Pmono4, errPr1, errPr2, errPr3, errPr4
 		
@@ -802,6 +807,11 @@ def ld_data(mv, z, j):
 		errPhh3 = np.std(Phh3[:,0:11], axis=1)
 		errPhh4 = np.std(Phh4[:,0:11], axis=1)
 		
+		noise1 = np.std(Pshot1[0:11])
+		noise2 = np.std(Pshot2[0:11])
+		noise3 = np.std(Pshot3[0:11])
+		noise4 = np.std(Pshot4[0:11])
+		
 		
 		
 		#-----------------------------------------------------------------------
@@ -942,6 +952,6 @@ def ld_data(mv, z, j):
 		
 		return kcamb, Pcamb, k, Pmm, PH1, PH2, PH3 , PH4, errPhh1, errPhh2, errPhh3, errPhh4, bias1, bias2, bias3, bias4, \
 		bias1s, bias2s, bias3s, bias4s, errb1, errb2, errb3, errb4, Pmono1, Pmono2, Pmono3, Pmono4, errPr1, errPr2, errPr3,\
-		errPr4, kclass, Tm, Tcb
+		errPr4, kclass, Tm, Tcb, noise1, noise2, noise3, noise4
 		#~ return kcamb, Pcamb, k, Pmm, PH1, PH2, PH3 , PH4, errPhh1, errPhh2, errPhh3, errPhh4, bias1s, bias2s, bias3s, bias4s, \
 		#~ errb1, errb2, errb3, errb4, Pmono1, Pmono2, Pmono3, Pmono4, errPr1, errPr2, errPr3, errPr4
