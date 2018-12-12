@@ -181,10 +181,10 @@ def perturb(kstop,  lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, Pmm, k, 
 		#~ fid_file.write('%.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g\n' % (kstop, b1z1_mcmc[0], b1z2_mcmc[0], b1z3_mcmc[0],\
 		#~ b1z4_mcmc[0], b3z1_mcmc[0], b3z2_mcmc[0], b3z3_mcmc[0], b3z4_mcmc[0]))
 	#~ fid_file.close()
-	#~ with open('3rdorder_'+str(z[j])+'.txt', 'a') as fid_file:
-		#~ fid_file.write('%.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g\n' % (kstop, b1z1_mcmc, b1z2_mcmc, b1z3_mcmc,\
-		#~ b1z4_mcmc, b3z1_mcmc, b3z2_mcmc, b3z3_mcmc, b3z4_mcmc))
-	#~ fid_file.close()
+	with open('3rdorder_'+str(z[j])+'.txt', 'a') as fid_file:
+		fid_file.write('%.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g\n' % (kstop, b1z1_mcmc, b1z2_mcmc, b1z3_mcmc,\
+		b1z4_mcmc, b3z1_mcmc, b3z2_mcmc, b3z3_mcmc, b3z4_mcmc))
+	fid_file.close()
 
 ##########################################################################
 ##########################################################################

@@ -53,7 +53,7 @@ z = [0.0,0.5,1.0,2.0]
 #~ plt.axhline(32/315., color='k')
 #~ plt.xlim(0.04,0.2)
 #~ plt.ylim(0.8,0.9)
-#~ plt.ylim(-0.6,0.6)
+#~ plt.ylim(-2,2)
 #~ plt.show()
 
 #~ j=0
@@ -93,6 +93,7 @@ for j in xrange(0,len(z)):
 	print 'For redshift z = ' + str(z[j])
 
 	cname1 = 'chi2a_z='+str(z[j])+'.txt'
+	cname2 = 'chi2rsd_z='+str(z[j])+'.txt'
 
 	goodfit1 = np.loadtxt(cname1) 
 	kmax = goodfit1[:,0]
@@ -156,6 +157,16 @@ for j in xrange(0,len(z)):
 	value = 1.5
 	idxpl = (np.abs(chipl4-value)).argmin()
 
+	####### RSD
+	goodfit2 = np.loadtxt(cname2) 
+	kmax2 = goodfit2[:,0]
+	nbpoints2 = goodfit2[:,5]
+	#~ print nbpoints
+	#--------------------
+	chir1 = goodfit2[:,1]/(nbpoints2 - 1.)
+	chir2 = goodfit2[:,2]/(nbpoints2 - 1.)
+	chir3 = goodfit2[:,3]/(nbpoints2 - 1.)
+	chir4 = goodfit2[:,4]/(nbpoints2 - 1.)
 	
 	#~ plt.figure()
 	#~ plt.scatter(kmax,goodfit1[:,8]/(nbpoints - 3.), c='r', marker='.')
@@ -184,45 +195,35 @@ for j in xrange(0,len(z)):
 	#~ ax2.plot(kmax, chipl1, color='C0')
 	#~ ax2.plot(kmax, chipl2, color='C0')
 	#~ ax2.plot(kmax, chipl3, color='C0')
-	P1, =ax2.plot(kmax, chipl4, color='C0', label='z = '+str(z[j]))
-	#~ P1, =ax2.plot(kmax, chipl4_, color='C0', linestyle ='--')
-	#~ P1, =ax2.plot(kmax, chipl, color='C0', label='z = '+str(z[j]))
-	#~ P1, =ax2.plot(kmax, chiplprime, color='C0', label='z = '+str(z[j]), linestyle ='--')
-	#~ ax2.errorbar(kmax, chipl, yerr= echipl,fmt='.')
+	#~ P1, =ax2.plot(kmax, chipl4, color='C0', label='z = '+str(z[j]))
+	P1, =ax2.plot(kmax2, chir1, color='c', label='etns model')
 	#---------------------------------
 	#~ ax2.plot(kmax, chipt1, color='C1')
 	#~ ax2.plot(kmax, chipt2, color='C1')
 	#~ ax2.plot(kmax, chipt3, color='C1')
-	P2, =ax2.plot(kmax, chipt4, color='C1')
-	#~ P2, =ax2.plot(kmax, chipt4_, color='C1', linestyle ='--')
-	#~ P2, =ax2.plot(kmax, chipt, color='C1')
-	#~ P2, =ax2.plot(kmax, chiptprime, color='C1', linestyle ='--')
-	#~ ax2.errorbar(kmax, chipt, yerr= echipt,fmt='.')
+	#~ P2, =ax2.plot(kmax, chipt4, color='C1')
+
 	#---------------------------------
 	#~ ax2.plot(kmax, chipbis1, color='C2')
 	#~ ax2.plot(kmax, chipbis2, color='C2')
 	#~ ax2.plot(kmax, chipbis3, color='C2')
-	P3, =ax2.plot(kmax, chipbis4, color='C2')
-	#~ P3, =ax2.plot(kmax, chipbis4_, color='C2', linestyle ='--')
-	#~ P3, =ax2.plot(kmax, chipbis, color='C2')
-	#~ P3, =ax2.plot(kmax, chipbisprime, color='C2', linestyle ='--')
-	#~ ax2.errorbar(kmax, chipbis, yerr= echipbis,fmt='.')
+	#~ P3, =ax2.plot(kmax, chipbis4, color='C2')
+
 	#---------------------------------
 	#~ ax2.plot(kmax, chipter1, color='C3')
 	#~ ax2.plot(kmax, chipter2, color='C3')
 	#~ ax2.plot(kmax, chipter3, color='C3')
-	P4, = ax2.plot(kmax, chipter4, color='C3')
-	#~ P4, = ax2.plot(kmax, chipter4_, color='C3', linestyle ='--')
-	#~ P4, =ax2.plot(kmax, chipter, color='C3')
-	#~ P4, =ax2.plot(kmax, chipterprime, color='C3', linestyle ='--')
-	#~ ax2.errorbar(kmax, chipter, yerr= echipter,fmt='.')
+	#~ P4, = ax2.plot(kmax, chipter4, color='C3')
+
 	#---------------------------------
-	plt.figlegend( (P1,P2, P3, P4), ('Polynomial','2nd order PT with free $b_{s}$',r'3nd order PT with free $b_{s}$,$b_{3nl}$',\
-	r'3nd order PT with fixed $b_{s}$,$b_{3nl}$'), \
-	#~ ######################################
-	loc = 'upper center', ncol=5, labelspacing=0., title =r' M$\nu$ = '+str(Mnu)+ ', for mass range M4', fontsize=14)
-	ax2.legend(loc = 'upper left', fancybox=True, fontsize=14, handlelength=0, handletextpad=0)
+	#~ plt.figlegend( (P1,P2, P3, P4), ('Polynomial','2nd order PT with free $b_{s}$',r'3nd order PT with free $b_{s}$,$b_{3nl}$',\
+	#~ r'3nd order PT with fixed $b_{s}$,$b_{3nl}$'), \
+	######################################
+	#~ loc = 'upper center', ncol=1, labelspacing=0., title =r' M$\nu$ = '+str(Mnu)+ ', for mass range M4', fontsize=14)
+	#~ ax2.legend(loc = 'upper left', fancybox=True, fontsize=14, handlelength=0, handletextpad=0)
+	ax2.legend(loc = 'upper left', title = 'z = '+str(z[j]), fancybox=True, fontsize=14)
 	plt.subplots_adjust(left=0.1, wspace=0.05, hspace=0.1)
+	plt.suptitle(r' M$\nu$ = '+str(Mnu)+ ', for mass range M1', fontsize = 14)
 	ax2.set_xscale('log')
 	ax2.axhline(1.5, c='k')
 	#~ ax2.set_yscale('log')

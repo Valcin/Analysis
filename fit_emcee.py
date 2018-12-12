@@ -133,10 +133,10 @@ def coeffit_pl (kstop,lb1, errlb1, pop, k ,b ,errb):
 	b1_ml, b2_ml, b3_ml, b4_ml = result["x"]
 	#~ print pop
 	#~ print result
-	#~ max_l = lnlike(result["x"], k, b, errb )
-	#~ AIC = 2*4. - 2 * max_l
-	#~ print 'maximum likelihood is '+str(max_l)
-	#~ print 'AIC = '+str(AIC)
+	max_l = lnlike(result["x"], k, b, errb )
+	AIC = 2*4. - 2 * max_l
+	print 'maximum likelihood is '+str(max_l)
+	print 'AIC = '+str(AIC)
 	
 	#~ ndim, nwalkers = len(pop), 300
 	#~ pos = [result["x"] + 1e-3*np.random.randn(ndim) for i in range(nwalkers)]
@@ -190,17 +190,17 @@ def coeffit_pl (kstop,lb1, errlb1, pop, k ,b ,errb):
 def coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb1, errlb1, pop, k ,b ,errb, noise):
 	#~ lim = np.where(k < kstop)[0]
 	lim = np.where((k < kstop)&(k > 1e-2))[0]
-	#~ lim = np.where((k < kstop))[0]
-	from scipy.signal import savgol_filter
-	b = savgol_filter(b, 51, 3) 
-	errb = savgol_filter(errb, 51, 6) 
+
+	#~ from scipy.signal import savgol_filter
+	#~ b = savgol_filter(b, 51, 3) 
+	#~ errb = savgol_filter(errb, 51, 6) 
 	
 	def lnlike(theta, x, y, yerr):
 		b1, b2, bs, N = theta
 		model = np.sqrt((b1**2 * Pmm[lim]+ b1*b2*A[lim] + 1/4.*b2**2*B[lim] + b1*bs*C[lim] + 1/2.*b2*bs*D[lim] + \
 		1/4.*bs**2*E[lim] + N)/Pmm[lim])
 		inv_sigma2 = 1.0/(yerr[lim]**2)
-		return -0.5*(np.sum((y[lim]-model)**2*inv_sigma2 - np.log(inv_sigma2)))
+		return -0.5*(np.sum((y[lim]-model)**2*inv_sigma2 - np.log(inv_sigma2))) 
 	
 	def lnprior(theta):
 		b1, b2, bs, N = theta
@@ -235,7 +235,7 @@ def coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb1, errlb1, pop, k ,b ,errb, noise)
 	print(result)
 	
 	#~ max_l = lnlike(result["x"], k, b, errb )
-	#~ AIC = 2*3. - 2 * max_l
+	#~ AIC = 2*4. - 2 * max_l
 	#~ print 'maximum likelihood is '+str(max_l)
 	#~ print 'AIC = '+str(AIC)
 	
@@ -304,7 +304,7 @@ def coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, pop, k ,b ,errb, noi
 	
 	def lnprior(theta, x, y, yerr):
 		b1, b2, bs, b3nl, N = theta
-		if  0 < b1   :
+		if  0 < b1 and  -3*noise < N < 3*noise :
 			return 0.0
 		return -np.inf
 		
@@ -333,11 +333,11 @@ def coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, pop, k ,b ,errb, noi
 	#~ print(result)
 	
 	#~ max_l = lnlike(result["x"], k, b, errb )
-	#~ AIC = 2*3. - 2 * max_l
+	#~ AIC = 2*5. - 2 * max_l
 	#~ print 'maximum likelihood is '+str(max_l)
 	#~ print 'AIC = '+str(AIC)
 	
-	#~ ndim, nwalkers = len(pop), 300
+	#~ ndim, nwalkers = len(pop), 200
 	#~ pos = [result["x"] + 1e-4*np.random.randn(ndim) for i in range(nwalkers)]
 
 	#~ posnum = 1000
@@ -445,7 +445,7 @@ def coeffit_exp3(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, pop, k ,b ,errb, noi
 	
 	
 	#~ max_l = lnlike(result["x"], k, b, errb )
-	#~ AIC = 2*4. - 2 * max_l
+	#~ AIC = 2*3. - 2 * max_l
 	#~ print 'maximum likelihood is '+str(max_l)
 	#~ print 'AIC = '+str(AIC)
 	

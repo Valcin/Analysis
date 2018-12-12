@@ -112,9 +112,9 @@ for j in xrange(0,len(z)):
 		
 		
 #### other kstop
-	kstoplim = [0.5,0.5,0.5,0.4]
-	kstoplim = [0.25,0.25,0.25,0.25]
-	kstop = kstoplim[ind]
+	#~ kstoplim = [0.5,0.5,0.5,0.4]
+	#~ kstoplim = [0.25,0.25,0.25,0.25]
+	#~ kstop = kstoplim[ind]
 	
 	print kstop
 	
@@ -209,7 +209,7 @@ for j in xrange(0,len(z)):
 	#~ bias3PTbis2s, bias3PTbis3s, bias3PTbis4s = perturb(kstop, k,  lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, Pmmbis,\
 	#~ kbis, bias1biss, bias2biss, bias3biss, bias4biss, errb1bis, errb2bis, errb3bis, errb4bis, A, B, C, D, E, F,Mnu, z, j, case)
 	
-	
+	#~ kill
 ######################################################################
 ### mean of mass bins
 
@@ -288,8 +288,8 @@ for j in xrange(0,len(z)):
 	#~ B3, = ax2.plot(k, b3, linewidth = 2)
 	#~ B3bis, = ax2.plot(k, b3bis, linewidth = 2)
 	#~ B2, = ax2.plot(k, b2, label='z = '+str(z[j]), color='k')
-	#~ plt.figlegend( (B3bis,B3), (r'$b_{cc} = b_{1} + b_{2}k^{2} + b_{4}k^{4}$ ',\
-	#~ r'$b_{cc} = b_{1} + b_{2}k^{2} + b_{3}k^{3} + b_{4}k^{4}$ '), \
+	#~ plt.figlegend( (B3bis,B3), (r'$b_{cb} = b_{1} + b_{2}k^{2} + b_{4}k^{4}$ ',\
+	#~ r'$b_{cb} = b_{1} + b_{2}k^{2} + b_{3}k^{3} + b_{4}k^{4}$ '), \
 	####### comparison bias and != models #############################
 	#~ M1 = ax2.errorbar(k, bias1, yerr= errb1,fmt='.')
 	#~ M2 = ax2.errorbar(k, bias2, yerr= errb2,fmt='.')
@@ -342,10 +342,10 @@ for j in xrange(0,len(z)):
 	#~ B1bisanal, = ax2.plot(k, bb1bis, color='C2',linestyle='--')
 	#~ B1teranal, = ax2.plot(k, bb1ter,  color='C3',linestyle='--')
 	
-	#~ plt.figlegend( (B1,B1bis,B1ter,B2,B3), ('2nd order expansion',r'3rd order expansion with free $b_{3nl}$',\
-	#~ r'3rd order expansion with fixed $b_{3nl}$', 'N-body','Power law '), \
+	#~ plt.figlegend( (B1,B1bis,B1ter,B2,B3), ('2nd order expansion with free $b_{s}$',r'3rd order expansion with free $b_s$, $b_{3nl}$',\
+	#~ r'3rd order expansion with fixed $b_s$, $b_{3nl}$', 'N-body','Power law '), \
 	######################################
-	#~ loc = 'upper center', ncol=5, labelspacing=0., title =r' M$\nu$ = '+str(Mnu)+', case '+str(case), fontsize=12)
+	#~ loc = 'upper center', ncol=3, labelspacing=0., title =r' M$\nu$ = '+str(Mnu)+', case '+str(case), fontsize=12)
 	#~ loc = 'upper center', ncol=5, labelspacing=0., title =r' M$\nu$ = '+str(Mnu), fontsize=12)
 	#~ ax2.axvspan(kstop, 7, alpha=0.2, color='grey')
 	#~ ax2.legend(loc = 'upper left', fancybox=True, fontsize=14, handlelength=0, handletextpad=0)
@@ -400,19 +400,19 @@ for j in xrange(0,len(z)):
 	
 ###########################################################################
 ### bias is also a free parameter
-	kai1f, kai2f, kai3f, kai4f, sco1f, sco2f, sco3f, sco4f, tns1f, tns2f, tns3f, tns4f, etns1f, etns2f,\
-	etns3f, etns4f = RSD2(fz,fcc, Dz[ind], j, kstop, kcamb, Pcamb, Pmod_dd, biasF1, biasF2, biasF3, biasF4,\
-	k, Pmono1, Pmono2, Pmono3, Pmono4, errPr1, errPr2, errPr3, errPr4, Pmod_dt, Pmod_tt, case,z,Mnu, A, B, C, D, E, F, G, H )
+	#~ kai1f, kai2f, kai3f, kai4f, sco1f, sco2f, sco3f, sco4f, tns1f, tns2f, tns3f, tns4f, etns1f, etns2f,\
+	#~ etns3f, etns4f = RSD2(fz,fcc, Dz[ind], j, kstop, kcamb, Pcamb, Pmod_dd, biasF1, biasF2, biasF3, biasF4,\
+	#~ k, Pmono1, Pmono2, Pmono3, Pmono4, errPr1, errPr2, errPr3, errPr4, Pmod_dt, Pmod_tt, case,z,Mnu, A, B, C, D, E, F, G, H )
 
 
-	p2f = np.array([kai1f/Pmono1, kai2f/Pmono2, kai3f/Pmono3, kai4f/Pmono4])
-	P2f = np.mean(p2f, axis=0)
-	p3f = np.array([sco1f/Pmono1, sco2f/Pmono2, sco3f/Pmono3, sco4f/Pmono4])
-	P3f = np.mean(p3f, axis=0)
-	p4f = np.array([tns1f/Pmono1, tns2f/Pmono2, tns3f/Pmono3, tns4f/Pmono4])
-	P4f = np.mean(p4f, axis=0)
-	p6f = np.array([etns1f/Pmono1, etns2f/Pmono2, etns3f/Pmono3, etns4f/Pmono4])
-	P6f = np.mean(p6f, axis=0)
+	#~ p2f = np.array([kai1f/Pmono1, kai2f/Pmono2, kai3f/Pmono3, kai4f/Pmono4])
+	#~ P2f = np.mean(p2f, axis=0)
+	#~ p3f = np.array([sco1f/Pmono1, sco2f/Pmono2, sco3f/Pmono3, sco4f/Pmono4])
+	#~ P3f = np.mean(p3f, axis=0)
+	#~ p4f = np.array([tns1f/Pmono1, tns2f/Pmono2, tns3f/Pmono3, tns4f/Pmono4])
+	#~ P4f = np.mean(p4f, axis=0)
+	#~ p6f = np.array([etns1f/Pmono1, etns2f/Pmono2, etns3f/Pmono3, etns4f/Pmono4])
+	#~ P6f = np.mean(p6f, axis=0)
 	
 
 
@@ -471,7 +471,7 @@ for j in xrange(0,len(z)):
 	#~ ax2.plot(k,P2f, color='C3', label='z = '+str(z[j]), linestyle='--')
 	#~ ax2.plot(k,P3f, color='C0', linestyle='--')
 	#~ ax2.plot(k,P4f, color='C1', linestyle='--')
-	ax2.plot(k,P6f, color='c', linestyle='--')
+	#~ ax2.plot(k,P6f, color='c', linestyle='--')
 	#-------------------------------
 	#~ ax2.plot(k,P2bis, color='C3', linestyle='--',label=r'w/ $b_{model}$ and $\sigma_v$ free')
 	#~ ax2.plot(k,P3bis, color='C0', linestyle='--')
@@ -523,22 +523,22 @@ for j in xrange(0,len(z)):
 	if j == 0 :
 		ax2.tick_params(bottom='off', labelbottom='off')
 		ax2.set_ylabel(r'P(k) / $P_{sim}$', fontsize=16)
-		#~ ax2.set_ylabel(r'$P_{cb}$', fontsize=16)
+		ax2.set_ylabel(r'$P_{cb}$', fontsize=16)
 	if j == 1 :
 		ax2.tick_params(bottom='off', labelbottom='off', labelright=True, right= True, labelleft='off', left='off')
 		ax2.set_ylabel(r'P(k) / $P_{sim}$', fontsize=16)
-		#~ ax2.set_ylabel(r'$P_{cb}$', fontsize=16)
+		ax2.set_ylabel(r'$P_{cb}$', fontsize=16)
 		ax2.yaxis.set_label_position("right")
 	if j == 2 :
 		#ax.tick_params(labelleft=True)
 		ax2.set_ylabel(r'P(k) / $P_{sim}$', fontsize=16)
-		#~ ax2.set_ylabel(r'$P_{cb}$', fontsize=16)
+		ax2.set_ylabel(r'$P_{cb}$', fontsize=16)
 		ax2.set_xlabel('k [h/Mpc]', fontsize=14)
 	if j == 3 :
 		ax2.tick_params(labelright=True, right= True, labelleft='off', left='off')
 		ax2.set_xlabel('k [h/Mpc]', fontsize=14)
 		ax2.set_ylabel(r'P(k) / $P_{sim}$', fontsize=16)
-		#~ ax2.set_ylabel(r'$P_{cb}$', fontsize=16)
+		ax2.set_ylabel(r'$P_{cb}$', fontsize=16)
 		ax2.yaxis.set_label_position("right")
 	ax2.set_xlim(8e-3,1.)
 	#~ #plt.ylim(0.7,1.3)
@@ -553,6 +553,9 @@ for j in xrange(0,len(z)):
 	biasF1, biasF2, biasF3, biasF4, biasF1bis, biasF2bis, biasF3bis, biasF4bis, bias2PT1, bias2PT2, bias2PT3, bias2PT4,\
 	bias3PT1, bias3PT2, bias3PT3, bias3PT4, bias3PTbis1, bias3PTbis2, bias3PTbis3,bias3PTbis4,B1,B1bis,B1ter,B2,B3,B3bis,b1,b1bis,\
 	b1ter,b2,b3,b3bis
+
+	
+
 	
 ########################################################################
 ############## plot ####################################################
@@ -738,7 +741,6 @@ for j in xrange(0,len(z)):
 			#~ chi2F1, chi2F2, chi2F3, chi2F4, chi2PT1, chi2PT2, chi2PT3, chi2PT4, chi2PTbis1, chi2PTbis2, chi2PTbis3, chi2PTbis4))
 		#~ print '\n'
 
-	 
 end = time()
 print 'total time is '+str((end - start))	 
 
