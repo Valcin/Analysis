@@ -51,7 +51,7 @@ z = [0.0,0.5,1.0,2.0]
 # neutrino parameters
 hierarchy = 'degenerate' #'degenerate', 'normal', 'inverted'
 ###########################
-Mnu       = 0.0  #eV
+Mnu       = 0.15  #eV
 ###########################
 Nnu       = 0  #number of massive neutrinos
 Neff      = 3.046
@@ -229,20 +229,20 @@ for j in xrange(0,len(z)): #chmahe this after test
 		
 		#####################################################################
 		### only sigma is a free parameter
-		kai1, kai2, kai3, kai4, sco1, sco2, sco3, sco4, tns1, tns2, tns3, tns4, etns1, etns2, etns3, etns4 = RSD1(fz,fcc, Dz[ind]\
-		, j, kstop, kcamb, Pcamb, Pmod_dd, biasF1, biasF2, biasF3, biasF4, k, Pmono1, Pmono2, Pmono3, \
-		Pmono4, errPr1, errPr2, errPr3, errPr4, Pmod_dt, Pmod_tt, case,z,Mnu, A, B, C, D, E, F, G, H )
+		#~ kai1, kai2, kai3, kai4, sco1, sco2, sco3, sco4, tns1, tns2, tns3, tns4, etns1, etns2, etns3, etns4 = RSD1(fz,fcc, Dz[ind]\
+		#~ , j, kstop, kcamb, Pcamb, Pmod_dd, biasF1, biasF2, biasF3, biasF4, k, Pmono1, Pmono2, Pmono3, \
+		#~ Pmono4, errPr1, errPr2, errPr3, errPr4, Pmod_dt, Pmod_tt, case,z,Mnu, A, B, C, D, E, F, G, H )
 
-		p1 = np.array([Pmono1/Pmono1, Pmono2/Pmono2, Pmono3/Pmono3, Pmono4/Pmono4])
-		P1 = np.mean(p1, axis=0)
-		p2 = np.array([kai1/Pmono1, kai2/Pmono2, kai3/Pmono3, kai4/Pmono4])
-		P2 = np.mean(p2, axis=0)
-		p3 = np.array([sco1/Pmono1, sco2/Pmono2, sco3/Pmono3, sco4/Pmono4])
-		P3 = np.mean(p3, axis=0)
-		p4 = np.array([tns1/Pmono1, tns2/Pmono2, tns3/Pmono3, tns4/Pmono4])
-		P4 = np.mean(p4, axis=0)
-		p6 = np.array([etns1/Pmono1, etns2/Pmono2, etns3/Pmono3, etns4/Pmono4])
-		P6 = np.mean(p6, axis=0)
+		#~ p1 = np.array([Pmono1/Pmono1, Pmono2/Pmono2, Pmono3/Pmono3, Pmono4/Pmono4])
+		#~ P1 = np.mean(p1, axis=0)
+		#~ p2 = np.array([kai1/Pmono1, kai2/Pmono2, kai3/Pmono3, kai4/Pmono4])
+		#~ P2 = np.mean(p2, axis=0)
+		#~ p3 = np.array([sco1/Pmono1, sco2/Pmono2, sco3/Pmono3, sco4/Pmono4])
+		#~ P3 = np.mean(p3, axis=0)
+		#~ p4 = np.array([tns1/Pmono1, tns2/Pmono2, tns3/Pmono3, tns4/Pmono4])
+		#~ P4 = np.mean(p4, axis=0)
+		#~ p6 = np.array([etns1/Pmono1, etns2/Pmono2, etns3/Pmono3, etns4/Pmono4])
+		#~ P6 = np.mean(p6, axis=0)
 		
 		####################################################################
 		#######--------- mean and std of bias and ps ratio ------------#####
@@ -320,7 +320,10 @@ for j in xrange(0,len(z)): #chmahe this after test
 		chi2PTter3 = np.sum(PTter3)
 		chi2PTter4 = np.sum(PTter4)
 		
-		cname = 'chi2a_z='+str(z[j])+'.txt'
+		if Mnu == 0.0:
+			cname = 'chi2a_z='+str(z[j])+'.txt' # for massless
+		elif Mnu == 0.15:
+			cname = 'chi2b_z='+str(z[j])+'.txt' # for massive
 		with open(cname, 'a+') as fid_file:
 			fid_file.write('%.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g\n' % (kstop,\
 			chi2F1, chi2F2, chi2F3, chi2F4, chi2PT1, chi2PT2, chi2PT3, chi2PT4, chi2PTbis1, chi2PTbis2, chi2PTbis3, chi2PTbis4,\
@@ -331,21 +334,21 @@ for j in xrange(0,len(z)): #chmahe this after test
 		#########################################
 		### For redshift space
 		# p is number of free param
-		R1 = (etns1[lim]-Pmono1[lim])**2/errPr1[lim]**2
-		R2 = (etns2[lim]-Pmono2[lim])**2/errPr2[lim]**2
-		R3 = (etns3[lim]-Pmono3[lim])**2/errPr3[lim]**2
-		R4 = (etns4[lim]-Pmono4[lim])**2/errPr4[lim]**2
-		chi2R1 = np.sum(R1)
-		chi2R2 = np.sum(R2)
-		chi2R3 = np.sum(R3)
-		chi2R4 = np.sum(R4)
+		#~ R1 = (etns1[lim]-Pmono1[lim])**2/errPr1[lim]**2
+		#~ R2 = (etns2[lim]-Pmono2[lim])**2/errPr2[lim]**2
+		#~ R3 = (etns3[lim]-Pmono3[lim])**2/errPr3[lim]**2
+		#~ R4 = (etns4[lim]-Pmono4[lim])**2/errPr4[lim]**2
+		#~ chi2R1 = np.sum(R1)
+		#~ chi2R2 = np.sum(R2)
+		#~ chi2R3 = np.sum(R3)
+		#~ chi2R4 = np.sum(R4)
 	
 		
-		cname = 'chi2rsd_z='+str(z[j])+'.txt'
-		with open(cname, 'a+') as fid_file:
-			fid_file.write('%.8g %.8g %.8g %.8g %.8g %.8g\n' % (kstop,\
-			chi2R1, chi2R2, chi2R3, chi2R4, len(lim)))
-		fid_file.close()
+		#~ cname = 'chi2rsd_z='+str(z[j])+'.txt'
+		#~ with open(cname, 'a+') as fid_file:
+			#~ fid_file.write('%.8g %.8g %.8g %.8g %.8g %.8g\n' % (kstop,\
+			#~ chi2R1, chi2R2, chi2R3, chi2R4, len(lim)))
+		#~ fid_file.close()
 		
 #-------------------------------------------------------------------------------------
 		#~ plt.figure()

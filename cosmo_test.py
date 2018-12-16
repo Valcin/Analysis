@@ -28,7 +28,7 @@ from polynomial import poly
 from perturbation import perturb
 #~ from hmf_test import htest
 from time import time
-from rsd import RSD
+from rsd import RSD1, RSD2
 from bias_library import halo_bias, bias
 from scipy.optimize import curve_fit
 from scipy.interpolate import interp1d
@@ -93,7 +93,7 @@ for j in xrange(0,len(z)):
 
 	kcamb, Pcamb, k, Pmm, _, _, _ , _, _, _, _, _, _, _,_, _, \
 	_, _, _, _, _, _, _, _, _, _, _, _, _, _,\
-	_, _, _, _, _ = ld_data(Mnu, z, j)
+	_, _, _, _, _, _, _, _, _ = ld_data(Mnu, z, j)
 	
 	#-------------------------------------------------
 	#------------matter  Real space --------
@@ -504,6 +504,10 @@ for j in xrange(0,len(z)):
 	Bias_eff_t=np.sum(hmf*dm4*bt)/np.sum(dm4*hmf)
 	
 	
+	### draw a vertical where resolution becaomes bad	
+	#~ print np.min(badres)
+	kres = [0.18,0.22, 0.4, 0.6]
+	badres =np.where((ktest2) < kres[j])[0]
 	####### comparison bias and != models #############################
 
 	#### plot all different bias test
@@ -520,14 +524,15 @@ for j in xrange(0,len(z)):
 	#####################################################################
 	####### comparison bias and != models #############################
 	M1, = ax2.plot(k, bias4r, c='k')
-	#~ ax2.scatter(k, bias4r, c='k', marker='.')
-	M1 = ax2.errorbar(k, bias4r, yerr= errb4r, color='k',fmt='.')
+	ax2.scatter(k, bias4r, c='k', marker='.')
+	#~ M1 = ax2.errorbar(k, bias4r, yerr= errb4r, color='k',fmt='.')
+	#~ ax2.axvline(kres[j],  color='C0', linestyle=':')
 	#---------------------------------------------------------
 	M2, =ax2.plot(k, bias4*Bias_eff_t/Bias_eff_t2, color='C3', label='z = '+str(z[j]))
 	#~ ax2.plot(kfid, bfid*Bias_eff_t/Bias_eff_t2, linestyle = '--', color='C3')
-	M3, =ax2.plot(ktest2, btest2*Bias_eff_t/Bias_eff_t1, color='C0')
+	M3, =ax2.plot(ktest2[badres], btest2[badres]*Bias_eff_t/Bias_eff_t1, color='C0')
 	#~ #--------------------------------------------------------
-	#~ ax2.fill_between(k,bias4r-errb4r, bias4r+errb4r, color='k' ,alpha=0.5)
+	ax2.fill_between(k,bias4r-errb4r, bias4r+errb4r, color='k' ,alpha=0.5)
 	ax2.set_ylim(bias4[5]*0.8,bias4[5]*1.2)
 	ax2.set_xlim(8e-3,1)
 	plt.figlegend( (M1,M2,M3), (r'$M_{\nu}$ = 0.15eV, s8 = 0.806',r'$M_{\nu}$ = 0.0eV, s8 = 0.834',r'$M_{\nu}$ = 0.0eV, s8 = 0.819'), \

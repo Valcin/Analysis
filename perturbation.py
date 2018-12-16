@@ -189,28 +189,28 @@ def perturb(kstop,  lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, Pmm, k, 
 ##########################################################################
 ##########################################################################
 
-	#~ cname2 = '/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+str(Mnu)+'eV/coeff_2exp_'+str(Mnu)+'_z='+str(z[j])+'.txt'
-	#~ cname2err = '/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+str(Mnu)+'eV/err_2exp_'+str(Mnu)+'_z='+str(z[j])+'.txt'
-	#~ cname3 = '/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+str(Mnu)+'eV/coeff_3exp_'+str(Mnu)+'_z='+str(z[j])+'.txt'
-	#~ cname3err = '/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+str(Mnu)+'eV/err_3exp_'+str(Mnu)+'_z='+str(z[j])+'.txt'
-	#~ cname3bis = '/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+str(Mnu)+'eV/coeff_3exp_fixed_'+str(Mnu)+'_z='+str(z[j])+'.txt'
-	#~ cname3errbis = '/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+str(Mnu)+'eV/err_3exp_fixed_'+str(Mnu)+'_z='+str(z[j])+'.txt'
+	#~ cname2 = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/coeff_2exp_'+str(Mnu)+'_z='+str(z[j])+'.txt'
+	#~ cname2err = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/err_2exp_'+str(Mnu)+'_z='+str(z[j])+'.txt'
+	#~ cname3 = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/coeff_3exp_'+str(Mnu)+'_z='+str(z[j])+'.txt'
+	#~ cname3err = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/err_3exp_'+str(Mnu)+'_z='+str(z[j])+'.txt'
+	#~ cname3bis = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/coeff_3exp_fixed_'+str(Mnu)+'_z='+str(z[j])+'.txt'
+	#~ cname3errbis = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/err_3exp_fixed_'+str(Mnu)+'_z='+str(z[j])+'.txt'
 	#------------------------------------------------------------------------------------------------
 
-	cname2 = '/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+str(Mnu)+'eV/case'+str(case)+'/coeff_2exp_'+str(Mnu)+'_z='+str(z[j])+'.txt'
-	cname2err = '/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+str(Mnu)+'eV/case'+str(case)+'/err_2exp_'+str(Mnu)+'_z='+str(z[j])+'.txt'
-	cname3 = '/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+str(Mnu)+'eV/case'+str(case)+'/coeff_3exp_'+str(Mnu)+'_z='+str(z[j])+'.txt'
-	cname3err = '/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+str(Mnu)+'eV/case'+str(case)+'/err_3exp_'+str(Mnu)+'_z='+str(z[j])+'.txt'
-	cname3bis = '/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+str(Mnu)+'eV/case'+str(case)+'/coeff_3exp_fixed_'+str(Mnu)+'_z='+str(z[j])+'.txt'
-	cname3errbis = '/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+str(Mnu)+'eV/case'+str(case)+'/err_3exp_fixed_'+str(Mnu)+'_z='+str(z[j])+'.txt'
+	cname2 = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/case'+str(case)+'/coeff_2exp_'+str(Mnu)+'_z='+str(z[j])+'.txt'
+	cname2err = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/case'+str(case)+'/err_2exp_'+str(Mnu)+'_z='+str(z[j])+'.txt'
+	cname3 = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/case'+str(case)+'/coeff_3exp_'+str(Mnu)+'_z='+str(z[j])+'.txt'
+	cname3err = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/case'+str(case)+'/err_3exp_'+str(Mnu)+'_z='+str(z[j])+'.txt'
+	cname3bis = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/case'+str(case)+'/coeff_3exp_fixed_'+str(Mnu)+'_z='+str(z[j])+'.txt'
+	cname3errbis = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/case'+str(case)+'/err_3exp_fixed_'+str(Mnu)+'_z='+str(z[j])+'.txt'
 
 
-	with open(cname2, 'w') as fid_file:
-		fid_file.write('%.8g %.8g %.8g %.8g\n' % (b1y1_mcmc, b2y1_mcmc, bsy1_mcmc, Ny1))
-		fid_file.write('%.8g %.8g %.8g %.8g\n' % (b1y2_mcmc, b2y2_mcmc, bsy2_mcmc, Ny2))
-		fid_file.write('%.8g %.8g %.8g %.8g\n' % (b1y3_mcmc, b2y3_mcmc, bsy3_mcmc, Ny3))
-		fid_file.write('%.8g %.8g %.8g %.8g\n' % (b1y4_mcmc, b2y4_mcmc, bsy4_mcmc, Ny4))
-	fid_file.close()
+	#~ with open(cname2, 'w') as fid_file:
+		#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (b1y1_mcmc, b2y1_mcmc, bsy1_mcmc, Ny1))
+		#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (b1y2_mcmc, b2y2_mcmc, bsy2_mcmc, Ny2))
+		#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (b1y3_mcmc, b2y3_mcmc, bsy3_mcmc, Ny3))
+		#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (b1y4_mcmc, b2y4_mcmc, bsy4_mcmc, Ny4))
+	#~ fid_file.close()
 	#~ with open(cname2err, 'w') as fid_file:
 		#~ fid_file.write('%.8g %.8g %.8g %.8g %.8g %.8g\n' % (b1y1_mcmc[1], b2y1_mcmc[1], bsy1_mcmc[1]\
 		#~ ,b1y1_mcmc[2], b2y1_mcmc[2], bsy1_mcmc[2]))
@@ -221,12 +221,12 @@ def perturb(kstop,  lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, Pmm, k, 
 		#~ fid_file.write('%.8g %.8g %.8g %.8g %.8g %.8g\n' % (b1y4_mcmc[1], b2y4_mcmc[1], bsy4_mcmc[1]\
 		#~ ,b1y4_mcmc[2], b2y4_mcmc[2], bsy4_mcmc[2]))
 	#~ fid_file.close()
-	with open(cname3, 'w') as fid_file:
-		fid_file.write('%.8g %.8g %.8g %.8g %.8g\n' % (b1z1_mcmc, b2z1_mcmc, bsz1_mcmc, b3z1_mcmc, Nz1))
-		fid_file.write('%.8g %.8g %.8g %.8g %.8g\n' % (b1z2_mcmc, b2z2_mcmc, bsz2_mcmc, b3z2_mcmc, Nz2))
-		fid_file.write('%.8g %.8g %.8g %.8g %.8g\n' % (b1z3_mcmc, b2z3_mcmc, bsz3_mcmc, b3z3_mcmc, Nz3))
-		fid_file.write('%.8g %.8g %.8g %.8g %.8g\n' % (b1z4_mcmc, b2z4_mcmc, bsz4_mcmc, b3z4_mcmc, Nz4))
-	fid_file.close()
+	#~ with open(cname3, 'w') as fid_file:
+		#~ fid_file.write('%.8g %.8g %.8g %.8g %.8g\n' % (b1z1_mcmc, b2z1_mcmc, bsz1_mcmc, b3z1_mcmc, Nz1))
+		#~ fid_file.write('%.8g %.8g %.8g %.8g %.8g\n' % (b1z2_mcmc, b2z2_mcmc, bsz2_mcmc, b3z2_mcmc, Nz2))
+		#~ fid_file.write('%.8g %.8g %.8g %.8g %.8g\n' % (b1z3_mcmc, b2z3_mcmc, bsz3_mcmc, b3z3_mcmc, Nz3))
+		#~ fid_file.write('%.8g %.8g %.8g %.8g %.8g\n' % (b1z4_mcmc, b2z4_mcmc, bsz4_mcmc, b3z4_mcmc, Nz4))
+	#~ fid_file.close()
 	#~ with open(cname3err, 'w') as fid_file:
 		#~ fid_file.write('%.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g\n' % (b1z1_mcmc[1], b2z1_mcmc[1], bsz1_mcmc[1], b3z1_mcmc[1]\
 		#~ ,b1z1_mcmc[2], b2z1_mcmc[2], bsz1_mcmc[2], b3z1_mcmc[2]))
@@ -237,12 +237,12 @@ def perturb(kstop,  lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, Pmm, k, 
 		#~ fid_file.write('%.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g\n' % (b1z4_mcmc[1], b2z4_mcmc[1], bsz4_mcmc[1], b3z4_mcmc[1]\
 		#~ ,b1z4_mcmc[2], b2z4_mcmc[2], bsz4_mcmc[2], b3z4_mcmc[2]))
 	#~ fid_file.close()
-	with open(cname3bis, 'w') as fid_file:
-		fid_file.write('%.8g %.8g %.8g\n' % (b1u1_mcmc, b2u1_mcmc, Nu1))
-		fid_file.write('%.8g %.8g %.8g\n' % (b1u2_mcmc, b2u2_mcmc, Nu2))
-		fid_file.write('%.8g %.8g %.8g\n' % (b1u3_mcmc, b2u3_mcmc, Nu3))
-		fid_file.write('%.8g %.8g %.8g\n' % (b1u4_mcmc, b2u4_mcmc, Nu4))
-	fid_file.close()
+	#~ with open(cname3bis, 'w') as fid_file:
+		#~ fid_file.write('%.8g %.8g %.8g\n' % (b1u1_mcmc, b2u1_mcmc, Nu1))
+		#~ fid_file.write('%.8g %.8g %.8g\n' % (b1u2_mcmc, b2u2_mcmc, Nu2))
+		#~ fid_file.write('%.8g %.8g %.8g\n' % (b1u3_mcmc, b2u3_mcmc, Nu3))
+		#~ fid_file.write('%.8g %.8g %.8g\n' % (b1u4_mcmc, b2u4_mcmc, Nu4))
+	#~ fid_file.close()
 	#~ with open(cname3errbis, 'w') as fid_file:
 		#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (b1u1_mcmc[1], b2u1_mcmc[1]\
 		#~ ,b1u1_mcmc[2], b2u1_mcmc[2]))
@@ -336,19 +336,19 @@ def perturb(kstop,  lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, Pmm, k, 
 #####################################################################
 	
 	
-	#~ Mpt2 = np.loadtxt('/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+\
+	#~ Mpt2 = np.loadtxt('/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+\
 	#~ str(Mnu)+'eV/coeff_2exp_'+str(Mnu)+'_z='+str(z[j])+'.txt')
-	#~ Mpt3 = np.loadtxt('/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+\
+	#~ Mpt3 = np.loadtxt('/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+\
 	#~ str(Mnu)+'eV/coeff_3exp_'+str(Mnu)+'_z='+str(z[j])+'.txt')
-	#~ Mpt3bis = np.loadtxt('/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+\
+	#~ Mpt3bis = np.loadtxt('/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+\
 	#~ str(Mnu)+'eV/coeff_3exp_fixed_'+str(Mnu)+'_z='+str(z[j])+'.txt')
 	
 	
-	#~ bpt2 = np.loadtxt('/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+\
+	#~ bpt2 = np.loadtxt('/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+\
 	#~ str(Mnu)+'eV/case'+str(case)+'/coeff_2exp_'+str(Mnu)+'_z='+str(z[j])+'.txt')
-	#~ bpt3 = np.loadtxt('/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+\
+	#~ bpt3 = np.loadtxt('/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+\
 	#~ str(Mnu)+'eV/case'+str(case)+'/coeff_3exp_'+str(Mnu)+'_z='+str(z[j])+'.txt')
-	#~ bpt3bis = np.loadtxt('/home/david/codes/montepython_public/BE_HaPPy/coefficients/'+\
+	#~ bpt3bis = np.loadtxt('/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+\
 	#~ str(Mnu)+'eV/case'+str(case)+'/coeff_3exp_fixed_'+str(Mnu)+'_z='+str(z[j])+'.txt')
 	
 	
