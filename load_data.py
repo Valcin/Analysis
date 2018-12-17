@@ -23,6 +23,7 @@ import tempfile
 import expected_CF
 import exp2
 from time import time
+from loop_pt import pt_terms
 from bias_library import halo_bias, bias
 from scipy.optimize import curve_fit
 from scipy.interpolate import interp1d
@@ -55,19 +56,63 @@ def ld_data(mv, z, j):
 		#------------------------------------------------
 		#-------- data from scoccimaro 2004 -------------
 		#------------------------------------------------
-		scoccidd = np.loadtxt('//home/david/delta.txt')
+		scoccidd = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/class_scocci/delta.txt')
 		psdd = scoccidd[:,0]
 		ksdd = scoccidd[:,1]
-		scoccidt = np.loadtxt('//home/david/deltheta.txt')
+		scoccidt = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/class_scocci/deltheta.txt')
 		psdt = scoccidt[:,0]
 		ksdt = scoccidt[:,1]
-		scoccitt = np.loadtxt('//home/david/theta.txt')
+		scoccitt = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/class_scocci/theta.txt')
 		pstt = scoccitt[:,0]
 		kstt = scoccitt[:,1]
 
 		classS = np.loadtxt('/home/david/codes/Paco/data2/0.0eV/class_scocci/test_pk.dat')
 		ks = classS[:,0]
 		pks = classS[:,1]
+		
+		ksbis = np.logspace(np.log10(np.min(ks)),np.log10(np.max(ks)), 100)
+		pksbis = np.interp(ksbis, ks,pks)
+		Pmod_dd, Pmod_dt, Pmod_tt, A, B, C, D, E, F, G, H   = pt_terms(ksbis, pksbis)
+		
+		fig = plt.figure()
+		ax1 = fig.add_subplot(3, 1, 1)
+		plt.gca().axes.get_xaxis().set_visible(False)
+		B1, =ax1.plot(ksdd, psdd, c='b')
+		B2, =ax1.plot(ksbis, Pmod_dd/pksbis, c='r')
+		ax1.axhline(1, linestyle='--', c='k')
+		ax1.set_xscale('log')
+		ax1.set_xlim(2e-2, 0.2)
+		ax1.set_ylim(0.5, 1.5)
+		ax1.set_ylabel(r'$P_{\delta\delta}$ / $P_{lin}$', fontsize=16)
+		#------------------
+		ax2 = fig.add_subplot(3, 1, 2)
+		plt.gca().axes.get_xaxis().set_visible(False)
+		ax2.plot(ksdt, psdt, c='b')
+		ax2.plot(ksbis, Pmod_dt/pksbis, c='r')
+		ax2.axhline(1, linestyle='--', c='k')
+		ax2.set_xscale('log')
+		ax2.set_xlim(2e-2, 0.2)
+		ax2.set_ylim(0.5, 1.5)
+		ax2.set_ylabel(r'$P_{\delta\theta}$ / $P_{lin}$', fontsize=16)
+		#-------------------
+		ax3 = fig.add_subplot(3, 1, 3)
+		ax3.plot(kstt, pstt, c='b')
+		ax3.plot(ksbis, Pmod_tt/pksbis, c='r')
+		ax3.axhline(1, linestyle='--', c='k')
+		ax3.set_xscale('log')
+		ax3.set_xlim(2e-2, 0.2)
+		ax3.set_ylim(0.5, 1.5)
+		ax3.set_xlabel('k [h/Mpc]', fontsize=14)
+		ax3.set_ylabel(r'$P_{\theta\theta}$ / $P_{lin}$', fontsize=16)
+		#-------------------
+		plt.subplots_adjust(wspace=0, hspace=0)
+		plt.figlegend( (B1,B2), ('Scoccimarro','FAST-PT implementation'), \
+		#~ ######################################
+		loc = 'upper center', ncol=3, labelspacing=0., title = ' z = 0', fontsize=14)
+		
+		plt.show()
+		kill
+		
 		#~ #-------------------------------------------------
 		#~ #---------------- Camb ---------------------------
 		#~ #-------------------------------------------------
@@ -77,7 +122,7 @@ def ld_data(mv, z, j):
 		#~ Plin = Pcamb
 		#~ klin = kcamb
 		
-		
+	
 		#~ #-------------------------------------------------
 		#~ #---------------- Class ---------------------------
 		#~ #-------------------------------------------------

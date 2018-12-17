@@ -21,7 +21,6 @@ import bias_library as BL
 import tempfile
 import expected_CF
 import exp2
-from load_data import ld_data
 from time import time
 from bias_library import halo_bias, bias
 from scipy.optimize import curve_fit

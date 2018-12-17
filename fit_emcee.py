@@ -112,16 +112,16 @@ def coeffit_pl (kstop,lb1, errlb1, pop, k ,b ,errb):
 		lp = lnprior(theta)
 		if not np.isfinite(lp):
 			return -np.inf
-		if lnlike(theta, x, y, yerr) < 0:
+		#~ if lnlike(theta, x, y, yerr) < 0:
 			#~ print ('-- ') + str(lp + lnlike(theta, x, y, yerr))
-			print ('-- ') + str(lp + lnlike(theta, x, y, yerr))
-			from termcolor import colored
-			print colored(theta, 'red')
-		else:
-			print '!! '+ str(lp + lnlike(theta, x, y, yerr))
+			#~ print ('-- ') + str(lp + lnlike(theta, x, y, yerr))
+			#~ from termcolor import colored
+			#~ print colored(theta, 'red')
+		#~ else:
+			#~ print '!! '+ str(lp + lnlike(theta, x, y, yerr))
 			#~ print '!! '+ str(lp + lnlike(theta, x1,x2,x3,x4,x5,x6,x7,x8, y, yerr))
-			from termcolor import colored
-			print colored(theta, 'blue')
+			#~ from termcolor import colored
+			#~ print colored(theta, 'blue')
 		return lp + lnlike(theta, x, y, yerr)
 		
 		
@@ -138,27 +138,29 @@ def coeffit_pl (kstop,lb1, errlb1, pop, k ,b ,errb):
 	print 'maximum likelihood is '+str(max_l)
 	print 'AIC = '+str(AIC)
 	
-	#~ ndim, nwalkers = len(pop), 300
-	#~ pos = [result["x"] + 1e-3*np.random.randn(ndim) for i in range(nwalkers)]
+	ndim, nwalkers = len(pop), 300
+	pos = [result["x"] + 1e-3*np.random.randn(ndim) for i in range(nwalkers)]
 	
-	#~ posnum = 1000
-	#~ sampler = emcee.EnsembleSampler(nwalkers, ndim, lnprob, args=(k, b, errb))
-	#~ sampler.run_mcmc(pos, posnum)
+	posnum = 1000
+	sampler = emcee.EnsembleSampler(nwalkers, ndim, lnprob, args=(k, b, errb))
+	sampler.run_mcmc(pos, posnum)
 	
-	#~ samples = sampler.chain[:, 50:, :].reshape((-1, ndim))
+	samples = sampler.chain[:, 50:, :].reshape((-1, ndim))
 
-	#~ print("Mean acceptance fraction: {0:.3f}"
-                #~ .format(np.mean(sampler.acceptance_fraction)))
+	print("Mean acceptance fraction: {0:.3f}"
+                .format(np.mean(sampler.acceptance_fraction)))
 	#~ import corner
 	#~ fig = corner.corner(samples, labels=["$b1$", "$b2$", "$b3$", "$b4$" ], truths=[b1_ml, b2_ml, b3_ml, b4_ml])
 	#~ fig.savefig("/home/david/triangle.png")
 	
 
-	#~ b1_mcmc, b2_mcmc, b3_mcmc, b4_mcmc = map(lambda v: (v[1], v[2]-v[1], v[1]-v[0]), zip(*np.percentile(samples, [16, 50, 84], axis=0)))
+	b1_mcmc, b2_mcmc, b3_mcmc, b4_mcmc = map(lambda v: (v[1], v[2]-v[1], v[1]-v[0]), zip(*np.percentile(samples, [16, 50, 84], axis=0)))
 	
-	#~ print b1_mcmc, b2_mcmc, b3_mcmc, b4_mcmc
+	print b1_mcmc, b2_mcmc, b3_mcmc, b4_mcmc
 	
 
+	
+	#~ kill
 	#~ plt.figure()
 	#~ ax1 = plt.subplot(221)
 	#~ ax1.set_title('b1')
@@ -183,7 +185,7 @@ def coeffit_pl (kstop,lb1, errlb1, pop, k ,b ,errb):
 	#~ plt.show()
 	
 	#~ return b1_mcmc, b2_mcmc, b3_mcmc, b4_mcmc
-	return b1_ml, b2_ml, b3_ml, b4_ml
+	return b1_ml, b2_ml, b3_ml, b4_ml, b1_mcmc, b2_mcmc, b3_mcmc, b4_mcmc
 ########################################################################
 ######### bias expansion 2nd order
 ########################################################################
@@ -205,7 +207,7 @@ def coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb1, errlb1, pop, k ,b ,errb, noise)
 	def lnprior(theta):
 		b1, b2, bs, N = theta
 		#~ if lb1 - 3*errlb1 < b1 < lb1 + 3*errlb1  and b1 > 0:
-		if  0 < b1 :
+		if  0 < b1  and -3*noise < N < 3*noise:
 			return 0.0
 		#~ return 0.0
 		return -np.inf
@@ -214,16 +216,16 @@ def coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb1, errlb1, pop, k ,b ,errb, noise)
 		lp = lnprior(theta)
 		if not np.isfinite(lp):
 			return -np.inf
-		if lnlike(theta, x, y, yerr) < 0:
-			print ('-- ') + str(lp + lnlike(theta, x, y, yerr))
+		#~ if lnlike(theta, x, y, yerr) < 0:
+			#~ print ('-- ') + str(lp + lnlike(theta, x, y, yerr))
 			#~ print ('-- ') + str(lp + lnlike(theta, x1,x2,x3,x4,x5,x6,x7,x8, y, yerr))
-			from termcolor import colored
-			print colored(theta, 'red')
-		else:
-			print '!! '+ str(lp + lnlike(theta, x, y, yerr))
+			#~ from termcolor import colored
+			#~ print colored(theta, 'red')
+		#~ else:
+			#~ print '!! '+ str(lp + lnlike(theta, x, y, yerr))
 			#~ print '!! '+ str(lp + lnlike(theta, x1,x2,x3,x4,x5,x6,x7,x8, y, yerr))
-			from termcolor import colored
-			print colored(theta, 'blue')
+			#~ from termcolor import colored
+			#~ print colored(theta, 'blue')
 		return lp + lnlike(theta, x, y, yerr)
 
 
@@ -239,23 +241,23 @@ def coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb1, errlb1, pop, k ,b ,errb, noise)
 	#~ print 'maximum likelihood is '+str(max_l)
 	#~ print 'AIC = '+str(AIC)
 	
-	#~ ndim, nwalkers = len(pop), 100
-	#~ pos = [result["x"] + 1e-4*np.random.randn(ndim) for i in range(nwalkers)]
+	ndim, nwalkers = len(pop), 100
+	pos = [result["x"] + 1e-4*np.random.randn(ndim) for i in range(nwalkers)]
 
-	#~ posnum = 1000
-	#~ sampler = emcee.EnsembleSampler(nwalkers, ndim, lnprob, args=(k, b, errb), a = 2.)
-	#~ sampler.run_mcmc(pos, posnum)
+	posnum = 1000
+	sampler = emcee.EnsembleSampler(nwalkers, ndim, lnprob, args=(k, b, errb), a = 2.)
+	sampler.run_mcmc(pos, posnum)
 	
-	#~ samples = sampler.chain[:, 200:, :].reshape((-1, ndim))
+	samples = sampler.chain[:, 200:, :].reshape((-1, ndim))
 
-	#~ print("Mean acceptance fraction: {0:.3f}"
-                #~ .format(np.mean(sampler.acceptance_fraction)))
+	print("Mean acceptance fraction: {0:.3f}"
+                .format(np.mean(sampler.acceptance_fraction)))
 	#~ import corner
 	#~ fig = corner.corner(samples, labels=["$b1$", "$b2$", "$bs$" , "$N$" ], truths=[b1_ml, b2_ml, bs_ml, N_ml])
 	#~ fig.savefig("/home/david/triangle.png")
 	
 
-	#~ b1_mcmc, b2_mcmc, bs_mcmc, N_mcmc = map(lambda v: (v[1], v[2]-v[1], v[1]-v[0]), zip(*np.percentile(samples, [16, 50, 84], axis=0)))
+	b1_mcmc, b2_mcmc, bs_mcmc, N_mcmc = map(lambda v: (v[1], v[2]-v[1], v[1]-v[0]), zip(*np.percentile(samples, [16, 50, 84], axis=0)))
 	#~ plt.figure()
 	#~ ax1 = plt.subplot(221)
 	#~ ax1.set_title('b1')
@@ -282,7 +284,7 @@ def coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb1, errlb1, pop, k ,b ,errb, noise)
 	#~ plt.show()
 
 	#~ return b1_mcmc, b2_mcmc, bs_mcmc, N_mcmc, b1_ml, b2_ml, bs_ml, N_ml
-	return b1_ml, b2_ml, bs_ml, N_ml
+	return b1_ml, b2_ml, bs_ml, N_ml, b1_mcmc, b2_mcmc, bs_mcmc, N_mcmc
 	
 ########################################################################
 ######### bias expansion 3rd order free
@@ -312,16 +314,16 @@ def coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, pop, k ,b ,errb, noi
 		lp = lnprior(theta, x, y, yerr)
 		if not np.isfinite(lp):
 			return -np.inf
-		if lnlike(theta, x, y, yerr) < 0:
-			print ('-- ') + str(lp + lnlike(theta, x, y, yerr))
+		#~ if lnlike(theta, x, y, yerr) < 0:
+			#~ print ('-- ') + str(lp + lnlike(theta, x, y, yerr))
 			#~ print ('-- ') + str(lp + lnlike(theta, x1,x2,x3,x4,x5,x6,x7,x8, y, yerr))
-			from termcolor import colored
-			print colored(theta, 'red')
-		else:
-			print '!! '+ str(lp + lnlike(theta, x, y, yerr))
+			#~ from termcolor import colored
+			#~ print colored(theta, 'red')
+		#~ else:
+			#~ print '!! '+ str(lp + lnlike(theta, x, y, yerr))
 			#~ print '!! '+ str(lp + lnlike(theta, x1,x2,x3,x4,x5,x6,x7,x8, y, yerr))
-			from termcolor import colored
-			print colored(theta, 'blue')
+			#~ from termcolor import colored
+			#~ print colored(theta, 'blue')
 		return lp + lnlike(theta, x, y, yerr)
 
 	
@@ -337,23 +339,23 @@ def coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, pop, k ,b ,errb, noi
 	#~ print 'maximum likelihood is '+str(max_l)
 	#~ print 'AIC = '+str(AIC)
 	
-	#~ ndim, nwalkers = len(pop), 200
-	#~ pos = [result["x"] + 1e-4*np.random.randn(ndim) for i in range(nwalkers)]
+	ndim, nwalkers = len(pop), 200
+	pos = [result["x"] + 1e-4*np.random.randn(ndim) for i in range(nwalkers)]
 
-	#~ posnum = 1000
-	#~ sampler = emcee.EnsembleSampler(nwalkers, ndim, lnprob, args=(k, b, errb), a = 2.)
-	#~ sampler.run_mcmc(pos, posnum)
+	posnum = 1000
+	sampler = emcee.EnsembleSampler(nwalkers, ndim, lnprob, args=(k, b, errb), a = 2.)
+	sampler.run_mcmc(pos, posnum)
 	
-	#~ samples = sampler.chain[:, 200:, :].reshape((-1, ndim))
+	samples = sampler.chain[:, 200:, :].reshape((-1, ndim))
 
-	#~ print("Mean acceptance fraction: {0:.3f}"
-                #~ .format(np.mean(sampler.acceptance_fraction)))
+	print("Mean acceptance fraction: {0:.3f}"
+                .format(np.mean(sampler.acceptance_fraction)))
 	#~ import corner
 	#~ fig = corner.corner(samples, labels=["$b1$", "$b2$", "$bs$" ,"$b3nl$" , "$N$" ], truths=[b1_ml, b2_ml, bs_ml, b3_ml, N_ml])
 	#~ fig.savefig("/home/david/triangle.png")
 	
 
-	#~ b1_mcmc, b2_mcmc, bs_mcmc, b3_mcmc, N_mcmc = map(lambda v: (v[1], v[2]-v[1], v[1]-v[0]), zip(*np.percentile(samples, [16, 50, 84], axis=0)))
+	b1_mcmc, b2_mcmc, bs_mcmc, b3_mcmc, N_mcmc = map(lambda v: (v[1], v[2]-v[1], v[1]-v[0]), zip(*np.percentile(samples, [16, 50, 84], axis=0)))
 	#~ print(result)
 	#~ print b1_mcmc[0], b2_mcmc[0], bs_mcmc[0], b3_mcmc[0], N_mcmc[0]
 	#~ print pop
@@ -393,7 +395,7 @@ def coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, pop, k ,b ,errb, noi
 	#~ plt.show()
 	#~ kill
 	#~ return b1_mcmc, b2_mcmc, bs_mcmc, b3_mcmc, N_mcmc
-	return b1_ml, b2_ml, bs_ml, b3_ml, N_ml
+	return b1_ml, b2_ml, bs_ml, b3_ml, N_ml, b1_mcmc, b2_mcmc, bs_mcmc, b3_mcmc, N_mcmc
 ########################################################################
 ######### bias expansion 3rd order fixed
 ########################################################################
@@ -412,10 +414,10 @@ def coeffit_exp3(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, pop, k ,b ,errb, noi
 	
 	def lnprior(theta):
 		b1, b2, N = theta
-		#~ if  0 < b1:
-			#~ return 0.0
-		return 0.0
-		#~ return -np.inf
+		if  0 < b1 and  -3*noise < N < 3*noise :
+			return 0.0
+		#~ return 0.0
+		return -np.inf
 	
 	def lnprob(theta, x, y, yerr):
 		lp = lnprior(theta)

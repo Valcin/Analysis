@@ -23,6 +23,7 @@ import tempfile
 import expected_CF
 import exp2
 from time import time
+from table import table_write_pt2, table_write_pt3
 from bias_library import halo_bias, bias
 from scipy.optimize import curve_fit
 from scipy.interpolate import interp1d
@@ -72,19 +73,31 @@ def perturb(kstop,  lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, Pmm, k, 
 ##### compute coefficient with emcee
 ####################################################################
 	# 2nd order bias ----------------------------------------------------------------------------------------------
-	b1y1_mcmc, b2y1_mcmc, bsy1_mcmc, Ny1= coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb1,errlb1, pop1, k ,bias1 ,errb1, noise1)
-	b1y2_mcmc, b2y2_mcmc, bsy2_mcmc, Ny2 = coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb2,errlb2, pop2, k ,bias2 ,errb2, noise2)
-	b1y3_mcmc, b2y3_mcmc, bsy3_mcmc, Ny3 = coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb3,errlb3, pop3, k ,bias3 ,errb3, noise3)
-	b1y4_mcmc, b2y4_mcmc, bsy4_mcmc, Ny4 = coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb4,errlb4, pop4, k ,bias4 ,errb4, noise4)
+	b1y1_ml, b2y1_ml, bsy1_ml, Ny1, b1y1_mcmc, b2y1_mcmc, bsy1_mcmc, Nmc1= coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb1,errlb1, pop1, k ,bias1 ,errb1, noise1)
+	b1y2_ml, b2y2_ml, bsy2_ml, Ny2, b1y2_mcmc, b2y2_mcmc, bsy2_mcmc, Nmc2 = coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb2,errlb2, pop2, k ,bias2 ,errb2, noise2)
+	b1y3_ml, b2y3_ml, bsy3_ml, Ny3, b1y3_mcmc, b2y3_mcmc, bsy3_mcmc, Nmc3 = coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb3,errlb3, pop3, k ,bias3 ,errb3, noise3)
+	b1y4_ml, b2y4_ml, bsy4_ml, Ny4, b1y4_mcmc, b2y4_mcmc, bsy4_mcmc, Nmc4 = coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb4,errlb4, pop4, k ,bias4 ,errb4, noise4)
+	
+	#-----
+	table_write_pt2(b1y1_ml, b2y1_ml, bsy1_ml, b1y1_mcmc, b2y1_mcmc, bsy1_mcmc,\
+	b1y2_ml, b2y2_ml, bsy2_ml, b1y2_mcmc, b2y2_mcmc, bsy2_mcmc, \
+	b1y3_ml, b2y3_ml, bsy3_ml, b1y3_mcmc, b2y3_mcmc, bsy3_mcmc, \
+	b1y4_ml, b2y4_ml, bsy4_ml, b1y4_mcmc, b2y4_mcmc, bsy4_mcmc, 'coeffpt2_'+str(z[j])+'.txt') 
 	#~ #3rd order free -----------------------------------------------------------------------------------------------
-	b1z1_mcmc, b2z1_mcmc, bsz1_mcmc, b3z1_mcmc, Nz1 = coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, popbis1,\
+	b1z1_ml, b2z1_ml, bsz1_ml, b3z1_ml, Nz1, b1z1_mcmc, b2z1_mcmc, bsz1_mcmc, b3z1_mcmc, Nmc1 = coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, popbis1,\
 	k ,bias1 ,errb1, noise1)
-	b1z2_mcmc, b2z2_mcmc, bsz2_mcmc, b3z2_mcmc, Nz2 = coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb2, errlb2, popbis2,\
+	b1z2_ml, b2z2_ml, bsz2_ml, b3z2_ml, Nz2, b1z2_mcmc, b2z2_mcmc, bsz2_mcmc, b3z2_mcmc, Nmc2 = coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb2, errlb2, popbis2,\
 	k ,bias2 ,errb2, noise2)
-	b1z3_mcmc, b2z3_mcmc, bsz3_mcmc, b3z3_mcmc, Nz3 = coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb3, errlb3, popbis3,\
+	b1z3_ml, b2z3_ml, bsz3_ml, b3z3_ml, Nz3, b1z3_mcmc, b2z3_mcmc, bsz3_mcmc, b3z3_mcmc, Nmc3 = coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb3, errlb3, popbis3,\
 	k ,bias3 ,errb3, noise3)
-	b1z4_mcmc, b2z4_mcmc, bsz4_mcmc, b3z4_mcmc, Nz4 = coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb4, errlb4, popbis4,\
+	b1z4_ml, b2z4_ml, bsz4_ml, b3z4_ml, Nz4, b1z4_mcmc, b2z4_mcmc, bsz4_mcmc, b3z4_mcmc, Nmc4 = coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb4, errlb4, popbis4,\
 	k ,bias4 ,errb4, noise4)
+	
+	#-----
+	table_write_pt3(b1z1_ml, b2z1_ml, bsz1_ml, b3z1_ml, b1z1_mcmc, b2z1_mcmc, bsz1_mcmc, b3z1_mcmc,\
+	b1z2_ml, b2z2_ml, bsz2_ml, b3z2_ml, b1z2_mcmc, b2z2_mcmc, bsz2_mcmc, b3z2_mcmc, \
+	b1z3_ml, b2z3_ml, bsz3_ml, b3z3_ml, b1z3_mcmc, b2z3_mcmc, bsz3_mcmc, b3z3_mcmc,  \
+	b1z4_ml, b2z4_ml, bsz4_ml, b3z4_ml, b1z4_mcmc, b2z4_mcmc, bsz4_mcmc, b3z4_mcmc, 'coeffpt3_'+str(z[j])+'.txt') 
 	#~ #-3rd order fixed -------------------------------------------------------------------------------------------------
 	b1u1_mcmc, b2u1_mcmc, Nu1= coeffit_exp3(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, popter1,\
 	k ,bias1 ,errb1, noise1)
@@ -106,14 +119,14 @@ def perturb(kstop,  lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, Pmm, k, 
 	#~ 1/2.*b2y3_mcmc[0]*bsy3_mcmc[0]*D + 1/4.*bsy3_mcmc[0]**2*E )/Pmm)
 	#~ bias2PT4 = np.sqrt((b1y4_mcmc[0]**2 * Pmm+ b1y4_mcmc[0]*b2y4_mcmc[0]*A + 1/4.*b2y4_mcmc[0]**2*B + b1y4_mcmc[0]*bsy4_mcmc[0]*C +\
 	#~ 1/2.*b2y4_mcmc[0]*bsy4_mcmc[0]*D + 1/4.*bsy4_mcmc[0]**2*E )/Pmm)
-	bias2PT1 = np.sqrt((b1y1_mcmc**2 * Pmm+ b1y1_mcmc*b2y1_mcmc*A + 1/4.*b2y1_mcmc**2*B + b1y1_mcmc*bsy1_mcmc*C +\
-	1/2.*b2y1_mcmc*bsy1_mcmc*D + 1/4.*bsy1_mcmc**2*E + Ny1)/Pmm)
-	bias2PT2 = np.sqrt((b1y2_mcmc**2 * Pmm+ b1y2_mcmc*b2y2_mcmc*A + 1/4.*b2y2_mcmc**2*B + b1y2_mcmc*bsy2_mcmc*C +\
-	1/2.*b2y2_mcmc*bsy2_mcmc*D + 1/4.*bsy2_mcmc**2*E + Ny2)/Pmm)
-	bias2PT3 = np.sqrt((b1y3_mcmc**2 * Pmm+ b1y3_mcmc*b2y3_mcmc*A + 1/4.*b2y3_mcmc**2*B + b1y3_mcmc*bsy3_mcmc*C +\
-	1/2.*b2y3_mcmc*bsy3_mcmc*D + 1/4.*bsy3_mcmc**2*E + Ny3)/Pmm)
-	bias2PT4 = np.sqrt((b1y4_mcmc**2 * Pmm+ b1y4_mcmc*b2y4_mcmc*A + 1/4.*b2y4_mcmc**2*B + b1y4_mcmc*bsy4_mcmc*C +\
-	1/2.*b2y4_mcmc*bsy4_mcmc*D + 1/4.*bsy4_mcmc**2*E + Ny4)/Pmm)
+	bias2PT1 = np.sqrt((b1y1_ml**2 * Pmm+ b1y1_ml*b2y1_ml*A + 1/4.*b2y1_ml**2*B + b1y1_ml*bsy1_ml*C +\
+	1/2.*b2y1_ml*bsy1_ml*D + 1/4.*bsy1_ml**2*E + Ny1)/Pmm)
+	bias2PT2 = np.sqrt((b1y2_ml**2 * Pmm+ b1y2_ml*b2y2_ml*A + 1/4.*b2y2_ml**2*B + b1y2_ml*bsy2_ml*C +\
+	1/2.*b2y2_ml*bsy2_ml*D + 1/4.*bsy2_ml**2*E + Ny2)/Pmm)
+	bias2PT3 = np.sqrt((b1y3_ml**2 * Pmm+ b1y3_ml*b2y3_ml*A + 1/4.*b2y3_ml**2*B + b1y3_ml*bsy3_ml*C +\
+	1/2.*b2y3_ml*bsy3_ml*D + 1/4.*bsy3_ml**2*E + Ny3)/Pmm)
+	bias2PT4 = np.sqrt((b1y4_ml**2 * Pmm+ b1y4_ml*b2y4_ml*A + 1/4.*b2y4_ml**2*B + b1y4_ml*bsy4_ml*C +\
+	1/2.*b2y4_ml*bsy4_ml*D + 1/4.*bsy4_ml**2*E + Ny4)/Pmm)
 	
 
 	#~ # 3rd order free -------------------------------------------------------------------
@@ -125,14 +138,14 @@ def perturb(kstop,  lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, Pmm, k, 
 	#~ 1/2.*b2z3_mcmc[0]*bsz3_mcmc[0]*D + 1/4.*bsz3_mcmc[0]**2*E + 2*b1z3_mcmc[0]*b3z3_mcmc[0]*F)/Pmm)
 	#~ bias3PT4 = np.sqrt((b1z4_mcmc[0]**2 * Pmm+ b1z4_mcmc[0]*b2z4_mcmc[0]*A + 1/4.*b2z4_mcmc[0]**2*B + b1z4_mcmc[0]*bsz4_mcmc[0]*C +\
 	#~ 1/2.*b2z4_mcmc[0]*bsz4_mcmc[0]*D + 1/4.*bsz4_mcmc[0]**2*E + 2*b1z4_mcmc[0]*b3z4_mcmc[0]*F)/Pmm)
-	bias3PT1 = np.sqrt((b1z1_mcmc**2 * Pmm+ b1z1_mcmc*b2z1_mcmc*A + 1/4.*b2z1_mcmc**2*B + b1z1_mcmc*bsz1_mcmc*C +\
-	1/2.*b2z1_mcmc*bsz1_mcmc*D + 1/4.*bsz1_mcmc**2*E + 2*b1z1_mcmc*b3z1_mcmc*F + Nz1)/Pmm)
-	bias3PT2 = np.sqrt((b1z2_mcmc**2 * Pmm+ b1z2_mcmc*b2z2_mcmc*A + 1/4.*b2z2_mcmc**2*B + b1z2_mcmc*bsz2_mcmc*C +\
-	1/2.*b2z2_mcmc*bsz2_mcmc*D + 1/4.*bsz2_mcmc**2*E + 2*b1z2_mcmc*b3z2_mcmc*F + Nz2)/Pmm)
-	bias3PT3 = np.sqrt((b1z3_mcmc**2 * Pmm+ b1z3_mcmc*b2z3_mcmc*A + 1/4.*b2z3_mcmc**2*B + b1z3_mcmc*bsz3_mcmc*C +\
-	1/2.*b2z3_mcmc*bsz3_mcmc*D + 1/4.*bsz3_mcmc**2*E + 2*b1z3_mcmc*b3z3_mcmc*F + Nz3)/Pmm)
-	bias3PT4 = np.sqrt((b1z4_mcmc**2 * Pmm+ b1z4_mcmc*b2z4_mcmc*A + 1/4.*b2z4_mcmc**2*B + b1z4_mcmc*bsz4_mcmc*C +\
-	1/2.*b2z4_mcmc*bsz4_mcmc*D + 1/4.*bsz4_mcmc**2*E + 2*b1z4_mcmc*b3z4_mcmc*F + Nz4)/Pmm)
+	bias3PT1 = np.sqrt((b1z1_ml**2 * Pmm+ b1z1_ml*b2z1_ml*A + 1/4.*b2z1_ml**2*B + b1z1_ml*bsz1_ml*C +\
+	1/2.*b2z1_ml*bsz1_ml*D + 1/4.*bsz1_ml**2*E + 2*b1z1_ml*b3z1_ml*F + Nz1)/Pmm)
+	bias3PT2 = np.sqrt((b1z2_ml**2 * Pmm+ b1z2_ml*b2z2_ml*A + 1/4.*b2z2_ml**2*B + b1z2_ml*bsz2_ml*C +\
+	1/2.*b2z2_ml*bsz2_ml*D + 1/4.*bsz2_ml**2*E + 2*b1z2_ml*b3z2_ml*F + Nz2)/Pmm)
+	bias3PT3 = np.sqrt((b1z3_ml**2 * Pmm+ b1z3_ml*b2z3_ml*A + 1/4.*b2z3_ml**2*B + b1z3_ml*bsz3_ml*C +\
+	1/2.*b2z3_ml*bsz3_ml*D + 1/4.*bsz3_ml**2*E + 2*b1z3_ml*b3z3_ml*F + Nz3)/Pmm)
+	bias3PT4 = np.sqrt((b1z4_ml**2 * Pmm+ b1z4_ml*b2z4_ml*A + 1/4.*b2z4_ml**2*B + b1z4_ml*bsz4_ml*C +\
+	1/2.*b2z4_ml*bsz4_ml*D + 1/4.*bsz4_ml**2*E + 2*b1z4_ml*b3z4_ml*F + Nz4)/Pmm)
 	
 	#~ print (b1z1_mcmc**2 * Pmm[lim]+ b1z1_mcmc*b2z1_mcmc*A[lim] + 1/4.*b2z1_mcmc**2*B[lim] + b1z1_mcmc*bsz1_mcmc*C[lim] +\
 	#~ 1/2.*b2z1_mcmc*bsz1_mcmc*D[lim] + 1/4.*bsz1_mcmc**2*E[lim] + 2*b1z1_mcmc*b3z1_mcmc*F[lim] + Nz1)/Pmm[lim]
@@ -182,8 +195,8 @@ def perturb(kstop,  lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, Pmm, k, 
 		#~ b1z4_mcmc[0], b3z1_mcmc[0], b3z2_mcmc[0], b3z3_mcmc[0], b3z4_mcmc[0]))
 	#~ fid_file.close()
 	with open('3rdorder_'+str(z[j])+'.txt', 'a') as fid_file:
-		fid_file.write('%.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g\n' % (kstop, b1z1_mcmc, b1z2_mcmc, b1z3_mcmc,\
-		b1z4_mcmc, b3z1_mcmc, b3z2_mcmc, b3z3_mcmc, b3z4_mcmc))
+		fid_file.write('%.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g\n' % (kstop, b1z1_ml, b1z2_ml, b1z3_ml,\
+		b1z4_ml, b3z1_ml, b3z2_ml, b3z3_ml, b3z4_ml))
 	fid_file.close()
 
 ##########################################################################
@@ -205,12 +218,12 @@ def perturb(kstop,  lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, Pmm, k, 
 	cname3errbis = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/case'+str(case)+'/err_3exp_fixed_'+str(Mnu)+'_z='+str(z[j])+'.txt'
 
 
-	#~ with open(cname2, 'w') as fid_file:
-		#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (b1y1_mcmc, b2y1_mcmc, bsy1_mcmc, Ny1))
-		#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (b1y2_mcmc, b2y2_mcmc, bsy2_mcmc, Ny2))
-		#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (b1y3_mcmc, b2y3_mcmc, bsy3_mcmc, Ny3))
-		#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (b1y4_mcmc, b2y4_mcmc, bsy4_mcmc, Ny4))
-	#~ fid_file.close()
+	with open(cname2, 'w') as fid_file:
+		fid_file.write('%.8g %.8g %.8g %.8g\n' % (b1y1_ml, b2y1_ml, bsy1_ml, Ny1))
+		fid_file.write('%.8g %.8g %.8g %.8g\n' % (b1y2_ml, b2y2_ml, bsy2_ml, Ny2))
+		fid_file.write('%.8g %.8g %.8g %.8g\n' % (b1y3_ml, b2y3_ml, bsy3_ml, Ny3))
+		fid_file.write('%.8g %.8g %.8g %.8g\n' % (b1y4_ml, b2y4_ml, bsy4_ml, Ny4))
+	fid_file.close()
 	#~ with open(cname2err, 'w') as fid_file:
 		#~ fid_file.write('%.8g %.8g %.8g %.8g %.8g %.8g\n' % (b1y1_mcmc[1], b2y1_mcmc[1], bsy1_mcmc[1]\
 		#~ ,b1y1_mcmc[2], b2y1_mcmc[2], bsy1_mcmc[2]))
@@ -221,12 +234,12 @@ def perturb(kstop,  lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, Pmm, k, 
 		#~ fid_file.write('%.8g %.8g %.8g %.8g %.8g %.8g\n' % (b1y4_mcmc[1], b2y4_mcmc[1], bsy4_mcmc[1]\
 		#~ ,b1y4_mcmc[2], b2y4_mcmc[2], bsy4_mcmc[2]))
 	#~ fid_file.close()
-	#~ with open(cname3, 'w') as fid_file:
-		#~ fid_file.write('%.8g %.8g %.8g %.8g %.8g\n' % (b1z1_mcmc, b2z1_mcmc, bsz1_mcmc, b3z1_mcmc, Nz1))
-		#~ fid_file.write('%.8g %.8g %.8g %.8g %.8g\n' % (b1z2_mcmc, b2z2_mcmc, bsz2_mcmc, b3z2_mcmc, Nz2))
-		#~ fid_file.write('%.8g %.8g %.8g %.8g %.8g\n' % (b1z3_mcmc, b2z3_mcmc, bsz3_mcmc, b3z3_mcmc, Nz3))
-		#~ fid_file.write('%.8g %.8g %.8g %.8g %.8g\n' % (b1z4_mcmc, b2z4_mcmc, bsz4_mcmc, b3z4_mcmc, Nz4))
-	#~ fid_file.close()
+	with open(cname3, 'w') as fid_file:
+		fid_file.write('%.8g %.8g %.8g %.8g %.8g\n' % (b1z1_ml, b2z1_ml, bsz1_ml, b3z1_ml, Nz1))
+		fid_file.write('%.8g %.8g %.8g %.8g %.8g\n' % (b1z2_ml, b2z2_ml, bsz2_ml, b3z2_ml, Nz2))
+		fid_file.write('%.8g %.8g %.8g %.8g %.8g\n' % (b1z3_ml, b2z3_ml, bsz3_ml, b3z3_ml, Nz3))
+		fid_file.write('%.8g %.8g %.8g %.8g %.8g\n' % (b1z4_ml, b2z4_ml, bsz4_ml, b3z4_ml, Nz4))
+	fid_file.close()
 	#~ with open(cname3err, 'w') as fid_file:
 		#~ fid_file.write('%.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g\n' % (b1z1_mcmc[1], b2z1_mcmc[1], bsz1_mcmc[1], b3z1_mcmc[1]\
 		#~ ,b1z1_mcmc[2], b2z1_mcmc[2], bsz1_mcmc[2], b3z1_mcmc[2]))
@@ -237,12 +250,12 @@ def perturb(kstop,  lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, Pmm, k, 
 		#~ fid_file.write('%.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g\n' % (b1z4_mcmc[1], b2z4_mcmc[1], bsz4_mcmc[1], b3z4_mcmc[1]\
 		#~ ,b1z4_mcmc[2], b2z4_mcmc[2], bsz4_mcmc[2], b3z4_mcmc[2]))
 	#~ fid_file.close()
-	#~ with open(cname3bis, 'w') as fid_file:
-		#~ fid_file.write('%.8g %.8g %.8g\n' % (b1u1_mcmc, b2u1_mcmc, Nu1))
-		#~ fid_file.write('%.8g %.8g %.8g\n' % (b1u2_mcmc, b2u2_mcmc, Nu2))
-		#~ fid_file.write('%.8g %.8g %.8g\n' % (b1u3_mcmc, b2u3_mcmc, Nu3))
-		#~ fid_file.write('%.8g %.8g %.8g\n' % (b1u4_mcmc, b2u4_mcmc, Nu4))
-	#~ fid_file.close()
+	with open(cname3bis, 'w') as fid_file:
+		fid_file.write('%.8g %.8g %.8g\n' % (b1u1_mcmc, b2u1_mcmc, Nu1))
+		fid_file.write('%.8g %.8g %.8g\n' % (b1u2_mcmc, b2u2_mcmc, Nu2))
+		fid_file.write('%.8g %.8g %.8g\n' % (b1u3_mcmc, b2u3_mcmc, Nu3))
+		fid_file.write('%.8g %.8g %.8g\n' % (b1u4_mcmc, b2u4_mcmc, Nu4))
+	fid_file.close()
 	#~ with open(cname3errbis, 'w') as fid_file:
 		#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (b1u1_mcmc[1], b2u1_mcmc[1]\
 		#~ ,b1u1_mcmc[2], b2u1_mcmc[2]))
