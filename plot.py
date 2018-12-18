@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as colors
 
 
-Mnu = 0.15
+Mnu = 0.0
 
 z = [0.0,0.5,1.0,2.0]
 
@@ -198,41 +198,43 @@ for j in xrange(0,len(z)):
 	#~ ax2.plot(kmax, chipl1, color='C0')
 	#~ ax2.plot(kmax, chipl2, color='C0')
 	#~ ax2.plot(kmax, chipl3, color='C0')
-	P1, =ax2.plot(kmax, chipl4, color='C0', label='z = '+str(z[j]))
-	#~ P1, =ax2.plot(kmax2, chir1, color='c', label='etns model')
+	#~ P1, =ax2.plot(kmax, chipl4, color='C0', label='z = '+str(z[j]))
+	P1, =ax2.plot(kmax2, chir1, color='c', label='eTns model')
 	#---------------------------------
 	#~ ax2.plot(kmax, chipt1, color='C1')
 	#~ ax2.plot(kmax, chipt2, color='C1')
 	#~ ax2.plot(kmax, chipt3, color='C1')
-	P2, =ax2.plot(kmax, chipt4, color='C1')
+	#~ P2, =ax2.plot(kmax, chipt4, color='C1')
 
 	#---------------------------------
 	#~ ax2.plot(kmax, chipbis1, color='C2')
 	#~ ax2.plot(kmax, chipbis2, color='C2')
 	#~ ax2.plot(kmax, chipbis3, color='C2')
-	P3, =ax2.plot(kmax, chipbis4, color='C2')
+	#~ P3, =ax2.plot(kmax, chipbis4, color='C2')
 
 	#---------------------------------
 	#~ ax2.plot(kmax, chipter1, color='C3')
 	#~ ax2.plot(kmax, chipter2, color='C3')
 	#~ ax2.plot(kmax, chipter3, color='C3')
-	P4, = ax2.plot(kmax, chipter4, color='C3')
+	#~ P4, = ax2.plot(kmax, chipter4, color='C3')
 
 	#---------------------------------
-	plt.figlegend( (P1,P2, P3, P4), ('Polynomial','2nd order PT with free $b_{s}$',r'3nd order PT with free $b_{s}$,$b_{3nl}$',\
-	r'3nd order PT with fixed $b_{s}$,$b_{3nl}$'), \
+	#~ plt.figlegend( (P1,P2, P3, P4), ('Polynomial','2nd order PT with free $b_{s}$',r'3nd order PT with free $b_{s}$,$b_{3nl}$',\
+	#~ r'3nd order PT with fixed $b_{s}$,$b_{3nl}$'), \
 	######################################
 	#~ loc = 'upper center', ncol=1, labelspacing=0., title =r' M$\nu$ = '+str(Mnu)+ ', for mass range M4', fontsize=14)
-	loc = 'upper center', ncol=3, labelspacing=0., title =r' M$\nu$ = '+str(Mnu)+ ', for mass range M4', fontsize=12)
+	#~ loc = 'upper center', ncol=3, labelspacing=0., title =r' M$\nu$ = '+str(Mnu)+ ', for mass range M4', fontsize=12)
 	ax2.legend(loc = 'upper left', fancybox=True, fontsize=14, handlelength=0, handletextpad=0)
-	ax2.legend(loc = 'upper left', title = 'z = '+str(z[j]), fancybox=True, fontsize=14)
+	#~ ax2.legend(loc = 'upper left', title = 'z = '+str(z[j]), fancybox=True, fontsize=14)
 	plt.subplots_adjust(left=0.1, wspace=0.05, hspace=0.1)
-	#~ plt.suptitle(r' M$\nu$ = '+str(Mnu)+ ', for mass range M1', fontsize = 14)
+	plt.suptitle(r' M$\nu$ = '+str(Mnu)+ ', for mass range M1', fontsize = 14)
 	ax2.set_xscale('log')
 	#~ ax2.axhline(1.5, c='k')
 	#~ ax2.set_yscale('log')
-	ax2. set_xlim(0.04,0.5)
-	ax2. set_ylim(0,3)
+	ax2.set_xlim(0.04,0.5)
+	ax2.set_xticks([0.05,0.1,0.2,0.4]) # choose which x locations to have ticks
+	ax2.set_xticklabels([0.05,0.1,0.2,0.4]) # set the labels to display at those ticks
+	ax2.set_ylim(0,3)
 	if j == 0 :
 		ax2.tick_params(bottom='off', labelbottom='off',labelleft=True)
 		ax2.set_ylabel(r'$\chi^2/dof$', fontsize=16)
