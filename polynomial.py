@@ -60,16 +60,20 @@ def poly(kstop, lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, k, bias1,\
 		
 		
 	# odd power law----------------------------------------------------
-	b1x1_ml, b2x1_ml, b3x1_ml, b4x1_ml, b1x1_mcmc, b2x1_mcmc, b3x1_mcmc, b4x1_mcmc = coeffit_pl(kstop, lb1, errlb1, popF1, k, bias1, errb1)
-	b1x2_ml, b2x2_ml, b3x2_ml, b4x2_ml, b1x2_mcmc, b2x2_mcmc, b3x2_mcmc, b4x2_mcmc = coeffit_pl(kstop, lb2, errlb2, popF2, k, bias2, errb2)
-	b1x3_ml, b2x3_ml, b3x3_ml, b4x3_ml, b1x3_mcmc, b2x3_mcmc, b3x3_mcmc, b4x3_mcmc = coeffit_pl(kstop, lb3, errlb3, popF3, k, bias3, errb3)
-	b1x4_ml, b2x4_ml, b3x4_ml, b4x4_ml, b1x4_mcmc, b2x4_mcmc, b3x4_mcmc, b4x4_mcmc = coeffit_pl(kstop, lb4, errlb4, popF4, k, bias4, errb4)
+	#~ b1x1_ml, b2x1_ml, b3x1_ml, b4x1_ml, b1x1_mcmc, b2x1_mcmc, b3x1_mcmc, b4x1_mcmc = coeffit_pl(kstop, lb1, errlb1, popF1, k, bias1, errb1)
+	#~ b1x2_ml, b2x2_ml, b3x2_ml, b4x2_ml, b1x2_mcmc, b2x2_mcmc, b3x2_mcmc, b4x2_mcmc = coeffit_pl(kstop, lb2, errlb2, popF2, k, bias2, errb2)
+	#~ b1x3_ml, b2x3_ml, b3x3_ml, b4x3_ml, b1x3_mcmc, b2x3_mcmc, b3x3_mcmc, b4x3_mcmc = coeffit_pl(kstop, lb3, errlb3, popF3, k, bias3, errb3)
+	#~ b1x4_ml, b2x4_ml, b3x4_ml, b4x4_ml, b1x4_mcmc, b2x4_mcmc, b3x4_mcmc, b4x4_mcmc = coeffit_pl(kstop, lb4, errlb4, popF4, k, bias4, errb4)
+	b1x1_ml, b2x1_ml, b3x1_ml, b4x1_ml = coeffit_pl(kstop, lb1, errlb1, popF1, k, bias1, errb1)
+	b1x2_ml, b2x2_ml, b3x2_ml, b4x2_ml = coeffit_pl(kstop, lb2, errlb2, popF2, k, bias2, errb2)
+	b1x3_ml, b2x3_ml, b3x3_ml, b4x3_ml = coeffit_pl(kstop, lb3, errlb3, popF3, k, bias3, errb3)
+	b1x4_ml, b2x4_ml, b3x4_ml, b4x4_ml = coeffit_pl(kstop, lb4, errlb4, popF4, k, bias4, errb4)
 	
 	#-----
-	table_write_pl(b1x1_ml, b2x1_ml, b3x1_ml, b4x1_ml, b1x1_mcmc, b2x1_mcmc, b3x1_mcmc, b4x1_mcmc,\
-	b1x2_ml, b2x2_ml, b3x2_ml, b4x2_ml, b1x2_mcmc, b2x2_mcmc, b3x2_mcmc, b4x2_mcmc, \
-	b1x3_ml, b2x3_ml, b3x3_ml, b4x3_ml, b1x3_mcmc, b2x3_mcmc, b3x3_mcmc, b4x3_mcmc, \
-	b1x4_ml, b2x4_ml, b3x4_ml, b4x4_ml, b1x4_mcmc, b2x4_mcmc, b3x4_mcmc, b4x4_mcmc, 'coeffpl_'+str(z[j])+'.txt') 
+	#~ table_write_pl(b1x1_ml, b2x1_ml, b3x1_ml, b4x1_ml, b1x1_mcmc, b2x1_mcmc, b3x1_mcmc, b4x1_mcmc,\
+	#~ b1x2_ml, b2x2_ml, b3x2_ml, b4x2_ml, b1x2_mcmc, b2x2_mcmc, b3x2_mcmc, b4x2_mcmc, \
+	#~ b1x3_ml, b2x3_ml, b3x3_ml, b4x3_ml, b1x3_mcmc, b2x3_mcmc, b3x3_mcmc, b4x3_mcmc, \
+	#~ b1x4_ml, b2x4_ml, b3x4_ml, b4x4_ml, b1x4_mcmc, b2x4_mcmc, b3x4_mcmc, b4x4_mcmc, 'coeffpl_'+str(z[j])+'.txt') 
 
 	
 	# even power law ----------------------------------------------------------------------------------------

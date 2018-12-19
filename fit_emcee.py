@@ -131,32 +131,32 @@ def coeffit_pl (kstop,lb1, errlb1, pop, k ,b ,errb):
 	nll = lambda *args: -lnlike(*args)
 	result = op.minimize(nll, [pop],  method='Nelder-Mead', args=(k, b ,errb ),  options={'maxfev': 2000} )
 	b1_ml, b2_ml, b3_ml, b4_ml = result["x"]
-	#~ print pop
-	#~ print result
-	max_l = lnlike(result["x"], k, b, errb )
-	AIC = 2*4. - 2 * max_l
-	print 'maximum likelihood is '+str(max_l)
-	print 'AIC = '+str(AIC)
+	print pop
+	print result
+	#~ max_l = lnlike(result["x"], k, b, errb )
+	#~ AIC = 2*4. - 2 * max_l
+	#~ print 'maximum likelihood is '+str(max_l)
+	#~ print 'AIC = '+str(AIC)
 	
-	ndim, nwalkers = len(pop), 300
-	pos = [result["x"] + 1e-3*np.random.randn(ndim) for i in range(nwalkers)]
+	#~ ndim, nwalkers = len(pop), 300
+	#~ pos = [result["x"] + 1e-3*np.random.randn(ndim) for i in range(nwalkers)]
 	
-	posnum = 1000
-	sampler = emcee.EnsembleSampler(nwalkers, ndim, lnprob, args=(k, b, errb))
-	sampler.run_mcmc(pos, posnum)
+	#~ posnum = 1000
+	#~ sampler = emcee.EnsembleSampler(nwalkers, ndim, lnprob, args=(k, b, errb))
+	#~ sampler.run_mcmc(pos, posnum)
 	
-	samples = sampler.chain[:, 50:, :].reshape((-1, ndim))
+	#~ samples = sampler.chain[:, 50:, :].reshape((-1, ndim))
 
-	print("Mean acceptance fraction: {0:.3f}"
-                .format(np.mean(sampler.acceptance_fraction)))
+	#~ print("Mean acceptance fraction: {0:.3f}"
+                #~ .format(np.mean(sampler.acceptance_fraction)))
 	#~ import corner
 	#~ fig = corner.corner(samples, labels=["$b1$", "$b2$", "$b3$", "$b4$" ], truths=[b1_ml, b2_ml, b3_ml, b4_ml])
 	#~ fig.savefig("/home/david/triangle.png")
 	
 
-	b1_mcmc, b2_mcmc, b3_mcmc, b4_mcmc = map(lambda v: (v[1], v[2]-v[1], v[1]-v[0]), zip(*np.percentile(samples, [16, 50, 84], axis=0)))
+	#~ b1_mcmc, b2_mcmc, b3_mcmc, b4_mcmc = map(lambda v: (v[1], v[2]-v[1], v[1]-v[0]), zip(*np.percentile(samples, [16, 50, 84], axis=0)))
 	
-	print b1_mcmc, b2_mcmc, b3_mcmc, b4_mcmc
+	#~ print b1_mcmc, b2_mcmc, b3_mcmc, b4_mcmc
 	
 
 	
@@ -185,7 +185,8 @@ def coeffit_pl (kstop,lb1, errlb1, pop, k ,b ,errb):
 	#~ plt.show()
 	
 	#~ return b1_mcmc, b2_mcmc, b3_mcmc, b4_mcmc
-	return b1_ml, b2_ml, b3_ml, b4_ml, b1_mcmc, b2_mcmc, b3_mcmc, b4_mcmc
+	#~ return b1_ml, b2_ml, b3_ml, b4_ml, b1_mcmc, b2_mcmc, b3_mcmc, b4_mcmc
+	return b1_ml, b2_ml, b3_ml, b4_ml
 ########################################################################
 ######### bias expansion 2nd order
 ########################################################################
