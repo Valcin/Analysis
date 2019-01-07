@@ -232,10 +232,6 @@ def rescal(j, case):
 	bF2 = biasF2*sca2
 	bF3 = biasF3*sca3
 	bF4 = biasF4*sca4
-	#~ bF1 = biasF1
-	#~ bF2 = biasF2
-	#~ bF3 = biasF3
-	#~ bF4 = biasF4
 	b3PTbis1 = bias3PTbis1*sca1
 	b3PTbis2 = bias3PTbis2*sca2
 	b3PTbis3 = bias3PTbis3*sca3
@@ -264,9 +260,12 @@ def rescal(j, case):
 	#~ return kai1*sca1, kai2*sca2, kai3*sca3, kai4*sca4, sco1*sca1, sco2*sca2, sco3*sca3, sco4*sca4, tns1*sca1, tns2*sca2,\
 	#~ tns3*sca3, tns4*sca4, etns1*sca1, etns2*sca2, etns3*sca3, etns4*sca4
 	#---------------------------------------------------
-	kai1, kai2, kai3, kai4, sco1, sco2, sco3, sco4, tns1, tns2, tns3, tns4, etns1, etns2, etns3, etns4 = RSD1(fz[j],fcc, Dz[ind]\
+	#~ kai1, kai2, kai3, kai4, sco1, sco2, sco3, sco4, tns1, tns2, tns3, tns4, etns1, etns2, etns3, etns4 = RSD1(fz[j],fcc, Dz[ind]\
+	#~ , j, kstop, kcamb, Pcamb, Pmod_dd, bF1, bF2, bF3, bF4, k, Pmono1, Pmono2, Pmono3, Pmono4, errPr1, errPr2,\
+	#~ errPr3, errPr4, Pmod_dt, Pmod_tt, case,z,0.15, A, B, C, D, E, F, G, H)
+	kai1, kai2, kai3, kai4, sco1, sco2, sco3, sco4, tns1, tns2, tns3, tns4, etns1, etns2, etns3, etns4 = RSD3(fz[j],fcc, Dz[ind]\
 	, j, kstop, kcamb, Pcamb, Pmod_dd, bF1, bF2, bF3, bF4, k, Pmono1, Pmono2, Pmono3, Pmono4, errPr1, errPr2,\
-	errPr3, errPr4, Pmod_dt, Pmod_tt, case,z,0.15, A, B, C, D, E, F, G, H)
+	errPr3, errPr4, Pmod_dt, Pmod_tt, case,z,0.15, A, B, C, D, E, F, G, H, sca1, sca2, sca3, sca4)
 	
 	
 	return kai1, kai2, kai3, kai4, sco1, sco2, sco3, sco4, tns1, tns2,\

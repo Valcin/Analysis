@@ -502,35 +502,34 @@ for j in xrange(0,len(z)):
 ############################################################################################################
 	
 	#~ #######--------- mean and std of bias and ps ratio ------------#####
-	if j == z[0]:
-		fig2 = plt.figure()
-	J = j + 1
+	#~ if j == z[0]:
+		#~ fig2 = plt.figure()
+	#~ J = j + 1
 	
-	if len(z) == 1:
-		ax2 = fig2.add_subplot(1, len(z), J)
-	elif len(z) == 2:
-		ax2 = fig2.add_subplot(1, 2, J)
-	elif len(z) > 2:
-		ax2 = fig2.add_subplot(2, 2, J)
+	#~ if len(z) == 1:
+		#~ ax2 = fig2.add_subplot(1, len(z), J)
+	#~ elif len(z) == 2:
+		#~ ax2 = fig2.add_subplot(1, 2, J)
+	#~ elif len(z) > 2:
+		#~ ax2 = fig2.add_subplot(2, 2, J)
 	########### power spectrum ########
-	ax2.set_ylim(0.9,1.1)
-	#~ ax2.set_ylim(0.,2.1)
-	ax2.set_yticks(np.linspace(0.9,1.1,5))
-	ax2.axhline(1, color='k', linestyle='--')
-	ax2.axhline(1.01, color='k', linestyle=':')
-	ax2.axhline(0.99, color='k', linestyle=':')
-	Ps1, =ax2.plot(k,P1, color='k')
-	Ps2, =ax2.plot(k,P2, color='C3')
-	Ps3, =ax2.plot(k,P3, color='C0')
-	Ps4, =ax2.plot(k,P4, color='C1')
-	Ps6, =ax2.plot(k,P6, color='c')
+	#~ ax2.set_ylim(0.9,1.1)
+	#~ ax2.set_yticks(np.linspace(0.9,1.1,5))
+	#~ ax2.axhline(1, color='k', linestyle='--')
+	#~ ax2.axhline(1.01, color='k', linestyle=':')
+	#~ ax2.axhline(0.99, color='k', linestyle=':')
+	#~ Ps1, =ax2.plot(k,P1, color='k')
+	#~ Ps2, =ax2.plot(k,P2, color='C3',label= 'real space calibration')
+	#~ Ps3, =ax2.plot(k,P3, color='C0')
+	#~ Ps4, =ax2.plot(k,P4, color='C1')
+	#~ Ps6, =ax2.plot(k,P6, color='c')
 	#~ #--------------------------------
 	#~ ax2.plot(k,P2f, color='C3', label='z = '+str(z[j]), linestyle='--')
 	#~ ax2.plot(k,P3f, color='C0', linestyle='--')
 	#~ ax2.plot(k,P4f, color='C1', linestyle='--')
 	#~ ax2.plot(k,P6f, color='c', linestyle='--')
 	#-------------------------------
-	ax2.plot(k,P2bis, color='C3', linestyle='--',label=r'w/ $b_{model}$ and $\sigma_v$ free')
+	ax2.plot(k,P2bis, color='C3', linestyle='--',label= 'BE-HaPPy')
 	ax2.plot(k,P3bis, color='C0', linestyle='--')
 	ax2.plot(k,P4bis, color='C1', linestyle='--')
 	ax2.plot(k,P6bis, color='c', linestyle='--')
@@ -573,29 +572,30 @@ for j in xrange(0,len(z)):
 	######################################
 	loc = 'upper center', ncol=5, labelspacing=0., title =r' M$\nu$ = '+str(Mnu)+', case '+str(case), fontsize=14)
 	ax2.axvspan(kstop, 7, alpha=0.2, color='grey')
-	ax2.legend(loc = 'upper left', title='z = '+str(z[j]), fancybox=True, fontsize=14)
+	#~ ax2.legend(loc = 'upper left', title='z = '+str(z[j]), fancybox=True, fontsize=14)
+	ax2.legend(loc = 'lower left', title='z = '+str(z[j]), fancybox=True, fontsize=14)
 	#~ ax2.legend(loc = 'lower left', fancybox=True, fontsize=14, handlelength=0, handletextpad=0)
 	plt.subplots_adjust(left=0.1, wspace=0.05, hspace=0.1)
 	ax2.set_xscale('log')
 	if j == 0 :
 		ax2.tick_params(bottom='off', labelbottom='off')
 		ax2.set_ylabel(r'P(k) / $P_{sim}$', fontsize=16)
-		ax2.set_ylabel(r'$P_{cb}$', fontsize=16)
+		#~ ax2.set_ylabel(r'$P_{cb}$', fontsize=16)
 	if j == 1 :
 		ax2.tick_params(bottom='off', labelbottom='off', labelright=True, right= True, labelleft='off', left='off')
 		ax2.set_ylabel(r'P(k) / $P_{sim}$', fontsize=16)
-		ax2.set_ylabel(r'$P_{cb}$', fontsize=16)
+		#~ ax2.set_ylabel(r'$P_{cb}$', fontsize=16)
 		ax2.yaxis.set_label_position("right")
 	if j == 2 :
 		#ax.tick_params(labelleft=True)
 		ax2.set_ylabel(r'P(k) / $P_{sim}$', fontsize=16)
-		ax2.set_ylabel(r'$P_{cb}$', fontsize=16)
+		#~ ax2.set_ylabel(r'$P_{cb}$', fontsize=16)
 		ax2.set_xlabel('k [h/Mpc]', fontsize=14)
 	if j == 3 :
 		ax2.tick_params(labelright=True, right= True, labelleft='off', left='off')
 		ax2.set_xlabel('k [h/Mpc]', fontsize=14)
 		ax2.set_ylabel(r'P(k) / $P_{sim}$', fontsize=16)
-		ax2.set_ylabel(r'$P_{cb}$', fontsize=16)
+		#~ ax2.set_ylabel(r'$P_{cb}$', fontsize=16)
 		ax2.yaxis.set_label_position("right")
 	ax2.set_xlim(8e-3,1.)
 	#~ #plt.ylim(0.7,1.3)

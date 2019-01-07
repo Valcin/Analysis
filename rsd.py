@@ -240,8 +240,8 @@ def RSD1(fz,fcc, Dz, j, kstop, kcamb, Pcamb, Pmm, biasF1, biasF2, biasF3, biasF4
 		coeffA = np.arctan(kappa/math.sqrt(2))/(math.sqrt(2)*kappa) + 1/(2+kappa**2)
 		coeffB = 6/kappa**2*(coeffA - 2/(2+kappa**2))
 		coeffC = -10/kappa**2*(coeffB - 2/(2+kappa**2))
-		#~ return Pmm*(b**2*coeffA +  2/3.*b*fcc*coeffB + 1/5.*fcc**2*coeffC)
-		return Pmm*(b**2 +  2/3.*b*fcc + 1/5.*fcc**2)
+		return Pmm*(b**2*coeffA +  2/3.*b*fcc*coeffB + 1/5.*fcc**2*coeffC)
+		#~ return Pmm*(b**2 +  2/3.*b*fcc + 1/5.*fcc**2)
 		
 	#~ kai1 = kaips(biasF1, bK[0])
 	#~ kai2 = kaips(biasF2, bK[1])
@@ -847,10 +847,10 @@ def RSD3(fz,fcc, Dz, j, kstop, kcamb, Pcamb, Pmm, biasF1, biasF2, biasF3, biasF4
 	#### compute mcmc coefficient of halo ps fit
 	print 'kaiser'
 	#~ b1,b2,b3,b4,bK1 = coeffit_Kaiser2(j, fcc, kstop,Pmm, biasF1, k, Pmono1, errPr1)
-	bK1 = coeffit_Kaiser(j, fcc, kstop,Pmm, biasF1*sca1, k, Pmono1, errPr1)
-	bK2 = coeffit_Kaiser(j, fcc, kstop,Pmm, biasF2*sca2, k, Pmono2, errPr2)
-	bK3 = coeffit_Kaiser(j, fcc, kstop,Pmm, biasF3*sca3, k, Pmono3, errPr3)
-	bK4 = coeffit_Kaiser(j, fcc, kstop,Pmm, biasF4*sca4, k, Pmono4, errPr4)
+	bK1 = coeffit_Kaiser(j, fcc, kstop,Pmm, biasF1, k, Pmono1, errPr1)
+	bK2 = coeffit_Kaiser(j, fcc, kstop,Pmm, biasF2, k, Pmono2, errPr2)
+	bK3 = coeffit_Kaiser(j, fcc, kstop,Pmm, biasF3, k, Pmono3, errPr3)
+	bK4 = coeffit_Kaiser(j, fcc, kstop,Pmm, biasF4, k, Pmono4, errPr4)
 	#~ cn1 = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/v_disp/case'+str(case)+'/vdispkai_z='+str(z[j])+'.txt'
 	#~ with open(cn1, 'w') as fid_file:
 		#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (bK1[0][0],bK2[0][0],bK3[0][0],bK4[0][0]))
@@ -858,10 +858,10 @@ def RSD3(fz,fcc, Dz, j, kstop, kcamb, Pcamb, Pmm, biasF1, biasF2, biasF3, biasF4
 
 	#----------------------------------------------------------------------------------------
 	print 'Scoccimaro'
-	bsco1 = coeffit_Scocci(j, fcc, kstop,Pmm,Pmod_dt, Pmod_tt, biasF1*sca1, k, Pmono1, errPr1)
-	bsco2 = coeffit_Scocci(j, fcc, kstop,Pmm,Pmod_dt, Pmod_tt, biasF2*sca2, k, Pmono2, errPr2)
-	bsco3 = coeffit_Scocci(j, fcc, kstop,Pmm,Pmod_dt, Pmod_tt, biasF3*sca3, k, Pmono3, errPr3)
-	bsco4 = coeffit_Scocci(j, fcc, kstop,Pmm,Pmod_dt, Pmod_tt, biasF4*sca4, k, Pmono4, errPr4)
+	bsco1 = coeffit_Scocci(j, fcc, kstop,Pmm,Pmod_dt, Pmod_tt, biasF1, k, Pmono1, errPr1)
+	bsco2 = coeffit_Scocci(j, fcc, kstop,Pmm,Pmod_dt, Pmod_tt, biasF2, k, Pmono2, errPr2)
+	bsco3 = coeffit_Scocci(j, fcc, kstop,Pmm,Pmod_dt, Pmod_tt, biasF3, k, Pmono3, errPr3)
+	bsco4 = coeffit_Scocci(j, fcc, kstop,Pmm,Pmod_dt, Pmod_tt, biasF4, k, Pmono4, errPr4)
 	#~ cn2 = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/v_disp/case'+str(case)+'/vdispsco_z='+str(z[j])+'.txt'
 	#~ with open(cn2, 'w') as fid_file:
 		#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (bsco1[0][0],bsco2[0][0],bsco3[0][0],bsco4[0][0]))
@@ -869,10 +869,10 @@ def RSD3(fz,fcc, Dz, j, kstop, kcamb, Pcamb, Pmm, biasF1, biasF2, biasF3, biasF4
 
 	#----------------------------------------------------------------------------------------
 	print 'Tns'
-	btns1 = coeffit_TNS(j, fcc, kstop,Pmm,Pmod_dt, Pmod_tt, biasF1*sca1, k, Pmono1, errPr1, AB2_1, AB4_1, AB6_1, AB8_1)
-	btns2 = coeffit_TNS(j, fcc, kstop,Pmm,Pmod_dt, Pmod_tt, biasF2*sca2, k, Pmono2, errPr2, AB2_2, AB4_2, AB6_2, AB8_2)
-	btns3 = coeffit_TNS(j, fcc, kstop,Pmm,Pmod_dt, Pmod_tt, biasF3*sca3, k, Pmono3, errPr3, AB2_3, AB4_3, AB6_3, AB8_3)
-	btns4 = coeffit_TNS(j, fcc, kstop,Pmm,Pmod_dt, Pmod_tt, biasF4*sca4, k, Pmono4, errPr4, AB2_4, AB4_4, AB6_4, AB8_4)
+	btns1 = coeffit_TNS(j, fcc, kstop,Pmm,Pmod_dt, Pmod_tt, biasF1, k, Pmono1, errPr1, AB2_1, AB4_1, AB6_1, AB8_1)
+	btns2 = coeffit_TNS(j, fcc, kstop,Pmm,Pmod_dt, Pmod_tt, biasF2, k, Pmono2, errPr2, AB2_2, AB4_2, AB6_2, AB8_2)
+	btns3 = coeffit_TNS(j, fcc, kstop,Pmm,Pmod_dt, Pmod_tt, biasF3, k, Pmono3, errPr3, AB2_3, AB4_3, AB6_3, AB8_3)
+	btns4 = coeffit_TNS(j, fcc, kstop,Pmm,Pmod_dt, Pmod_tt, biasF4, k, Pmono4, errPr4, AB2_4, AB4_4, AB6_4, AB8_4)
 	#~ cn3 = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/v_disp/case'+str(case)+'/vdisptns_z='+str(z[j])+'.txt'
 	#~ with open(cn3, 'w') as fid_file:
 		#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (btns1[0][0],btns2[0][0],btns3[0][0],btns4[0][0]))
@@ -881,16 +881,16 @@ def RSD3(fz,fcc, Dz, j, kstop, kcamb, Pcamb, Pmm, biasF1, biasF2, biasF3, biasF4
 	#~ #----------------------------------------------------------------------------------------
 	print 'eTns'
 
-	betns1 = coeffit_eTNS(j, fcc, kstop, b1pt3[0]*sca1, b2pt3[0]*sca2, bspt3[0]*sca3, b3pt3[0]*sca4, Pmm, Pmod_dt, Pmod_tt,\
+	betns1 = coeffit_eTNS(j, fcc, kstop, b1pt3[0]*sca1, b2pt3[0]*sca1, bspt3[0]*sca1, b3pt3[0]*sca1, Pmm, Pmod_dt, Pmod_tt,\
 	A, B, C, D, E, F, G, H, k, Pmono1, errPr1, AB2bis_1, AB4bis_1,\
 	AB6bis_1, AB8bis_1, Npt3[0])
-	betns2 = coeffit_eTNS(j, fcc, kstop, b1pt3[1]*sca1, b2pt3[1]*sca2, bspt3[1]*sca3, b3pt3[1]*sca4, Pmm, Pmod_dt, Pmod_tt,\
+	betns2 = coeffit_eTNS(j, fcc, kstop, b1pt3[1]*sca2, b2pt3[1]*sca2, bspt3[1]*sca2, b3pt3[1]*sca2, Pmm, Pmod_dt, Pmod_tt,\
 	A, B, C, D, E, F, G, H, k, Pmono2, errPr2, AB2bis_2, AB4bis_2,\
 	AB6bis_2, AB8bis_2, Npt3[1])
-	betns3 = coeffit_eTNS(j, fcc, kstop, b1pt3[2]*sca1, b2pt3[2]*sca2, bspt3[2]*sca3, b3pt3[2]*sca4, Pmm, Pmod_dt, Pmod_tt,\
+	betns3 = coeffit_eTNS(j, fcc, kstop, b1pt3[2]*sca3, b2pt3[2]*sca3, bspt3[2]*sca3, b3pt3[2]*sca3, Pmm, Pmod_dt, Pmod_tt,\
 	A, B, C, D, E, F, G, H, k, Pmono3, errPr3, AB2bis_3, AB4bis_3,\
 	AB6bis_3, AB8bis_3, Npt3[2])
-	betns4 = coeffit_eTNS(j, fcc, kstop, b1pt3[3]*sca1, b2pt3[3]*sca2, bspt3[3]*sca3, b3pt3[3]*sca4, Pmm, Pmod_dt, Pmod_tt,\
+	betns4 = coeffit_eTNS(j, fcc, kstop, b1pt3[3]*sca4, b2pt3[3]*sca4, bspt3[3]*sca4, b3pt3[3]*sca4, Pmm, Pmod_dt, Pmod_tt,\
 	A, B, C, D, E, F, G, H, k, Pmono4, errPr4, AB2bis_4, AB4bis_4,\
 	AB6bis_4, AB8bis_4, Npt3[3])
 	
@@ -915,10 +915,10 @@ def RSD3(fz,fcc, Dz, j, kstop, kcamb, Pcamb, Pmm, biasF1, biasF2, biasF3, biasF4
 	#~ kai2 = kaips(biasF2, bK[1])
 	#~ kai3 = kaips(biasF3, bK[2])
 	#~ kai4 = kaips(biasF4, bK[3])
-	kai1 = kaips(biasF1*sca1, bK1)
-	kai2 = kaips(biasF2*sca2, bK2)
-	kai3 = kaips(biasF3*sca3, bK3)
-	kai4 = kaips(biasF4*sca4, bK4)
+	kai1 = kaips(biasF1, bK1)
+	kai2 = kaips(biasF2, bK2)
+	kai3 = kaips(biasF3, bK3)
+	kai4 = kaips(biasF4, bK4)
 	#*****************************
 	#~ k1 = kaips(bF1, BK[0])
 	#~ k2 = kaips(bF2, BK[1])
@@ -946,10 +946,10 @@ def RSD3(fz,fcc, Dz, j, kstop, kcamb, Pcamb, Pmm, biasF1, biasF2, biasF3, biasF4
 	#~ sco2 = scops(biasF2, bsco[1])
 	#~ sco3 = scops(biasF3, bsco[2])
 	#~ sco4 = scops(biasF4, bsco[3])
-	sco1 = scops(biasF1*sca1, bsco1)
-	sco2 = scops(biasF2*sca2, bsco2)
-	sco3 = scops(biasF3*sca3, bsco3)
-	sco4 = scops(biasF4*sca4, bsco4)
+	sco1 = scops(biasF1, bsco1)
+	sco2 = scops(biasF2, bsco2)
+	sco3 = scops(biasF3, bsco3)
+	sco4 = scops(biasF4, bsco4)
 	
 	#~ s1 = scops(bF1, Bsco[0])
 	#~ s2 = scops(bF2, Bsco[1])
@@ -980,10 +980,10 @@ def RSD3(fz,fcc, Dz, j, kstop, kcamb, Pcamb, Pmm, biasF1, biasF2, biasF3, biasF4
 	#~ tns2 = tnsps(biasF2,btns[1], AB2_2, AB4_2, AB6_2, AB8_2)
 	#~ tns3 = tnsps(biasF3,btns[2], AB2_3, AB4_3, AB6_3, AB8_3)
 	#~ tns4 = tnsps(biasF4,btns[3], AB2_4, AB4_4, AB6_4, AB8_4)
-	tns1 = tnsps(biasF1*sca1,btns1, AB2_1, AB4_1, AB6_1, AB8_1)
-	tns2 = tnsps(biasF2*sca2,btns2, AB2_2, AB4_2, AB6_2, AB8_2)
-	tns3 = tnsps(biasF3*sca3,btns3, AB2_3, AB4_3, AB6_3, AB8_3)
-	tns4 = tnsps(biasF4*sca4,btns4, AB2_4, AB4_4, AB6_4, AB8_4)
+	tns1 = tnsps(biasF1,btns1, AB2_1, AB4_1, AB6_1, AB8_1)
+	tns2 = tnsps(biasF2,btns2, AB2_2, AB4_2, AB6_2, AB8_2)
+	tns3 = tnsps(biasF3,btns3, AB2_3, AB4_3, AB6_3, AB8_3)
+	tns4 = tnsps(biasF4,btns4, AB2_4, AB4_4, AB6_4, AB8_4)
 	
 	#~ t1 = tnsps(bF1,Btns[0], ab2_1, ab4_1, ab6_1, ab8_1)
 	#~ t2 = tnsps(bF2,Btns[1], ab2_2, ab4_2, ab6_2, ab8_2)
@@ -1027,10 +1027,10 @@ def RSD3(fz,fcc, Dz, j, kstop, kcamb, Pcamb, Pmm, biasF1, biasF2, biasF3, biasF4
 	#~ etns2 = etnsps(b1pt3[1], b2pt3[1], bspt3[1], b3pt3[1], betns[1], AB2bis_2, AB4bis_2, AB6bis_2, AB8bis_2)  
 	#~ etns3 = etnsps(b1pt3[2], b2pt3[2], bspt3[2], b3pt3[2], betns[2], AB2bis_3, AB4bis_3, AB6bis_3, AB8bis_3)  
 	#~ etns4 = etnsps(b1pt3[3], b2pt3[3], bspt3[3], b3pt3[3], betns[3], AB2bis_4, AB4bis_4, AB6bis_4, AB8bis_4) 
-	etns1 = etnsps(b1pt3[0], b2pt3[0], bspt3[0], b3pt3[0], betns1, AB2bis_1, AB4bis_1, AB6bis_1, AB8bis_1, Npt3[0])  
-	etns2 = etnsps(b1pt3[1], b2pt3[1], bspt3[1], b3pt3[1], betns2, AB2bis_2, AB4bis_2, AB6bis_2, AB8bis_2, Npt3[1])  
-	etns3 = etnsps(b1pt3[2], b2pt3[2], bspt3[2], b3pt3[2], betns3, AB2bis_3, AB4bis_3, AB6bis_3, AB8bis_3, Npt3[2])  
-	etns4 = etnsps(b1pt3[3], b2pt3[3], bspt3[3], b3pt3[3], betns4, AB2bis_4, AB4bis_4, AB6bis_4, AB8bis_4, Npt3[3]) 
+	etns1 = etnsps(b1pt3[0]*sca1, b2pt3[0]*sca1, bspt3[0]*sca1, b3pt3[0]*sca1, betns1, AB2bis_1, AB4bis_1, AB6bis_1, AB8bis_1, Npt3[0])  
+	etns2 = etnsps(b1pt3[1]*sca2, b2pt3[1]*sca2, bspt3[1]*sca2, b3pt3[1]*sca2, betns2, AB2bis_2, AB4bis_2, AB6bis_2, AB8bis_2, Npt3[1])  
+	etns3 = etnsps(b1pt3[2]*sca3, b2pt3[2]*sca3, bspt3[2]*sca3, b3pt3[2]*sca3, betns3, AB2bis_3, AB4bis_3, AB6bis_3, AB8bis_3, Npt3[2])  
+	etns4 = etnsps(b1pt3[3]*sca4, b2pt3[3]*sca4, bspt3[3]*sca4, b3pt3[3]*sca4, betns4, AB2bis_4, AB4bis_4, AB6bis_4, AB8bis_4, Npt3[3]) 
 	 
 	#~ e1 = etnsps(m1pt3[0], m1pt3[1], m1pt3[2], m1pt3[3], Betns[0], ab2bis_1, ab4bis_1, ab6bis_1, ab8bis_1,(Bias_eff_t1/Bias_eff0_t1))  
 	#~ e2 = etnsps(m2pt3[0], m2pt3[1], m2pt3[2], m2pt3[3], Betns[1], ab2bis_2, ab4bis_2, ab6bis_2, ab8bis_2,(Bias_eff_t2/Bias_eff0_t2))  
