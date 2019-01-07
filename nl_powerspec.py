@@ -29,7 +29,7 @@ from perturbation import perturb
 from interp import interp_simu1, interp_simu3
 #~ from hmf_test import htest
 from time import time
-from rsd import RSD1, RSD2
+from rsd import RSD1, RSD2, RSD3
 from bias_library import halo_bias, bias
 from scipy.optimize import curve_fit
 from scipy.interpolate import interp1d
@@ -50,7 +50,7 @@ z = [0.0,0.5,1.0,2.0]
 # neutrino parameters
 hierarchy = 'degenerate' #'degenerate', 'normal', 'inverted'
 ###########################
-Mnu       = 0.0 #eV
+Mnu       = 0.15 #eV
 ###########################
 Nnu       = 0  #number of massive neutrinos
 Neff      = 3.046
@@ -80,12 +80,12 @@ for j in xrange(0,len(z)):
 	##### scale factor 
 	red = ['0.0','0.5','1.0','2.0']
 	ind = red.index(str(z[j]))
-	#~ fz = [0.524,0.759,0.875,0.958]
+	fz = [0.524,0.759,0.875,0.958]
 	Dz = [ 1.,0.77,0.61,0.42]
 	print 'For redshift z = ' + str(z[j])
 	
 	Omeg_m_z = Omega_m * (1 + z[j])**3 / (Omega_m * (1 + z[j])**3 + Omega_l)
-	fz = Omeg_m_z**0.55
+	#~ fz = Omeg_m_z**0.55
 	
 #########################################################################
 #### load data from simualtion 
@@ -190,8 +190,8 @@ for j in xrange(0,len(z)):
 #### get fitted coefficients
 
 	print 'polynomial'
-	#~ biasF1, biasF2, biasF3, biasF4, biasF1bis, biasF2bis, biasF3bis, biasF4bis = poly(kstop, lb1, lb2, lb3, lb4,\
-	#~ errlb1, errlb2, errlb3, errlb4, k, bias1, bias2, bias3, bias4, errb1, errb2, errb3, errb4,Mnu, z, j, case)
+	biasF1, biasF2, biasF3, biasF4, biasF1bis, biasF2bis, biasF3bis, biasF4bis = poly(kstop, lb1, lb2, lb3, lb4,\
+	errlb1, errlb2, errlb3, errlb4, k, bias1, bias2, bias3, bias4, errb1, errb2, errb3, errb4,Mnu, z, j, case)
 
 	#~ biasF1s, biasF2s, biasF3s, biasF4s, biasF1biss, biasF2biss, biasF3biss, biasF4biss = poly(kstop, k, lb1, lb2, lb3, lb4,\
 	#~ errlb1, errlb2, errlb3, errlb4, kbis, bias1biss, bias2biss, bias3biss, bias4biss, errb1bis, errb2bis, errb3bis, errb4bis,Mnu, z, j, case)
@@ -210,6 +210,61 @@ for j in xrange(0,len(z)):
 	#~ kbis, bias1biss, bias2biss, bias3biss, bias4biss, errb1bis, errb2bis, errb3bis, errb4bis, A, B, C, D, E, F,Mnu, z, j, case)
 	
 	#~ kill
+	
+	#~ b1 = 1.06
+	#~ b2 = 0.87
+	#~ bs = -4/7.*(b1-1)
+	#~ b3nl = 32/315.*(b1-1)
+	#~ N = 0.16
+	
+	#~ ### compute tns coefficeints given mcmc results
+	#~ # set the parameters for the power spectrum window and
+	#~ # Fourier coefficient window 
+	#~ #P_window=np.array([.2,.2])  
+	#~ C_window=0.95
+
+	#~ # padding length 
+	#~ nu=-2; n_pad=len(kcamb)
+	#~ n_pad=int(0.5*len(kcamb))
+	#~ to_do=['all']
+					
+	# initialize the FASTPT class 
+	# including extrapolation to higher and lower k  
+	# time the operation
+	#~ t1=time()
+	#~ fastpt=FPT.FASTPT(kcamb,to_do=to_do,n_pad=n_pad, verbose=True) 
+	#~ t2=time()
+	
+		
+	#~ AB2,AB4,AB6,AB8 = fastpt.RSD_ABsum_components(Pcamb,fz,b1 ,C_window=C_window)
+	#~ AB2 = np.interp(k, kcamb, AB2)
+	#~ AB4 = np.interp(k, kcamb, AB4)
+	#~ AB6 = np.interp(k, kcamb, AB6)
+	#~ AB8 = np.interp(k, kcamb, AB8)
+	#~ Tm, Tcb = interp_simu3(z,j ,k, kclass, Tm, Tcb, 2)
+	#~ fcc = fz * (Tm/ Tcb)
+
+	#~ print len(fcc), len(k)
+	#~ PsptD1z = b1**2*Pmod_dd + b1*b2*A+ 1/4.*b2**2*B+ b1*bs*C+ 1/2.*b2*bs*D+ 1/4.*bs**2*E+ 2*b1*b3nl*F + N
+	#~ PsptT = b1* Pmod_dt+ b2*G+ bs*H + b3nl*F
+	#~ kappa = k*10*fcc*Dz[j]
+	#~ coeffA = np.arctan(kappa/math.sqrt(2))/(math.sqrt(2)*kappa) + 1/(2+kappa**2)
+	#~ coeffB = 6/kappa**2*(coeffA - 2/(2+kappa**2))
+	#~ coeffC = -10/kappa**2*(coeffB - 2/(2+kappa**2))
+	#~ coeffD = -2/3./kappa**2*(coeffC - 2/(2+kappa**2))
+	#~ coeffE = -4/10./kappa**2*(7.*coeffD - 2/(2+kappa**2))
+
+	#~ Pred = PsptD1z*coeffA + 2/3.*fcc*PsptT*coeffB + 1/5.*fcc**2*Pmod_tt*coeffC \
+		#~ + (1/3.*AB2*coeffB+ 1/5.*AB4*coeffC+ 1/7.*AB6*coeffD+ 1/9.*AB8*coeffE)
+		
+	#~ plt.plot(k, kappa, c='b')
+	#~ plt.plot(k, Pmono1, c='b')
+	#~ plt.plot(k, Pred, c='r')
+	#~ plt.xscale('log')
+	#~ plt.yscale('log')
+	#~ plt.xlim(0.008,0.17)
+	#~ plt.ylim(3e3,3e4)
+	#~ plt.show()
 ######################################################################
 ### mean of mass bins
 
@@ -379,30 +434,31 @@ for j in xrange(0,len(z)):
 #####################################################################
 #### compute fcc with transfer function
 	Tm, Tcb = interp_simu3(z,j ,k, kclass, Tm, Tcb, 2)
-	fcc = fz * (Tm/ Tcb)
+	fcc = fz[j] * (Tm/ Tcb)
 	
 #####################################################################
 ### only sigma is a free parameter
-	#~ kai1, kai2, kai3, kai4, sco1, sco2, sco3, sco4, tns1, tns2, tns3, tns4, etns1, etns2, etns3, etns4 = RSD1(fz,fcc, Dz[ind]\
-	#~ , j, kstop, kcamb, Pcamb, Pmod_dd, biasF1, biasF2, biasF3, biasF4, k, Pmono1, Pmono2, Pmono3, \
-	#~ Pmono4, errPr1, errPr2, errPr3, errPr4, Pmod_dt, Pmod_tt, case,z,Mnu, A, B, C, D, E, F, G, H )
+	kai1, kai2, kai3, kai4, sco1, sco2, sco3, sco4, tns1, tns2, tns3, tns4, etns1, etns2, etns3, etns4 = RSD1(fz[j],fcc, Dz[ind]\
+	, j, kstop, kcamb, Pcamb, Pmod_dd, biasF1, biasF2, biasF3, biasF4, k, Pmono1, Pmono2, Pmono3, \
+	Pmono4, errPr1, errPr2, errPr3, errPr4, Pmod_dt, Pmod_tt, case,z,Mnu, A, B, C, D, E, F, G, H )
 
-	#~ p1 = np.array([Pmono1/Pmono1, Pmono2/Pmono2, Pmono3/Pmono3, Pmono4/Pmono4])
-	#~ P1 = np.mean(p1, axis=0)
-	#~ p2 = np.array([kai1/Pmono1, kai2/Pmono2, kai3/Pmono3, kai4/Pmono4])
-	#~ P2 = np.mean(p2, axis=0)
-	#~ p3 = np.array([sco1/Pmono1, sco2/Pmono2, sco3/Pmono3, sco4/Pmono4])
-	#~ P3 = np.mean(p3, axis=0)
-	#~ p4 = np.array([tns1/Pmono1, tns2/Pmono2, tns3/Pmono3, tns4/Pmono4])
-	#~ P4 = np.mean(p4, axis=0)
-	#~ p6 = np.array([etns1/Pmono1, etns2/Pmono2, etns3/Pmono3, etns4/Pmono4])
-	#~ P6 = np.mean(p6, axis=0)
+	p1 = np.array([Pmono1/Pmono1, Pmono2/Pmono2, Pmono3/Pmono3, Pmono4/Pmono4])
+	P1 = np.mean(p1, axis=0)
+	p2 = np.array([kai1/Pmono1, kai2/Pmono2, kai3/Pmono3, kai4/Pmono4])
+	P2 = np.mean(p2, axis=0)
+	p3 = np.array([sco1/Pmono1, sco2/Pmono2, sco3/Pmono3, sco4/Pmono4])
+	P3 = np.mean(p3, axis=0)
+	p4 = np.array([tns1/Pmono1, tns2/Pmono2, tns3/Pmono3, tns4/Pmono4])
+	P4 = np.mean(p4, axis=0)
+	p6 = np.array([etns1/Pmono1, etns2/Pmono2, etns3/Pmono3, etns4/Pmono4])
+	P6 = np.mean(p6, axis=0)
 	
 ###########################################################################
 ### bias is also a free parameter
+	
 	#~ kai1f, kai2f, kai3f, kai4f, sco1f, sco2f, sco3f, sco4f, tns1f, tns2f, tns3f, tns4f, etns1f, etns2f,\
 	#~ etns3f, etns4f = RSD2(fz,fcc, Dz[ind], j, kstop, kcamb, Pcamb, Pmod_dd, biasF1, biasF2, biasF3, biasF4,\
-	#~ k, Pmono1, Pmono2, Pmono3, Pmono4, errPr1, errPr2, errPr3, errPr4, Pmod_dt, Pmod_tt, case,z,Mnu, A, B, C, D, E, F, G, H )
+	#~ k, Pmono1, Pmono2, Pmono3, Pmono4, errPr1, errPr2, errPr3, errPr4, Pmod_dt, Pmod_tt, case,z,Mnu, A, B, C, D, E, F, G, H)
 
 
 	#~ p2f = np.array([kai1f/Pmono1, kai2f/Pmono2, kai3f/Pmono3, kai4f/Pmono4])
@@ -418,17 +474,17 @@ for j in xrange(0,len(z)):
 
 ####################################################################
 #### get rescaled coefficients
-	#~ k1, k2, k3, k4, s1, s2, s3, s4, t1, t2, t3, t4, e1, e2, e3, e4 = rescal(j, case)
+	k1, k2, k3, k4, s1, s2, s3, s4, t1, t2, t3, t4, e1, e2, e3, e4 = rescal(j, case)
 	
 	
-	#~ p2bis = np.array([k1/Pmono1bis, k2/Pmono2bis, k3/Pmono3bis, k4/Pmono4bis])
-	#~ P2bis = np.mean(p2bis, axis=0)
-	#~ p3bis = np.array([s1/Pmono1bis, s2/Pmono2bis, s3/Pmono3bis, s4/Pmono4bis])
-	#~ P3bis = np.mean(p3bis, axis=0)
-	#~ p4bis = np.array([t1/Pmono1bis, t2/Pmono2bis, t3/Pmono3bis, t4/Pmono4bis])
-	#~ P4bis = np.mean(p4bis, axis=0)
-	#~ p6bis = np.array([e1/Pmono1bis, e2/Pmono2bis, e3/Pmono3bis, e4/Pmono4bis])
-	#~ P6bis = np.mean(p6bis, axis=0)
+	p2bis = np.array([k1/Pmono1, k2/Pmono2, k3/Pmono3, k4/Pmono4])
+	P2bis = np.mean(p2bis, axis=0)
+	p3bis = np.array([s1/Pmono1, s2/Pmono2, s3/Pmono3, s4/Pmono4])
+	P3bis = np.mean(p3bis, axis=0)
+	p4bis = np.array([t1/Pmono1, t2/Pmono2, t3/Pmono3, t4/Pmono4])
+	P4bis = np.mean(p4bis, axis=0)
+	p6bis = np.array([e1/Pmono1, e2/Pmono2, e3/Pmono3, e4/Pmono4])
+	P6bis = np.mean(p6bis, axis=0)
 
 	
 	#~ p2ter = np.array([k1ter/Pmono1bis, k2ter/Pmono2bis,	k3ter/Pmono3bis, k4ter/Pmono4bis])
@@ -446,44 +502,45 @@ for j in xrange(0,len(z)):
 ############################################################################################################
 	
 	#~ #######--------- mean and std of bias and ps ratio ------------#####
-	#~ if j == z[0]:
-		#~ fig2 = plt.figure()
-	#~ J = j + 1
+	if j == z[0]:
+		fig2 = plt.figure()
+	J = j + 1
 	
-	#~ if len(z) == 1:
-		#~ ax2 = fig2.add_subplot(1, len(z), J)
-	#~ elif len(z) == 2:
-		#~ ax2 = fig2.add_subplot(1, 2, J)
-	#~ elif len(z) > 2:
-		#~ ax2 = fig2.add_subplot(2, 2, J)
+	if len(z) == 1:
+		ax2 = fig2.add_subplot(1, len(z), J)
+	elif len(z) == 2:
+		ax2 = fig2.add_subplot(1, 2, J)
+	elif len(z) > 2:
+		ax2 = fig2.add_subplot(2, 2, J)
 	########### power spectrum ########
-	#~ ax2.set_ylim(0.9,1.1)
-	#~ ax2.set_yticks(np.linspace(0.9,1.1,5))
-	#~ ax2.axhline(1, color='k', linestyle='--')
-	#~ ax2.axhline(1.01, color='k', linestyle=':')
-	#~ ax2.axhline(0.99, color='k', linestyle=':')
-	#~ Ps1, =ax2.plot(k,P1, color='k')
-	#~ Ps2, =ax2.plot(k,P2, color='C3')
-	#~ Ps3, =ax2.plot(k,P3, color='C0')
-	#~ Ps4, =ax2.plot(k,P4, color='C1')
-	#~ Ps6, =ax2.plot(k,P6, color='c')
+	ax2.set_ylim(0.9,1.1)
+	#~ ax2.set_ylim(0.,2.1)
+	ax2.set_yticks(np.linspace(0.9,1.1,5))
+	ax2.axhline(1, color='k', linestyle='--')
+	ax2.axhline(1.01, color='k', linestyle=':')
+	ax2.axhline(0.99, color='k', linestyle=':')
+	Ps1, =ax2.plot(k,P1, color='k')
+	Ps2, =ax2.plot(k,P2, color='C3')
+	Ps3, =ax2.plot(k,P3, color='C0')
+	Ps4, =ax2.plot(k,P4, color='C1')
+	Ps6, =ax2.plot(k,P6, color='c')
 	#~ #--------------------------------
 	#~ ax2.plot(k,P2f, color='C3', label='z = '+str(z[j]), linestyle='--')
 	#~ ax2.plot(k,P3f, color='C0', linestyle='--')
 	#~ ax2.plot(k,P4f, color='C1', linestyle='--')
 	#~ ax2.plot(k,P6f, color='c', linestyle='--')
 	#-------------------------------
-	#~ ax2.plot(k,P2bis, color='C3', linestyle='--',label=r'w/ $b_{model}$ and $\sigma_v$ free')
-	#~ ax2.plot(k,P3bis, color='C0', linestyle='--')
-	#~ ax2.plot(k,P4bis, color='C1', linestyle='--')
-	#~ ax2.plot(k,P6bis, color='c', linestyle='--')
+	ax2.plot(k,P2bis, color='C3', linestyle='--',label=r'w/ $b_{model}$ and $\sigma_v$ free')
+	ax2.plot(k,P3bis, color='C0', linestyle='--')
+	ax2.plot(k,P4bis, color='C1', linestyle='--')
+	ax2.plot(k,P6bis, color='c', linestyle='--')
 	#-------------------------------
 	#~ ax2.plot(k,P2ter, color='C3', linestyle='--',label=r'w/ $b_{model}$ and $\sigma_v$ fixed')
 	#~ ax2.plot(k,P3ter, color='C0', linestyle='--')
 	#~ ax2.plot(k,P4ter, color='C1', linestyle='--')
 	#~ ax2.plot(k,P6ter, color='c', linestyle='--')
 	
-	#~ plt.figlegend( (Ps1,Ps2, Ps3, Ps4,Ps6), ('N-body','Polyn. + Kaiser','Polyn. + Scoccimarro','Polyn. + TNS','eTNS'), \
+	plt.figlegend( (Ps1,Ps2, Ps3, Ps4,Ps6), ('N-body','Polyn. + Kaiser','Polyn. + Scoccimarro','Polyn. + TNS','eTNS'), \
 	####### comparison bias and != models #############################
 	#~ ax2.set_yscale('log')
 	#~ plt.ylim(2e2,3e5)
@@ -514,36 +571,36 @@ for j in xrange(0,len(z)):
 	#~ plt.figlegend( (M1,M2,M3,M4,nlk,sco, tns, etns), ('$M_{1}$','$M_{2}$','$M_{3}$','$M_{4}$', 'non linear kaiser + PL'\
 	#~ ,'Scoccimarro + PL', r'TNS + PL', r'eTNS'), \
 	######################################
-	#~ loc = 'upper center', ncol=5, labelspacing=0., title =r' M$\nu$ = '+str(Mnu)+', case '+str(case), fontsize=14)
-	#~ ax2.axvspan(kstop, 7, alpha=0.2, color='grey')
-	#~ ax2.legend(loc = 'upper left', title='z = '+str(z[j]), fancybox=True, fontsize=14)
+	loc = 'upper center', ncol=5, labelspacing=0., title =r' M$\nu$ = '+str(Mnu)+', case '+str(case), fontsize=14)
+	ax2.axvspan(kstop, 7, alpha=0.2, color='grey')
+	ax2.legend(loc = 'upper left', title='z = '+str(z[j]), fancybox=True, fontsize=14)
 	#~ ax2.legend(loc = 'lower left', fancybox=True, fontsize=14, handlelength=0, handletextpad=0)
-	#~ plt.subplots_adjust(left=0.1, wspace=0.05, hspace=0.1)
-	#~ ax2.set_xscale('log')
-	#~ if j == 0 :
-		#~ ax2.tick_params(bottom='off', labelbottom='off')
-		#~ ax2.set_ylabel(r'P(k) / $P_{sim}$', fontsize=16)
-		#~ ax2.set_ylabel(r'$P_{cb}$', fontsize=16)
-	#~ if j == 1 :
-		#~ ax2.tick_params(bottom='off', labelbottom='off', labelright=True, right= True, labelleft='off', left='off')
-		#~ ax2.set_ylabel(r'P(k) / $P_{sim}$', fontsize=16)
-		#~ ax2.set_ylabel(r'$P_{cb}$', fontsize=16)
-		#~ ax2.yaxis.set_label_position("right")
-	#~ if j == 2 :
-		#~ #ax.tick_params(labelleft=True)
-		#~ ax2.set_ylabel(r'P(k) / $P_{sim}$', fontsize=16)
-		#~ ax2.set_ylabel(r'$P_{cb}$', fontsize=16)
-		#~ ax2.set_xlabel('k [h/Mpc]', fontsize=14)
-	#~ if j == 3 :
-		#~ ax2.tick_params(labelright=True, right= True, labelleft='off', left='off')
-		#~ ax2.set_xlabel('k [h/Mpc]', fontsize=14)
-		#~ ax2.set_ylabel(r'P(k) / $P_{sim}$', fontsize=16)
-		#~ ax2.set_ylabel(r'$P_{cb}$', fontsize=16)
-		#~ ax2.yaxis.set_label_position("right")
-	#~ ax2.set_xlim(8e-3,1.)
-	#plt.ylim(0.7,1.3)
-	#~ if j == len(z) -1:
-		#~ plt.show()
+	plt.subplots_adjust(left=0.1, wspace=0.05, hspace=0.1)
+	ax2.set_xscale('log')
+	if j == 0 :
+		ax2.tick_params(bottom='off', labelbottom='off')
+		ax2.set_ylabel(r'P(k) / $P_{sim}$', fontsize=16)
+		ax2.set_ylabel(r'$P_{cb}$', fontsize=16)
+	if j == 1 :
+		ax2.tick_params(bottom='off', labelbottom='off', labelright=True, right= True, labelleft='off', left='off')
+		ax2.set_ylabel(r'P(k) / $P_{sim}$', fontsize=16)
+		ax2.set_ylabel(r'$P_{cb}$', fontsize=16)
+		ax2.yaxis.set_label_position("right")
+	if j == 2 :
+		#ax.tick_params(labelleft=True)
+		ax2.set_ylabel(r'P(k) / $P_{sim}$', fontsize=16)
+		ax2.set_ylabel(r'$P_{cb}$', fontsize=16)
+		ax2.set_xlabel('k [h/Mpc]', fontsize=14)
+	if j == 3 :
+		ax2.tick_params(labelright=True, right= True, labelleft='off', left='off')
+		ax2.set_xlabel('k [h/Mpc]', fontsize=14)
+		ax2.set_ylabel(r'P(k) / $P_{sim}$', fontsize=16)
+		ax2.set_ylabel(r'$P_{cb}$', fontsize=16)
+		ax2.yaxis.set_label_position("right")
+	ax2.set_xlim(8e-3,1.)
+	#~ #plt.ylim(0.7,1.3)
+	if j == len(z) -1:
+		plt.show()
 	
 		
 	#~ kill

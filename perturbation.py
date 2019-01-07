@@ -73,31 +73,43 @@ def perturb(kstop,  lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, Pmm, k, 
 ##### compute coefficient with emcee
 ####################################################################
 	# 2nd order bias ----------------------------------------------------------------------------------------------
-	b1y1_ml, b2y1_ml, bsy1_ml, Ny1, b1y1_mcmc, b2y1_mcmc, bsy1_mcmc, Nmc1= coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb1,errlb1, pop1, k ,bias1 ,errb1, noise1)
-	b1y2_ml, b2y2_ml, bsy2_ml, Ny2, b1y2_mcmc, b2y2_mcmc, bsy2_mcmc, Nmc2 = coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb2,errlb2, pop2, k ,bias2 ,errb2, noise2)
-	b1y3_ml, b2y3_ml, bsy3_ml, Ny3, b1y3_mcmc, b2y3_mcmc, bsy3_mcmc, Nmc3 = coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb3,errlb3, pop3, k ,bias3 ,errb3, noise3)
-	b1y4_ml, b2y4_ml, bsy4_ml, Ny4, b1y4_mcmc, b2y4_mcmc, bsy4_mcmc, Nmc4 = coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb4,errlb4, pop4, k ,bias4 ,errb4, noise4)
+	#~ b1y1_ml, b2y1_ml, bsy1_ml, Ny1, b1y1_mcmc, b2y1_mcmc, bsy1_mcmc, Nmc1= coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb1,errlb1, pop1, k ,bias1 ,errb1, noise1)
+	#~ b1y2_ml, b2y2_ml, bsy2_ml, Ny2, b1y2_mcmc, b2y2_mcmc, bsy2_mcmc, Nmc2 = coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb2,errlb2, pop2, k ,bias2 ,errb2, noise2)
+	#~ b1y3_ml, b2y3_ml, bsy3_ml, Ny3, b1y3_mcmc, b2y3_mcmc, bsy3_mcmc, Nmc3 = coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb3,errlb3, pop3, k ,bias3 ,errb3, noise3)
+	#~ b1y4_ml, b2y4_ml, bsy4_ml, Ny4, b1y4_mcmc, b2y4_mcmc, bsy4_mcmc, Nmc4 = coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb4,errlb4, pop4, k ,bias4 ,errb4, noise4)
+	b1y1_ml, b2y1_ml, bsy1_ml, Ny1= coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb1,errlb1, pop1, k ,bias1 ,errb1, noise1)
+	b1y2_ml, b2y2_ml, bsy2_ml, Ny2 = coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb2,errlb2, pop2, k ,bias2 ,errb2, noise2)
+	b1y3_ml, b2y3_ml, bsy3_ml, Ny3 = coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb3,errlb3, pop3, k ,bias3 ,errb3, noise3)
+	b1y4_ml, b2y4_ml, bsy4_ml, Ny4 = coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb4,errlb4, pop4, k ,bias4 ,errb4, noise4)
 	
 	#-----
-	table_write_pt2(b1y1_ml, b2y1_ml, bsy1_ml, b1y1_mcmc, b2y1_mcmc, bsy1_mcmc,\
-	b1y2_ml, b2y2_ml, bsy2_ml, b1y2_mcmc, b2y2_mcmc, bsy2_mcmc, \
-	b1y3_ml, b2y3_ml, bsy3_ml, b1y3_mcmc, b2y3_mcmc, bsy3_mcmc, \
-	b1y4_ml, b2y4_ml, bsy4_ml, b1y4_mcmc, b2y4_mcmc, bsy4_mcmc, 'coeffpt2_'+str(z[j])+'.txt') 
+	#~ table_write_pt2(b1y1_ml, b2y1_ml, bsy1_ml, b1y1_mcmc, b2y1_mcmc, bsy1_mcmc,\
+	#~ b1y2_ml, b2y2_ml, bsy2_ml, b1y2_mcmc, b2y2_mcmc, bsy2_mcmc, \
+	#~ b1y3_ml, b2y3_ml, bsy3_ml, b1y3_mcmc, b2y3_mcmc, bsy3_mcmc, \
+	#~ b1y4_ml, b2y4_ml, bsy4_ml, b1y4_mcmc, b2y4_mcmc, bsy4_mcmc, 'coeffpt2_'+str(z[j])+'.txt') 
 	#~ #3rd order free -----------------------------------------------------------------------------------------------
-	b1z1_ml, b2z1_ml, bsz1_ml, b3z1_ml, Nz1, b1z1_mcmc, b2z1_mcmc, bsz1_mcmc, b3z1_mcmc, Nmc1 = coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, popbis1,\
+	#~ b1z1_ml, b2z1_ml, bsz1_ml, b3z1_ml, Nz1, b1z1_mcmc, b2z1_mcmc, bsz1_mcmc, b3z1_mcmc, Nmc1 = coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, popbis1,\
+	#~ k ,bias1 ,errb1, noise1)
+	#~ b1z2_ml, b2z2_ml, bsz2_ml, b3z2_ml, Nz2, b1z2_mcmc, b2z2_mcmc, bsz2_mcmc, b3z2_mcmc, Nmc2 = coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb2, errlb2, popbis2,\
+	#~ k ,bias2 ,errb2, noise2)
+	#~ b1z3_ml, b2z3_ml, bsz3_ml, b3z3_ml, Nz3, b1z3_mcmc, b2z3_mcmc, bsz3_mcmc, b3z3_mcmc, Nmc3 = coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb3, errlb3, popbis3,\
+	#~ k ,bias3 ,errb3, noise3)
+	#~ b1z4_ml, b2z4_ml, bsz4_ml, b3z4_ml, Nz4, b1z4_mcmc, b2z4_mcmc, bsz4_mcmc, b3z4_mcmc, Nmc4 = coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb4, errlb4, popbis4,\
+	#~ k ,bias4 ,errb4, noise4)
+	b1z1_ml, b2z1_ml, bsz1_ml, b3z1_ml, Nz1 = coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, popbis1,\
 	k ,bias1 ,errb1, noise1)
-	b1z2_ml, b2z2_ml, bsz2_ml, b3z2_ml, Nz2, b1z2_mcmc, b2z2_mcmc, bsz2_mcmc, b3z2_mcmc, Nmc2 = coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb2, errlb2, popbis2,\
+	b1z2_ml, b2z2_ml, bsz2_ml, b3z2_ml, Nz2 = coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb2, errlb2, popbis2,\
 	k ,bias2 ,errb2, noise2)
-	b1z3_ml, b2z3_ml, bsz3_ml, b3z3_ml, Nz3, b1z3_mcmc, b2z3_mcmc, bsz3_mcmc, b3z3_mcmc, Nmc3 = coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb3, errlb3, popbis3,\
+	b1z3_ml, b2z3_ml, bsz3_ml, b3z3_ml, Nz3 = coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb3, errlb3, popbis3,\
 	k ,bias3 ,errb3, noise3)
-	b1z4_ml, b2z4_ml, bsz4_ml, b3z4_ml, Nz4, b1z4_mcmc, b2z4_mcmc, bsz4_mcmc, b3z4_mcmc, Nmc4 = coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb4, errlb4, popbis4,\
+	b1z4_ml, b2z4_ml, bsz4_ml, b3z4_ml, Nz4 = coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb4, errlb4, popbis4,\
 	k ,bias4 ,errb4, noise4)
 	
 	#-----
-	table_write_pt3(b1z1_ml, b2z1_ml, bsz1_ml, b3z1_ml, b1z1_mcmc, b2z1_mcmc, bsz1_mcmc, b3z1_mcmc,\
-	b1z2_ml, b2z2_ml, bsz2_ml, b3z2_ml, b1z2_mcmc, b2z2_mcmc, bsz2_mcmc, b3z2_mcmc, \
-	b1z3_ml, b2z3_ml, bsz3_ml, b3z3_ml, b1z3_mcmc, b2z3_mcmc, bsz3_mcmc, b3z3_mcmc,  \
-	b1z4_ml, b2z4_ml, bsz4_ml, b3z4_ml, b1z4_mcmc, b2z4_mcmc, bsz4_mcmc, b3z4_mcmc, 'coeffpt3_'+str(z[j])+'.txt') 
+	#~ table_write_pt3(b1z1_ml, b2z1_ml, bsz1_ml, b3z1_ml, b1z1_mcmc, b2z1_mcmc, bsz1_mcmc, b3z1_mcmc,\
+	#~ b1z2_ml, b2z2_ml, bsz2_ml, b3z2_ml, b1z2_mcmc, b2z2_mcmc, bsz2_mcmc, b3z2_mcmc, \
+	#~ b1z3_ml, b2z3_ml, bsz3_ml, b3z3_ml, b1z3_mcmc, b2z3_mcmc, bsz3_mcmc, b3z3_mcmc,  \
+	#~ b1z4_ml, b2z4_ml, bsz4_ml, b3z4_ml, b1z4_mcmc, b2z4_mcmc, bsz4_mcmc, b3z4_mcmc, 'coeffpt3_'+str(z[j])+'.txt') 
 	#~ #-3rd order fixed -------------------------------------------------------------------------------------------------
 	b1u1_mcmc, b2u1_mcmc, Nu1= coeffit_exp3(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, popter1,\
 	k ,bias1 ,errb1, noise1)

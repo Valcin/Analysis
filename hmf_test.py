@@ -574,6 +574,11 @@ for j in xrange(0,len(z)):
 		br3 = bias3_0ev *Bias_eff_t3/Bias_eff0_t3
 		br4 = bias4_0ev *Bias_eff_t4/Bias_eff0_t4
 		
+		print Bias_eff_t1/Bias_eff0_t1
+		print Bias_eff_t2/Bias_eff0_t2
+		print Bias_eff_t3/Bias_eff0_t3
+		print Bias_eff_t4/Bias_eff0_t4
+		kill
 		
 		Br = np.array([br1/bias1, br2/bias2, br3/bias3, br4/bias4])
 		br = np.mean(Br,axis=0)

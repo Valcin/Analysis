@@ -535,9 +535,10 @@ for j in xrange(0,len(z)):
 	ax2.fill_between(k,bias4r-errb4r, bias4r+errb4r, color='k' ,alpha=0.5)
 	ax2.set_ylim(bias4[5]*0.8,bias4[5]*1.2)
 	ax2.set_xlim(8e-3,1)
-	plt.figlegend( (M1,M2,M3), (r'$M_{\nu}$ = 0.15eV, s8 = 0.806',r'$M_{\nu}$ = 0.0eV, s8 = 0.834',r'$M_{\nu}$ = 0.0eV, s8 = 0.819'), \
+	plt.figlegend( (M1,M2,M3), (r'$M_{\nu}$ = 0.15eV, $\sigma_8$ = 0.806',r'$M_{\nu}$ = 0.0eV, $\sigma_8$ = 0.834',r'$M_{\nu}$ = 0.0eV, $\sigma_8$ = 0.819'), \
 	#~ #######################################
-	loc = 'upper center', ncol=5, labelspacing=0., title =r' M$\nu$ = '+str(Mnu), fontsize=14)
+	#~ loc = 'upper center', ncol=5, labelspacing=0., title =r' M$\nu$ = '+str(Mnu), fontsize=14)
+	loc = 'upper center', ncol=5, labelspacing=0., fontsize=14)
 	ax2.legend(loc = 'upper left', fancybox=True, fontsize=14, handlelength=0, handletextpad=0)
 	plt.subplots_adjust(left=0.1, wspace=0.05, hspace=0.1)
 	ax2.set_xscale('log')

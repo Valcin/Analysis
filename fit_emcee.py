@@ -131,8 +131,8 @@ def coeffit_pl (kstop,lb1, errlb1, pop, k ,b ,errb):
 	nll = lambda *args: -lnlike(*args)
 	result = op.minimize(nll, [pop],  method='Nelder-Mead', args=(k, b ,errb ),  options={'maxfev': 2000} )
 	b1_ml, b2_ml, b3_ml, b4_ml = result["x"]
-	print pop
-	print result
+	#~ print pop
+	#~ print result
 	#~ max_l = lnlike(result["x"], k, b, errb )
 	#~ AIC = 2*4. - 2 * max_l
 	#~ print 'maximum likelihood is '+str(max_l)
@@ -150,7 +150,8 @@ def coeffit_pl (kstop,lb1, errlb1, pop, k ,b ,errb):
 	#~ print("Mean acceptance fraction: {0:.3f}"
                 #~ .format(np.mean(sampler.acceptance_fraction)))
 	#~ import corner
-	#~ fig = corner.corner(samples, labels=["$b1$", "$b2$", "$b3$", "$b4$" ], truths=[b1_ml, b2_ml, b3_ml, b4_ml])
+	#~ cmap = ['w','b','g','c']
+	#~ fig = corner.corner(samples, labels=[r"$b_1$", r"$b_2$", r"$b_3$", r"$b_4$" ], truths=[b1_ml, b2_ml, b3_ml, b4_ml], fontsize = 14)
 	#~ fig.savefig("/home/david/triangle.png")
 	
 
@@ -158,7 +159,18 @@ def coeffit_pl (kstop,lb1, errlb1, pop, k ,b ,errb):
 	
 	#~ print b1_mcmc, b2_mcmc, b3_mcmc, b4_mcmc
 	
-
+	#~ import seaborn as sns
+	#~ import pandas as pd
+	#~ sns.set(style="white")
+	#~ iris = sns.load_dataset("iris")
+	#~ print iris
+	#~ wnv_approaches = pd.DataFrame({"b1": samples[:,0], "b2": samples[:,1], "b3": samples[:,2],"b4": samples[:,3]})
+	#~ print wnv_approaches
+	#~ g = sns.PairGrid(wnv_approaches)
+	#~ g = g.map_upper(plt.scatter)
+	#~ g = g.map_lower(sns.kdeplot, cmap="Blues_d")
+	#~ g = g.map_diag(sns.kdeplot, lw=3, legend=False)
+	
 	
 	#~ kill
 	#~ plt.figure()
@@ -234,31 +246,31 @@ def coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb1, errlb1, pop, k ,b ,errb, noise)
 	#~ result = op.minimize(nll, [pop],  method='Nelder-Mead', args=(k, b ,errb ),  options={'maxfev': 2000} )
 	result = op.minimize(nll, [pop],method='SLSQP', args=(k, b ,errb ),  bounds=((0, None), (None,None), (None,None), (-3*noise,3*noise)),  options={'maxfev': 5000} )
 	b1_ml, b2_ml, bs_ml, N_ml = result["x"]
-	print pop
-	print(result)
+	#~ print pop
+	#~ print(result)
 	
 	#~ max_l = lnlike(result["x"], k, b, errb )
 	#~ AIC = 2*4. - 2 * max_l
 	#~ print 'maximum likelihood is '+str(max_l)
 	#~ print 'AIC = '+str(AIC)
 	
-	ndim, nwalkers = len(pop), 100
-	pos = [result["x"] + 1e-4*np.random.randn(ndim) for i in range(nwalkers)]
+	#~ ndim, nwalkers = len(pop), 100
+	#~ pos = [result["x"] + 1e-4*np.random.randn(ndim) for i in range(nwalkers)]
 
-	posnum = 1000
-	sampler = emcee.EnsembleSampler(nwalkers, ndim, lnprob, args=(k, b, errb), a = 2.)
-	sampler.run_mcmc(pos, posnum)
+	#~ posnum = 1000
+	#~ sampler = emcee.EnsembleSampler(nwalkers, ndim, lnprob, args=(k, b, errb), a = 2.)
+	#~ sampler.run_mcmc(pos, posnum)
 	
-	samples = sampler.chain[:, 200:, :].reshape((-1, ndim))
+	#~ samples = sampler.chain[:, 200:, :].reshape((-1, ndim))
 
-	print("Mean acceptance fraction: {0:.3f}"
-                .format(np.mean(sampler.acceptance_fraction)))
+	#~ print("Mean acceptance fraction: {0:.3f}"
+                #~ .format(np.mean(sampler.acceptance_fraction)))
 	#~ import corner
 	#~ fig = corner.corner(samples, labels=["$b1$", "$b2$", "$bs$" , "$N$" ], truths=[b1_ml, b2_ml, bs_ml, N_ml])
 	#~ fig.savefig("/home/david/triangle.png")
 	
 
-	b1_mcmc, b2_mcmc, bs_mcmc, N_mcmc = map(lambda v: (v[1], v[2]-v[1], v[1]-v[0]), zip(*np.percentile(samples, [16, 50, 84], axis=0)))
+	#~ b1_mcmc, b2_mcmc, bs_mcmc, N_mcmc = map(lambda v: (v[1], v[2]-v[1], v[1]-v[0]), zip(*np.percentile(samples, [16, 50, 84], axis=0)))
 	#~ plt.figure()
 	#~ ax1 = plt.subplot(221)
 	#~ ax1.set_title('b1')
@@ -285,8 +297,8 @@ def coeffit_exp1(kstop, Pmm, A, B, C, D, E, lb1, errlb1, pop, k ,b ,errb, noise)
 	#~ plt.show()
 
 	#~ return b1_mcmc, b2_mcmc, bs_mcmc, N_mcmc, b1_ml, b2_ml, bs_ml, N_ml
-	return b1_ml, b2_ml, bs_ml, N_ml, b1_mcmc, b2_mcmc, bs_mcmc, N_mcmc
-	
+	#~ return b1_ml, b2_ml, bs_ml, N_ml, b1_mcmc, b2_mcmc, bs_mcmc, N_mcmc
+	return b1_ml, b2_ml, bs_ml, N_ml
 ########################################################################
 ######### bias expansion 3rd order free
 ########################################################################
@@ -340,23 +352,26 @@ def coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, pop, k ,b ,errb, noi
 	#~ print 'maximum likelihood is '+str(max_l)
 	#~ print 'AIC = '+str(AIC)
 	
-	ndim, nwalkers = len(pop), 200
-	pos = [result["x"] + 1e-4*np.random.randn(ndim) for i in range(nwalkers)]
+	#~ ndim, nwalkers = len(pop), 300
+	#~ pos = [result["x"] + 1e-4*np.random.randn(ndim) for i in range(nwalkers)]
 
-	posnum = 1000
-	sampler = emcee.EnsembleSampler(nwalkers, ndim, lnprob, args=(k, b, errb), a = 2.)
-	sampler.run_mcmc(pos, posnum)
+	#~ posnum = 1000
+	#~ sampler = emcee.EnsembleSampler(nwalkers, ndim, lnprob, args=(k, b, errb), a = 2.)
+	#~ sampler.run_mcmc(pos, posnum)
 	
-	samples = sampler.chain[:, 200:, :].reshape((-1, ndim))
+	#~ samples = sampler.chain[:, 200:, :].reshape((-1, ndim))
 
-	print("Mean acceptance fraction: {0:.3f}"
-                .format(np.mean(sampler.acceptance_fraction)))
+	#~ print("Mean acceptance fraction: {0:.3f}"
+                #~ .format(np.mean(sampler.acceptance_fraction)))
 	#~ import corner
-	#~ fig = corner.corner(samples, labels=["$b1$", "$b2$", "$bs$" ,"$b3nl$" , "$N$" ], truths=[b1_ml, b2_ml, bs_ml, b3_ml, N_ml])
+	#~ samplesbis = np.delete(samples, 4, 1)
+	#~ fig = corner.corner(samplesbis, labels=[r"$b_1$", r"$b_2$", r"$b_{s2}$" ,r"$b_{3nl}$"],\
+	#~ truths=[b1_ml, b2_ml, bs_ml, b3_ml], fontsize = 14)
+	
 	#~ fig.savefig("/home/david/triangle.png")
 	
 
-	b1_mcmc, b2_mcmc, bs_mcmc, b3_mcmc, N_mcmc = map(lambda v: (v[1], v[2]-v[1], v[1]-v[0]), zip(*np.percentile(samples, [16, 50, 84], axis=0)))
+	#~ b1_mcmc, b2_mcmc, bs_mcmc, b3_mcmc, N_mcmc = map(lambda v: (v[1], v[2]-v[1], v[1]-v[0]), zip(*np.percentile(samples, [16, 50, 84], axis=0)))
 	#~ print(result)
 	#~ print b1_mcmc[0], b2_mcmc[0], bs_mcmc[0], b3_mcmc[0], N_mcmc[0]
 	#~ print pop
@@ -396,7 +411,8 @@ def coeffit_exp2(kstop, Pmm, A, B, C, D, E, F, lb1, errlb1, pop, k ,b ,errb, noi
 	#~ plt.show()
 	#~ kill
 	#~ return b1_mcmc, b2_mcmc, bs_mcmc, b3_mcmc, N_mcmc
-	return b1_ml, b2_ml, bs_ml, b3_ml, N_ml, b1_mcmc, b2_mcmc, bs_mcmc, b3_mcmc, N_mcmc
+	#~ return b1_ml, b2_ml, bs_ml, b3_ml, N_ml, b1_mcmc, b2_mcmc, bs_mcmc, b3_mcmc, N_mcmc
+	return b1_ml, b2_ml, bs_ml, b3_ml, N_ml
 ########################################################################
 ######### bias expansion 3rd order fixed
 ########################################################################
@@ -631,7 +647,7 @@ def coeffit_Kaiser2(j, fcc, kstop, Pmm,  k ,b ,errb):
 	nll = lambda *args: -lnlike(*args)
 	result = op.minimize(nll, [pop],  method='Nelder-Mead', args=(k, b ,errb ),  options={'maxfev': 2000} )
 	b1_ml, b2_ml, b3_ml, b4_ml, sig_ml = result["x"]
-	print(result)
+	#~ print(result)
 	
 	#~ max_l = lnlike(result["x"], k, b, errb )
 	#~ AIC = 2*4. - 2 * max_l
@@ -804,7 +820,7 @@ def coeffit_Scocci2(j, fcc, kstop,Pmod_dd, Pmod_dt, Pmod_tt, k ,b ,errb):
 	nll = lambda *args: -lnlike(*args)
 	result = op.minimize(nll, [pop],  method='Nelder-Mead', args=(k, b ,errb ),  options={'maxfev': 2000} )
 	b1_ml, b2_ml, b3_ml, b4_ml, sig_ml = result["x"]
-	print(result)
+	#~ print(result)
 	
 	#~ max_l = lnlike(result["x"], k, b, errb )
 	#~ AIC = 2*4. - 2 * max_l
@@ -988,7 +1004,7 @@ def coeffit_TNS2(j, fcc, kstop,Pmod_dd, Pmod_dt, Pmod_tt, k ,b ,errb,AB2,AB4,AB6
 	nll = lambda *args: -lnlike(*args)
 	result = op.minimize(nll, [pop],  method='Nelder-Mead', args=(k, b ,errb ),  options={'maxfev': 2000} )
 	b1_ml, b2_ml, b3_ml, b4_ml, sig_ml = result["x"]
-	print(result)
+	#~ print(result)
 	
 	#~ max_l = lnlike(result["x"], k, b, errb )
 	#~ AIC = 2*4. - 2 * max_l
@@ -1090,7 +1106,7 @@ def coeffit_eTNS(j, fcc, kstop, b1, b2, bs, b3nl, Pmod_dd, Pmod_dt, Pmod_tt, A, 
 	#~ result = op.minimize(nll, [pop], bounds= [(1,1000)], args=(k, b ,errb ))
 	result = op.minimize_scalar(nll, bounds=(1,1000), method='bounded',args=(k, b ,errb ))
 	b1_ml = result["x"]
-	print(result)
+	#~ print(result)
 	
 	#~ max_l = lnlike(result["x"], k, b, errb )
 	#~ AIC = 2*4. - 2 * max_l
@@ -1141,8 +1157,10 @@ def coeffit_eTNS2(j, fcc, kstop, Pmod_dd, Pmod_dt, Pmod_tt, A, B, C, D, E, F, G,
 	lim = np.where((k < kstop)&(k > 1e-2))[0]
 	
 	def lnlike(theta, x, y, yerr):
-		b1, b2, bs, b3nl, N, sigma = theta
+		b1, b2, N, sigma = theta
 		#~ sigma = theta
+		bs = -4/7.*(b1-1)
+		b3nl = 32/315.*(b1-1)
 		PsptD1z = b1**2*Pmod_dd[lim] + b1*b2*A[lim] + 1/4.*b2**2*B[lim] + b1*bs*C[lim] + 1/2.*b2*bs*D[lim] + 1/4.*bs**2*E[lim] \
 		+ 2*b1*b3nl*F[lim] +N
 		PsptT = b1* Pmod_dt[lim] + b2*G[lim] + bs*H[lim] + b3nl*F[lim]
@@ -1169,7 +1187,7 @@ def coeffit_eTNS2(j, fcc, kstop, Pmod_dd, Pmod_dt, Pmod_tt, A, B, C, D, E, F, G,
 		return -0.5*(np.sum((y[lim]-model)**2*inv_sigma2 - np.log(inv_sigma2)))
 		
 	def lnprior(theta):
-		b1, b2, bs, b3nl,N, sigma = theta
+		b1, b2,N, sigma = theta
 		#~ if lb1 - 3*errlb1 < b1 < lb1 + 3*errlb1 :
 		if 0 < sigma < 100:
 			return 0.0
@@ -1187,10 +1205,10 @@ def coeffit_eTNS2(j, fcc, kstop, Pmod_dd, Pmod_dt, Pmod_tt, A, B, C, D, E, F, G,
 	f = [0.518,0.754,0.872,0.956,0.98]
 	Dz = [ 1.,0.77,0.61,0.42]
 
-	pop = [1,1,1,1,1,6]
+	pop = [1,1,1,6]
 	nll = lambda *args: -lnlike(*args)
 	result = op.minimize(nll, [pop],  method='Nelder-Mead', args=(k, b ,errb ),  options={'maxfev': 5000} )
-	b1_ml, b2_ml, bs_ml, b3nl_ml,N_ml, sigma_ml  = result["x"]
+	b1_ml, b2_ml,N_ml, sigma_ml  = result["x"]
 	print(result)
 	
 	#~ max_l = lnlike(result["x"], k, b, errb )
@@ -1229,4 +1247,4 @@ def coeffit_eTNS2(j, fcc, kstop, Pmod_dd, Pmod_dt, Pmod_tt, A, B, C, D, E, F, G,
 	end = time.time()
 	print 'time is '+str((end - start))
 	#~ return b1_mcmc
-	return b1_ml, b2_ml, bs_ml, b3nl_ml,N_ml, sigma_ml 
+	return b1_ml, b2_ml,N_ml, sigma_ml 

@@ -248,39 +248,15 @@ for j in xrange(0,len(z)):
 	plt.subplots_adjust(left=0.1, wspace=0.05, hspace=0.1)
 	ax2.axvspan(kstop, 7, alpha=0.2, color='grey')
 	ax2.set_xscale('log')
+	#~ ax2.set_xticks([0.01,0.1,0.3]) # choose which x locations to have ticks
+	#~ ax2.set_xticklabels([0.01,0.1,0.3]) # set the labels to display at those ticks
 	#----------------------------
 	if j == 0 :
-		ax2.tick_params(bottom='off', labelbottom='off')
 		ax2.set_ylabel(r'$b_{eff}$ / $b_{sim}$', fontsize = 16)
 		ax2.set_ylabel(r'$b_{\rm model}$ / $b_{\rm sim}$', fontsize = 16)
 		ax2.set_ylabel(r'$b_{cb}$', fontsize = 16)
-		#~ ax2.set_ylabel(r'$M^2 n(M)$', fontsize = 16)
-		#ax2.grid()
-	if j == 1 :
-		ax2.tick_params(bottom='off', labelbottom='off', labelright=True, right= True, labelleft='off', left='off')
-		ax2.set_ylabel(r'$b_{eff}$ / $b_{sim}$', fontsize = 16)
-		ax2.set_ylabel(r'$b_{\rm model}$ / $b_{\rm sim}$', fontsize = 16)
-		ax2.set_ylabel(r'$b_{cb}$', fontsize = 16)
-		#~ ax2.set_ylabel(r'$M^2 n(M)$', fontsize = 16)
-		ax2.yaxis.set_label_position("right")
-		#ax2.grid()
-	if j == 2 :
-		#~ #ax.tick_params(labelleft=True)
-		ax2.set_ylabel(r'$b_{eff}$ / $b_{sim}$', fontsize = 16)
-		ax2.set_ylabel(r'$b_{\rm model}$ / $b_{\rm sim}$', fontsize = 16)
-		ax2.set_ylabel(r'$b_{cb}$', fontsize = 16)
-		#~ ax2.set_ylabel(r'$M^2 n(M)$', fontsize = 16)
-		ax2.set_xlabel('k [h/Mpc]', fontsize = 14)
-		#~ ax2.set_xlabel(r'M [$h^{-1} M_{\odot}$]', fontsize = 14)
-		#ax2.grid()
-	if j == 3 :
-		ax2.tick_params(labelright=True, right= True, labelleft='off', left='off')
 		ax2.set_xlabel('k [h/Mpc]', fontsize = 16)
-		#~ ax2.set_xlabel(r'M [$h^{-1} M_{\odot}$]', fontsize = 16)
-		ax2.set_ylabel(r'$b_{eff}$ / $b_{sim}$', fontsize = 16)
-		ax2.set_ylabel(r'$b_{cb}$', fontsize = 16)
-		#~ ax2.set_ylabel(r'$M^2 n(M)$', fontsize = 14)
-		ax2.yaxis.set_label_position("right")
+		#~ ax2.set_ylabel(r'$M^2 n(M)$', fontsize = 16)
 		#ax2.grid()
 	#ax2.set_xlim(8e-3,0.05)
 	if j == len(z) -1:
