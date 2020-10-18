@@ -87,12 +87,12 @@ def RSD1(fz,fcc, Dz, j, kstop, kcamb, Pcamb, Pmm, biasF1, biasF2, biasF3, biasF4
 	AB2bis_3,AB4bis_3,AB6bis_3,AB8bis_3 = fastpt.RSD_ABsum_components(Pcamb,fz,b1pt3[2] ,C_window=C_window)
 	AB2bis_4,AB4bis_4,AB6bis_4,AB8bis_4 = fastpt.RSD_ABsum_components(Pcamb,fz,b1pt3[3] ,C_window=C_window)
 
-	AB2_1,AB4_1,AB6_1,AB8_1,AB2_2,AB4_2,AB6_2,AB8_2,AB2_3,AB4_3,AB6_3,AB8_3,\
-	AB2_4,AB4_4,AB6_4,AB8_4,AB2bis_1,AB4bis_1,AB6bis_1,AB8bis_1 ,AB2bis_2,AB4bis_2,AB6bis_2,AB8bis_2,\
-	AB2bis_3,AB4bis_3,AB6bis_3,AB8bis_3, AB2bis_4,AB4bis_4,AB6bis_4,AB8bis_4 = interp_simu2(z,j,k,kcamb, Pcamb,\
-	AB2_1,AB4_1,AB6_1,AB8_1,AB2_2,AB4_2,AB6_2,AB8_2,AB2_3,AB4_3,AB6_3,AB8_3,\
-	AB2_4,AB4_4,AB6_4,AB8_4,AB2bis_1,AB4bis_1,AB6bis_1,AB8bis_1 ,AB2bis_2,AB4bis_2,AB6bis_2,AB8bis_2,\
-	AB2bis_3,AB4bis_3,AB6bis_3,AB8bis_3, AB2bis_4,AB4bis_4,AB6bis_4,AB8bis_4, 2)
+	#~ AB2_1,AB4_1,AB6_1,AB8_1,AB2_2,AB4_2,AB6_2,AB8_2,AB2_3,AB4_3,AB6_3,AB8_3,\
+	#~ AB2_4,AB4_4,AB6_4,AB8_4,AB2bis_1,AB4bis_1,AB6bis_1,AB8bis_1 ,AB2bis_2,AB4bis_2,AB6bis_2,AB8bis_2,\
+	#~ AB2bis_3,AB4bis_3,AB6bis_3,AB8bis_3, AB2bis_4,AB4bis_4,AB6bis_4,AB8bis_4 = interp_simu2(z,j,k,kcamb, Pcamb,\
+	#~ AB2_1,AB4_1,AB6_1,AB8_1,AB2_2,AB4_2,AB6_2,AB8_2,AB2_3,AB4_3,AB6_3,AB8_3,\
+	#~ AB2_4,AB4_4,AB6_4,AB8_4,AB2bis_1,AB4bis_1,AB6bis_1,AB8bis_1 ,AB2bis_2,AB4bis_2,AB6bis_2,AB8bis_2,\
+	#~ AB2bis_3,AB4bis_3,AB6bis_3,AB8bis_3, AB2bis_4,AB4bis_4,AB6bis_4,AB8bis_4, 2)
 		
 		
 	#~ dat_file_path = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/0.0eV/large_scale/'\
@@ -108,68 +108,68 @@ def RSD1(fz,fcc, Dz, j, kstop, kcamb, Pcamb, Pmm, biasF1, biasF2, biasF3, biasF4
 	#~ AB2ter_4,AB4ter_4,AB6ter_4,AB8ter_4 = fastpt.RSD_ABsum_components(Pcamb,fz,bls4 ,C_window=C_window)
 	
 	#~ #-------------------------------------------------------
-	#~ cname1m1 = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/TNS_coeff/'\
-	#~ 'tns_pl1_z='+str(z[j])+'.txt'
-	#~ cname1m2 = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/TNS_coeff/'\
-	#~ 'tns_pl2_z='+str(z[j])+'.txt'
-	#~ cname1m3 = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/TNS_coeff/'\
-	#~ 'tns_pl3_z='+str(z[j])+'.txt'
-	#~ cname1m4 = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/TNS_coeff/'\
-	#~ 'tns_pl4_z='+str(z[j])+'.txt'
-	#~ cname2m1 = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/TNS_coeff/'\
-	#~ 'tns_pt1_z='+str(z[j])+'.txt'
-	#~ cname2m2 = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/TNS_coeff/'\
-	#~ 'tns_pt2_z='+str(z[j])+'.txt'
-	#~ cname2m3 = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/TNS_coeff/'\
-	#~ 'tns_pt3_z='+str(z[j])+'.txt'
-	#~ cname2m4 = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/TNS_coeff/'\
-	#~ 'tns_pt4_z='+str(z[j])+'.txt'
-	#~ cname3m1 = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/TNS_coeff/'\
-	#~ 'tns_lin1_z='+str(z[j])+'.txt'
-	#~ cname3m2 = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/TNS_coeff/'\
-	#~ 'tns_lin2_z='+str(z[j])+'.txt'
-	#~ cname3m3 = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/TNS_coeff/'\
-	#~ 'tns_lin3_z='+str(z[j])+'.txt'
-	#~ cname3m4 = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/TNS_coeff/'\
-	#~ 'tns_lin4_z='+str(z[j])+'.txt'
+	cname1m1 = '/home/david/codes/BE_HaPPy/coefficients/'+str(Mnu)+'eV/TNS_coeff/'\
+	'tns_pl1_z='+str(z[j])+'.txt'
+	cname1m2 = '/home/david/codes/BE_HaPPy/coefficients/'+str(Mnu)+'eV/TNS_coeff/'\
+	'tns_pl2_z='+str(z[j])+'.txt'
+	cname1m3 = '/home/david/codes/BE_HaPPy/coefficients/'+str(Mnu)+'eV/TNS_coeff/'\
+	'tns_pl3_z='+str(z[j])+'.txt'
+	cname1m4 = '/home/david/codes/BE_HaPPy/coefficients/'+str(Mnu)+'eV/TNS_coeff/'\
+	'tns_pl4_z='+str(z[j])+'.txt'
+	cname2m1 = '/home/david/codes/BE_HaPPy/coefficients/'+str(Mnu)+'eV/TNS_coeff/'\
+	'tns_pt1_z='+str(z[j])+'.txt'
+	cname2m2 = '/home/david/codes/BE_HaPPy/coefficients/'+str(Mnu)+'eV/TNS_coeff/'\
+	'tns_pt2_z='+str(z[j])+'.txt'
+	cname2m3 = '/home/david/codes/BE_HaPPy/coefficients/'+str(Mnu)+'eV/TNS_coeff/'\
+	'tns_pt3_z='+str(z[j])+'.txt'
+	cname2m4 = '/home/david/codes/BE_HaPPy/coefficients/'+str(Mnu)+'eV/TNS_coeff/'\
+	'tns_pt4_z='+str(z[j])+'.txt'
+	cname3m1 = '/home/david/codes/BE_HaPPy/coefficients/'+str(Mnu)+'eV/TNS_coeff/'\
+	'tns_lin1_z='+str(z[j])+'.txt'
+	cname3m2 = '/home/david/codes/BE_HaPPy/coefficients/'+str(Mnu)+'eV/TNS_coeff/'\
+	'tns_lin2_z='+str(z[j])+'.txt'
+	cname3m3 = '/home/david/codes/BE_HaPPy/coefficients/'+str(Mnu)+'eV/TNS_coeff/'\
+	'tns_lin3_z='+str(z[j])+'.txt'
+	cname3m4 = '/home/david/codes/BE_HaPPy/coefficients/'+str(Mnu)+'eV/TNS_coeff/'\
+	'tns_lin4_z='+str(z[j])+'.txt'
 
 
-	#~ with open(cname1m1, 'w') as fid_file:
-		#~ for index_k in xrange(len(k)):
-			#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (AB2_1[index_k],AB4_1[index_k],AB6_1[index_k],AB8_1[index_k]))
-	#~ with open(cname1m2, 'w') as fid_file:
-		#~ for index_k in xrange(len(k)):
-			#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (AB2_2[index_k],AB4_2[index_k],AB6_2[index_k],AB8_2[index_k]))
-	#~ with open(cname1m3, 'w') as fid_file:
-		#~ for index_k in xrange(len(k)):
-			#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (AB2_3[index_k],AB4_3[index_k],AB6_3[index_k],AB8_3[index_k]))
-	#~ with open(cname1m4, 'w') as fid_file:
-		#~ for index_k in xrange(len(k)):
-			#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (AB2_4[index_k],AB4_4[index_k],AB6_4[index_k],AB8_4[index_k]))
-	#~ with open(cname2m1, 'w') as fid_file:
-		#~ for index_k in xrange(len(k)):
-			#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (AB2bis_1[index_k],AB4bis_1[index_k],AB6bis_1[index_k],AB8bis_1[index_k]))
-	#~ with open(cname2m2, 'w') as fid_file:
-		#~ for index_k in xrange(len(kbis)):
-			#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (AB2bis_2[index_k],AB4bis_2[index_k],AB6bis_2[index_k],AB8bis_2[index_k]))
-	#~ with open(cname2m3, 'w') as fid_file:
-		#~ for index_k in xrange(len(kbis)):
-			#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (AB2bis_3[index_k],AB4bis_3[index_k],AB6bis_3[index_k],AB8bis_3[index_k]))
-	#~ with open(cname2m4, 'w') as fid_file:
-		#~ for index_k in xrange(len(kbis)):
-			#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (AB2bis_4[index_k],AB4bis_4[index_k],AB6bis_4[index_k],AB8bis_4[index_k]))
-	#~ with open(cname3m1, 'w') as fid_file:
-		#~ for index_k in xrange(len(kbis)):
-			#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (AB2ter_1[index_k],AB4ter_1[index_k],AB6ter_1[index_k],AB8ter_1[index_k]))
-	#~ with open(cname3m2, 'w') as fid_file:
-		#~ for index_k in xrange(len(k)):
-			#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (AB2ter_2[index_k],AB4ter_2[index_k],AB6ter_2[index_k],AB8ter_2[index_k]))
-	#~ with open(cname3m3, 'w') as fid_file:
-		#~ for index_k in xrange(len(k)):
-			#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (AB2ter_3[index_k],AB4ter_3[index_k],AB6ter_3[index_k],AB8ter_3[index_k]))
-	#~ with open(cname3m4, 'w') as fid_file:
-		#~ for index_k in xrange(len(k)):
-			#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (AB2ter_4[index_k],AB4ter_4[index_k],AB6ter_4[index_k],AB8ter_4[index_k]))
+	with open(cname1m1, 'w') as fid_file:
+		for index_k in xrange(len(k)):
+			fid_file.write('%.8g %.8g %.8g %.8g\n' % (AB2_1[index_k],AB4_1[index_k],AB6_1[index_k],AB8_1[index_k]))
+	with open(cname1m2, 'w') as fid_file:
+		for index_k in xrange(len(k)):
+			fid_file.write('%.8g %.8g %.8g %.8g\n' % (AB2_2[index_k],AB4_2[index_k],AB6_2[index_k],AB8_2[index_k]))
+	with open(cname1m3, 'w') as fid_file:
+		for index_k in xrange(len(k)):
+			fid_file.write('%.8g %.8g %.8g %.8g\n' % (AB2_3[index_k],AB4_3[index_k],AB6_3[index_k],AB8_3[index_k]))
+	with open(cname1m4, 'w') as fid_file:
+		for index_k in xrange(len(k)):
+			fid_file.write('%.8g %.8g %.8g %.8g\n' % (AB2_4[index_k],AB4_4[index_k],AB6_4[index_k],AB8_4[index_k]))
+	with open(cname2m1, 'w') as fid_file:
+		for index_k in xrange(len(k)):
+			fid_file.write('%.8g %.8g %.8g %.8g\n' % (AB2bis_1[index_k],AB4bis_1[index_k],AB6bis_1[index_k],AB8bis_1[index_k]))
+	with open(cname2m2, 'w') as fid_file:
+		for index_k in xrange(len(kbis)):
+			fid_file.write('%.8g %.8g %.8g %.8g\n' % (AB2bis_2[index_k],AB4bis_2[index_k],AB6bis_2[index_k],AB8bis_2[index_k]))
+	with open(cname2m3, 'w') as fid_file:
+		for index_k in xrange(len(kbis)):
+			fid_file.write('%.8g %.8g %.8g %.8g\n' % (AB2bis_3[index_k],AB4bis_3[index_k],AB6bis_3[index_k],AB8bis_3[index_k]))
+	with open(cname2m4, 'w') as fid_file:
+		for index_k in xrange(len(kbis)):
+			fid_file.write('%.8g %.8g %.8g %.8g\n' % (AB2bis_4[index_k],AB4bis_4[index_k],AB6bis_4[index_k],AB8bis_4[index_k]))
+	with open(cname3m1, 'w') as fid_file:
+		for index_k in xrange(len(kbis)):
+			fid_file.write('%.8g %.8g %.8g %.8g\n' % (AB2ter_1[index_k],AB4ter_1[index_k],AB6ter_1[index_k],AB8ter_1[index_k]))
+	with open(cname3m2, 'w') as fid_file:
+		for index_k in xrange(len(k)):
+			fid_file.write('%.8g %.8g %.8g %.8g\n' % (AB2ter_2[index_k],AB4ter_2[index_k],AB6ter_2[index_k],AB8ter_2[index_k]))
+	with open(cname3m3, 'w') as fid_file:
+		for index_k in xrange(len(k)):
+			fid_file.write('%.8g %.8g %.8g %.8g\n' % (AB2ter_3[index_k],AB4ter_3[index_k],AB6ter_3[index_k],AB8ter_3[index_k]))
+	with open(cname3m4, 'w') as fid_file:
+		for index_k in xrange(len(k)):
+			fid_file.write('%.8g %.8g %.8g %.8g\n' % (AB2ter_4[index_k],AB4ter_4[index_k],AB6ter_4[index_k],AB8ter_4[index_k]))
 
 	
 
@@ -231,7 +231,7 @@ def RSD1(fz,fcc, Dz, j, kstop, kcamb, Pcamb, Pmm, biasF1, biasF2, biasF3, biasF4
 ##########################################################################
 
 	#### compute the different power spectra given the mcmc results
-	bK = np.loadtxt('/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/v_disp/case'+str(case)+'/vdispkai_z='+str(z[j])+'.txt')
+	bK = np.loadtxt('/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/other neutrinos masses/'+str(Mnu)+'eV/v_disp/case'+str(case)+'/vdispkai_z='+str(z[j])+'.txt')
 	#~ BK = np.loadtxt('/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/v_disp/case'+str(case)+'/vdispkaibis_z='+str(z[j])+'.txt')
 	#~ biasK = np.loadtxt('/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/0.0eV/v_disp/case'+str(case)+'/vdispkai_z='+str(z[j])+'.txt')
 
@@ -263,7 +263,7 @@ def RSD1(fz,fcc, Dz, j, kstop, kcamb, Pcamb, Pmm, biasF1, biasF2, biasF3, biasF4
 	#~ k4ter = kaips(bF4, biasK[3])
 
 	#---------------------------------------------------------------------------------------
-	bsco = np.loadtxt('/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/v_disp/case'+str(case)+'/vdispsco_z='+str(z[j])+'.txt')
+	bsco = np.loadtxt('/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/other neutrinos masses/'+str(Mnu)+'eV/v_disp/case'+str(case)+'/vdispsco_z='+str(z[j])+'.txt')
 	#~ Bsco = np.loadtxt('/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/v_disp/case'+str(case)+'/vdispscobis_z='+str(z[j])+'.txt')
 	#~ bs = np.loadtxt('/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/0.0eV/v_disp/case'+str(case)+'/vdispsco_z='+str(z[j])+'.txt')
 	def scops(b,sigma):
@@ -293,7 +293,7 @@ def RSD1(fz,fcc, Dz, j, kstop, kcamb, Pcamb, Pmm, biasF1, biasF2, biasF3, biasF4
 	#~ s3ter = scops(bF3, bs[2])
 	#~ s4ter = scops(bF4, bs[3])
 	#~ #---------------------------------------------------------------------------------------
-	btns = np.loadtxt('/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/v_disp/case'+str(case)+'/vdisptns_z='+str(z[j])+'.txt')
+	btns = np.loadtxt('/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/other neutrinos masses/'+str(Mnu)+'eV/v_disp/case'+str(case)+'/vdisptns_z='+str(z[j])+'.txt')
 	#~ Btns = np.loadtxt('/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/v_disp/case'+str(case)+'/vdisptnsbis_z='+str(z[j])+'.txt')
 	#~ bt = np.loadtxt('/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/0.0eV/v_disp/case'+str(case)+'/vdisptns_z='+str(z[j])+'.txt')
 	def tnsps(b,sigma, AB2, AB4, AB6, AB8):
@@ -327,7 +327,7 @@ def RSD1(fz,fcc, Dz, j, kstop, kcamb, Pcamb, Pmm, biasF1, biasF2, biasF3, biasF4
 	#~ t3ter = tnsps(bF3,bt[2], ab2_3, ab4_3, ab6_3, ab8_3)
 	#~ t4ter = tnsps(bF4,bt[3], ab2_4, ab4_4, ab6_4, ab8_4)
 	#-------------------------------------------------------------------
-	betns = np.loadtxt('/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/v_disp/case'+str(case)+'/vdispetns_z='+str(z[j])+'.txt')
+	betns = np.loadtxt('/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/other neutrinos masses/'+str(Mnu)+'eV/v_disp/case'+str(case)+'/vdispetns_z='+str(z[j])+'.txt')
 	#~ Betns = np.loadtxt('/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/v_disp/case'+str(case)+'/vdispetnsbis_z='+str(z[j])+'.txt')
 	#~ be = np.loadtxt('/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/0.0eV/v_disp/case'+str(case)+'/vdispetns_z='+str(z[j])+'.txt')
 	def etnsps(b1,b2,bs,b3nl,sigma, AB2, AB4, AB6, AB8, N, sca=None):
@@ -899,7 +899,7 @@ def RSD3(fz,fcc, Dz, j, kstop, kcamb, Pcamb, Pmm, biasF1, biasF2, biasF3, biasF4
 ##########################################################################
 
 	#### compute the different power spectra given the mcmc results
-	bK = np.loadtxt('/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/v_disp/case'+str(case)+'/vdispkai_z='+str(z[j])+'.txt')
+	bK = np.loadtxt('/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/other neutrinos masses/'+str(Mnu)+'eV/v_disp/case'+str(case)+'/vdispkai_z='+str(z[j])+'.txt')
 	#~ BK = np.loadtxt('/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/v_disp/case'+str(case)+'/vdispkaibis_z='+str(z[j])+'.txt')
 	#~ biasK = np.loadtxt('/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/0.0eV/v_disp/case'+str(case)+'/vdispkai_z='+str(z[j])+'.txt')
 
@@ -931,7 +931,7 @@ def RSD3(fz,fcc, Dz, j, kstop, kcamb, Pcamb, Pmm, biasF1, biasF2, biasF3, biasF4
 	#~ k4ter = kaips(bF4, biasK[3])
 
 	#---------------------------------------------------------------------------------------
-	bsco = np.loadtxt('/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/v_disp/case'+str(case)+'/vdispsco_z='+str(z[j])+'.txt')
+	bsco = np.loadtxt('/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/other neutrinos masses/'+str(Mnu)+'eV/v_disp/case'+str(case)+'/vdispsco_z='+str(z[j])+'.txt')
 	#~ Bsco = np.loadtxt('/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/v_disp/case'+str(case)+'/vdispscobis_z='+str(z[j])+'.txt')
 	#~ bs = np.loadtxt('/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/0.0eV/v_disp/case'+str(case)+'/vdispsco_z='+str(z[j])+'.txt')
 	def scops(b,sigma):
@@ -961,7 +961,7 @@ def RSD3(fz,fcc, Dz, j, kstop, kcamb, Pcamb, Pmm, biasF1, biasF2, biasF3, biasF4
 	#~ s3ter = scops(bF3, bs[2])
 	#~ s4ter = scops(bF4, bs[3])
 	#~ #---------------------------------------------------------------------------------------
-	btns = np.loadtxt('/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/v_disp/case'+str(case)+'/vdisptns_z='+str(z[j])+'.txt')
+	btns = np.loadtxt('/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/other neutrinos masses/'+str(Mnu)+'eV/v_disp/case'+str(case)+'/vdisptns_z='+str(z[j])+'.txt')
 	#~ Btns = np.loadtxt('/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/v_disp/case'+str(case)+'/vdisptnsbis_z='+str(z[j])+'.txt')
 	#~ bt = np.loadtxt('/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/0.0eV/v_disp/case'+str(case)+'/vdisptns_z='+str(z[j])+'.txt')
 	def tnsps(b,sigma, AB2, AB4, AB6, AB8):
@@ -995,7 +995,7 @@ def RSD3(fz,fcc, Dz, j, kstop, kcamb, Pcamb, Pmm, biasF1, biasF2, biasF3, biasF4
 	#~ t3ter = tnsps(bF3,bt[2], ab2_3, ab4_3, ab6_3, ab8_3)
 	#~ t4ter = tnsps(bF4,bt[3], ab2_4, ab4_4, ab6_4, ab8_4)
 	#-------------------------------------------------------------------
-	betns = np.loadtxt('/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/v_disp/case'+str(case)+'/vdispetns_z='+str(z[j])+'.txt')
+	betns = np.loadtxt('/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/other neutrinos masses/'+str(Mnu)+'eV/v_disp/case'+str(case)+'/vdispetns_z='+str(z[j])+'.txt')
 	#~ Betns = np.loadtxt('/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/v_disp/case'+str(case)+'/vdispetnsbis_z='+str(z[j])+'.txt')
 	#~ be = np.loadtxt('/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/0.0eV/v_disp/case'+str(case)+'/vdispetns_z='+str(z[j])+'.txt')
 	def etnsps(b1,b2,bs,b3nl,sigma, AB2, AB4, AB6, AB8, N, sca=None):

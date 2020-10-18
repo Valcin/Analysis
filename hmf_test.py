@@ -47,7 +47,7 @@ z = [0.0,0.5,1.0,2.0]
 # neutrino parameters
 hierarchy = 'degenerate' #'degenerate', 'normal', 'inverted'
 ###########################
-Mnu       = 0.15  #eV
+Mnu       = 0.0  #eV
 ###########################
 Nnu       = 0  #number of massive neutrinos
 Neff      = 3.046
@@ -210,15 +210,15 @@ for j in xrange(0,len(z)):
 		#~ dndM3=MFL.Tinker_mass_function(kcamb,Pcamb,Omega_m,z[j],limM[2],limM[4],len(m_middle3), Masses = m_middle3)[1]
 		#~ dndM4=MFL.Tinker_mass_function(kcamb,Pcamb,Omega_m,z[j],limM[3],limM[4],len(m_middle4), Masses = m_middle4)[1]
 		#~ #-------------------------------------------------------
-		#~ DndM1=MFL.Tinker_2010_mass_function(kcamb,Pcamb,Omega_m,z[j],limM[0],limM[4],len(m_middle1), Masses = m_middle1)[1]
-		#~ DndM2=MFL.Tinker_2010_mass_function(kcamb,Pcamb,Omega_m,z[j],limM[1],limM[4],len(m_middle2), Masses = m_middle2)[1]
-		#~ DndM3=MFL.Tinker_2010_mass_function(kcamb,Pcamb,Omega_m,z[j],limM[2],limM[4],len(m_middle3), Masses = m_middle3)[1]
-		#~ DndM4=MFL.Tinker_2010_mass_function(kcamb,Pcamb,Omega_m,z[j],limM[3],limM[4],len(m_middle4), Masses = m_middle4)[1]
-		#~ #-------------------------------------------------------------
-		#~ dndMbis1=MFL.Crocce_mass_function(kcamb,Pcamb,Omega_m,z[j],limM[0],limM[4],len(m_middle1), Masses = m_middle1)[1]
-		#~ dndMbis2=MFL.Crocce_mass_function(kcamb,Pcamb,Omega_m,z[j],limM[1],limM[4],len(m_middle2), Masses = m_middle2)[1]
-		#~ dndMbis3=MFL.Crocce_mass_function(kcamb,Pcamb,Omega_m,z[j],limM[2],limM[4],len(m_middle3), Masses = m_middle3)[1]
-		#~ dndMbis4=MFL.Crocce_mass_function(kcamb,Pcamb,Omega_m,z[j],limM[3],limM[4],len(m_middle4), Masses = m_middle4)[1]
+		DndM1=MFL.Tinker_2010_mass_function(kcamb,Pcamb,Omega_m,z[j],limM[0],limM[4],len(m_middle1), Masses = m_middle1)[1]
+		DndM2=MFL.Tinker_2010_mass_function(kcamb,Pcamb,Omega_m,z[j],limM[1],limM[4],len(m_middle2), Masses = m_middle2)[1]
+		DndM3=MFL.Tinker_2010_mass_function(kcamb,Pcamb,Omega_m,z[j],limM[2],limM[4],len(m_middle3), Masses = m_middle3)[1]
+		DndM4=MFL.Tinker_2010_mass_function(kcamb,Pcamb,Omega_m,z[j],limM[3],limM[4],len(m_middle4), Masses = m_middle4)[1]
+		#-------------------------------------------------------------
+		dndMbis1=MFL.Crocce_mass_function(kcamb,Pcamb,Omega_m,z[j],limM[0],limM[4],len(m_middle1), Masses = m_middle1)[1]
+		dndMbis2=MFL.Crocce_mass_function(kcamb,Pcamb,Omega_m,z[j],limM[1],limM[4],len(m_middle2), Masses = m_middle2)[1]
+		dndMbis3=MFL.Crocce_mass_function(kcamb,Pcamb,Omega_m,z[j],limM[2],limM[4],len(m_middle3), Masses = m_middle3)[1]
+		dndMbis4=MFL.Crocce_mass_function(kcamb,Pcamb,Omega_m,z[j],limM[3],limM[4],len(m_middle4), Masses = m_middle4)[1]
 		
 		#~ dndM1 = np.nan_to_num(dndM1)
 		#~ dndM2 = np.nan_to_num(dndM2)
@@ -230,10 +230,10 @@ for j in xrange(0,len(z)):
 		#~ dndMbis4 = np.nan_to_num(dndMbis4)
 ###########################################
 		
-		#~ bt1=np.empty(len(m_middle1),dtype=np.float64)
-		#~ bt2=np.empty(len(m_middle2),dtype=np.float64)
-		#~ bt3=np.empty(len(m_middle3),dtype=np.float64)
-		#~ bt4=np.empty(len(m_middle4),dtype=np.float64)
+		bt1=np.empty(len(m_middle1),dtype=np.float64)
+		bt2=np.empty(len(m_middle2),dtype=np.float64)
+		bt3=np.empty(len(m_middle3),dtype=np.float64)
+		bt4=np.empty(len(m_middle4),dtype=np.float64)
 		#~ bst1=np.empty(len(m_middle1),dtype=np.float64)
 		#~ bst2=np.empty(len(m_middle2),dtype=np.float64)
 		#~ bst3=np.empty(len(m_middle3),dtype=np.float64)
@@ -242,16 +242,16 @@ for j in xrange(0,len(z)):
 		#~ bsmt2=np.empty(len(m_middle2),dtype=np.float64)
 		#~ bsmt3=np.empty(len(m_middle3),dtype=np.float64)
 		#~ bsmt4=np.empty(len(m_middle4),dtype=np.float64)
-		#~ bm1=np.empty(len(m_middle1),dtype=np.float64)
-		#~ bm2=np.empty(len(m_middle2),dtype=np.float64)
-		#~ bm3=np.empty(len(m_middle3),dtype=np.float64)
-		#~ bm4=np.empty(len(m_middle4),dtype=np.float64)
+		bm1=np.empty(len(m_middle1),dtype=np.float64)
+		bm2=np.empty(len(m_middle2),dtype=np.float64)
+		bm3=np.empty(len(m_middle3),dtype=np.float64)
+		bm4=np.empty(len(m_middle4),dtype=np.float64)
 		
-		#~ for i in range(len(m_middle1)):
-			#~ bt1[i]=bias(kcamb,Pcamb,Omega_m,m_middle1[i],'Tinker')
-			#~ bt2[i]=bias(kcamb,Pcamb,Omega_m,m_middle2[i],'Tinker')
-			#~ bt3[i]=bias(kcamb,Pcamb,Omega_m,m_middle3[i],'Tinker')
-			#~ bt4[i]=bias(kcamb,Pcamb,Omega_m,m_middle4[i],'Tinker')
+		for i in range(len(m_middle1)):
+			bt1[i]=bias(kcamb,Pcamb,Omega_m,m_middle1[i],'Tinker')
+			bt2[i]=bias(kcamb,Pcamb,Omega_m,m_middle2[i],'Tinker')
+			bt3[i]=bias(kcamb,Pcamb,Omega_m,m_middle3[i],'Tinker')
+			bt4[i]=bias(kcamb,Pcamb,Omega_m,m_middle4[i],'Tinker')
 			#~ #-------------------------------------------
 			#~ bst1[i]=bias(kcamb,Pcamb,Omega_m,m_middle1[i],'Crocce')
 			#~ bst2[i]=bias(kcamb,Pcamb,Omega_m,m_middle2[i],'Crocce')
@@ -263,19 +263,19 @@ for j in xrange(0,len(z)):
 			#~ bsmt3[i]=bias(kcamb,Pcamb,Omega_m,m_middle3[i],'SMT01')
 			#~ bsmt4[i]=bias(kcamb,Pcamb,Omega_m,m_middle4[i],'SMT01')
 			#-----------------------------------------
-			#~ bm1[i]=bias(kcamb,Pcamb,Omega_m,m_middle1[i],'Mice')
-			#~ bm2[i]=bias(kcamb,Pcamb,Omega_m,m_middle2[i],'Mice')
-			#~ bm3[i]=bias(kcamb,Pcamb,Omega_m,m_middle3[i],'Mice')
-			#~ bm4[i]=bias(kcamb,Pcamb,Omega_m,m_middle4[i],'Mice')
+			bm1[i]=bias(kcamb,Pcamb,Omega_m,m_middle1[i],'Mice')
+			bm2[i]=bias(kcamb,Pcamb,Omega_m,m_middle2[i],'Mice')
+			bm3[i]=bias(kcamb,Pcamb,Omega_m,m_middle3[i],'Mice')
+			bm4[i]=bias(kcamb,Pcamb,Omega_m,m_middle4[i],'Mice')
 		
-		#~ bt1 = np.nan_to_num(bt1)
-		#~ bt2 = np.nan_to_num(bt2)
-		#~ bt3 = np.nan_to_num(bt3)
-		#~ bt4 = np.nan_to_num(bt4)
-		#~ bm1 = np.nan_to_num(bm1)
-		#~ bm2 = np.nan_to_num(bm2)
-		#~ bm3 = np.nan_to_num(bm3)
-		#~ bm4 = np.nan_to_num(bm4)
+		bt1 = np.nan_to_num(bt1)
+		bt2 = np.nan_to_num(bt2)
+		bt3 = np.nan_to_num(bt3)
+		bt4 = np.nan_to_num(bt4)
+		bm1 = np.nan_to_num(bm1)
+		bm2 = np.nan_to_num(bm2)
+		bm3 = np.nan_to_num(bm3)
+		bm4 = np.nan_to_num(bm4)
 		
 		#~ with open('/home/david/codes/Paco/data2/0.0eV/hmf/thmf_z='+str(z[j])+'.txt', 'w+') as fid_file:
 			#~ for m in xrange(0, len(m_middle1)):
@@ -316,10 +316,10 @@ for j in xrange(0,len(z)):
 		#~ bias_eff0_t3=np.sum(dndM3*dm3*bt3)/np.sum(dm3*dndM3)
 		#~ bias_eff0_t4=np.sum(dndM4*dm4*bt4)/np.sum(dm4*dndM4)
 		#------------------------------
-		#~ Bias_eff0_t1=np.sum(DndM1*dm1*bt1)/np.sum(dm1*DndM1)
-		#~ Bias_eff0_t2=np.sum(DndM2*dm2*bt2)/np.sum(dm2*DndM2)
-		#~ Bias_eff0_t3=np.sum(DndM3*dm3*bt3)/np.sum(dm3*DndM3)
-		#~ Bias_eff0_t4=np.sum(DndM4*dm4*bt4)/np.sum(dm4*DndM4)
+		Bias_eff0_t1=np.sum(DndM1*dm1*bt1)/np.sum(dm1*DndM1)
+		Bias_eff0_t2=np.sum(DndM2*dm2*bt2)/np.sum(dm2*DndM2)
+		Bias_eff0_t3=np.sum(DndM3*dm3*bt3)/np.sum(dm3*DndM3)
+		Bias_eff0_t4=np.sum(DndM4*dm4*bt4)/np.sum(dm4*DndM4)
 		#------------------------------
 		#~ bias_eff0_st1=np.sum(dndMbis1*dm1*bst1)/np.sum(dm1*dndMbis1)
 		#~ bias_eff0_st2=np.sum(dndMbis2*dm2*bst2)/np.sum(dm2*dndMbis2)
@@ -331,10 +331,10 @@ for j in xrange(0,len(z)):
 		#~ bias_eff0_smt3=np.sum(dndMbis3*dm3*bsmt3)/np.sum(dm3*dndMbis3)
 		#~ bias_eff0_smt4=np.sum(dndMbis4*dm4*bsmt4)/np.sum(dm4*dndMbis4)
 		#~ #------------------------------
-		#~ bias_eff0_m1=np.sum(dndMbis1*dm1*bm1)/np.sum(dm1*dndMbis1)
-		#~ bias_eff0_m2=np.sum(dndMbis2*dm2*bm2)/np.sum(dm2*dndMbis2)
-		#~ bias_eff0_m3=np.sum(dndMbis3*dm3*bm3)/np.sum(dm3*dndMbis3)
-		#~ bias_eff0_m4=np.sum(dndMbis4*dm4*bm4)/np.sum(dm4*dndMbis4)
+		bias_eff0_m1=np.sum(dndMbis1*dm1*bm1)/np.sum(dm1*dndMbis1)
+		bias_eff0_m2=np.sum(dndMbis2*dm2*bm2)/np.sum(dm2*dndMbis2)
+		bias_eff0_m3=np.sum(dndMbis3*dm3*bm3)/np.sum(dm3*dndMbis3)
+		bias_eff0_m4=np.sum(dndMbis4*dm4*bm4)/np.sum(dm4*dndMbis4)
 		
 		#~ with open('/home/david/codes/montepython_public/BE_HaPPy/coefficients/0.0eV/large_scale/LS_z='+str(z[j])+'_.txt', 'w+') as fid_file:
 			#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (Bias_eff0_t1,Bias_eff0_t2, Bias_eff0_t3, Bias_eff0_t4))
@@ -636,10 +636,10 @@ for j in xrange(0,len(z)):
 	#~ plt.figlegend( (h1,h2, h3), (r'Tinker 2008 w/ $P_{cc}$',r'Tinker 2010 w/ $P_{cc}$',r'Crocce w/ $P_{cc}$'), \
 	###################################################################
 	####### comparison bias and != models #############################
-	#~ M1, = ax2.plot(k, bias1, label='$simulation$')
-	#~ M2, = ax2.plot(k, bias2)
-	#~ M3, = ax2.plot(k, bias3)
-	#~ M4, = ax2.plot(k, bias4)
+	M1, = ax2.plot(k, bias1, label='$simulation$')
+	M2, = ax2.plot(k, bias2)
+	M3, = ax2.plot(k, bias3)
+	M4, = ax2.plot(k, bias4)
 	#-----------------------------------------------
 	#~ M1, = ax2.plot(k, bias1_0ev, linestyle = '--', color='C0', label=r'$b_{cc , M_{\nu} = 0.0eV} $')
 	#~ M2, = ax2.plot(k, bias2_0ev, linestyle = '--', color='C1')
@@ -651,10 +651,10 @@ for j in xrange(0,len(z)):
 	#~ ax2.axhline(bias_eff0_t3, color='C2', linestyle='--')
 	#~ ax2.axhline(bias_eff0_t4, color='C3', linestyle='--')
 	#---------------------------------------------------
-	#~ st2 =ax2.axhline(Bias_eff0_t1, color='C0', linestyle=':', label='$Tinker 2010$')
-	#~ ax2.axhline(Bias_eff0_t2, color='C1', linestyle=':')
-	#~ ax2.axhline(Bias_eff0_t3, color='C2', linestyle=':')
-	#~ ax2.axhline(Bias_eff0_t4, color='C3', linestyle=':')
+	st2 =ax2.axhline(Bias_eff0_t1, color='C0', linestyle=':', label='$Tinker 2010$')
+	ax2.axhline(Bias_eff0_t2, color='C1', linestyle=':')
+	ax2.axhline(Bias_eff0_t3, color='C2', linestyle=':')
+	ax2.axhline(Bias_eff0_t4, color='C3', linestyle=':')
 	#~ #---------------------------------------------------
 	#~ st3 =ax2.axhline(bias_eff0_st1, color='C0', linestyle='--')
 	#~ ax2.axhline(bias_eff0_st2, color='C1', linestyle='--')
@@ -666,24 +666,24 @@ for j in xrange(0,len(z)):
 	#~ ax2.axhline(bias_eff0_smt3, color='C2', linestyle='-.')
 	#~ ax2.axhline(bias_eff0_smt4, color='C3', linestyle='-.')
 	#~ #---------------------------------------------------
-	#~ st4 =ax2.axhline(bias_eff0_m1, color='C0', linestyle='-.', label='$Crocce$')
-	#~ ax2.axhline(bias_eff0_m2, color='C1', linestyle='-.')
-	#~ ax2.axhline(bias_eff0_m3, color='C2', linestyle='-.')
-	#~ ax2.axhline(bias_eff0_m4, color='C3', linestyle='-.')
+	st4 =ax2.axhline(bias_eff0_m1, color='C0', linestyle='-.', label='$Crocce$')
+	ax2.axhline(bias_eff0_m2, color='C1', linestyle='-.')
+	ax2.axhline(bias_eff0_m3, color='C2', linestyle='-.')
+	ax2.axhline(bias_eff0_m4, color='C3', linestyle='-.')
 	#-----------------------------------------------
 	#~ ax2.axvline( kk1, color='C0', linestyle=':', label='shot noise = 80% of P(k)')
 	#~ ax2.axvline( kk2, color='C1', linestyle=':')
 	#~ ax2.axvline( kk3, color='C2', linestyle=':')
 	#~ ax2.axvline( kk4, color='C3', linestyle=':')
-	#~ ax2.fill_between(k,bias1-errb1, bias1+errb1, alpha=0.6)
-	#~ ax2.fill_between(k,bias2-errb2, bias2+errb2, alpha=0.6)
-	#~ ax2.fill_between(k,bias3-errb3, bias3+errb3, alpha=0.6)
-	#~ ax2.fill_between(k,bias4-errb4, bias4+errb4, alpha=0.6)
-	#~ ax2.set_ylim(bias1[0]*0.8,bias4[0]*1.4)
-	#~ ax2.set_xlim(8e-3,1)
+	ax2.fill_between(k,bias1-errb1, bias1+errb1, alpha=0.6)
+	ax2.fill_between(k,bias2-errb2, bias2+errb2, alpha=0.6)
+	ax2.fill_between(k,bias3-errb3, bias3+errb3, alpha=0.6)
+	ax2.fill_between(k,bias4-errb4, bias4+errb4, alpha=0.6)
+	ax2.set_ylim(bias1[0]*0.8,bias4[0]*1.4)
+	ax2.set_xlim(8e-3,1)
 	#~ plt.figlegend( (M1,M2,M3,M4, st2,st3), ('$M_{1}$','$M_{2}$','$M_{3}$','$M_{4}$', 'Sim hmf + Tinker bias', 'rescaled effective bias'), \
 	#~ plt.figlegend( (M1,M2,M3,M4, st2,st3, st4), ('$M_{1}$','$M_{2}$','$M_{3}$','$M_{4}$', 'Tinker', 'ST', 'SMT'), \
-	#~ plt.figlegend( (M1,M2,M3,M4), ('$M_{1}$','$M_{2}$','$M_{3}$','$M_{4}$'), \
+	plt.figlegend( (M1,M2,M3,M4), ('$M_{1}$','$M_{2}$','$M_{3}$','$M_{4}$'), \
 	#####################################################################
 	####### comparison bias and != models #############################
 	#~ M1, = ax2.plot(k, bias1,label=r'$b_{sim}$')
@@ -731,33 +731,33 @@ for j in xrange(0,len(z)):
 	#~ ax2.plot(k,bias3s/bias3s0, color='g')
 	#~ ax2.plot(k,bias4s/bias4s0, color='c')
 	#~ #-------------------------------------
-	ax2.axhline(1, color='k')
-	ax2.axhline(0.99, color='k', linestyle=':')
-	ax2.axhline(1.01, color='k', linestyle=':')
+	#~ ax2.axhline(1, color='k')
+	#~ ax2.axhline(0.99, color='k', linestyle=':')
+	#~ ax2.axhline(1.01, color='k', linestyle=':')
 	#~ M1, =ax2.plot(k,bias1/br1, color='b', linestyle='--', label='Tinker 2010')
 	#~ M2, =ax2.plot(k,bias2/br2, color='r', linestyle='--')
 	#~ M3, =ax2.plot(k,bias3/br3, color='g', linestyle='--')
 	#~ M4, =ax2.plot(k,bias4/br4, color='C3', linestyle='--')
-	B1, = ax2.plot(k, b1, color='C1')
-	B1bis, = ax2.plot(k, b1bis, color='C2')
-	B1ter, = ax2.plot(k, b1ter,  color='C3')
-	ax2.axvspan(kstop, 7, alpha=0.2, color='grey')
-	M1, =ax2.plot(k,bias1/bias1, color='k', label='z = '+str(z[j]))
-	M2, =ax2.plot(k,br, color='b')
-	ax2.set_xlim(8e-3,1)
+	#~ B1, = ax2.plot(k, b1, color='C1')
+	#~ B1bis, = ax2.plot(k, b1bis, color='C2')
+	#~ B1ter, = ax2.plot(k, b1ter,  color='C3')
+	#~ ax2.axvspan(kstop, 7, alpha=0.2, color='grey')
+	#~ M1, =ax2.plot(k,bias1/bias1, color='k', label='z = '+str(z[j]))
+	#~ M2, =ax2.plot(k,br, color='b')
+	#~ ax2.set_xlim(8e-3,1)
 	#-------------------------------------
 	
 	#~ ax2.set_ylim(1.02,1.1)
-	ax2.set_ylim(0.9,1.1)
+	#~ ax2.set_ylim(0.9,1.1)
 	#~ ax2.set_xlim(0.008,0.2)
 	
 	#~ plt.figlegend( (M1,M2,M3,M4), ('$M_{1}$','$M_{2}$','$M_{3}$','$M_{4}$'), \
 	#~ plt.figlegend( (M1, M2), ('N-body','rescaled bias'), \
-	plt.figlegend( (M1, M2, B1,B1bis,B1ter), ('N-body','rescaled bias','2nd order expansion with free $b_{s}$',r'3rd order expansion with free $b_s$, $b_{3nl}$',\
-	r'3rd order expansion with fixed $b_s$, $b_{3nl}$'), \
+	#~ plt.figlegend( (M1, M2, B1,B1bis,B1ter), ('N-body','rescaled bias','2nd order expansion with free $b_{s}$',r'3rd order expansion with free $b_s$, $b_{3nl}$',\
+	#~ r'3rd order expansion with fixed $b_s$, $b_{3nl}$'), \
 	#######################################
 	loc = 'upper center', ncol=3, labelspacing=0., title =r' M$\nu$ = '+str(Mnu), fontsize=12)
-	ax2.legend(loc = 'upper left', fancybox=True, fontsize=14, handlelength=0, handletextpad=0)
+	#~ ax2.legend(loc = 'upper left', fancybox=True, fontsize=14, handlelength=0, handletextpad=0)
 	plt.subplots_adjust(left=0.1, wspace=0.05, hspace=0.1)
 	ax2.set_xscale('log')
 	#----------------------------

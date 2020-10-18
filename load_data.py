@@ -2,34 +2,34 @@ from time import time
 import numpy as np
 import h5py
 import math
-import readsnap
+#~ import readsnap
 import matplotlib
 #~ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.colors as colors
-import sys
-sys.path.append('/home/david/codes/FAST-PT')
-import myFASTPT as FPT
+#~ import sys
+#~ sys.path.append('/home/david/codes/FAST-PT')
+#~ import myFASTPT as FPT
 import scipy.interpolate as sp
 import pyximport
 pyximport.install()
-import redshift_space_library as RSL
-from readfof import FoF_catalog
-import MAS_library as MASL
-import Pk_library as PKL
-import mass_function_library as MFL
-import bias_library as BL
-import tempfile
-import expected_CF
-import exp2
-from time import time
-from loop_pt import pt_terms
-from bias_library import halo_bias, bias
-from scipy.optimize import curve_fit
-from scipy.interpolate import interp1d
-from scipy.special import erf
-from scipy.special import gamma
-from fit_emcee import coeffit_pl,coeffit_pl2,coeffit_exp1, coeffit_exp2, coeffit_exp3,coeffit_Kaiser, coeffit_Scocci, coeffit_TNS, coeffit_eTNS
+#~ import redshift_space_library as RSL
+#~ from readfof import FoF_catalog
+#~ import MAS_library as MASL
+#~ import Pk_library as PKL
+#~ import mass_function_library as MFL
+#~ import bias_library as BL
+#~ import tempfile
+#~ import expected_CF
+#~ import exp2
+#~ from time import time
+#~ from loop_pt import pt_terms
+#~ from bias_library import halo_bias, bias
+#~ from scipy.optimize import curve_fit
+#~ from scipy.interpolate import interp1d
+#~ from scipy.special import erf
+#~ from scipy.special import gamma
+#~ from fit_emcee import coeffit_pl,coeffit_pl2,coeffit_exp1, coeffit_exp2, coeffit_exp3,coeffit_Kaiser, coeffit_Scocci, coeffit_TNS, coeffit_eTNS
 
 
 
@@ -217,7 +217,7 @@ def ld_data(mv, z, j):
 		#~ kk4 = np.mean(kk4t)
 
 		
-		### do the mean over quantitites ###
+		#~ ### do the mean over quantitites ###
 		
 		#~ Pmm = np.mean(Pmat[:,0:11], axis=1)
 		#~ Pshot1 = np.mean(Pshot1)
@@ -246,13 +246,13 @@ def ld_data(mv, z, j):
 		#~ M1, =plt.plot(k, PH1, label='halo Power spectrum')
 		#~ M2, =plt.plot(k, PH2)
 		#~ M3, =plt.plot(k, PH3)
-		#~ M4, =plt.plot(k, PH4, c='k')
+		#~ M4, =plt.plot(k, PH4)
 		#~ for i in range(10):
 			#~ plt.scatter(k, Phh4[:,i])
 		#~ plt.axhline( Pshot1, color='C0', linestyle='--', label='shot noise')
 		#~ plt.axhline( Pshot2, color='C1', linestyle='--')
 		#~ plt.axhline( Pshot3, color='C2', linestyle='--')
-		#~ plt.axhline( Pshot4, color='k', linestyle='--', label='shot noise')
+		#~ plt.axhline( Pshot4, color='C3', linestyle='--')
 		#~ plt.fill_between(k,PH1-errPhh1, PH1+errPhh1, alpha=0.6)
 		#~ plt.fill_between(k,PH2-errPhh2, PH2+errPhh2, alpha=0.6)
 		#~ plt.fill_between(k,PH3-errPhh3, PH3+errPhh3, alpha=0.6)
@@ -260,17 +260,17 @@ def ld_data(mv, z, j):
 		#~ plt.axvline( kk1, color='C0', linestyle=':', label='shot noise = 80% of P(k)')
 		#~ plt.axvline( kk2, color='C1', linestyle=':')
 		#~ plt.axvline( kk3, color='C2', linestyle=':')
-		#~ plt.axvline( kk4, color='k', linestyle=':', label='shot noise = 80% of P(k)')
+		#~ plt.axvline( kk4, color='C3', linestyle=':')
 		#~ plt.legend(loc = 'upper right', title='z = '+str(z[j]), fancybox=True)
 		#~ plt.legend(loc = 'lower left', title='z = '+str(z[j]), fancybox=True, fontsize = 14)
 		#~ plt.figlegend( (M1,M2,M3,M4), ('mass range M1','mass range M2','mass range M3','mass range M4'), \
-		#~ loc = 'upper center', ncol=2, labelspacing=0. , title ='Mv = 0.0eV ', fontsize = 14)
+		#~ loc = 'upper center', ncol=2, labelspacing=0., fontsize = 14)
 		#~ plt.xlabel('k [h/Mpc]', fontsize=14)
-		#~ plt.ylabel('P(k)', fontsize=14)
+		#~ plt.ylabel(r'P(k) [$\rm (Mpc/h)^3$]', fontsize=14)
 		#~ plt.xscale('log')
 		#~ plt.yscale('log')
 		#~ plt.xlim(8e-3,2)
-		#~ plt.ylim(1e4,2e5)
+		#~ plt.ylim(1e2,2e5)
 		#~ plt.show()
 		
 		#~ kill

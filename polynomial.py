@@ -112,17 +112,17 @@ def poly(kstop, lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, k, bias1,\
 	#~ cname1bis = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(mv)+'eV/coeff_ple_'+str(mv)+'_z='+str(z[j])+'.txt'
 	#~ cname1errbis = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(mv)+'eV/err_ple_'+str(mv)+'_z='+str(z[j])+'.txt'
 	
-	cname1 = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(mv)+'eV/case'+str(case)+'/coeff_pl_'+str(mv)+'_z='+str(z[j])+'.txt'
-	cname1err = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(mv)+'eV/case'+str(case)+'/err_pl_'+str(mv)+'_z='+str(z[j])+'.txt'
-	cname1bis = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(mv)+'eV/case'+str(case)+'/coeff_ple_'+str(mv)+'_z='+str(z[j])+'.txt'
-	cname1errbis = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(mv)+'eV/case'+str(case)+'/err_ple_'+str(mv)+'_z='+str(z[j])+'.txt'
+	#~ cname1 = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(mv)+'eV/case'+str(case)+'/coeff_pl_'+str(mv)+'_z='+str(z[j])+'.txt'
+	#~ cname1err = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(mv)+'eV/case'+str(case)+'/err_pl_'+str(mv)+'_z='+str(z[j])+'.txt'
+	#~ cname1bis = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(mv)+'eV/case'+str(case)+'/coeff_ple_'+str(mv)+'_z='+str(z[j])+'.txt'
+	#~ cname1errbis = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(mv)+'eV/case'+str(case)+'/err_ple_'+str(mv)+'_z='+str(z[j])+'.txt'
 		
-	with open(cname1, 'w') as fid_file:
-		fid_file.write('%.8g %.8g %.8g %.8g\n' % (b1x1_ml, b2x1_ml, b3x1_ml, b4x1_ml))
-		fid_file.write('%.8g %.8g %.8g %.8g\n' % (b1x2_ml, b2x2_ml, b3x2_ml, b4x2_ml))
-		fid_file.write('%.8g %.8g %.8g %.8g\n' % (b1x3_ml, b2x3_ml, b3x3_ml, b4x3_ml))
-		fid_file.write('%.8g %.8g %.8g %.8g\n' % (b1x4_ml, b2x4_ml, b3x4_ml, b4x4_ml))
-	fid_file.close()
+	#~ with open(cname1, 'w') as fid_file:
+		#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (b1x1_ml, b2x1_ml, b3x1_ml, b4x1_ml))
+		#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (b1x2_ml, b2x2_ml, b3x2_ml, b4x2_ml))
+		#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (b1x3_ml, b2x3_ml, b3x3_ml, b4x3_ml))
+		#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (b1x4_ml, b2x4_ml, b3x4_ml, b4x4_ml))
+	#~ fid_file.close()
 	#~ with open(cname1err, 'w') as fid_file:
 		#~ fid_file.write('%.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g\n' % (b1x1_mcmc[1], b2x1_mcmc[1], b3x1_mcmc[1], b4x1_mcmc[1]\
 		#~ ,b1x1_mcmc[2], b2x1_mcmc[2], b3x1_mcmc[2], b4x1_mcmc[2]))
@@ -133,12 +133,12 @@ def poly(kstop, lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, k, bias1,\
 		#~ fid_file.write('%.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g\n' % (b1x4_mcmc[1], b2x4_mcmc[1], b3x4_mcmc[1], b4x4_mcmc[1]\
 		#~ ,b1x4_mcmc[2], b2x4_mcmc[2], b3x4_mcmc[2], b4x4_mcmc[2]))
 	#~ fid_file.close()
-	with open(cname1bis, 'w') as fid_file:
-		fid_file.write('%.8g %.8g %.8g\n' % (b1w1_ml, b2w1_ml, b4w1_ml))
-		fid_file.write('%.8g %.8g %.8g\n' % (b1w2_ml, b2w2_ml, b4w2_ml))
-		fid_file.write('%.8g %.8g %.8g\n' % (b1w3_ml, b2w3_ml, b4w3_ml))
-		fid_file.write('%.8g %.8g %.8g\n' % (b1w4_ml, b2w4_ml, b4w4_ml))
-	fid_file.close()
+	#~ with open(cname1bis, 'w') as fid_file:
+		#~ fid_file.write('%.8g %.8g %.8g\n' % (b1w1_ml, b2w1_ml, b4w1_ml))
+		#~ fid_file.write('%.8g %.8g %.8g\n' % (b1w2_ml, b2w2_ml, b4w2_ml))
+		#~ fid_file.write('%.8g %.8g %.8g\n' % (b1w3_ml, b2w3_ml, b4w3_ml))
+		#~ fid_file.write('%.8g %.8g %.8g\n' % (b1w4_ml, b2w4_ml, b4w4_ml))
+	#~ fid_file.close()
 	#~ with open(cname1errbis, 'w') as fid_file:
 		#~ fid_file.write('%.8g %.8g %.8g %.8g %.8g %.8g\n' % (b1w1_mcmc[1], b2w1_mcmc[1], b4w1_mcmc[1]\
 		#~ ,b1w1_mcmc[2], b2w1_mcmc[2], b4w1_mcmc[2]))

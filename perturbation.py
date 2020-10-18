@@ -53,7 +53,7 @@ def perturb(kstop,  lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, Pmm, k, 
 	pop2 = [lb2,1,-4/7.*(lb2-1), 0]
 	pop3 = [lb3,1,-4/7.*(lb3-1), 0]
 	pop4 = [lb4,1,-4/7.*(lb4-1), 0]
-	#~ pop4 = [lb4,1,10, 1]
+
 
 	popbis1 = [lb1,1,-4/7.*(lb1-1),32/315.*(lb1-1), 0]
 	popbis2 = [lb2,1,-4/7.*(lb2-1),32/315.*(lb2-1), 0]
@@ -206,10 +206,10 @@ def perturb(kstop,  lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, Pmm, k, 
 		#~ fid_file.write('%.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g\n' % (kstop, b1z1_mcmc[0], b1z2_mcmc[0], b1z3_mcmc[0],\
 		#~ b1z4_mcmc[0], b3z1_mcmc[0], b3z2_mcmc[0], b3z3_mcmc[0], b3z4_mcmc[0]))
 	#~ fid_file.close()
-	with open('3rdorder_'+str(z[j])+'.txt', 'a') as fid_file:
-		fid_file.write('%.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g\n' % (kstop, b1z1_ml, b1z2_ml, b1z3_ml,\
-		b1z4_ml, b3z1_ml, b3z2_ml, b3z3_ml, b3z4_ml))
-	fid_file.close()
+	#~ with open('3rdorder_'+str(z[j])+'.txt', 'a') as fid_file:
+		#~ fid_file.write('%.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g\n' % (kstop, b1z1_ml, b1z2_ml, b1z3_ml,\
+		#~ b1z4_ml, b3z1_ml, b3z2_ml, b3z3_ml, b3z4_ml))
+	#~ fid_file.close()
 
 ##########################################################################
 ##########################################################################
@@ -222,20 +222,20 @@ def perturb(kstop,  lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, Pmm, k, 
 	#~ cname3errbis = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/err_3exp_fixed_'+str(Mnu)+'_z='+str(z[j])+'.txt'
 	#------------------------------------------------------------------------------------------------
 
-	cname2 = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/case'+str(case)+'/coeff_2exp_'+str(Mnu)+'_z='+str(z[j])+'.txt'
-	cname2err = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/case'+str(case)+'/err_2exp_'+str(Mnu)+'_z='+str(z[j])+'.txt'
-	cname3 = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/case'+str(case)+'/coeff_3exp_'+str(Mnu)+'_z='+str(z[j])+'.txt'
-	cname3err = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/case'+str(case)+'/err_3exp_'+str(Mnu)+'_z='+str(z[j])+'.txt'
-	cname3bis = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/case'+str(case)+'/coeff_3exp_fixed_'+str(Mnu)+'_z='+str(z[j])+'.txt'
-	cname3errbis = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/case'+str(case)+'/err_3exp_fixed_'+str(Mnu)+'_z='+str(z[j])+'.txt'
+	#~ cname2 = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/case'+str(case)+'/coeff_2exp_'+str(Mnu)+'_z='+str(z[j])+'.txt'
+	#~ cname2err = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/case'+str(case)+'/err_2exp_'+str(Mnu)+'_z='+str(z[j])+'.txt'
+	#~ cname3 = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/case'+str(case)+'/coeff_3exp_'+str(Mnu)+'_z='+str(z[j])+'.txt'
+	#~ cname3err = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/case'+str(case)+'/err_3exp_'+str(Mnu)+'_z='+str(z[j])+'.txt'
+	#~ cname3bis = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/case'+str(case)+'/coeff_3exp_fixed_'+str(Mnu)+'_z='+str(z[j])+'.txt'
+	#~ cname3errbis = '/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/'+str(Mnu)+'eV/case'+str(case)+'/err_3exp_fixed_'+str(Mnu)+'_z='+str(z[j])+'.txt'
 
 
-	with open(cname2, 'w') as fid_file:
-		fid_file.write('%.8g %.8g %.8g %.8g\n' % (b1y1_ml, b2y1_ml, bsy1_ml, Ny1))
-		fid_file.write('%.8g %.8g %.8g %.8g\n' % (b1y2_ml, b2y2_ml, bsy2_ml, Ny2))
-		fid_file.write('%.8g %.8g %.8g %.8g\n' % (b1y3_ml, b2y3_ml, bsy3_ml, Ny3))
-		fid_file.write('%.8g %.8g %.8g %.8g\n' % (b1y4_ml, b2y4_ml, bsy4_ml, Ny4))
-	fid_file.close()
+	#~ with open(cname2, 'w') as fid_file:
+		#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (b1y1_ml, b2y1_ml, bsy1_ml, Ny1))
+		#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (b1y2_ml, b2y2_ml, bsy2_ml, Ny2))
+		#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (b1y3_ml, b2y3_ml, bsy3_ml, Ny3))
+		#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (b1y4_ml, b2y4_ml, bsy4_ml, Ny4))
+	#~ fid_file.close()
 	#~ with open(cname2err, 'w') as fid_file:
 		#~ fid_file.write('%.8g %.8g %.8g %.8g %.8g %.8g\n' % (b1y1_mcmc[1], b2y1_mcmc[1], bsy1_mcmc[1]\
 		#~ ,b1y1_mcmc[2], b2y1_mcmc[2], bsy1_mcmc[2]))
@@ -246,12 +246,12 @@ def perturb(kstop,  lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, Pmm, k, 
 		#~ fid_file.write('%.8g %.8g %.8g %.8g %.8g %.8g\n' % (b1y4_mcmc[1], b2y4_mcmc[1], bsy4_mcmc[1]\
 		#~ ,b1y4_mcmc[2], b2y4_mcmc[2], bsy4_mcmc[2]))
 	#~ fid_file.close()
-	with open(cname3, 'w') as fid_file:
-		fid_file.write('%.8g %.8g %.8g %.8g %.8g\n' % (b1z1_ml, b2z1_ml, bsz1_ml, b3z1_ml, Nz1))
-		fid_file.write('%.8g %.8g %.8g %.8g %.8g\n' % (b1z2_ml, b2z2_ml, bsz2_ml, b3z2_ml, Nz2))
-		fid_file.write('%.8g %.8g %.8g %.8g %.8g\n' % (b1z3_ml, b2z3_ml, bsz3_ml, b3z3_ml, Nz3))
-		fid_file.write('%.8g %.8g %.8g %.8g %.8g\n' % (b1z4_ml, b2z4_ml, bsz4_ml, b3z4_ml, Nz4))
-	fid_file.close()
+	#~ with open(cname3, 'w') as fid_file:
+		#~ fid_file.write('%.8g %.8g %.8g %.8g %.8g\n' % (b1z1_ml, b2z1_ml, bsz1_ml, b3z1_ml, Nz1))
+		#~ fid_file.write('%.8g %.8g %.8g %.8g %.8g\n' % (b1z2_ml, b2z2_ml, bsz2_ml, b3z2_ml, Nz2))
+		#~ fid_file.write('%.8g %.8g %.8g %.8g %.8g\n' % (b1z3_ml, b2z3_ml, bsz3_ml, b3z3_ml, Nz3))
+		#~ fid_file.write('%.8g %.8g %.8g %.8g %.8g\n' % (b1z4_ml, b2z4_ml, bsz4_ml, b3z4_ml, Nz4))
+	#~ fid_file.close()
 	#~ with open(cname3err, 'w') as fid_file:
 		#~ fid_file.write('%.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g\n' % (b1z1_mcmc[1], b2z1_mcmc[1], bsz1_mcmc[1], b3z1_mcmc[1]\
 		#~ ,b1z1_mcmc[2], b2z1_mcmc[2], bsz1_mcmc[2], b3z1_mcmc[2]))
@@ -262,12 +262,12 @@ def perturb(kstop,  lb1, lb2, lb3, lb4, errlb1, errlb2, errlb3, errlb4, Pmm, k, 
 		#~ fid_file.write('%.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g\n' % (b1z4_mcmc[1], b2z4_mcmc[1], bsz4_mcmc[1], b3z4_mcmc[1]\
 		#~ ,b1z4_mcmc[2], b2z4_mcmc[2], bsz4_mcmc[2], b3z4_mcmc[2]))
 	#~ fid_file.close()
-	with open(cname3bis, 'w') as fid_file:
-		fid_file.write('%.8g %.8g %.8g\n' % (b1u1_mcmc, b2u1_mcmc, Nu1))
-		fid_file.write('%.8g %.8g %.8g\n' % (b1u2_mcmc, b2u2_mcmc, Nu2))
-		fid_file.write('%.8g %.8g %.8g\n' % (b1u3_mcmc, b2u3_mcmc, Nu3))
-		fid_file.write('%.8g %.8g %.8g\n' % (b1u4_mcmc, b2u4_mcmc, Nu4))
-	fid_file.close()
+	#~ with open(cname3bis, 'w') as fid_file:
+		#~ fid_file.write('%.8g %.8g %.8g\n' % (b1u1_mcmc, b2u1_mcmc, Nu1))
+		#~ fid_file.write('%.8g %.8g %.8g\n' % (b1u2_mcmc, b2u2_mcmc, Nu2))
+		#~ fid_file.write('%.8g %.8g %.8g\n' % (b1u3_mcmc, b2u3_mcmc, Nu3))
+		#~ fid_file.write('%.8g %.8g %.8g\n' % (b1u4_mcmc, b2u4_mcmc, Nu4))
+	#~ fid_file.close()
 	#~ with open(cname3errbis, 'w') as fid_file:
 		#~ fid_file.write('%.8g %.8g %.8g %.8g\n' % (b1u1_mcmc[1], b2u1_mcmc[1]\
 		#~ ,b1u1_mcmc[2], b2u1_mcmc[2]))

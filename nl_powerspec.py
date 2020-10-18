@@ -39,7 +39,7 @@ from scipy.special import gamma
 
 
 z = [0.0,0.5,1.0,2.0]
-#~ z = [0.0,2.0]
+#~ z = [1.0]
 #~ mu = 0.5
 #~ kmax = 1
 #~ mass_range = ['m1','m2','m3','m4']
@@ -74,6 +74,7 @@ BoxSize = 1000.0 #Mpc/h                                      
 start = time()
 
 for j in xrange(0,len(z)):
+
 ########################################################################
 ########################################################################
 	####################################################################
@@ -92,7 +93,75 @@ for j in xrange(0,len(z)):
 
 	kcamb, Pcamb, k, Pmm, PH1, PH2, PH3 , PH4, errPhh1, errPhh2, errPhh3, errPhh4, bias1, bias2, bias3, bias4, \
 	bias1s, bias2s, bias3s, bias4s, errb1, errb2, errb3, errb4, Pmono1, Pmono2, Pmono3, Pmono4, errPr1, errPr2, errPr3,\
-	errPr4, kclass, Tm, Tcb, noise1, noise2, noise3, noise4 = ld_data(Mnu, z, j)
+	errPr4, kclass, Tm, Tcb, noise1, noise2, noise3, noise4 = ld_data(0.0, z, j)
+	
+	kcamb, Pcamb, k, Pmmbis, PH1bis, PH2bis, PH3bis , PH4bis, errPhh1, errPhh2, errPhh3, errPhh4, bias1bis, bias2bis,\
+	bias3bis, bias4bis, bias1s, bias2s, bias3s, bias4s, errb1, errb2, errb3, errb4, Pmono1, Pmono2, Pmono3, Pmono4, errPr1,\
+	errPr2, errPr3,	errPr4, kclass, Tm, Tcb, noise1, noise2, noise3, noise4 = ld_data(0.15, z, j)
+	
+	zbis = ['0','0.5','1','2']
+	test2 = np.loadtxt('/home/david/codes/Analysis/cosmo_test/s8_m/b_z='+zbis[j]+'.txt')
+	ktest2 = test2[:,0]
+	btest2_square = test2[:,1]
+	btest2 = np.sqrt(btest2_square)
+	btest2 = np.interp(k, ktest2, btest2)
+	
+	B1 = np.array([bias1bis/bias1, bias2bis/bias2, bias3bis/bias3, bias4bis/bias4])
+	b1 = np.mean(B1,axis=0)
+	
+	#~ if j == z[0]:
+		#~ fig2 = plt.figure()
+	#~ J = j + 1
+	
+	#~ if len(z) == 1:
+		#~ ax2 = fig2.add_subplot(1, len(z), J)
+	#~ elif len(z) == 2:
+		#~ ax2 = fig2.add_subplot(1, 2, J)
+	#~ elif len(z) > 2:
+		#~ ax2 = fig2.add_subplot(2, 2, J)
+	#~ #######################################
+	#~ a1, =ax2.plot(k,PH1bis/PH1)
+	#~ a2, =ax2.plot(k,PH2bis/PH2)
+	#~ a3, =ax2.plot(k,PH3bis/PH3)
+	#~ a4, =ax2.plot(k,PH4bis/PH4)
+	#~ a1, =ax2.plot(k,PH1bis, c='b', linestyle='--')
+	#~ a1, =ax2.plot(k,PH1, c='b')
+	#~ a1, =ax2.plot(k,PH4bis, c='r', linestyle='--')
+	#~ a1, =ax2.plot(k,PH4, c='r')
+	#~ a1, =ax2.plot(k,Pmmbis, c='k', linestyle='--')
+	#~ a1, =ax2.plot(k,Pmm, c='k')
+	#~ ax2.set_xlim(1e-2,0.2)
+	#~ ax2.set_ylim(1e3,2e5)
+	#~ plt.figlegend( (a1,a2,a3,a4), (r'$M_1$',r'$M_2$',r'$M_3$',r'$M_4$'), \
+	#~ ######################################
+	#~ loc = 'upper center', ncol=4, labelspacing=0., fontsize=11)
+	#~ ax2.legend(loc = 'upper left', title = 'z = '+str(z[j]), fancybox=True, fontsize=14)
+	#~ plt.subplots_adjust(left=0.1, wspace=0.05, hspace=0.1)
+	#~ ax2.set_xscale('log')
+	#~ ax2.set_yscale('log')
+	#~ if j == 0 :
+		#~ ax2.tick_params(bottom='off', labelbottom='off',labelleft=True)
+		#~ ax2.set_ylabel(r'$b_{cc, 0.15eV}$ / $b_{cc, 0.0eV}$', fontsize = 16)
+		#~ ax2.set_ylabel(r'$P_{cc}$ [$\rm (Mpc/h)^3$]', fontsize=16)
+	#~ if j == 1 :
+		#~ ax2.tick_params(bottom='off', labelbottom='off', labelright=True, right= True, labelleft='off', left='off')
+		#~ ax2.set_ylabel(r'$b_{cc, 0.15eV}$ / $b_{cc, 0.0eV}$', fontsize = 16)
+		#~ ax2.set_ylabel(r'$P_{cc}$ [$\rm (Mpc/h)^3$]', fontsize=16)
+		#~ ax2.yaxis.set_label_position("right")
+	#~ if j == 2 :
+		#~ #ax.tick_params(labelleft=True)
+		#~ ax2.set_ylabel(r'$b_{cc, 0.15eV}$ / $b_{cc, 0.0eV}$', fontsize = 16)
+		#~ ax2.set_ylabel(r'$P_{cc}$ [$\rm (Mpc/h)^3$]', fontsize=16)
+		#~ ax2.set_xlabel('k [h/Mpc]', fontsize=16)
+	#~ if j == 3 :
+		#~ ax2.tick_params(labelright=True, right= True, labelleft='off', left='off')
+		#~ ax2.set_xlabel('k [h/Mpc]', fontsize=14)
+		#~ ax2.set_ylabel(r'$b_{cc, 0.15eV}$ / $b_{cc, 0.0eV}$', fontsize = 16)
+		#~ ax2.set_ylabel(r'$P_{cc}$ [$\rm (Mpc/h)^3$]', fontsize=16)
+		#~ ax2.yaxis.set_label_position("right")
+	#~ if j == len(z) -1:
+		#~ plt.show()
+
 	
 ####################################################################
 ##### define the maximum scale for the fit 
@@ -268,18 +337,18 @@ for j in xrange(0,len(z)):
 ######################################################################
 ### mean of mass bins
 
-	#~ B1 = np.array([bias2PT1/bias1, bias2PT2/bias2, bias2PT3/bias3, bias2PT4/bias4])
-	#~ B1bis = np.array([bias3PT1/bias1, bias3PT2/bias2, bias3PT3/bias3, bias3PT4/bias4])
-	#~ B1ter = np.array([bias3PTbis1/bias1, bias3PTbis2/bias2, bias3PTbis3/bias3, bias3PTbis4/bias4])
-	#~ B2 = np.array([bias1/bias1, bias2/bias2, bias3/bias3, bias4/bias4])
-	#~ B3 = np.array([biasF1/bias1, biasF2/bias2, biasF3/bias3, biasF4/bias4])
-	#~ B3bis = np.array([biasF1bis/bias1, biasF2bis/bias2, biasF3bis/bias3, biasF4bis/bias4])
-	#~ b1 = np.mean(B1,axis=0)
-	#~ b1bis = np.mean(B1bis,axis=0)
-	#~ b1ter = np.mean(B1ter,axis=0)
-	#~ b2 = np.mean(B2,axis=0)
-	#~ b3 = np.mean(B3,axis=0)
-	#~ b3bis = np.mean(B3bis,axis=0)
+	B1 = np.array([bias2PT1/bias1, bias2PT2/bias2, bias2PT3/bias3, bias2PT4/bias4])
+	B1bis = np.array([bias3PT1/bias1, bias3PT2/bias2, bias3PT3/bias3, bias3PT4/bias4])
+	B1ter = np.array([bias3PTbis1/bias1, bias3PTbis2/bias2, bias3PTbis3/bias3, bias3PTbis4/bias4])
+	B2 = np.array([bias1/bias1, bias2/bias2, bias3/bias3, bias4/bias4])
+	B3 = np.array([biasF1/bias1, biasF2/bias2, biasF3/bias3, biasF4/bias4])
+	B3bis = np.array([biasF1bis/bias1, biasF2bis/bias2, biasF3bis/bias3, biasF4bis/bias4])
+	b1 = np.mean(B1,axis=0)
+	b1bis = np.mean(B1bis,axis=0)
+	b1ter = np.mean(B1ter,axis=0)
+	b2 = np.mean(B2,axis=0)
+	b3 = np.mean(B3,axis=0)
+	b3bis = np.mean(B3bis,axis=0)
 
 
 ######################################################################
@@ -303,19 +372,23 @@ for j in xrange(0,len(z)):
 
 ####################################################################
 #### get rescaled coefficients
-	#~ bbias2PT1, bbias2PT2, bbias2PT3, bbias2PT4,bbias3PT1, bbias3PT2, bbias3PT3,\
-	#~ bbias3PT4,bbiasF1, bbiasF2, bbiasF3, bbiasF4, bbias3PTbis1, bbias3PTbis2, bbias3PTbis3, bbias3PTbis4 = rescal(j, case)
+	bbias2PT1, bbias2PT2, bbias2PT3, bbias2PT4,bbias3PT1, bbias3PT2, bbias3PT3,\
+	bbias3PT4,bbiasF1, bbiasF2, bbiasF3, bbiasF4, bbias3PTbis1, bbias3PTbis2, bbias3PTbis3, bbias3PTbis4 = rescal(j, case)
 
-	#~ Bb1 = np.array([bbias2PT1/bias1bis, bbias2PT2/bias2bis, bbias2PT3/bias3bis, bbias2PT4/bias4bis])
-	#~ Bb1bis = np.array([bbias3PT1/bias1bis, bbias3PT2/bias2bis, bbias3PT3/bias3bis, bbias3PT4/bias4bis])
-	#~ Bb1ter = np.array([bbias3PTbis1/bias1bis, bbias3PTbis2/bias2bis, bbias3PTbis3/bias3bis, bbias3PTbis4/bias4bis])
-	#~ Bb3 = np.array([bbiasF1/bias1bis, bbiasF2/bias2bis, bbiasF3/bias3bis, bbiasF4/bias4bis])
-	#~ bb1 = np.mean(Bb1,axis=0)
-	#~ bb1bis = np.mean(Bb1bis,axis=0)
-	#~ bb1ter = np.mean(Bb1ter,axis=0)
-	#~ bb3 = np.mean(Bb3,axis=0)
 	
+	Bb1 = np.array([bbias2PT1/bias1bis, bbias2PT2/bias2bis, bbias2PT3/bias3bis, bbias2PT4/bias4bis])
+	Bb1bis = np.array([bbias3PT1/bias1bis, bbias3PT2/bias2bis, bbias3PT3/bias3bis, bbias3PT4/bias4bis])
+	Bb1ter = np.array([bbias3PTbis1/bias1bis, bbias3PTbis2/bias2bis, bbias3PTbis3/bias3bis, bbias3PTbis4/bias4bis])
+	Bb3 = np.array([bbiasF1/bias1bis, bbiasF2/bias2bis, bbiasF3/bias3bis, bbiasF4/bias4bis])
+	bb1 = np.mean(Bb1,axis=0)
+	bb1bis = np.mean(Bb1bis,axis=0)
+	bb1ter = np.mean(Bb1ter,axis=0)
+	bb3 = np.mean(Bb3,axis=0)
 	
+	sca1, sca2, sca3, sca4 = np.loadtxt('/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/other neutrinos masses/0.15eV/rescaling_z='+str(z[j])+'_.txt')
+
+	Bres = np.array([bias1*sca1/bias1bis, bias2*sca2/bias2bis, bias3*sca3/bias3bis, bias4*sca4/bias4bis])
+	bres = np.mean(Bres,axis=0)
 ####################################################################
 ##### different fit
 ####################################################################
@@ -324,27 +397,33 @@ for j in xrange(0,len(z)):
 	
 	####################################################################
 	#######--------- mean and std of bias and ps ratio ------------#####
-	#~ if j == z[0]:
-		#~ fig2 = plt.figure()
-	#~ J = j + 1
+	if j == 0:
+		fig2 = plt.figure()
+	J = j + 1
 	
-	#~ if len(z) == 1:
-		#~ ax2 = fig2.add_subplot(1, len(z), J)
-	#~ elif len(z) == 2:
-		#~ ax2 = fig2.add_subplot(1, 2, J)
-	#~ elif len(z) > 2:
-		#~ ax2 = fig2.add_subplot(2, 2, J)
+	if len(z) == 1:
+		ax2 = fig2.add_subplot(1, len(z), J)
+	elif len(z) == 2:
+		ax2 = fig2.add_subplot(1, 2, J)
+	elif len(z) > 2:
+		ax2 = fig2.add_subplot(2, 2, J)
 	#~ ######### pl residuals comparison #################
 	#~ ax2.set_ylim(0.9,1.1)
 	#~ ax2.set_yticks(np.linspace(0.9,1.1,5))
 	#~ ax2.axhline(1, color='k', linestyle='--')
 	#~ ax2.axhline(1.01, color='k', linestyle=':')
 	#~ ax2.axhline(0.99, color='k', linestyle=':')
+	#~ A1, = ax2.plot(k, B3[0,:], linewidth = 2)
+	#~ A2, = ax2.plot(k, B3[1,:], linewidth = 2)
+	#~ A3, = ax2.plot(k, B3[2,:], linewidth = 2)
+	#~ A4, = ax2.plot(k, B3[3,:], linewidth = 2)
 	#~ B3, = ax2.plot(k, b3, linewidth = 2)
 	#~ B3bis, = ax2.plot(k, b3bis, linewidth = 2)
 	#~ B2, = ax2.plot(k, b2, label='z = '+str(z[j]), color='k')
 	#~ plt.figlegend( (B3bis,B3), (r'$b_{cb} = b_{1} + b_{2}k^{2} + b_{4}k^{4}$ ',\
 	#~ r'$b_{cb} = b_{1} + b_{2}k^{2} + b_{3}k^{3} + b_{4}k^{4}$ '), \
+	#~ plt.figlegend( (A1,A2, A3, A4), (r'$M_1$ ',\
+	#~ r'$M_2$ ',r'$M_3$ ',r'$M_4$ '), \
 	####### comparison bias and != models #############################
 	#~ M1 = ax2.errorbar(k, bias1, yerr= errb1,fmt='.')
 	#~ M2 = ax2.errorbar(k, bias2, yerr= errb2,fmt='.')
@@ -356,40 +435,49 @@ for j in xrange(0,len(z)):
 	#~ pt2, =ax2.plot(k, bias2PT1, color='k', linestyle='--')
 	#~ pt3, =ax2.plot(k, bias3PT1, color='k', linestyle=':')
 	#~ pt3bis, =ax2.plot(k, bias3PTbis1, color='k', linestyle='-.')
-	#~ #--------
+	#--------
 	#~ ax2.plot(k, biasF2, color='k')
 	#~ ax2.plot(k, biasF2bis, color='k', linestyle='--')
 	#~ ax2.plot(k, bias2PT2, color='k', linestyle='--' )
 	#~ ax2.plot(k, bias3PT2, color='k', linestyle=':')
 	#~ ax2.plot(k, bias3PTbis2, color='k', linestyle='-.')
-	#~ #--------
+	#--------
 	#~ ax2.plot(k, biasF3, color='k')
 	#~ ax2.plot(k, biasF3bis, color='k', linestyle='--')
 	#~ ax2.plot(k, bias2PT3, color='k', linestyle='--' )
 	#~ ax2.plot(k, bias3PT3, color='k', linestyle=':')
 	#~ ax2.plot(k, bias3PTbis3, color='k', linestyle='-.')
-	#~ #--------
+	#--------
 	#~ ax2.plot(k, biasF4, color='k')
 	#~ ax2.plot(k, biasF4bis, color='k', linestyle='--')
 	#~ ax2.plot(k, bias2PT4, color='k', linestyle='--')
 	#~ ax2.plot(k, bias3PT4, color='k', linestyle=':')
 	#~ ax2.plot(k, bias3PTbis4, color='k', linestyle='-.')
 	#--------
-	#~ plt.figlegend( (M1,M2,M3,M4,Plo, Ple), ('$M_{1}$','$M_{2}$','$M_{3}$','$M_{4}$', 'PL with odd k','PL without odd k'), \
-	#~ plt.figlegend( (M1,M2,M3,M4,Plo, pt2, pt3, pt3bis), ('$M_{1}$','$M_{2}$','$M_{3}$','$M_{4}$', 'PL with odd k'\
+	#~ plt.figlegend( (M1,M2,M3,M4,Plo, Ple), ('$M_{1}$','$M_{2}$','$M_{3}$','$M_{4}$',\
+	#~ 'Phenomenological Polynomial (odd + even power of k)','Physical polynomial (only even power of k)'), \
+	#~ plt.figlegend( (M1,M2,M3,M4,Plo, pt2, pt3, pt3bis), ('$M_{1}$','$M_{2}$','$M_{3}$','$M_{4}$', 'Phenomenological Polynomial'\
 	#~ ,'2nd order bias expansion', r'3rd order with free $b_{3nl}$', r'3rd order with fixed $b_{s}$, $b_{3nl}$'), \
 	#~ ###### compare all power model residuals ##########################
-	#~ ax2.set_ylim(0.,2.1)
-	#~ ax2.set_ylim(0.9,1.1)
-	#~ ax2.set_yticks(np.linspace(0.9,1.1,5))
-	#~ ax2.axhline(1, color='k', linestyle='--')
-	#~ ax2.axhline(1.01, color='k', linestyle=':')
-	#~ ax2.axhline(0.99, color='k', linestyle=':')
+	ax2.set_ylim(0.,2.1)
+	ax2.set_ylim(0.9,1.1)
+	ax2.set_yticks(np.linspace(0.9,1.1,5))
+	ax2.axhline(1, color='k', linestyle='--')
+	ax2.axhline(1.01, color='k', linestyle=':')
+	ax2.axhline(0.99, color='k', linestyle=':')
 	#~ B3, = ax2.plot(k, b3, label='z = '+str(z[j]), color='C0')
-	#~ B1, = ax2.plot(k, b1, color='C1')
-	#~ B1bis, = ax2.plot(k, b1bis, color='C2')
-	#~ B1ter, = ax2.plot(k, b1ter,  color='C3')
-	#~ B2, = ax2.plot(k, b2, color='k')
+	Bres, = ax2.plot(k, bres, label='z = '+str(z[j]), color='C0')
+	#~ B1res, = ax2.plot(k, Bres[0,:], label='z = '+str(z[j]), color='C0')
+	#~ B2res, = ax2.plot(k, Bres[1,:], color='C1')
+	#~ B3res, = ax2.plot(k, Bres[2,:], color='C2')
+	#~ B4res, = ax2.plot(k, Bres[3,:],  color='C3')
+	B1, = ax2.plot(k, b1, color='C1')
+	B1bis, = ax2.plot(k, b1bis, color='C2')
+	B1ter, = ax2.plot(k, b1ter,  color='C3')
+	#~ B1, = ax2.plot(k, b1, color='k', linestyle=':')
+	#~ B1bis, = ax2.plot(k, b1bis, color='k', linestyle='--')
+	#~ B1ter, = ax2.plot(k, b1ter, color='k', linestyle='-.')
+	B2, = ax2.plot(k, b2, color='k')
 	
 	#~ B3, = ax2.plot(k, b3,label=r'w/ $b_{sim}$', color='C0')
 	#~ B3anal, = ax2.plot(k, bb3,label=r'w/ $b_{model}$', color='C0',linestyle='--')
@@ -397,39 +485,44 @@ for j in xrange(0,len(z)):
 	#~ B1bisanal, = ax2.plot(k, bb1bis, color='C2',linestyle='--')
 	#~ B1teranal, = ax2.plot(k, bb1ter,  color='C3',linestyle='--')
 	
+	#~ plt.figlegend( (B1,B1bis,B1ter,B2,B1res,B2res,B3res,B4res), ('2nd order expansion with free $b_{s}$',r'3rd order expansion with free $b_s$, $b_{3nl}$',\
+	#~ r'3rd order expansion with fixed $b_s$, $b_{3nl}$', 'N-body','Massless bias M1 rescaled via Eq. 3.6',
+	#~ 'M2 rescaled','M3 rescaled','M4 rescaled'), \
+	plt.figlegend( (B1,B1bis,B1ter,B2,Bres), ('2nd order expansion with free $b_{s}$',r'3rd order expansion with free $b_s$, $b_{3nl}$',\
+	r'3rd order expansion with fixed $b_s$, $b_{3nl}$', 'N-body','Massless neutrinos bias rescaled with Eq. 3.6'), \
 	#~ plt.figlegend( (B1,B1bis,B1ter,B2,B3), ('2nd order expansion with free $b_{s}$',r'3rd order expansion with free $b_s$, $b_{3nl}$',\
-	#~ r'3rd order expansion with fixed $b_s$, $b_{3nl}$', 'N-body','Power law '), \
+	#~ r'3rd order expansion with fixed $b_s$, $b_{3nl}$', 'N-body','Phenomenological Polynomial'), \
 	######################################
 	#~ loc = 'upper center', ncol=3, labelspacing=0., title =r' M$\nu$ = '+str(Mnu)+', case '+str(case), fontsize=12)
-	#~ loc = 'upper center', ncol=5, labelspacing=0., title =r' M$\nu$ = '+str(Mnu), fontsize=12)
-	#~ ax2.axvspan(kstop, 7, alpha=0.2, color='grey')
-	#~ ax2.legend(loc = 'upper left', fancybox=True, fontsize=14, handlelength=0, handletextpad=0)
+	loc = 'upper center', ncol=4, labelspacing=0., title =r' M$\nu$ = '+str(Mnu), fontsize=11)
+	ax2.axvspan(kstop, 7, alpha=0.2, color='grey')
+	ax2.legend(loc = 'upper left', fancybox=True, fontsize=14, handlelength=0, handletextpad=0)
 	#~ ax2.legend(loc = 'upper left', title = 'z = '+str(z[j]), fancybox=True, fontsize=14)
-	#~ plt.subplots_adjust(left=0.1, wspace=0.05, hspace=0.1)
-	#~ ax2.set_xscale('log')
-	#~ if j == 0 :
-		#~ ax2.tick_params(bottom='off', labelbottom='off',labelleft=True)
-		#~ ax2.set_ylabel(r'$b_{cb}$ / $b_{sim}$', fontsize = 16)
-		#~ ax2.set_ylabel(r'$b_{cb}$', fontsize=16)
-	#~ if j == 1 :
-		#~ ax2.tick_params(bottom='off', labelbottom='off', labelright=True, right= True, labelleft='off', left='off')
-		#~ ax2.set_ylabel(r'$b_{cb}$ / $b_{sim}$', fontsize=16)
-		#~ ax2.set_ylabel(r'$b_{cb}$', fontsize=16)
-		#~ ax2.yaxis.set_label_position("right")
-	#~ if j == 2 :
-		#~ #ax.tick_params(labelleft=True)
-		#~ ax2.set_ylabel(r'$b_{cb}$ / $b_{sim}$', fontsize=16)
-		#~ ax2.set_ylabel(r'$b_{cb}$', fontsize=14)
-		#~ ax2.set_xlabel('k [h/Mpc]', fontsize=16)
-	#~ if j == 3 :
-		#~ ax2.tick_params(labelright=True, right= True, labelleft='off', left='off')
-		#~ ax2.set_xlabel('k [h/Mpc]', fontsize=14)
-		#~ ax2.set_ylabel(r'$b_{cb}$ / $b_{sim}$', fontsize=16)
-		#~ ax2.set_ylabel(r'$b_{cb}$', fontsize=16)
-		#~ ax2.yaxis.set_label_position("right")
-	#~ ax2.set_xlim(8e-3,1)
-	#~ if j == len(z) -1:
-		#~ plt.show()
+	plt.subplots_adjust(left=0.1, wspace=0.05, hspace=0.1)
+	ax2.set_xscale('log')
+	if j == 0 :
+		ax2.tick_params(bottom='off', labelbottom='off',labelleft=True)
+		ax2.set_ylabel(r'$b_{model}$ / $b_{sim}$', fontsize = 16)
+		#~ ax2.set_ylabel(r'$b_{cc}$', fontsize=16)
+	if j == 1 :
+		ax2.tick_params(bottom='off', labelbottom='off', labelright=True, right= True, labelleft='off', left='off')
+		ax2.set_ylabel(r'$b_{model}$ / $b_{sim}$', fontsize=16)
+		#~ ax2.set_ylabel(r'$b_{cc}$', fontsize=16)
+		ax2.yaxis.set_label_position("right")
+	if j == 2 :
+		#ax.tick_params(labelleft=True)
+		ax2.set_ylabel(r'$b_{model}$ / $b_{sim}$', fontsize=16)
+		#~ ax2.set_ylabel(r'$b_{cc}$', fontsize=14)
+		ax2.set_xlabel('k [h/Mpc]', fontsize=16)
+	if j == 3 :
+		ax2.tick_params(labelright=True, right= True, labelleft='off', left='off')
+		ax2.set_xlabel('k [h/Mpc]', fontsize=14)
+		ax2.set_ylabel(r'$b_{model}$ / $b_{sim}$', fontsize=16)
+		#~ ax2.set_ylabel(r'$b_{cc}$', fontsize=16)
+		ax2.yaxis.set_label_position("right")
+	ax2.set_xlim(8e-3,1)
+	if j == len(z) -1:
+		plt.show()
 	
 #####################################################################
 #### compute fcc with transfer function
@@ -438,20 +531,20 @@ for j in xrange(0,len(z)):
 	
 #####################################################################
 ### only sigma is a free parameter
-	kai1, kai2, kai3, kai4, sco1, sco2, sco3, sco4, tns1, tns2, tns3, tns4, etns1, etns2, etns3, etns4 = RSD1(fz[j],fcc, Dz[ind]\
-	, j, kstop, kcamb, Pcamb, Pmod_dd, biasF1, biasF2, biasF3, biasF4, k, Pmono1, Pmono2, Pmono3, \
-	Pmono4, errPr1, errPr2, errPr3, errPr4, Pmod_dt, Pmod_tt, case,z,Mnu, A, B, C, D, E, F, G, H )
+	#~ kai1, kai2, kai3, kai4, sco1, sco2, sco3, sco4, tns1, tns2, tns3, tns4, etns1, etns2, etns3, etns4 = RSD1(fz[j],fcc, Dz[ind]\
+	#~ , j, kstop, kcamb, Pcamb, Pmod_dd, biasF1, biasF2, biasF3, biasF4, k, Pmono1, Pmono2, Pmono3, \
+	#~ Pmono4, errPr1, errPr2, errPr3, errPr4, Pmod_dt, Pmod_tt, case,z,Mnu, A, B, C, D, E, F, G, H )
 
-	p1 = np.array([Pmono1/Pmono1, Pmono2/Pmono2, Pmono3/Pmono3, Pmono4/Pmono4])
-	P1 = np.mean(p1, axis=0)
-	p2 = np.array([kai1/Pmono1, kai2/Pmono2, kai3/Pmono3, kai4/Pmono4])
-	P2 = np.mean(p2, axis=0)
-	p3 = np.array([sco1/Pmono1, sco2/Pmono2, sco3/Pmono3, sco4/Pmono4])
-	P3 = np.mean(p3, axis=0)
-	p4 = np.array([tns1/Pmono1, tns2/Pmono2, tns3/Pmono3, tns4/Pmono4])
-	P4 = np.mean(p4, axis=0)
-	p6 = np.array([etns1/Pmono1, etns2/Pmono2, etns3/Pmono3, etns4/Pmono4])
-	P6 = np.mean(p6, axis=0)
+	#~ p1 = np.array([Pmono1/Pmono1, Pmono2/Pmono2, Pmono3/Pmono3, Pmono4/Pmono4])
+	#~ P1 = np.mean(p1, axis=0)
+	#~ p2 = np.array([kai1/Pmono1, kai2/Pmono2, kai3/Pmono3, kai4/Pmono4])
+	#~ P2 = np.mean(p2, axis=0)
+	#~ p3 = np.array([sco1/Pmono1, sco2/Pmono2, sco3/Pmono3, sco4/Pmono4])
+	#~ P3 = np.mean(p3, axis=0)
+	#~ p4 = np.array([tns1/Pmono1, tns2/Pmono2, tns3/Pmono3, tns4/Pmono4])
+	#~ P4 = np.mean(p4, axis=0)
+	#~ p6 = np.array([etns1/Pmono1, etns2/Pmono2, etns3/Pmono3, etns4/Pmono4])
+	#~ P6 = np.mean(p6, axis=0)
 	
 ###########################################################################
 ### bias is also a free parameter
@@ -474,17 +567,17 @@ for j in xrange(0,len(z)):
 
 ####################################################################
 #### get rescaled coefficients
-	k1, k2, k3, k4, s1, s2, s3, s4, t1, t2, t3, t4, e1, e2, e3, e4 = rescal(j, case)
+	#~ k1, k2, k3, k4, s1, s2, s3, s4, t1, t2, t3, t4, e1, e2, e3, e4 = rescal(j, case)
 	
 	
-	p2bis = np.array([k1/Pmono1, k2/Pmono2, k3/Pmono3, k4/Pmono4])
-	P2bis = np.mean(p2bis, axis=0)
-	p3bis = np.array([s1/Pmono1, s2/Pmono2, s3/Pmono3, s4/Pmono4])
-	P3bis = np.mean(p3bis, axis=0)
-	p4bis = np.array([t1/Pmono1, t2/Pmono2, t3/Pmono3, t4/Pmono4])
-	P4bis = np.mean(p4bis, axis=0)
-	p6bis = np.array([e1/Pmono1, e2/Pmono2, e3/Pmono3, e4/Pmono4])
-	P6bis = np.mean(p6bis, axis=0)
+	#~ p2bis = np.array([k1/Pmono1, k2/Pmono2, k3/Pmono3, k4/Pmono4])
+	#~ P2bis = np.mean(p2bis, axis=0)
+	#~ p3bis = np.array([s1/Pmono1, s2/Pmono2, s3/Pmono3, s4/Pmono4])
+	#~ P3bis = np.mean(p3bis, axis=0)
+	#~ p4bis = np.array([t1/Pmono1, t2/Pmono2, t3/Pmono3, t4/Pmono4])
+	#~ P4bis = np.mean(p4bis, axis=0)
+	#~ p6bis = np.array([e1/Pmono1, e2/Pmono2, e3/Pmono3, e4/Pmono4])
+	#~ P6bis = np.mean(p6bis, axis=0)
 
 	
 	#~ p2ter = np.array([k1ter/Pmono1bis, k2ter/Pmono2bis,	k3ter/Pmono3bis, k4ter/Pmono4bis])
@@ -523,23 +616,23 @@ for j in xrange(0,len(z)):
 	#~ Ps3, =ax2.plot(k,P3, color='C0')
 	#~ Ps4, =ax2.plot(k,P4, color='C1')
 	#~ Ps6, =ax2.plot(k,P6, color='c')
-	#~ #--------------------------------
+	#--------------------------------
 	#~ ax2.plot(k,P2f, color='C3', label='z = '+str(z[j]), linestyle='--')
 	#~ ax2.plot(k,P3f, color='C0', linestyle='--')
 	#~ ax2.plot(k,P4f, color='C1', linestyle='--')
 	#~ ax2.plot(k,P6f, color='c', linestyle='--')
 	#-------------------------------
-	ax2.plot(k,P2bis, color='C3', linestyle='--',label= 'BE-HaPPy')
-	ax2.plot(k,P3bis, color='C0', linestyle='--')
-	ax2.plot(k,P4bis, color='C1', linestyle='--')
-	ax2.plot(k,P6bis, color='c', linestyle='--')
+	#~ ax2.plot(k,P2bis, color='C3', linestyle='--',label= 'BE-HaPPy')
+	#~ ax2.plot(k,P3bis, color='C0', linestyle='--')
+	#~ ax2.plot(k,P4bis, color='C1', linestyle='--')
+	#~ ax2.plot(k,P6bis, color='c', linestyle='--')
 	#-------------------------------
 	#~ ax2.plot(k,P2ter, color='C3', linestyle='--',label=r'w/ $b_{model}$ and $\sigma_v$ fixed')
 	#~ ax2.plot(k,P3ter, color='C0', linestyle='--')
 	#~ ax2.plot(k,P4ter, color='C1', linestyle='--')
 	#~ ax2.plot(k,P6ter, color='c', linestyle='--')
 	
-	plt.figlegend( (Ps1,Ps2, Ps3, Ps4,Ps6), ('N-body','Polyn. + Kaiser','Polyn. + Scoccimarro','Polyn. + TNS','eTNS'), \
+	#~ plt.figlegend( (Ps1,Ps2, Ps3, Ps4,Ps6), ('N-body','Polyn. + Kaiser','Polyn. + Scoccimarro','Polyn. + TNS','eTNS'), \
 	####### comparison bias and != models #############################
 	#~ ax2.set_yscale('log')
 	#~ plt.ylim(2e2,3e5)
@@ -551,7 +644,7 @@ for j in xrange(0,len(z)):
 	#~ sco, = ax2.plot(k, sco1, color='k', linestyle='--')
 	#~ tns, = ax2.plot(k, tns1, color='k', linestyle=':')
 	#~ etns, = ax2.plot(k, etns1, color='k', linestyle='-.')
-	#--------
+	#~ #--------
 	#~ ax2.plot(k, kai2, color='k')
 	#~ ax2.plot(k, sco2, color='k', linestyle='--' )
 	#~ ax2.plot(k, tns2, color='k', linestyle=':')
@@ -566,41 +659,41 @@ for j in xrange(0,len(z)):
 	#~ ax2.plot(k, sco4, color='k', linestyle='--')
 	#~ ax2.plot(k, tns4, color='k', linestyle=':')
 	#~ ax2.plot(k, etns4, color='k', linestyle='-.')
-	#~ #--------
+	#--------
 	#~ plt.figlegend( (M1,M2,M3,M4,nlk,sco, tns, etns), ('$M_{1}$','$M_{2}$','$M_{3}$','$M_{4}$', 'non linear kaiser + PL'\
 	#~ ,'Scoccimarro + PL', r'TNS + PL', r'eTNS'), \
 	######################################
-	loc = 'upper center', ncol=5, labelspacing=0., title =r' M$\nu$ = '+str(Mnu)+', case '+str(case), fontsize=14)
-	ax2.axvspan(kstop, 7, alpha=0.2, color='grey')
+	#~ loc = 'upper center', ncol=5, labelspacing=0., title =r' M$\nu$ = '+str(Mnu)+', case '+str(case), fontsize=14)
+	#~ ax2.axvspan(kstop, 7, alpha=0.2, color='grey')
 	#~ ax2.legend(loc = 'upper left', title='z = '+str(z[j]), fancybox=True, fontsize=14)
-	ax2.legend(loc = 'lower left', title='z = '+str(z[j]), fancybox=True, fontsize=14)
+	#~ ax2.legend(loc = 'lower left', title='z = '+str(z[j]), fancybox=True, fontsize=14)
 	#~ ax2.legend(loc = 'lower left', fancybox=True, fontsize=14, handlelength=0, handletextpad=0)
-	plt.subplots_adjust(left=0.1, wspace=0.05, hspace=0.1)
-	ax2.set_xscale('log')
-	if j == 0 :
-		ax2.tick_params(bottom='off', labelbottom='off')
-		ax2.set_ylabel(r'P(k) / $P_{sim}$', fontsize=16)
-		#~ ax2.set_ylabel(r'$P_{cb}$', fontsize=16)
-	if j == 1 :
-		ax2.tick_params(bottom='off', labelbottom='off', labelright=True, right= True, labelleft='off', left='off')
-		ax2.set_ylabel(r'P(k) / $P_{sim}$', fontsize=16)
-		#~ ax2.set_ylabel(r'$P_{cb}$', fontsize=16)
-		ax2.yaxis.set_label_position("right")
-	if j == 2 :
-		#ax.tick_params(labelleft=True)
-		ax2.set_ylabel(r'P(k) / $P_{sim}$', fontsize=16)
-		#~ ax2.set_ylabel(r'$P_{cb}$', fontsize=16)
-		ax2.set_xlabel('k [h/Mpc]', fontsize=14)
-	if j == 3 :
-		ax2.tick_params(labelright=True, right= True, labelleft='off', left='off')
-		ax2.set_xlabel('k [h/Mpc]', fontsize=14)
-		ax2.set_ylabel(r'P(k) / $P_{sim}$', fontsize=16)
-		#~ ax2.set_ylabel(r'$P_{cb}$', fontsize=16)
-		ax2.yaxis.set_label_position("right")
-	ax2.set_xlim(8e-3,1.)
-	#~ #plt.ylim(0.7,1.3)
-	if j == len(z) -1:
-		plt.show()
+	#~ plt.subplots_adjust(left=0.1, wspace=0.05, hspace=0.1)
+	#~ ax2.set_xscale('log')
+	#~ if j == 0 :
+		#~ ax2.tick_params(bottom='off', labelbottom='off')
+		#~ ax2.set_ylabel(r'P(k) / $P_{sim}$', fontsize=16)
+		#~ ax2.set_ylabel(r'$P_{hh	}$ [$\rm (Mpc/h)^3$]', fontsize=16)
+	#~ if j == 1 :
+		#~ ax2.tick_params(bottom='off', labelbottom='off', labelright=True, right= True, labelleft='off', left='off')
+		#~ ax2.set_ylabel(r'P(k) / $P_{sim}$', fontsize=16)
+		#~ ax2.set_ylabel(r'$P_{hh}$ [$\rm (Mpc/h)^3$]', fontsize=16)
+		#~ ax2.yaxis.set_label_position("right")
+	#~ if j == 2 :
+		#~ #ax.tick_params(labelleft=True)
+		#~ ax2.set_ylabel(r'P(k) / $P_{sim}$', fontsize=16)
+		#~ ax2.set_ylabel(r'$P_{hh}$ [$\rm (Mpc/h)^3$]', fontsize=16)
+		#~ ax2.set_xlabel('k [h/Mpc]', fontsize=14)
+	#~ if j == 3 :
+		#~ ax2.tick_params(labelright=True, right= True, labelleft='off', left='off')
+		#~ ax2.set_xlabel('k [h/Mpc]', fontsize=14)
+		#~ ax2.set_ylabel(r'P(k) / $P_{sim}$', fontsize=16)
+		#~ ax2.set_ylabel(r'$P_{hh}$ [$\rm (Mpc/h)^3$]', fontsize=16)
+		#~ ax2.yaxis.set_label_position("right")
+	#~ ax2.set_xlim(8e-3,1.)
+	#plt.ylim(0.7,1.3)
+	#~ if j == len(z) -1:
+		#~ plt.show()
 	
 		
 	#~ kill

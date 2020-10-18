@@ -397,3 +397,61 @@ for j in xrange(0,len(z)): #chmahe this after test
 end = time()
 print 'total time is '+str((end - start))	 
 
+#~ dddd = [0,1,2,3]
+		#~ eeee = ['C0','C1','C2','C3']
+		#~ ffff = ['-','--','-.',':']
+		#~ a1 = [];a2 = [];a3 = [];a4 = [];
+		#~ aaaa = [a1, a2, a3, a4]
+		#~ for j,self.z in enumerate(self.red):
+			#~ print j
+			#~ if j == 0:
+				#~ fig2 = plt.figure()
+			#~ J = j + 1
+			#~ print J
+			#~ if len(self.red) == 1:
+				#~ ax2 = fig2.add_subplot(1, len(z), J)
+			#~ elif len(self.red) == 2:
+				#~ ax2 = fig2.add_subplot(1, 2, J)
+			#~ elif len(self.red) > 2:
+				#~ ax2 = fig2.add_subplot(2, 2, J)
+			#######################################
+			#~ for self.mbin in dddd:
+				#~ print self.mbin
+				#~ alpha,nu_masses, bcc_massive, bcc_LS000  = self.rescaling()	
+				#~ if self.mbin ==0:
+					#~ a1,= ax2.plot(nu_masses, bcc_massive/bcc_LS000, c=eeee[self.mbin], label='z = '+str(self.red[j]))
+				#~ elif self.mbin ==1:
+					#~ a2,= ax2.plot(nu_masses, bcc_massive/bcc_LS000, c=eeee[self.mbin])
+				#~ elif self.mbin ==2:
+					#~ a3,= ax2.plot(nu_masses, bcc_massive/bcc_LS000, c=eeee[self.mbin])
+				#~ elif self.mbin ==3:
+					#~ a4,= ax2.plot(nu_masses, bcc_massive/bcc_LS000, c=eeee[self.mbin])
+
+				#~ ax2.scatter(nu_masses, bcc_massive/bcc_LS000, c=eeee[self.mbin])
+			#~ plt.figlegend( (a1,a2,a3,a4), (r'$M_1$',r'$M_2$',r'$M_3$',r'$M_4$'), \
+			######################################
+			#~ loc = 'upper center', ncol=4, labelspacing=0., fontsize=11)
+			#~ ax2.legend(loc = 'upper left', fancybox=True, fontsize=14, handlelength=0, handletextpad=0)
+			#~ plt.subplots_adjust(left=0.1, wspace=0.05, hspace=0.1)
+			#~ ax2.set_xscale('log')
+			#~ ax2.set_yscale('log')
+			#~ if j == 0 :
+				#~ ax2.tick_params(bottom='off', labelbottom='off',labelleft=True)
+				#~ plt.ylabel(r'$\alpha$', fontsize = 16)
+			#~ if j == 1 :
+				#~ ax2.tick_params(bottom='off', labelbottom='off', labelright=True, right= True, labelleft='off', left='off')
+				#~ plt.ylabel(r'$\alpha$', fontsize = 16)
+				#~ ax2.yaxis.set_label_position("right")
+			#~ if j == 2 :
+				#~ #ax.tick_params(labelleft=True)
+				#~ plt.xlabel(r'$M_{\nu}$ [eV]', fontsize = 16)
+				#~ plt.ylabel(r'$\alpha$', fontsize = 16)
+			#~ if j == 3 :
+				#~ ax2.tick_params(labelright=True, right= True, labelleft='off', left='off')
+				#~ plt.xlabel(r'$M_{\nu}$ [eV]', fontsize = 16)
+				#~ plt.ylabel(r'$\alpha$', fontsize = 16)
+				#~ ax2.yaxis.set_label_position("right")
+			#~ if j == len(self.red) -1:
+				#~ plt.show()
+
+		#~ kill	

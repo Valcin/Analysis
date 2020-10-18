@@ -216,8 +216,7 @@ def rescal(j, case):
 	#~ b3 = np.mean(b3,axis=0)
 	#~ b3bis = np.mean(b3bis,axis=0)
 	
-	sca1, sca2, sca3, sca4 = np.loadtxt('/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/0.15eV/large_scale/rescaling_z='+str(z[j])+'_.txt')
-
+	sca1, sca2, sca3, sca4 = np.loadtxt('/home/david/codes/montepython_public/montepython/likelihoods/BE_HaPPy/coefficients/other neutrinos masses/0.15eV/rescaling_z='+str(z[j])+'_.txt')
 
 
 	b2PT1 = bias2PT1*sca1
@@ -237,8 +236,8 @@ def rescal(j, case):
 	b3PTbis3 = bias3PTbis3*sca3
 	b3PTbis4 = bias3PTbis4*sca4
 	
-	#~ return b2PT1, b2PT2, b2PT3, b2PT4,b3PT1, b3PT2, b3PT3, b3PT4,bF1, bF2, bF3, bF4,\
-	#~ b3PTbis1, b3PTbis2, b3PTbis3, b3PTbis4
+	return b2PT1, b2PT2, b2PT3, b2PT4,b3PT1, b3PT2, b3PT3, b3PT4,bF1, bF2, bF3, bF4,\
+	b3PTbis1, b3PTbis2, b3PTbis3, b3PTbis4
 #~ ####################################################################
 #~ ### compute of the 4 mass bins
 #~ ####################################################################
@@ -268,6 +267,6 @@ def rescal(j, case):
 	errPr3, errPr4, Pmod_dt, Pmod_tt, case,z,0.15, A, B, C, D, E, F, G, H, sca1, sca2, sca3, sca4)
 	
 	
-	return kai1, kai2, kai3, kai4, sco1, sco2, sco3, sco4, tns1, tns2,\
-	tns3, tns4, etns1, etns2, etns3, etns4
+	#~ return kai1, kai2, kai3, kai4, sco1, sco2, sco3, sco4, tns1, tns2,\
+	#~ tns3, tns4, etns1, etns2, etns3, etns4
 	

@@ -1150,7 +1150,7 @@ def coeffit_eTNS(j, fcc, kstop, b1, b2, bs, b3nl, Pmod_dd, Pmod_dt, Pmod_tt, A, 
 #### TNS + saito or eTns 2
 ########################################################################
 def coeffit_eTNS2(j, fcc, kstop, Pmod_dd, Pmod_dt, Pmod_tt, A, B, C, D, E, F, G, H, k ,b ,\
-	errb,AB2,AB4,AB6,AB8,N, sca=None ):
+	errb,AB2,AB4,AB6,AB8,N ):
 	
 	start = time.time()
 	#~ lim = np.where(k < kstop)[0]
@@ -1176,14 +1176,9 @@ def coeffit_eTNS2(j, fcc, kstop, Pmod_dd, Pmod_dt, Pmod_tt, A, B, C, D, E, F, G,
 		coeffC = -10/kappa**2*(coeffB - 2/(2+kappa**2))
 		coeffD = -2/3./kappa**2*(coeffC - 2/(2+kappa**2))
 		coeffE = -4/10./kappa**2*(7.*coeffD - 2/(2+kappa**2))
-		if sca:
-			model = PsptD1z*coeffA*sca**2 + 2/3.*fcc[lim]*PsptT*coeffB*sca + 1/5.*fcc[lim]**2*Pmod_tt[lim]*coeffC \
-			+ (1/3.*AB2[lim]*coeffB+ 1/5.*AB4[lim]*coeffC+ 1/7.*AB6[lim]*coeffD+ 1/9.*AB8[lim]*coeffE)
-			inv_sigma2 = 1.0/(yerr[lim]**2)
-		else:
-			model = PsptD1z*coeffA + 2/3.*fcc[lim]*PsptT*coeffB + 1/5.*fcc[lim]**2*Pmod_tt[lim]*coeffC \
-			+ (1/3.*AB2[lim]*coeffB+ 1/5.*AB4[lim]*coeffC+ 1/7.*AB6[lim]*coeffD+ 1/9.*AB8[lim]*coeffE)
-			inv_sigma2 = 1.0/(yerr[lim]**2)
+		model = PsptD1z*coeffA + 2/3.*fcc[lim]*PsptT*coeffB + 1/5.*fcc[lim]**2*Pmod_tt[lim]*coeffC \
+		+ (1/3.*AB2[lim]*coeffB+ 1/5.*AB4[lim]*coeffC+ 1/7.*AB6[lim]*coeffD+ 1/9.*AB8[lim]*coeffE)
+		inv_sigma2 = 1.0/(yerr[lim]**2)
 		return -0.5*(np.sum((y[lim]-model)**2*inv_sigma2 - np.log(inv_sigma2)))
 		
 	def lnprior(theta):

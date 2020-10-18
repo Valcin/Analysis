@@ -508,6 +508,8 @@ for j in xrange(0,len(z)):
 	#~ print np.min(badres)
 	kres = [0.18,0.22, 0.4, 0.6]
 	badres =np.where((ktest2) < kres[j])[0]
+	
+	
 	####### comparison bias and != models #############################
 
 	#### plot all different bias test
@@ -523,22 +525,30 @@ for j in xrange(0,len(z)):
 		ax2 = fig2.add_subplot(2, 2, J)
 	#####################################################################
 	####### comparison bias and != models #############################
-	M1, = ax2.plot(k, bias4r, c='k')
-	ax2.scatter(k, bias4r, c='k', marker='.')
+	#~ M1, = ax2.plot(k, bias4r, c='k')
+	#~ ax2.scatter(k, bias4r, c='k', marker='.')
 	#~ M1 = ax2.errorbar(k, bias4r, yerr= errb4r, color='k',fmt='.')
 	#~ ax2.axvline(kres[j],  color='C0', linestyle=':')
 	#---------------------------------------------------------
-	M2, =ax2.plot(k, bias4*Bias_eff_t/Bias_eff_t2, color='C3', label='z = '+str(z[j]))
+	#~ M2, =ax2.plot(k, bias4*Bias_eff_t/Bias_eff_t2, color='C3', label='z = '+str(z[j]))
 	#~ ax2.plot(kfid, bfid*Bias_eff_t/Bias_eff_t2, linestyle = '--', color='C3')
-	M3, =ax2.plot(ktest2[badres], btest2[badres]*Bias_eff_t/Bias_eff_t1, color='C0')
+	#~ M3, =ax2.plot(ktest2[badres], btest2[badres]*Bias_eff_t/Bias_eff_t1, color='C0')
+	#-----------------------------------------------------------
+	btest2 = np.interp(k, ktest2, btest2)
+	M1, =ax2.plot(k, bias4r/bias4, color='C3')
+	M2, =ax2.plot(k, bias4r/btest2, color='C0')
+	ax2.set_ylim(0.5,1.5)
+	ax2.set_xlim(8e-3,0.5)
+	plt.figlegend( (M1,M2), (r'$M_{\nu}$ = 0.0eV, $\sigma_8$ = 0.834',r'$M_{\nu}$ = 0.0eV, $\sigma_8$ = 0.819'), \
 	#~ #--------------------------------------------------------
-	ax2.fill_between(k,bias4r-errb4r, bias4r+errb4r, color='k' ,alpha=0.5)
-	ax2.set_ylim(bias4[5]*0.8,bias4[5]*1.2)
-	ax2.set_xlim(8e-3,1)
-	plt.figlegend( (M1,M2,M3), (r'$M_{\nu}$ = 0.15eV, $\sigma_8$ = 0.806',r'$M_{\nu}$ = 0.0eV, $\sigma_8$ = 0.834',r'$M_{\nu}$ = 0.0eV, $\sigma_8$ = 0.819'), \
+	#~ ax2.fill_between(k,bias4r-errb4r, bias4r+errb4r, color='k' ,alpha=0.5)
+	#~ ax2.set_ylim(bias4[5]*0.8,bias4[5]*1.2)
+	#~ ax2.set_xlim(8e-3,1)
+	#~ plt.figlegend( (M1,M2,M3), (r'$M_{\nu}$ = 0.15eV, $\sigma_8$ = 0.806',r'$M_{\nu}$ = 0.0eV, $\sigma_8$ = 0.834',r'$M_{\nu}$ = 0.0eV, $\sigma_8$ = 0.819'), \
 	#~ #######################################
 	#~ loc = 'upper center', ncol=5, labelspacing=0., title =r' M$\nu$ = '+str(Mnu), fontsize=14)
-	loc = 'upper center', ncol=5, labelspacing=0., fontsize=14)
+	loc = 'upper center', ncol=5, labelspacing=0., title =r'$M_{\nu}$ = 0.15eV, $\sigma_8$ = 0.806 and $M_{\rm haloes}$ > 5e13 $M_{\odot}$', fontsize=14)
+	#~ loc = 'upper center', ncol=5, labelspacing=0., fontsize=14)
 	ax2.legend(loc = 'upper left', fancybox=True, fontsize=14, handlelength=0, handletextpad=0)
 	plt.subplots_adjust(left=0.1, wspace=0.05, hspace=0.1)
 	ax2.set_xscale('log')
@@ -547,27 +557,30 @@ for j in xrange(0,len(z)):
 		ax2.tick_params(bottom='off', labelbottom='off')
 		ax2.set_ylabel(r'$b_{eff}$ / $b_{sim}$', fontsize = 16)
 		ax2.set_ylabel(r'$b_{sim, 0.15}$ / $b_{sim, 0.0}$', fontsize = 16)
-		ax2.set_ylabel(r'$b_{cb}$', fontsize = 16)
+		ax2.set_ylabel(r'$b_{cc}$', fontsize = 16)
+		ax2.set_ylabel(r'$b_{cc, 0.15eV}$ / $b_{cc, 0.0eV}$', fontsize = 16)
 		#~ ax2.set_ylabel(r'$M^2 n(M)$', fontsize = 16)
-		ax2.set_ylim(bias4[5]*0.8,bias4[5]*1.2)
+		#~ ax2.set_ylim(bias4[5]*0.8,bias4[5]*1.2)
 		#ax2.grid()
 	if j == 1 :
 		ax2.tick_params(bottom='off', labelbottom='off', labelright=True, right= True, labelleft='off', left='off')
 		ax2.set_ylabel(r'$b_{eff}$ / $b_{sim}$', fontsize = 16)
 		ax2.set_ylabel(r'$b_{sim, 0.15}$ / $b_{sim, 0.0}$', fontsize = 16)
-		ax2.set_ylabel(r'$b_{cb}$', fontsize = 16)
+		ax2.set_ylabel(r'$b_{cc}$', fontsize = 16)
+		ax2.set_ylabel(r'$b_{cc, 0.15eV}$ / $b_{cc, 0.0eV}$', fontsize = 16)
 		#~ ax2.set_ylabel(r'$M^2 n(M)$', fontsize = 16)
-		ax2.set_ylim(bias4[5]*0.7,bias4[5]*1.3)
+		#~ ax2.set_ylim(bias4[5]*0.7,bias4[5]*1.3)
 		ax2.yaxis.set_label_position("right")
 		#ax2.grid()
 	if j == 2 :
 		#~ #ax.tick_params(labelleft=True)
 		ax2.set_ylabel(r'$b_{eff}$ / $b_{sim}$', fontsize = 16)
 		ax2.set_ylabel(r'$b_{sim, 0.15}$ / $b_{sim, 0.0}$', fontsize = 16)
-		ax2.set_ylabel(r'$b_{cb}$', fontsize = 16)
+		ax2.set_ylabel(r'$b_{cc}$', fontsize = 16)
+		ax2.set_ylabel(r'$b_{cc, 0.15eV}$ / $b_{cc, 0.0eV}$', fontsize = 16)
 		#~ ax2.set_ylabel(r'$M^2 n(M)$', fontsize = 16)
 		ax2.set_xlabel('k [h/Mpc]', fontsize = 14)
-		ax2.set_ylim(bias4[5]*0.8,bias4[5]*1.3)
+		#~ ax2.set_ylim(bias4[5]*0.8,bias4[5]*1.3)
 		#~ ax2.set_xlabel(r'M [$h^{-1} M_{\odot}$]', fontsize = 14)
 		#ax2.grid()
 	if j == 3 :
@@ -576,8 +589,9 @@ for j in xrange(0,len(z)):
 		#~ ax2.set_xlabel(r'M [$h^{-1} M_{\odot}$]', fontsize = 16)
 		ax2.set_ylabel(r'$b_{eff}$ / $b_{sim}$', fontsize = 16)
 		ax2.set_ylabel(r'$b_{sim, 0.15}$ / $b_{sim, 0.0}$', fontsize = 16)
-		ax2.set_ylabel(r'$b_{cb}$', fontsize = 16)
-		ax2.set_ylim(bias4[5]*0.6,bias4[5]*2.2)
+		ax2.set_ylabel(r'$b_{cc}$', fontsize = 16)
+		ax2.set_ylabel(r'$b_{cc, 0.15eV}$ / $b_{cc, 0.0eV}$', fontsize = 16)
+		#~ ax2.set_ylim(bias4[5]*0.6,bias4[5]*2.2)
 		#~ ax2.set_ylabel(r'$M^2 n(M)$', fontsize = 14)
 		ax2.yaxis.set_label_position("right")
 		#ax2.grid()

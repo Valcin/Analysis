@@ -1,2 +1,2 @@
 # Analysis
-various codes for analysis
+various code for analysis
