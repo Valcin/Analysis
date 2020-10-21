@@ -1,0 +1,19 @@
+Hi,
+
+>> The reason for this email is that I have an idea that can lead to a quick and short paper and that can help reaching the systematic errors.
+>>
+>> Most of the systematic error bar comes from uncertainty in the mixing length value. If we could reduce that error bar by a factor 2 then we could start saying things about expansion rates. Also, there is a white paper out there https://arxiv.org/pdf/2008.11286.pdf (includes Licia and Ben as coauthors) highliting the importance of ages in measuring Omega_k (I think Omega_k is a very important next cosmological parameter to pin down).
+>>
+>> The idea is as follows: we can take our best determined metallicity as a prior and do a very simple excerscise: the position in color of the RGB depends on the value of the mixing length parameter once the metallicity is known. Further, and very important, if there were star-to-star variations in the mixing length among stars in the GC, then the RGB wouldn’t be thin but “fat”
+>>
+>> Here is what I am proposing:
+>>
+>> For each GC we can compute the color spread in the RGB (this is quite simple, just the rms wrt current best fitting model) and see how much sigma the data allowed us from the assumption of a single value mixing length.
+>>
+>> To compute different values of mixing length we can use the MESA code http://mesa.sourceforge.net/bestpractices.html
+>>
+>> We could then determine if GCs have different values of mixing length among each other. We can then pin down the spread on mixing length and Monte Carlo the errors.
+>>
+>> It is actually quite straightforward and David can get out a nice and short paper following up the current big GCs and we could say something useful for expansion rates and curvature (excited about this latter one). We have already shown that we can get a phenomenal low statistical error.
+>>
+>> Raul
