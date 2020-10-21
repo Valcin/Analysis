@@ -1,0 +1,32 @@
+#SBATCH --job-name=array
+#SBATCH --output=array_%A_%a.out
+#SBATCH --error=array_%A_%a.err
+#SBATCH --array=0-68
+
+#!/bin/bash
+#PBS -N jlb_lpbh+a_100
+#PBS -l nodes=nova6
+#PBS -l walltime=500:00:00
+#PBS -l mem=200g
+#PBS -q batch
+#PBS -r n
+
+arrays dsed
+8,13,16,18,22,23,29,37,42,47,48,53,54
+
+omalley
+3,4,8,12,14,15,17,19,20,24,28,32,34,42,,43,46,48,51,52,54,59,61
+
+\simeq  m_{TOP} + 4
+, where $m_{TOP}$ is the magnitude of the main sequence turnoff point
+
+1,0 tout va bien
+2+, 0 pb with metallicity or magnitude of MSTOP
+other rescaled
+
+yes, it is because Z=Fe so we just do Z/Z0 = 0.64*falpha +0.36 so i take log Log[Z/Zo]=Log[Fe/H(new)/Fe/H(old)] = Log [0.64*2+0.36] =0.22
+
+so Log[Fe/H (new)]= Log[Fe/H(old)]+0.22
+
+so if i was using -1.5 originally now i have to use -1.5+0.22 as the iusochrone to fit the data
+
