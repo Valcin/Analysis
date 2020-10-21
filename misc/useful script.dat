@@ -1,0 +1,53 @@
+#### Compute the scale dependent growth rate
+	#~ fnl = np.zeros((len(k_dot), znumber), 'float64')
+	
+	#~ power = np.linspace(10,3,znumber)
+	#~ split = np.linspace(0.06,0.08,znumber)
+	#~ for index_k in xrange(len(k_dot)):
+                    #~ for index_z in xrange(znumber):
+				
+				#~ piece = np.piecewise(k_dot, [k_dot < split[index_z], k_dot >=split[index_z]], [0, 1]) 
+				#~ fnl[index_k,index_z] = cosmo.scale_independent_growth_factor_f(redshift[index_z]) - power[index_z] * piece[index_k]*k_dot[index_k]**2
+	
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+#### compute the redshift space distortion using the analytic expression of Linder F(k,mu,z)
+	
+def Linder_approx():
+
+	A = 1 + (k_dot/0.39)**1.58
+	B = 20
+	C = 8 * np.exp(- k_dot/0.176)
+	mu = np.ones(znumber)
+
+
+	F = np.zeros((len(k_dot),len(mu)), 'float64')
+	for i in xrange(len(mu)):
+		F[:,i] = A / (1+ B * k_dot**2 * mu[i]**2) + C * k_dot**2 * mu[i]**2
+		
+		
+	return F
+
+----------------------------------------------------------------------------------------------------------------------------------------------
+# jennings fitting formula for pdt and ptt
+def jen(pk,var1, var2):
+	if var1 == 'delta' and var2 == 'theta':
+		alpha0 = -12288.7
+		alpha1 = 1.43
+		alpha2 = 1367.7
+		alpha3 = 1.54
+		
+	elif var1 == 'theta' and var2 == 'theta':
+		alpha0 = -12462.1
+		alpha1 = 0.839
+		alpha2 = 1446.6 
+		alpha3 = 0.806
+		
+	pxy = (alpha0 * np.sqrt(kpk) + alpha1 * kpk**2) /(alpha2 + alpha3 * kpk)
+	
+	return pxy
+
+pdt = jen(kpk_nl,'delta','theta')
+ptt = jen(kpk_nl,'theta','theta')
+qnk = kpk_nl + 2/3.*f*pdt + 1/5.*f**2 *ptt
+----------------------------------------------------------------------------------------------------------------------------------------------

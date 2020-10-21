@@ -1,0 +1,24 @@
+# Likekilood created to study the bias in the presence of massive neutrinos
+
+NCDM_bias.data_directory = data.path['data']
+NCDM_bias.fiducial_file  = "NCDM_bias_fiducial.dat"
+
+
+# if you modify the number of redshifts modify znumber accordingly
+NCDM_bias.redshift = 0., 1., 2., 3.
+#NCDM_bias.redshift = 0.
+NCDM_bias.zmax  = 4.0
+
+# Select the scale mode from raccanelli et al 2017. choices are 1,2 or 3
+NCDM_bias.kmode = 2
+
+
+NCDM_bias.use_halofit    = True
+
+
+# precise that you have to use the bias coefficient define in raccanelli et al 2017.
+# Uncomment the line corresponding to the redshifts you want to use 0,1,2,3
+NCDM_bias.use_nuisance = ['b1_z0', 'b2_z0', 'b3_z0', 'b4_z0']
+NCDM_bias.use_nuisance = ['b1_z1', 'b2_z1', 'b3_z1', 'b4_z1']
+NCDM_bias.use_nuisance = ['b1_z2', 'b2_z2', 'b3_z2', 'b4_z2']
+NCDM_bias.use_nuisance = ['b1_z3', 'b2_z3', 'b3_z3', 'b4_z3']

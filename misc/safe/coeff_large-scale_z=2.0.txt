@@ -1,0 +1,2 @@
+Tinker-m1 tinker-m2 tinker-m3 tinker-m4 Crocce-m1 Crocce-m2 Crocce-m3 Crocce-m4
+1.9266614 2.3254747 3.1289549 4.5570507 1.9356284 2.3623653 3.2236417 4.9490601
