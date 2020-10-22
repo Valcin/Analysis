@@ -1,16 +1,70 @@
-import numpy as np
-import math
-import matplotlib.pyplot as plt
-from neurodiffeq import diff      # the differentiation operation
-from neurodiffeq.ode import solve # the ANN-based solver
-from neurodiffeq.ode import IVP   # the initial condition
-from neurodiffeq.ode import solve_system
-from neurodiffeq.pde import solve2D_system
-from neurodiffeq.networks import FCNN    # fully-connect neural network
-from neurodiffeq.networks import SinActv # sin activation
-from neurodiffeq.ode import Monitor
+import torch
+from torch import nn, optim
+from neurodiffeq import diff
+from neurodiffeq.networks import FCNN
+from neurodiffeq.temporal import generator_3dspatial_body, generator_3dspatial_surface, generator_temporal
+from neurodiffeq.temporal import FirstOrderInitialCondition, BoundaryCondition
+from neurodiffeq.temporal import SingleNetworkApproximator3DSpatialTemporal
+from neurodiffeq.temporal import MonitorMinimal
+from neurodiffeq.temporal import _solve_3dspatial_temporal
 
+def some_3d_time_dependent_pde(u, x, y, z, t):
+    return diff(u, x) + diff(u, y) + diff(u, z) + diff(u, t) ...
 
+# e.g. make u(x, y, z, t) = x^2 +y^2 + z^2 at the boundary
+boundary_surface_1 = BoundaryCondition(
+    form=lambda u, x, y, z: u - (x**2 + y**2 + z**2),
+    points_generator=generator_3dspatial_surface( ... )
+)
+boundary_surface_2 = BoundaryCondition(
+    form=lambda u, x, y, z: u - (x**2 + y**2 + z**2),
+    points_generator=generator_3dspatial_surface( ... )
+)
+boundary_surface_3 = BoundaryCondition(
+    form=lambda u, x, y, z: u - (x**2 + y**2 + z**2),
+    points_generator=generator_3dspatial_surface( ... )
+)
+
+fcnn = FCNN(
+    n_input_units=4,
+    n_output_units=1,
+    n_hidden_units=32,
+    n_hidden_layers=1,
+    actv=nn.Tanh
+)
+fcnn_approximator = SingleNetworkApproximator3DSpatialTemporal(
+    single_network=fcnn,
+    pde=some_3d_time_dependent_pde,
+    boundary_conditions=[
+        boundary_surface_1,
+        boundary_surface_2,
+        boundary_surface_3,
+    ]
+)
+adam = optim.Adam(fcnn_approximator.parameters(), lr=0.001)
+
+train_gen_spatial = generator_3dspatial_body(...)
+train_gen_temporal = generator_temporal(...)
+valid_gen_spatial = generator_3dspatial_body(...)
+valid_gen_temporal = generator_temporal(...)
+
+some_3d_time_dependent_pde_solution, _ = _solve_3dspatial_temporal(
+    train_generator_spatial=train_gen_spatial,
+    train_generator_temporal=train_gen_temporal,
+    valid_generator_spatial=valid_gen_spatial,
+    valid_generator_temporal=valid_gen_temporal,
+    approximator=fcnn_approximator,
+    optimizer=adam,
+    batch_size=512,
+    max_epochs=5000,
+    shuffle=True,
+    metrics={},
+    monitor=MonitorMinimal(check_every=10)
+)
+
+#-------------------------------------------------------------------------
+#-------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 #-------------------------------------------------------------------------
 # define the Ricci tensor for all configurations
 # ~R11 = (8*r*M)/(2*r**2 + M**2 * r)**2
@@ -87,18 +141,4 @@ FCNN(n_hidden_units=32, n_hidden_layers=1, actv=SinActv),FCNN(n_hidden_units=32,
 #~ nets=nets_lv, max_epochs=48000, monitor=Monitor(t_min=0.0, t_max=12, check_every=100))
 solution_lv, _ = solve2D_system(pde_system=adm, conditions=init_vals_lv, xy_min=(0, 0), xy_max=(12, 12), max_epochs=2000)
 
-# ~ts = np.linspace(0, 12, 100)
 
-# ANN-based solution
-# ~s_net, i_net, r_net = solution_lv(ts, as_type='np')
-
-# ~plt.figure()
-# ~plt.plot(ts, s_net, label='suceptible')
-# ~plt.plot(ts, i_net, label='infected')
-# ~plt.plot(ts, r_net, label='recoverd')
-
-# ~plt.ylabel('population')
-# ~plt.xlabel('t')
-# ~plt.title('beta = '+str(beta)+', gamma = '+str(gamma))
-# ~plt.legend()
-# ~plt.show()
