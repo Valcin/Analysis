@@ -235,8 +235,24 @@ ncpu = 3 # number of cpu requested
 #~ kill
 #~ ncpu = int(os.environ["cpu_num"]) # number of cpu requested hipatia
 
-for glc in [0,1,8]:
-	
+rescale = np.loadtxt('rescale_ig.csv',delimiter=',')
+ind1 = np.loadtxt('ind_met15.txt')
+ind2 = np.loadtxt('ind_met20.txt')
+
+
+#rescale gc to put mstop at 0
+chunkbot = rescale[:,5]
+mstop = chunkbot[glc]
+
+met = (input("what is the metallicity limit ? "))
+if met == '-1.5':
+	ind = ind1
+elif met == '-2.0':
+	ind = ind2
+
+for g in ind[0]:
+	glc = int(g)
+	print(glc)
 # ~glc = int(input("what is your cluster number? "))
 # glc = int(os.environ["SLURM_ARRAY_TASK_ID"]) # aganice
 #~ glc = int(os.environ["PBS_ARRAYID"])  # hipatia
@@ -245,20 +261,20 @@ for glc in [0,1,8]:
 	print(clus_nb, Age, metal, distance, Abs, afe_init, distplus, distmoins)
 	photo_v, err_v, photo_i, color, err_color, nmv, nmi, longueur = photometry()
 
-
 # ~plt.figure()
-	plt.scatter(color,photo_v, marker='.', s=10, color='grey', label='stars', alpha=0.8)
-	# ~plt.scatter(color,photo_v, marker='.', s=10, label='stars', alpha=0.8)
+# ~plt.scatter(color,photo_v, marker='.', s=10, color='grey', alpha=0.8)
+	plt.scatter(color,photo_v, marker='.', s=10, alpha=0.8)
+	plt.axhline(mstop)
 plt.xlim(-0.5,3)
 plt.ylim(27,10)
 plt.tick_params(labelsize=16)
-lgnd = plt.legend(loc='best', fontsize = 24)
-lgnd.get_frame().set_edgecolor('k')
-lgnd.get_frame().set_linewidth(2.0)
+plt.subplots_adjust(bottom=0.16)
+# ~lgnd = plt.legend(loc='best', fontsize = 24)
+# ~lgnd.get_frame().set_edgecolor('k')
+# ~lgnd.get_frame().set_linewidth(2.0)
 plt.xlabel('F606W - F814W', fontsize = 24)
 plt.ylabel('F606W', fontsize = 24)
-# ~plt.title(clus_nb+' '+str(glc), fontsize = 16)
-# ~plt.title('IC4499', fontsize = 24)
+plt.title('[Fe/H] < '+met+', '+str(len(ind))+' clusters', fontsize = 24)
 plt.show() 
 plt.close()
 # ~kill
