@@ -276,15 +276,16 @@ for g in ind:
 	abV = Abso*exV
 	abcol = Abso*exV - Abso*exI
 
-	corr_mag = photo_v - dm
-	# ~corr_mag = photo_v - mstop
+	corr_mag = photo_v - dm - abV
+	corr_col = color - abcol
 
-	# ~plt.scatter(color,corr_mag, marker='.', s=10, color='grey', alpha=0.8)
-	plt.scatter(color,corr_mag, marker='.', s=10, alpha=0.8)
+
+	# ~plt.scatter(corr_col,corr_mag, marker='.', s=10, alpha=0.8)
+	plt.scatter(corr_col,corr_mag, marker='.', s=10, color='grey', alpha=0.8)
 
 plt.xlim(-0.5,3)
 # ~plt.ylim(27,-10)
-plt.ylim(15,-10)
+plt.ylim(5,-5)
 plt.tick_params(labelsize=16)
 plt.subplots_adjust(bottom=0.16)
 # ~lgnd = plt.legend(loc='best', fontsize = 24)
