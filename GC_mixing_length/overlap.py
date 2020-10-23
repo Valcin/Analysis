@@ -239,10 +239,15 @@ rescale = np.loadtxt('rescale_ig.csv',delimiter=',')
 ind1 = np.loadtxt('ind_met15.txt')
 ind2 = np.loadtxt('ind_met20.txt')
 
+version2 = '15'
+model2 = 'dar'
+distance_dar = np.loadtxt('/home/david/codes/Analysis/GC/plots/data_'+ version2 +'_'+str(model2)+'.txt', usecols=(8,))
+Abs_dar = np.loadtxt('/home/david/codes/Analysis/GC/plots/data_'+ version2 +'_'+str(model2)+'.txt', usecols=(11,))
 
 #rescale gc to put mstop at 0
 chunkbot = rescale[:,5]
-mstop = chunkbot[glc]
+exV = 0.9110638171893733
+exI = 0.5641590452038215
 
 met = (input("what is the metallicity limit ? "))
 if met == '-1.5':
@@ -250,30 +255,43 @@ if met == '-1.5':
 elif met == '-2.0':
 	ind = ind2
 
-for g in ind[0]:
+for g in ind:
 	glc = int(g)
 	print(glc)
-# ~glc = int(input("what is your cluster number? "))
-# glc = int(os.environ["SLURM_ARRAY_TASK_ID"]) # aganice
-#~ glc = int(os.environ["PBS_ARRAYID"])  # hipatia
+	mstop = chunkbot[glc]
 	print("the chosen cluster is {}".format(glc))
 	clus_nb, Age, metal, distance, Abs, afe_init, distplus, distmoins  = cluster(glc)
 	print(clus_nb, Age, metal, distance, Abs, afe_init, distplus, distmoins)
 	photo_v, err_v, photo_i, color, err_color, nmv, nmi, longueur = photometry()
 
-# ~plt.figure()
-# ~plt.scatter(color,photo_v, marker='.', s=10, color='grey', alpha=0.8)
-	plt.scatter(color,photo_v, marker='.', s=10, alpha=0.8)
-	plt.axhline(mstop)
+
+	if glc < 27:
+		dist = distance_dar[glc]
+		Abso = Abs_dar[glc]
+	else:
+		dist = distance_dar[glc-1]
+		Abso = Abs_dar[glc-1]
+
+	dm = 5*np.log10(dist) - 5
+	abV = Abso*exV
+	abcol = Abso*exV - Abso*exI
+
+	corr_mag = photo_v - dm
+	# ~corr_mag = photo_v - mstop
+
+	# ~plt.scatter(color,corr_mag, marker='.', s=10, color='grey', alpha=0.8)
+	plt.scatter(color,corr_mag, marker='.', s=10, alpha=0.8)
+
 plt.xlim(-0.5,3)
-plt.ylim(27,10)
+# ~plt.ylim(27,-10)
+plt.ylim(15,-10)
 plt.tick_params(labelsize=16)
 plt.subplots_adjust(bottom=0.16)
 # ~lgnd = plt.legend(loc='best', fontsize = 24)
 # ~lgnd.get_frame().set_edgecolor('k')
 # ~lgnd.get_frame().set_linewidth(2.0)
-plt.xlabel('F606W - F814W', fontsize = 24)
-plt.ylabel('F606W', fontsize = 24)
+plt.xlabel('Rescaled color, F606W - F814W', fontsize = 20)
+plt.ylabel('Rescaled magnitude, F606W', fontsize = 20)
 plt.title('[Fe/H] < '+met+', '+str(len(ind))+' clusters', fontsize = 24)
 plt.show() 
 plt.close()

@@ -145,7 +145,7 @@ def cluster(nb):
 #~ @profile
 def photometry():
         
-	files = np.loadtxt('/home/david/codes/Analysis/GC/data/hlsp_acsggct_hst_acs-wfc_'+clus_nb+'_r.rdviq.cal.adj.zpt', skiprows = 3)
+	files = np.loadtxt('/home/david/codes/data/GC_data/data_HST/hlsp_acsggct_hst_acs-wfc_'+clus_nb+'_r.rdviq.cal.adj.zpt', skiprows = 3)
 	longueur = len(files)
 	
 	### magnitude cut --------------------------------------------------
@@ -1989,7 +1989,7 @@ elif model == 'dar':
 		size=(nwalkers, ndim))
 
 
-
+kill
 
 #--------------------------------------------------------------
 #--------------------------------------------------------------
