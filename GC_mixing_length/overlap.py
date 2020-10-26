@@ -379,13 +379,20 @@ chunkbot = rescale[:,5]
 exV = 0.9110638171893733
 exI = 0.5641590452038215
 
+ctot = []
+vtot = []
+ctot_sample = []
+vtot_sample = []
+isov = np.zeros((12,265))
+isoc = np.zeros((12,265))
+
 met = (input("what is the metallicity limit ? "))
 if met == '-1.5':
 	ind = ind1
 elif met == '-2.0':
 	ind = ind2
 
-for g in ind:
+for ig, g in enumerate(ind):
 	glc = int(g)
 	# ~print(glc)
 	mstop = chunkbot[glc]
@@ -417,7 +424,7 @@ for g in ind:
 	# ~corr_mag = photo_v 
 	# ~corr_col = color 
 #-----------------------------------------------------------------------
-
+# compute isochrones for each GC
 	helium_y = ''
 	from isochrones.dartmouth import Dartmouth_FastIsochrone
 	darm2 = Dartmouth_FastIsochrone(afe='afem2', y=helium_y)
@@ -457,27 +464,49 @@ for g in ind:
 	cocol = corr_col[rgb][close]
 	comag = corr_mag[rgb][close]
 
+	ctot.extend(corr_col)
+	vtot.extend(corr_mag)
+	ctot_sample.extend(cocol)
+	vtot_sample.extend(comag)
+
+	# ~isoc.append(Color_iso1)
+	# ~isov.append(mag_v1)
+	isoc[ig, :] = Color_iso1[:265]
+	isov[ig, :] = mag_v1[:265]
+
 	# ~vcenter, ccenter, errcenter, sbin, bingood, errcenterv = way(corr_mag[close], corr_col[close], err_color[close], err_v[close])
 	
 #-----------------------------------------------------------------------
+# compute the mean isochrone
+iso_midc = np.mean(isoc, axis=0)
+iso_midv = np.mean(isov, axis=0)
 
-	# ~plt.scatter(corr_col,corr_mag, marker='.', s=10, alpha=0.8)
-	plt.scatter(corr_col,corr_mag, marker='.', s=10, color='grey', alpha=0.8)
-	plt.scatter(cocol,comag, marker='.', s=10, color='r', alpha=0.8)
-	# ~plt.scatter(corr_col[rgb],corr_mag[rgb], marker='.', s=10, color='b', alpha=0.8)
-	# ~plt.scatter(ccenter,vcenter, marker='o', s=10, color='b', alpha=0.8)
-	plt.plot(Color_iso1, mag_v1)
-	plt.xlim(-0.5,3)
-	# ~plt.ylim(25.75,10)
-	plt.ylim(5,-5)
-	plt.tick_params(labelsize=16)
-	# ~plt.subplots_adjust(bottom=0.16)
-	# ~lgnd = plt.legend(loc='best', fontsize = 24)
-	# ~lgnd.get_frame().set_edgecolor('k')
-	# ~lgnd.get_frame().set_linewidth(2.0)
-	# ~plt.xlabel('Rescaled color, F606W - F814W', fontsize = 20)
-	# ~plt.ylabel('Rescaled magnitude, F606W', fontsize = 20)
-	# ~plt.title('[Fe/H] < '+met+', '+str(len(ind))+' clusters', fontsize = 24)
-	plt.show() 
-	plt.close()
-	# ~kill
+plt.figure()
+# ~for i in range(len(ind)):
+	# ~plt.plot(isoc[i], isov[i], color='grey')
+plt.plot(iso_midc, iso_midv, color='r')
+# ~plt.xlim(-0.5,3)
+# ~plt.ylim(5,-5)
+# ~plt.tick_params(labelsize=16)
+plt.show() 
+plt.close()
+kill
+#-----------------------------------------------------------------------
+# ~plt.scatter(corr_col,corr_mag, marker='.', s=10, alpha=0.8)
+plt.scatter(ctot,vtot, marker='.', s=10, color='grey', alpha=0.8)
+plt.scatter(ctot_sample,vtot_sample, marker='.', s=10, color='r', alpha=0.8)
+plt.plot(isoc[0], isov[0])
+plt.xlim(-0.5,3)
+# ~plt.ylim(25.75,10)
+plt.ylim(5,-5)
+plt.tick_params(labelsize=16)
+# ~plt.subplots_adjust(bottom=0.16)
+# ~lgnd = plt.legend(loc='best', fontsize = 24)
+# ~lgnd.get_frame().set_edgecolor('k')
+# ~lgnd.get_frame().set_linewidth(2.0)
+# ~plt.xlabel('Rescaled color, F606W - F814W', fontsize = 20)
+# ~plt.ylabel('Rescaled magnitude, F606W', fontsize = 20)
+# ~plt.title('[Fe/H] < '+met+', '+str(len(ind))+' clusters', fontsize = 24)
+plt.show() 
+plt.close()
+# ~kill
