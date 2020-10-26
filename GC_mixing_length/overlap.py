@@ -128,7 +128,7 @@ def cluster(nb):
 	distance = 10**(np.float32(dist_mod)/5. +1)
 	distplus = 10**((np.float32(dist_mod)+0.2)/5. +1)
 	distmoins = 10**((np.float32(dist_mod)-0.2)/5. +1)
-	print(dist_mod)
+	# ~print(dist_mod)
 	Age = float(round(Age,3))
 	metal = float(round(float(metal),3))
 	distance = float(round(distance,3))
@@ -201,8 +201,8 @@ def photometry():
 	photo_v = files[mg_cut, 3][filter_all]
 	photo_i = files[mg_cut, 7][filter_all]
 	
-	print(np.min(photo_v), np.min(photo_i))
-	print(np.max(photo_v), np.max(photo_i))
+	# ~print(np.min(photo_v), np.min(photo_i))
+	# ~print(np.max(photo_v), np.max(photo_i))
 
 	Color = files[mg_cut, 5][filter_all]
 	err_Color = pcolor[filter_all]
@@ -224,6 +224,131 @@ def photometry():
 
 	return photo_v, err_v, photo_i, Color, err_Color, nmv, nmi, longueur
 
+	
+def iso_mag(Age, metal, distance, A, afe_val = None):
+
+
+	if model == 'mist': 
+		
+		mag_v, eep_first = mist.mageep['F606W'](Age, metal, distance, A)
+		mag_i, eep_first = mist.mageep['F814W'](Age, metal, distance, A)
+		#~ mag_v = mist.mageep['F606'](Age, metal, distance, Abs)
+		#~ mag_i = mist.mageep['F814'](Age, metal, distance, Abs)
+
+	if model == 'dar': 
+		if afe_val == -0.2:
+			mag_v, eep_first = darm2.mageep['F606W'](Age, metal, distance, A)
+			mag_i, eep_first = darm2.mageep['F814W'](Age, metal, distance, A)
+		elif afe_val == 0.0:
+			mag_v, eep_first = darp0.mageep['F606W'](Age, metal, distance, A)
+			mag_i, eep_first = darp0.mageep['F814W'](Age, metal, distance, A)
+		elif afe_val == 0.2:
+			mag_v, eep_first = darp2.mageep['F606W'](Age, metal, distance, A)
+			mag_i, eep_first = darp2.mageep['F814W'](Age, metal, distance, A)
+		elif afe_val == 0.4:
+			mag_v, eep_first = darp4.mageep['F606W'](Age, metal, distance, A)
+			mag_i, eep_first = darp4.mageep['F814W'](Age, metal, distance, A)
+		elif afe_val == 0.6:
+			mag_v, eep_first = darp6.mageep['F606W'](Age, metal, distance, A)
+			mag_i, eep_first = darp6.mageep['F814W'](Age, metal, distance, A)
+		elif afe_val == 0.8:
+			mag_v, eep_first = darp8.mageep['F606W'](Age, metal, distance, A)
+			mag_i, eep_first = darp8.mageep['F814W'](Age, metal, distance, A)
+		
+	mag_i = mag_i[~np.isnan(mag_i)]# - Abs
+	mag_v = mag_v[~np.isnan(mag_v)]# - Abs
+	Color = (mag_v - mag_i)
+
+
+	#make a magnitude cut
+	#~ cut = np.where((mag_v < np.max(photo_v)) & (mag_v > np.min(photo_v)))[0]
+	#~ if len(cut)<1:
+		#~ print('ohlala problem with')
+		#~ print(Age, metal, distance, Abs)
+	#~ chosen = np.random.choice(cut, sample)
+	
+	#~ mag_v = mag_v[chosen]
+	#~ mag_i = mag_i[chosen]
+	#~ Color = Color[chosen]
+
+	gc.collect()
+	return mag_v, mag_i, Color, eep_first
+
+def way(vgood, cgood, errgood, errgoodv, step = None):
+
+	#remove duplicate
+	for i, j in zip(vgood, cgood):
+		dup = np.where((vgood == i)&(cgood==j))[0]
+		if len(dup) > 1:
+			vgood = np.delete(np.array(vgood), dup[1:])
+			cgood = np.delete(np.array(cgood), dup[1:])
+	
+	#~ nbins = 20
+	rangebin = np.max(vgood) - np.min(vgood)
+	if step is not None:
+		nbins = int(round(rangebin/step))
+	else:
+		nbins = int(round(rangebin/0.2))
+
+	bingood = np.linspace(np.min(vgood), np.max(vgood),nbins)
+	centergood = (bingood[:-1] + bingood[1:]) / 2 
+	
+	vcenter = np.zeros(len(centergood))
+	ccenter = np.zeros(len(centergood))
+	errcenter = np.zeros(len(centergood))
+	errcenterv = np.zeros(len(centergood))
+	size_bin = np.zeros(len(centergood))
+
+
+	for c in range(0,len(centergood)):
+		inbin = np.digitize(vgood, bingood)
+		ici = np.where(inbin == c+1)[0]
+		#~ print(np.min(np.array(cgood)[ici]), np.max(np.array(cgood)[ici]))
+		
+		threshold = 3
+		z = np.abs(stats.zscore(np.array(cgood)[ici]))
+		out = (np.where(z > threshold)[0])
+		zcol =  np.delete(np.array(cgood)[ici], out)
+		zmagv =  np.delete(np.array(vgood)[ici], out)
+		
+		z = np.abs(stats.zscore(zcol))
+		out = (np.where(z > threshold)[0])
+		zcol =  np.delete(zcol, out)
+		zmagv =  np.delete(zmagv, out)
+		
+		#~ zcol =  np.array(cgood)[ici]
+		#~ zmagv =  np.array(vgood)[ici]
+
+
+		if len(ici) == 1:
+			ccenter[c] =np.median(zcol)
+			errcenter[c] =np.array(errgood)[ici]
+			errcenterv[c] =np.array(errgoodv)[ici]
+			vcenter[c] =centergood[c]
+			#~ vcenter[c] =np.array(vgood)[ici]
+			size_bin[c] = len(ici)
+		elif len(ici) == 2:
+			ccenter[c] =np.median(zcol)
+			errcenter[c] = np.std(zcol)
+			errcenterv[c] = np.std(zmagv)
+			vcenter[c] =centergood[c]
+			#~ vcenter[c] =np.median(zmagv)
+			size_bin[c] = len(ici)
+		elif len(ici) >2:
+			ccenter[c] =np.median(zcol)
+			#~ ccenter[c] =np.mean(zcol)
+			if np.std(zcol) == 0:
+				errcenter[c] =np.mean(np.array(errgood)[ici])
+				print('std nul')
+			else:
+				errcenter[c] =1.2533*np.std(zcol)
+				errcenterv[c] =1.2533*np.std(zmagv)
+			vcenter[c] =centergood[c]
+			size_bin[c] = len(ici)
+		
+		#~ print(centergood[c], ccenter[c])	
+
+	return vcenter, ccenter, errcenter, size_bin, bingood, errcenterv
 ########################################################################
 ########################################################################
 ### define global variables
@@ -240,9 +365,14 @@ ind1 = np.loadtxt('ind_met15.txt')
 ind2 = np.loadtxt('ind_met20.txt')
 
 version2 = '15'
+model = 'dar'
 model2 = 'dar'
+
+Age_dar = np.loadtxt('/home/david/codes/Analysis/GC/plots/data_'+ version2 +'_'+str(model2)+'.txt', usecols=(2,))
+metal_dar = np.loadtxt('/home/david/codes/Analysis/GC/plots/data_'+ version2 +'_'+str(model2)+'.txt', usecols=(5,))
 distance_dar = np.loadtxt('/home/david/codes/Analysis/GC/plots/data_'+ version2 +'_'+str(model2)+'.txt', usecols=(8,))
 Abs_dar = np.loadtxt('/home/david/codes/Analysis/GC/plots/data_'+ version2 +'_'+str(model2)+'.txt', usecols=(11,))
+Afe_dar = np.loadtxt('/home/david/codes/Analysis/GC/plots/data_'+ version2 +'_'+str(model2)+'.txt', usecols=(14,))
 
 #rescale gc to put mstop at 0
 chunkbot = rescale[:,5]
@@ -257,20 +387,26 @@ elif met == '-2.0':
 
 for g in ind:
 	glc = int(g)
-	print(glc)
+	# ~print(glc)
 	mstop = chunkbot[glc]
 	print("the chosen cluster is {}".format(glc))
 	clus_nb, Age, metal, distance, Abs, afe_init, distplus, distmoins  = cluster(glc)
 	print(clus_nb, Age, metal, distance, Abs, afe_init, distplus, distmoins)
 	photo_v, err_v, photo_i, color, err_color, nmv, nmi, longueur = photometry()
 
-
+#------------------------------------------------------
 	if glc < 27:
+		age = Age_dar[glc]
+		metal = metal_dar[glc]
 		dist = distance_dar[glc]
 		Abso = Abs_dar[glc]
+		afe = Afe_dar[glc]
 	else:
+		age = Age_dar[glc-1]
+		metal = metal_dar[glc-1]
 		dist = distance_dar[glc-1]
 		Abso = Abs_dar[glc-1]
+		afe = Afe_dar[glc-1]
 
 	dm = 5*np.log10(dist) - 5
 	abV = Abso*exV
@@ -278,22 +414,70 @@ for g in ind:
 
 	corr_mag = photo_v - dm - abV
 	corr_col = color - abcol
+	# ~corr_mag = photo_v 
+	# ~corr_col = color 
+#-----------------------------------------------------------------------
 
+	helium_y = ''
+	from isochrones.dartmouth import Dartmouth_FastIsochrone
+	darm2 = Dartmouth_FastIsochrone(afe='afem2', y=helium_y)
+	darp0 = Dartmouth_FastIsochrone(afe='afep0', y=helium_y)
+	darp2 = Dartmouth_FastIsochrone(afe='afep2', y=helium_y)
+	darp4 = Dartmouth_FastIsochrone(afe='afep4', y=helium_y)
+	darp6 = Dartmouth_FastIsochrone(afe='afep6', y=helium_y)
+	darp8 = Dartmouth_FastIsochrone(afe='afep8', y=helium_y)
+	### create a sample from best fit
+	afe_values=[-0.2, 0.0 , 0.2, 0.4, 0.6, 0.8] 
+
+	afe_max = afe_values[np.searchsorted(afe_values, afe)]
+	afe_min = afe_values[np.searchsorted(afe_values, afe)-1]
+
+
+	mag_v1_min , mag_i1_min, Color_iso1_min, eep_first = iso_mag(np.log10(age*1.e9), metal, dist, Abso, afe_min)
+	mag_v1_max , mag_i1_max, Color_iso1_max, eep_first = iso_mag(np.log10(age*1.e9), metal, dist, Abso, afe_max)
+	lpp = (min(len(mag_v1_min), len(mag_v1_max))) # get minimum length to interpolate
+	
+	mag_v1 = (mag_v1_min[:lpp]*(afe_max - afe) + mag_v1_max[:lpp]*(afe - afe_min)) / (afe_max - afe_min)
+	Color_iso1 = (Color_iso1_min[:lpp]*(afe_max - afe) + Color_iso1_max[:lpp]*(afe - afe_min)) / (afe_max - afe_min)
+
+
+	mag_v1 = mag_v1 - dm - abV
+	Color_iso1 = Color_iso1 - abcol
+#-----------------------------------------------------------------------
+# remove hb, outliers stars and rgb stars
+	fmag = interpolate.interp1d(mag_v1, Color_iso1, 'nearest',fill_value="extrapolate")
+	Color_new = fmag(corr_mag)
+	col_dist = np.abs(Color_new - corr_col)
+
+	rgb = np.where(corr_mag < mstop - dm - abV - 0.5)[0]
+
+	close = np.where(col_dist[rgb] < 0.3)[0]
+	print(np.mean(col_dist[close]))
+
+	cocol = corr_col[rgb][close]
+	comag = corr_mag[rgb][close]
+
+	# ~vcenter, ccenter, errcenter, sbin, bingood, errcenterv = way(corr_mag[close], corr_col[close], err_color[close], err_v[close])
+	
+#-----------------------------------------------------------------------
 
 	# ~plt.scatter(corr_col,corr_mag, marker='.', s=10, alpha=0.8)
 	plt.scatter(corr_col,corr_mag, marker='.', s=10, color='grey', alpha=0.8)
-
-plt.xlim(-0.5,3)
-# ~plt.ylim(27,-10)
-plt.ylim(5,-5)
-plt.tick_params(labelsize=16)
-plt.subplots_adjust(bottom=0.16)
-# ~lgnd = plt.legend(loc='best', fontsize = 24)
-# ~lgnd.get_frame().set_edgecolor('k')
-# ~lgnd.get_frame().set_linewidth(2.0)
-plt.xlabel('Rescaled color, F606W - F814W', fontsize = 20)
-plt.ylabel('Rescaled magnitude, F606W', fontsize = 20)
-plt.title('[Fe/H] < '+met+', '+str(len(ind))+' clusters', fontsize = 24)
-plt.show() 
-plt.close()
-# ~kill
+	plt.scatter(cocol,comag, marker='.', s=10, color='r', alpha=0.8)
+	# ~plt.scatter(corr_col[rgb],corr_mag[rgb], marker='.', s=10, color='b', alpha=0.8)
+	# ~plt.scatter(ccenter,vcenter, marker='o', s=10, color='b', alpha=0.8)
+	plt.plot(Color_iso1, mag_v1)
+	plt.xlim(-0.5,3)
+	# ~plt.ylim(25.75,10)
+	plt.ylim(5,-5)
+	plt.tick_params(labelsize=16)
+	# ~plt.subplots_adjust(bottom=0.16)
+	# ~lgnd = plt.legend(loc='best', fontsize = 24)
+	# ~lgnd.get_frame().set_edgecolor('k')
+	# ~lgnd.get_frame().set_linewidth(2.0)
+	# ~plt.xlabel('Rescaled color, F606W - F814W', fontsize = 20)
+	# ~plt.ylabel('Rescaled magnitude, F606W', fontsize = 20)
+	# ~plt.title('[Fe/H] < '+met+', '+str(len(ind))+' clusters', fontsize = 24)
+	plt.show() 
+	plt.close()
+	# ~kill
