@@ -425,8 +425,8 @@ if version == '0':
 tot_age = []
 tot_met = []
 
-# ~for cn in range(1,3):
-for cn in list(range(27))+ list(range(28,69)):
+for cn in range(8,9):
+# ~for cn in list(range(27))+ list(range(28,69)):
 #~ for cn in garr: # 
 	glc = cn
 	clus_nb, Age0, metal0, distance0, Abs0, distplus0, distmoins0  = cluster(glc)
@@ -698,27 +698,27 @@ for cn in list(range(27))+ list(range(28,69)):
 	# ~fid_file.close()
 	
 	
-	if Metal_mean <= -1.5:
+	# ~if Metal_mean <= -1.5:
 		# ~with open('/home/david/codes/Analysis/GC/plots/w_1', 'ab+') as fid_file:
 			# ~np.savetxt(fid_file, h1)
 		# ~fid_file.close()	
 		# ~with open('/home/david/codes/Analysis/GC/plots/renom_1', 'ab+') as fid_file:
 			# ~np.savetxt(fid_file, h2)
 		# ~fid_file.close()
-		with open('/home/david/codes/Analysis/GC_mixing_length/ind_met15.txt', 'a+') as fid_file:
-			fid_file.write(str(glc)+"\n")
-		fid_file.close()
+		# ~with open('/home/david/codes/Analysis/GC_mixing_length/ind_met15.txt', 'a+') as fid_file:
+			# ~fid_file.write(str(glc)+"\n")
+		# ~fid_file.close()
 		
-	if Metal_mean <= -2:
+	# ~if Metal_mean <= -2:
 		# ~with open('/home/david/codes/Analysis/GC/plots/w_2', 'ab+') as fid_file:
 			# ~np.savetxt(fid_file, h1)
 		# ~fid_file.close()	
 		# ~with open('/home/david/codes/Analysis/GC/plots/renom_2', 'ab+') as fid_file:
 			# ~np.savetxt(fid_file, h2)
-		fid_file.close()	
-		with open('/home/david/codes/Analysis/GC_mixing_length/int_met20.txt', 'a+') as fid_file:
-			fid_file.write(str(glc)+"\n")
-		fid_file.close()	
+		# ~fid_file.close()	
+		# ~with open('/home/david/codes/Analysis/GC_mixing_length/int_met20.txt', 'a+') as fid_file:
+			# ~fid_file.write(str(glc)+"\n")
+		# ~fid_file.close()	
 		
 
 	nbins = 50
@@ -893,63 +893,65 @@ for cn in list(range(27))+ list(range(28,69)):
 			
 
 
-	# ~helium_y = ''
-	# ~from isochrones.dartmouth import Dartmouth_FastIsochrone
-	# ~darm2 = Dartmouth_FastIsochrone(afe='afem2', y=helium_y)
-	# ~darp0 = Dartmouth_FastIsochrone(afe='afep0', y=helium_y)
-	# ~darp2 = Dartmouth_FastIsochrone(afe='afep2', y=helium_y)
-	# ~darp4 = Dartmouth_FastIsochrone(afe='afep4', y=helium_y)
-	# ~darp6 = Dartmouth_FastIsochrone(afe='afep6', y=helium_y)
-	# ~darp8 = Dartmouth_FastIsochrone(afe='afep8', y=helium_y)
-	# ~### create a sample from best fit
-	# ~afe_values=[-0.2, 0.0 , 0.2, 0.4, 0.6, 0.8] 
+	helium_y = ''
+	from isochrones.dartmouth import Dartmouth_FastIsochrone
+	darm2 = Dartmouth_FastIsochrone(afe='afem2', y=helium_y)
+	darp0 = Dartmouth_FastIsochrone(afe='afep0', y=helium_y)
+	darp2 = Dartmouth_FastIsochrone(afe='afep2', y=helium_y)
+	darp4 = Dartmouth_FastIsochrone(afe='afep4', y=helium_y)
+	darp6 = Dartmouth_FastIsochrone(afe='afep6', y=helium_y)
+	darp8 = Dartmouth_FastIsochrone(afe='afep8', y=helium_y)
+	### create a sample from best fit
+	afe_values=[-0.2, 0.0 , 0.2, 0.4, 0.6, 0.8] 
 
-	# ~afe_max = afe_values[np.searchsorted(afe_values, Afe_mean)]
-	# ~afe_min = afe_values[np.searchsorted(afe_values, Afe_mean)-1]
-	# ~print(afe_min)
-	# ~print(afe_max)
+	afe_max = afe_values[np.searchsorted(afe_values, Afe_mean)]
+	afe_min = afe_values[np.searchsorted(afe_values, Afe_mean)-1]
+	print(afe_min)
+	print(afe_max)
 
+	print(np.log10(Age_mean*1.e9), Metal_mean, Distance_mean, AAbs_mean, afe_min)
+	print(np.log10(Age_mean*1.e9), Metal_mean, Distance_mean, AAbs_mean, afe_max)
 
-	# ~mag_v1_min , mag_i1_min, Color_iso1_min, eep_first = iso_mag(np.log10(Age_mean*1.e9), Metal_mean, Distance_mean, AAbs_mean, afe_min)
-	# ~mag_v1_max , mag_i1_max, Color_iso1_max, eep_first = iso_mag(np.log10(Age_mean*1.e9), Metal_mean, Distance_mean, AAbs_mean, afe_max)
-	# ~mag_v1_min , mag_i1_min, Color_iso1_min = iso_mag2(mass,np.log10(Age_mean*1.e9), Metal_mean, Distance_mean, AAbs_mean, afe_min)
-	# ~mag_v1_max , mag_i1_max, Color_iso1_max = iso_mag2(mass,np.log10(Age_mean*1.e9), Metal_mean, Distance_mean, AAbs_mean, afe_max)
-	# ~lpp = (min(len(mag_v1_min), len(mag_v1_max))) # get minimum length to interpolate
+	mag_v1_min , mag_i1_min, Color_iso1_min, eep_first = iso_mag(np.log10(Age_mean*1.e9), Metal_mean, Distance_mean, AAbs_mean, afe_min)
+	mag_v1_max , mag_i1_max, Color_iso1_max, eep_first = iso_mag(np.log10(Age_mean*1.e9), Metal_mean, Distance_mean, AAbs_mean, afe_max)
+	#mag_v1_min , mag_i1_min, Color_iso1_min = iso_mag2(mass,np.log10(Age_mean*1.e9), Metal_mean, Distance_mean, AAbs_mean, afe_min)
+	#mag_v1_max , mag_i1_max, Color_iso1_max = iso_mag2(mass,np.log10(Age_mean*1.e9), Metal_mean, Distance_mean, AAbs_mean, afe_max)
+	lpp = (min(len(mag_v1_min), len(mag_v1_max))) # get minimum length to interpolate
 	
-	# ~mag_v1 = (mag_v1_min[:lpp]*(afe_max - Afe_mean) + mag_v1_max[:lpp]*(Afe_mean - afe_min)) / (afe_max - afe_min)
-	# ~Color_iso1 = (Color_iso1_min[:lpp]*(afe_max - Afe_mean) + Color_iso1_max[:lpp]*(Afe_mean - afe_min)) / (afe_max - afe_min)
+	mag_v1 = (mag_v1_min[:lpp]*(afe_max - Afe_mean) + mag_v1_max[:lpp]*(Afe_mean - afe_min)) / (afe_max - afe_min)
+	Color_iso1 = (Color_iso1_min[:lpp]*(afe_max - Afe_mean) + Color_iso1_max[:lpp]*(Afe_mean - afe_min)) / (afe_max - afe_min)
 
 
-	# ~interv = np.linspace(np.min(mag_v1), np.max(photo_v),len(color) )
-	# ~interv = np.linspace(np.min(mag_v1), np.max(photo_v),2000)
-	# ~fmag = interpolate.interp1d(mag_v1, Color_iso1, 'nearest',fill_value="extrapolate")
-	#~ fmag = interpolate.interp1d(mag_v1, Color_iso1, 'cubic')
-	# ~xinterp = fmag(interv)
+	#interv = np.linspace(np.min(mag_v1), np.max(photo_v),len(color) )
+	#interv = np.linspace(np.min(mag_v1), np.max(photo_v),2000)
+	#fmag = interpolate.interp1d(mag_v1, Color_iso1, 'nearest',fill_value="extrapolate")
+	#fmag = interpolate.interp1d(mag_v1, Color_iso1, 'cubic')
+	#xinterp = fmag(interv)
 
 
 	# ~xinterp = np.interp(interv, mag_v1, Color_iso1)
 	# ~print(xinterp)
 
 
-	# ~plt.figure()
-	# ~plt.scatter(color,photo_v, marker='.',s=30, color='grey', alpha=0.5,label='stars')
-	# ~# sc =plt.scatter(Color_iso2,mag_v2, marker='.',s=10,c='r',  label='best fit')
-	# ~sc =plt.scatter(Color_iso1,mag_v1, marker='.',s=30,c='r',  label='best fit')
-	# ~sc =plt.scatter(Color_iso1 + noise,mag_v1, marker='.',s=30,c='b',  label='best fit')
-	# ~sc =plt.scatter(xinterp+noise, interv, marker='.',s=30,c='b',  label='best fit')
-	# ~plt.xlim(-0.5,3)
-	# ~plt.ylim(25.75,10)
+	plt.figure()
+	plt.scatter(color,photo_v, marker='.',s=30, color='grey', alpha=0.5,label='stars')
+	# sc =plt.scatter(Color_iso2,mag_v2, marker='.',s=10,c='r',  label='best fit')
+	sc =plt.scatter(Color_iso1,mag_v1, marker='.',s=30,c='r',  label='best fit')
+	# sc =plt.scatter(Color_iso1 + noise,mag_v1, marker='.',s=30,c='b',  label='best fit')
+	# sc =plt.scatter(xinterp+noise, interv, marker='.',s=30,c='b',  label='best fit')
+	plt.xlim(-0.5,3)
+	plt.ylim(25.75,10)
 	# ~lgnd = plt.legend(loc='upper left', fontsize = 16)
 	# ~lgnd.legendHandles[0]._sizes = [286]
 	# ~lgnd.legendHandles[1]._sizes = [286]
 	# ~plt.xlabel('F606W - F814W', fontsize = 16)
 	# ~plt.ylabel('F606W', fontsize = 16)
-	# ~plt.tick_params(labelsize=16)
+	plt.tick_params(labelsize=16)
 	# ~plt.title(clus_nb, fontsize = 16)
 	# ~plt.title('IC4499', fontsize = 16)
 	# ~plt.subplots_adjust(bottom=0.13)
 	# ~plt.savefig('/home/david/codes/Analysis/GC/plots/analysis/fit_'+clus_nb+'.png')
-	# ~plt.show()
-	# ~plt.close()
-	# ~kill
+	plt.show()
+	plt.close()
+	kill
  
