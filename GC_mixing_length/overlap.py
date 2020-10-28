@@ -360,22 +360,9 @@ ncpu = 3 # number of cpu requested
 #~ kill
 #~ ncpu = int(os.environ["cpu_num"]) # number of cpu requested hipatia
 
-rescale = np.loadtxt('rescale_ig.csv',delimiter=',')
-ind1 = np.loadtxt('ind_met15.txt')
-ind2 = np.loadtxt('ind_met20.txt')
+#-----------------------------------------------------------------------
+# global variable
 
-version2 = '15'
-model = 'dar'
-model2 = 'dar'
-
-Age_dar = np.loadtxt('/home/david/codes/Analysis/GC/plots/data_'+ version2 +'_'+str(model2)+'.txt', usecols=(2,))
-metal_dar = np.loadtxt('/home/david/codes/Analysis/GC/plots/data_'+ version2 +'_'+str(model2)+'.txt', usecols=(5,))
-distance_dar = np.loadtxt('/home/david/codes/Analysis/GC/plots/data_'+ version2 +'_'+str(model2)+'.txt', usecols=(8,))
-Abs_dar = np.loadtxt('/home/david/codes/Analysis/GC/plots/data_'+ version2 +'_'+str(model2)+'.txt', usecols=(11,))
-Afe_dar = np.loadtxt('/home/david/codes/Analysis/GC/plots/data_'+ version2 +'_'+str(model2)+'.txt', usecols=(14,))
-
-#rescale gc to put mstop at 0
-chunkbot = rescale[:,5]
 exV = 0.9110638171893733
 exI = 0.5641590452038215
 
@@ -383,8 +370,29 @@ ctot = []
 vtot = []
 ctot_sample = []
 vtot_sample = []
+mean_stop = []
+
 isov = np.zeros((12,265))
 isoc = np.zeros((12,265))
+
+version2 = '15'
+model = 'dar'
+model2 = 'dar'
+#-----------------------------------------------------------------------
+#file to be loaded
+rescale = np.loadtxt('rescale_ig.csv',delimiter=',')
+ind1 = np.loadtxt('ind_met15.txt')
+ind2 = np.loadtxt('ind_met20.txt')
+
+
+Age_dar = np.loadtxt('/home/david/codes/Analysis/GC/plots/data_'+ version2 +'_'+str(model2)+'.txt', usecols=(2,))
+metal_dar = np.loadtxt('/home/david/codes/Analysis/GC/plots/data_'+ version2 +'_'+str(model2)+'.txt', usecols=(5,))
+distance_dar = np.loadtxt('/home/david/codes/Analysis/GC/plots/data_'+ version2 +'_'+str(model2)+'.txt', usecols=(8,))
+Abs_dar = np.loadtxt('/home/david/codes/Analysis/GC/plots/data_'+ version2 +'_'+str(model2)+'.txt', usecols=(11,))
+Afe_dar = np.loadtxt('/home/david/codes/Analysis/GC/plots/data_'+ version2 +'_'+str(model2)+'.txt', usecols=(14,))
+
+chunkbot = rescale[:,5]
+#-----------------------------------------------------------------------
 
 met = (input("what is the metallicity limit ? "))
 if met == '-1.5':
@@ -402,6 +410,7 @@ for ig, g in enumerate(ind):
 	photo_v, err_v, photo_i, color, err_color, nmv, nmi, longueur = photometry()
 
 #------------------------------------------------------
+#rescale gc to put mstop at 0
 	if glc < 27:
 		age = Age_dar[glc]
 		metal = metal_dar[glc]
@@ -421,8 +430,7 @@ for ig, g in enumerate(ind):
 
 	corr_mag = photo_v - dm - abV
 	corr_col = color - abcol
-	# ~corr_mag = photo_v 
-	# ~corr_col = color 
+
 #-----------------------------------------------------------------------
 # compute isochrones for each GC
 	helium_y = ''
@@ -450,6 +458,12 @@ for ig, g in enumerate(ind):
 
 	mag_v1 = mag_v1 - dm - abV
 	Color_iso1 = Color_iso1 - abcol
+
+	# ~isoc.append(Color_iso1)
+	# ~isov.append(mag_v1)
+	isoc[ig, :] = Color_iso1[:265]
+	isov[ig, :] = mag_v1[:265]
+
 #-----------------------------------------------------------------------
 # remove hb, outliers stars and rgb stars
 	fmag = interpolate.interp1d(mag_v1, Color_iso1, 'nearest',fill_value="extrapolate")
@@ -458,8 +472,12 @@ for ig, g in enumerate(ind):
 
 	rgb = np.where(corr_mag < mstop - dm - abV - 0.5)[0]
 
-	close = np.where(col_dist[rgb] < 0.3)[0]
-	print(np.mean(col_dist[close]))
+	close = np.where(col_dist[rgb] < 0.15)[0]
+	print(np.mean(col_dist[rgb][close]))
+
+	# ~with open('/home/david/codes/Analysis/GC_mixing_length/ind_met15.txt', 'a+') as fid_file:
+	# ~fid_file.write(str(glc)+"\n")
+	# ~fid_file.close()
 
 	cocol = corr_col[rgb][close]
 	comag = corr_mag[rgb][close]
@@ -469,33 +487,53 @@ for ig, g in enumerate(ind):
 	ctot_sample.extend(cocol)
 	vtot_sample.extend(comag)
 
-	# ~isoc.append(Color_iso1)
-	# ~isov.append(mag_v1)
-	isoc[ig, :] = Color_iso1[:265]
-	isov[ig, :] = mag_v1[:265]
-
 	# ~vcenter, ccenter, errcenter, sbin, bingood, errcenterv = way(corr_mag[close], corr_col[close], err_color[close], err_v[close])
+
+	# ~plt.scatter(corr_col,corr_mag, marker='.', s=10, color='grey', alpha=0.8)
+	# ~plt.scatter(corr_col[rgb][close],corr_mag[rgb][close], marker='.', s=10, color='r', alpha=0.8)
+	# ~plt.xlim(-0.5,3)
+	# ~plt.ylim(5,-5)
+	# ~plt.tick_params(labelsize=16)
+	# ~plt.show() 
+	# ~plt.close()
 	
 #-----------------------------------------------------------------------
-# compute the mean isochrone
+# compute the mean isochrone and mean mstop
 iso_midc = np.mean(isoc, axis=0)
 iso_midv = np.mean(isov, axis=0)
+m_stop = np.mean(mean_stop)
 
-plt.figure()
+# ~plt.figure()
 # ~for i in range(len(ind)):
 	# ~plt.plot(isoc[i], isov[i], color='grey')
-plt.plot(iso_midc, iso_midv, color='r')
+# ~plt.plot(iso_midc, iso_midv, color='r', label='mean')
+# ~plt.legend(loc='best', fontsize=20)
 # ~plt.xlim(-0.5,3)
 # ~plt.ylim(5,-5)
 # ~plt.tick_params(labelsize=16)
-plt.show() 
-plt.close()
-kill
+# ~plt.xlabel('Rescaled color, F606W - F814W', fontsize = 20)
+# ~plt.ylabel('Rescaled magnitude, F606W', fontsize = 20)
+# ~plt.show() 
+# ~plt.close()
+
 #-----------------------------------------------------------------------
+# remove hb, outliers stars and rgb stars
+fmag = interpolate.interp1d(iso_midv, iso_midc, 'nearest',fill_value="extrapolate")
+Color_new = fmag(vtot_sample)
+col_dist = np.abs(Color_new - ctot_sample)
+
+# ~rgb = np.where(corr_mag < m_stop - dm - abV - 0.5)[0]
+
+print(np.mean(col_dist))
+
+#-----------------------------------------------------------------------
+# plot total start
+
+plt.figure()
 # ~plt.scatter(corr_col,corr_mag, marker='.', s=10, alpha=0.8)
 plt.scatter(ctot,vtot, marker='.', s=10, color='grey', alpha=0.8)
 plt.scatter(ctot_sample,vtot_sample, marker='.', s=10, color='r', alpha=0.8)
-plt.plot(isoc[0], isov[0])
+plt.plot(iso_midc, iso_midv)
 plt.xlim(-0.5,3)
 # ~plt.ylim(25.75,10)
 plt.ylim(5,-5)
