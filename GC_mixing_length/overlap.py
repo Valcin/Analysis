@@ -200,23 +200,21 @@ def photometry():
 	#~ ### get the photmetry of the selected stars in both filters
 	photo_v = files[mg_cut, 3][filter_all]
 	photo_i = files[mg_cut, 7][filter_all]
-	
-	# ~print(np.min(photo_v), np.min(photo_i))
-	# ~print(np.max(photo_v), np.max(photo_i))
 
 	Color = files[mg_cut, 5][filter_all]
 	err_Color = pcolor[filter_all]
 	err_v = pv[filter_all]
 	nmv = files[mg_cut,11][filter_all]
 	nmi = files[mg_cut,12][filter_all]
-	#~ photo_v = files[mg_cut, 3]
-	#~ photo_i = files[mg_cut, 7]
 
-	#~ Color = files[mg_cut, 5]
-	#~ err_Color = pcolor
-	#~ err_v = pv
-	#~ nmv = files[mg_cut,11]
-	#~ nmi = files[mg_cut,12]
+	
+	# ~photo_v = files[mg_cut, 3]
+	# ~photo_i = files[mg_cut, 7]
+	# ~Color = files[mg_cut, 5]
+	# ~err_Color = pcolor
+	# ~err_v = pv
+	# ~nmv = files[mg_cut,11]
+	# ~nmi = files[mg_cut,12]
 
 
 	del files
@@ -341,8 +339,8 @@ def way(vgood, cgood, errgood, errgoodv, step = None):
 				errcenter[c] =np.mean(np.array(errgood)[ici])
 				print('std nul')
 			else:
-				errcenter[c] =1.2533*np.std(zcol)
-				errcenterv[c] =1.2533*np.std(zmagv)
+				errcenter[c] =np.std(zcol)
+				errcenterv[c] =np.std(zmagv)
 			vcenter[c] =centergood[c]
 			size_bin[c] = len(ici)
 		
@@ -361,29 +359,14 @@ ncpu = 3 # number of cpu requested
 #~ ncpu = int(os.environ["cpu_num"]) # number of cpu requested hipatia
 
 #-----------------------------------------------------------------------
-# global variable
-
-exV = 0.9110638171893733
-exI = 0.5641590452038215
-
-ctot = []
-vtot = []
-ctot_sample = []
-vtot_sample = []
-mean_stop = []
-
-isov = np.zeros((12,265))
-isoc = np.zeros((12,265))
-
-version2 = '15'
-model = 'dar'
-model2 = 'dar'
-#-----------------------------------------------------------------------
 #file to be loaded
 rescale = np.loadtxt('rescale_ig.csv',delimiter=',')
 ind1 = np.loadtxt('ind_met15.txt')
 ind2 = np.loadtxt('ind_met20.txt')
 
+version2 = '15'
+model = 'dar'
+model2 = 'dar'
 
 Age_dar = np.loadtxt('/home/david/codes/Analysis/GC/plots/data_'+ version2 +'_'+str(model2)+'.txt', usecols=(2,))
 metal_dar = np.loadtxt('/home/david/codes/Analysis/GC/plots/data_'+ version2 +'_'+str(model2)+'.txt', usecols=(5,))
@@ -392,13 +375,34 @@ Abs_dar = np.loadtxt('/home/david/codes/Analysis/GC/plots/data_'+ version2 +'_'+
 Afe_dar = np.loadtxt('/home/david/codes/Analysis/GC/plots/data_'+ version2 +'_'+str(model2)+'.txt', usecols=(14,))
 
 chunkbot = rescale[:,5]
-#-----------------------------------------------------------------------
 
+#-----------------------------------------------------------------------
+# global variable
 met = (input("what is the metallicity limit ? "))
 if met == '-1.5':
 	ind = ind1
 elif met == '-2.0':
 	ind = ind2
+
+exV = 0.9110638171893733
+exI = 0.5641590452038215
+
+ctot = []
+vtot = []
+ctot_sample = []
+vtot_sample = []
+errtot = []
+errtotv = []
+errtot_sample = []
+errtotv_sample = []
+mean_stop = []
+
+isov = np.zeros((len(ind),265))
+isoc = np.zeros((len(ind),265))
+
+
+#-----------------------------------------------------------------------
+
 
 for ig, g in enumerate(ind):
 	glc = int(g)
@@ -470,14 +474,8 @@ for ig, g in enumerate(ind):
 	Color_new = fmag(corr_mag)
 	col_dist = np.abs(Color_new - corr_col)
 
-	rgb = np.where(corr_mag < mstop - dm - abV - 0.5)[0]
-
-	close = np.where(col_dist[rgb] < 0.15)[0]
-	print(np.mean(col_dist[rgb][close]))
-
-	# ~with open('/home/david/codes/Analysis/GC_mixing_length/ind_met15.txt', 'a+') as fid_file:
-	# ~fid_file.write(str(glc)+"\n")
-	# ~fid_file.close()
+	rgb = np.where(corr_mag < mstop - dm - abV - 1.0)[0]
+	close = np.where(col_dist[rgb] < 0.1)[0]
 
 	cocol = corr_col[rgb][close]
 	comag = corr_mag[rgb][close]
@@ -486,16 +484,29 @@ for ig, g in enumerate(ind):
 	vtot.extend(corr_mag)
 	ctot_sample.extend(cocol)
 	vtot_sample.extend(comag)
+	errtot.extend(err_color)
+	errtotv.extend(err_v)
+	errtot_sample.extend(err_color[rgb][close])
+	errtotv_sample.extend(err_v[rgb][close])
 
-	# ~vcenter, ccenter, errcenter, sbin, bingood, errcenterv = way(corr_mag[close], corr_col[close], err_color[close], err_v[close])
+	vcenter, ccenter, errcenter, sbin, bingood, errcenterv = way(corr_mag[rgb][close], corr_col[rgb][close], err_color[rgb][close], err_v[rgb][close])
 
-	# ~plt.scatter(corr_col,corr_mag, marker='.', s=10, color='grey', alpha=0.8)
-	# ~plt.scatter(corr_col[rgb][close],corr_mag[rgb][close], marker='.', s=10, color='r', alpha=0.8)
-	# ~plt.xlim(-0.5,3)
-	# ~plt.ylim(5,-5)
-	# ~plt.tick_params(labelsize=16)
-	# ~plt.show() 
-	# ~plt.close()
+	std = np.sqrt(np.sum(col_dist[rgb][close]**2)/len(col_dist[rgb][close]))
+
+	print(std)
+
+	# ~with open('/home/david/codes/Analysis/GC_mixing_length/sigma'+met+'.txt', 'a+') as fid_file:
+		# ~fid_file.write(str(glc)+' '+str(len(col_dist[rgb][close]))+' '+str(std)+"\n")
+	# ~fid_file.close()
+	
+	plt.scatter(corr_col,corr_mag, marker='.', s=10, color='grey', alpha=0.8)
+	plt.scatter(corr_col[rgb][close],corr_mag[rgb][close], marker='.', s=10, color='r', alpha=0.8)
+	#plt.scatter(ccenter,vcenter, marker='o', s=10, color='b', alpha=0.8)
+	plt.xlim(-0.5,3)
+	plt.ylim(5,-5)
+	plt.tick_params(labelsize=16)
+	plt.show() 
+	plt.close()
 	
 #-----------------------------------------------------------------------
 # compute the mean isochrone and mean mstop
@@ -518,14 +529,29 @@ m_stop = np.mean(mean_stop)
 
 #-----------------------------------------------------------------------
 # remove hb, outliers stars and rgb stars
-fmag = interpolate.interp1d(iso_midv, iso_midc, 'nearest',fill_value="extrapolate")
-Color_new = fmag(vtot_sample)
-col_dist = np.abs(Color_new - ctot_sample)
+fmag_tot = interpolate.interp1d(iso_midv, iso_midc, 'nearest',fill_value="extrapolate")
+Color_new = fmag_tot(vtot_sample)
+col_dist_tot = np.abs(Color_new - ctot_sample)
 
 # ~rgb = np.where(corr_mag < m_stop - dm - abV - 0.5)[0]
 
-print(np.mean(col_dist))
+vcentertot, ccentertot, errcentertot, sbintot, bingoodtot, errcentervtot = way(vtot_sample, ctot_sample, errtot_sample, errtotv_sample)
 
+std_tot = np.sqrt(np.sum(col_dist_tot**2)/len(col_dist_tot))
+
+
+fmag_tot2 = interpolate.interp1d(vcentertot[2:], ccentertot[2:], 'nearest',fill_value="extrapolate")
+lim_mag = np.where(vtot_sample > np.min(vcentertot[2:]))[0]
+
+Color_new2 = fmag_tot(np.array(vtot_sample)[lim_mag])
+col_dist_tot2 = np.abs(Color_new2 - np.array(ctot_sample)[lim_mag])
+
+
+std_tot2 = np.sqrt(np.sum(col_dist_tot2**2)/len(col_dist_tot2))
+
+# ~with open('/home/david/codes/Analysis/GC_mixing_length/sigma'+met+'.txt', 'a+') as fid_file:
+	# ~fid_file.write(str(len(ind))+'GCs'+' '+str(len(col_dist_tot))+' '+str(std_tot)+"\n")
+# ~fid_file.close()
 #-----------------------------------------------------------------------
 # plot total start
 
@@ -533,6 +559,7 @@ plt.figure()
 # ~plt.scatter(corr_col,corr_mag, marker='.', s=10, alpha=0.8)
 plt.scatter(ctot,vtot, marker='.', s=10, color='grey', alpha=0.8)
 plt.scatter(ctot_sample,vtot_sample, marker='.', s=10, color='r', alpha=0.8)
+plt.scatter(ccentertot[2:],vcentertot[2:], marker='o', s=10, color='b', alpha=0.8)
 plt.plot(iso_midc, iso_midv)
 plt.xlim(-0.5,3)
 # ~plt.ylim(25.75,10)
