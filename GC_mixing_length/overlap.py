@@ -303,19 +303,19 @@ def way(vgood, cgood, errgood, errgoodv, step = None):
 		ici = np.where(inbin == c+1)[0]
 		#~ print(np.min(np.array(cgood)[ici]), np.max(np.array(cgood)[ici]))
 		
-		threshold = 3
-		z = np.abs(stats.zscore(np.array(cgood)[ici]))
-		out = (np.where(z > threshold)[0])
-		zcol =  np.delete(np.array(cgood)[ici], out)
-		zmagv =  np.delete(np.array(vgood)[ici], out)
+		# ~threshold = 3
+		# ~z = np.abs(stats.zscore(np.array(cgood)[ici]))
+		# ~out = (np.where(z > threshold)[0])
+		# ~zcol =  np.delete(np.array(cgood)[ici], out)
+		# ~zmagv =  np.delete(np.array(vgood)[ici], out)
 		
-		z = np.abs(stats.zscore(zcol))
-		out = (np.where(z > threshold)[0])
-		zcol =  np.delete(zcol, out)
-		zmagv =  np.delete(zmagv, out)
+		# ~z = np.abs(stats.zscore(zcol))
+		# ~out = (np.where(z > threshold)[0])
+		# ~zcol =  np.delete(zcol, out)
+		# ~zmagv =  np.delete(zmagv, out)
 		
-		#~ zcol =  np.array(cgood)[ici]
-		#~ zmagv =  np.array(vgood)[ici]
+		zcol =  np.array(cgood)[ici]
+		zmagv =  np.array(vgood)[ici]
 
 
 		if len(ici) == 1:
@@ -475,7 +475,7 @@ for ig, g in enumerate(ind):
 	col_dist = np.abs(Color_new - corr_col)
 
 	rgb = np.where(corr_mag < mstop - dm - abV - 1.0)[0]
-	close = np.where(col_dist[rgb] < 0.1)[0]
+	close = np.where(col_dist[rgb] < 0.08)[0]
 
 	cocol = corr_col[rgb][close]
 	comag = corr_mag[rgb][close]
@@ -493,8 +493,7 @@ for ig, g in enumerate(ind):
 
 	std = np.sqrt(np.sum(col_dist[rgb][close]**2)/len(col_dist[rgb][close]))
 
-	print(std)
-
+	print(std, len(col_dist[rgb][close]))
 	# ~with open('/home/david/codes/Analysis/GC_mixing_length/sigma'+met+'.txt', 'a+') as fid_file:
 		# ~fid_file.write(str(glc)+' '+str(len(col_dist[rgb][close]))+' '+str(std)+"\n")
 	# ~fid_file.close()
@@ -550,7 +549,10 @@ col_dist_tot2 = np.abs(Color_new2 - np.array(ctot_sample)[lim_mag])
 std_tot2 = np.sqrt(np.sum(col_dist_tot2**2)/len(col_dist_tot2))
 
 # ~with open('/home/david/codes/Analysis/GC_mixing_length/sigma'+met+'.txt', 'a+') as fid_file:
+	# ~fid_file.write('Using the mean of all the '+str(len(ind))+' GCs \n')
 	# ~fid_file.write(str(len(ind))+'GCs'+' '+str(len(col_dist_tot))+' '+str(std_tot)+"\n")
+	# ~fid_file.write('Using the median of the sample \n')
+	# ~fid_file.write(str(len(ind))+'GCs'+' '+str(len(col_dist_tot2))+' '+str(std_tot2)+"\n")
 # ~fid_file.close()
 #-----------------------------------------------------------------------
 # plot total start
@@ -560,6 +562,8 @@ plt.figure()
 plt.scatter(ctot,vtot, marker='.', s=10, color='grey', alpha=0.8)
 plt.scatter(ctot_sample,vtot_sample, marker='.', s=10, color='r', alpha=0.8)
 plt.scatter(ccentertot[2:],vcentertot[2:], marker='o', s=10, color='b', alpha=0.8)
+# ~for i in range(len(isoc)):
+	# ~plt.plot(isoc[i], isov[i])
 plt.plot(iso_midc, iso_midv)
 plt.xlim(-0.5,3)
 # ~plt.ylim(25.75,10)
