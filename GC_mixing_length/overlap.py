@@ -498,14 +498,14 @@ for ig, g in enumerate(ind):
 		# ~fid_file.write(str(glc)+' '+str(len(col_dist[rgb][close]))+' '+str(std)+"\n")
 	# ~fid_file.close()
 	
-	plt.scatter(corr_col,corr_mag, marker='.', s=10, color='grey', alpha=0.8)
-	plt.scatter(corr_col[rgb][close],corr_mag[rgb][close], marker='.', s=10, color='r', alpha=0.8)
-	#plt.scatter(ccenter,vcenter, marker='o', s=10, color='b', alpha=0.8)
-	plt.xlim(-0.5,3)
-	plt.ylim(5,-5)
-	plt.tick_params(labelsize=16)
-	plt.show() 
-	plt.close()
+	# ~plt.scatter(corr_col,corr_mag, marker='.', s=10, color='grey', alpha=0.8)
+	# ~plt.scatter(corr_col[rgb][close],corr_mag[rgb][close], marker='.', s=10, color='r', alpha=0.8)
+	# ~#plt.scatter(ccenter,vcenter, marker='o', s=10, color='b', alpha=0.8)
+	# ~plt.xlim(-0.5,3)
+	# ~plt.ylim(5,-5)
+	# ~plt.tick_params(labelsize=16)
+	# ~plt.show() 
+	# ~plt.close()
 	
 #-----------------------------------------------------------------------
 # compute the mean isochrone and mean mstop
@@ -556,6 +556,19 @@ std_tot2 = np.sqrt(np.sum(col_dist_tot2**2)/len(col_dist_tot2))
 # ~fid_file.close()
 #-----------------------------------------------------------------------
 # plot total start
+f1 = np.loadtxt('paintedZ3alpha10.data')
+F606w1, F814w1 = f1[:,9], f1[:,10]
+f2 = np.loadtxt('paintedZ3alpha12.data')
+F606w2, F814w2 = f2[:,9], f2[:,10]
+f3 = np.loadtxt('paintedZ3alpha14.data')
+F606w3, F814w3 = f3[:,9], f3[:,10]
+f4 = np.loadtxt('paintedZ3alpha16.data')
+F606w4, F814w4 = f4[:,9], f4[:,10]
+f5 = np.loadtxt('paintedZ3alpha18.data')
+F606w5, F814w5 = f5[:,9], f5[:,10]
+f6 = np.loadtxt('paintedZ3alpha20.data')
+F606w6, F814w6 = f6[:,9], f6[:,10]
+
 
 plt.figure()
 # ~plt.scatter(corr_col,corr_mag, marker='.', s=10, alpha=0.8)
@@ -565,6 +578,12 @@ plt.scatter(ccentertot[2:],vcentertot[2:], marker='o', s=10, color='b', alpha=0.
 # ~for i in range(len(isoc)):
 	# ~plt.plot(isoc[i], isov[i])
 plt.plot(iso_midc, iso_midv)
+plt.scatter(F606w1 - F814w1, F606w1, marker='.', label='1.0')
+# ~plt.scatter(F606w2 - F814w2, F606w2, marker='.', label='1.2')
+# ~plt.scatter(F606w3 - F814w3, F606w3, marker='.', label='1.4')
+# ~plt.scatter(F606w4 - F814w4, F606w4, marker='.', label='1.6')
+plt.scatter(F606w5 - F814w5, F606w5, marker='.', label='1.8')
+plt.scatter(F606w6 - F814w6, F606w6, marker='.', label='2.0')
 plt.xlim(-0.5,3)
 # ~plt.ylim(25.75,10)
 plt.ylim(5,-5)
