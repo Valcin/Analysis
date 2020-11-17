@@ -155,49 +155,108 @@ Lsun = 3.828e26 #solar luminosity in W
 rsun = 6.957e+10	# in centimeters
 msun = 1.989e+33 #g
 
-dat = np.loadtxt('fehm200.HST_ACSWF')
+# ~dat = np.loadtxt('catalogs/fehm200.HST_ACSWF')
+dat = np.loadtxt('/home/david/codes/data/GC_mixing_length/bol_corr/fehm175.HST_ACSWF')
 tefs = np.unique(dat[:,0])
 sfs = np.unique(dat[:,1])
 
 al = ['10','12','14','16','18','20']
 
-for j in al:
-	# ~# load the data
-	h = mr.MesaData('/home/david/codes/data/GC_mixing_length/Z3alpha'+j+'/trimmed_history.data')
 
-	# ~Lhe = h.log_LHe
-	# ~kp = np.where(10**Lhe > 100)
-
-	# ~plt.figure()
-	# ~plt.plot(h.log_Teff, h.log_L)
-	# ~plt.plot(h.log_Teff[kp], h.log_L[kp])
-	# ~plt.gca().invert_xaxis()
-	# ~plt.show()
-
-	G = 6.67259e-12 #cm3 g-1 s-2
-	M = h.star_mass * msun
-	R = 10**(h.log_R) * rsun
-	sf = np.log10(G*M/ R**2)
-	teff = 10**(h.log_Teff)
-
+h = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history.data')
+h1 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a100_M07.data')
+h1a = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a100_M08.data')
+# ~h2 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a120.data')
+# ~h3 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a140.data')
+# ~h4 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a160.data')
+# ~h5 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a180.data')
+# ~h6 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a200.data')
+# ~raul = np.loadtxt('/home/david/codes/data/GC_mixing_length/alpha200.txt')
+# ~tf, l = raul[:,0], raul[:,1]
+# ~raul1 = np.loadtxt('/home/david/codes/data/GC_mixing_length/alpha100.txt')
+# ~tf1, l1 = raul1[:,0], raul1[:,1]
+# ~raula = np.loadtxt('/home/david/codes/data/GC_mixing_length/a100.txt')
+# ~tfa, la = raula[:,1], raula[:,5]
+# ~raulb = np.loadtxt('/home/david/codes/data/GC_mixing_length/a200.txt')
+# ~tfb, lb = raulb[:,1], raulb[:,5]
 
 
-	safe = np.where((teff > np.min(tefs))&(teff < np.max(tefs))&(sf > np.min(sfs))&(sf < np.max(sfs)))[0]
-	teff = teff[safe]
-	sf = sf[safe]
-
-	Mbol = -2.5*np.log10((Lsun*10**h.log_L)/L0)[safe]
-	M606 = np.zeros(len(Mbol))
-	M814 = np.zeros(len(Mbol))
-
-	for i in range(len(Mbol)):
-		bc606, bc814 = interp_eep(teff[i], sf[i], tefs, sfs, dat)
-		M606[i] = Mbol[i] - bc606
-		M814[i] = Mbol[i] - bc814
-
-
-	# ~np.savetxt('hm_A'+j+'.txt', (M606-M814, M606))
-	plt.plot(M606-M814, M606)
-plt.gca().invert_yaxis()
+plt.figure()
+plt.plot(h.log_Teff, h.log_L, label='test', c='b')
+plt.plot(h1.log_Teff, h1.log_L, label='a = 1.0', c='r')
+plt.plot(h1a.log_Teff, h1a.log_L, label='a = 1.0', c='g')
+# ~plt.plot(h2.log_Teff, h2.log_L, label='a = 1.2')
+# ~plt.plot(h3.log_Teff, h3.log_L, label='a = 1.4')
+# ~plt.plot(h4.log_Teff, h4.log_L, label='a = 1.6')
+# ~plt.plot(h5.log_Teff, h5.log_L, label='a = 1.8')
+# ~plt.plot(h6.log_Teff, h6.log_L, label='a = 2.0')
+# ~plt.plot(tf,l, label='Raul plot with a = 2', c='b', linestyle='--')
+# ~plt.plot(tf1,l1, label='Raul plot with a = 1', c='r', linestyle='--')
+# ~plt.scatter(tfa,la, label='Raul plot with a = 1', c='g', marker='o')
+# ~plt.scatter(tfb,lb, label='Raul plot with a = 2', c='g', marker='o')
+plt.gca().invert_xaxis()
+plt.legend(loc='best')
 plt.show()
+plt.close()
+
+kill
+
+# ~for j in al:
+# ~# load the data
+# ~h = mr.MesaData('/home/david/codes/data/GC_mixing_length/Z3alpha'+j+'/trimmed_history.data')
+# ~h = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history.data')
+
+
+# ~name2 = ['a100','a120','a140','a160','a180','a200']
+
+# ~for j in name2:
+#j = name[4]
+	# ~h = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_'+j+'.data')
+	# ~G = 6.67259e-12 #cm3 g-1 s-2
+	# ~M = h.star_mass * msun
+	# ~R = 10**(h.log_R) * rsun
+	# ~sf = np.log10(G*M/ R**2)
+	# ~teff = 10**(h.log_Teff)
+	# ~safe = np.where((teff > np.min(tefs))&(teff < np.max(tefs))&(sf > np.min(sfs))&(sf < np.max(sfs)))[0]
+	# ~teff = teff[safe]
+	# ~sf = sf[safe]
+
+	# ~Mbol = -2.5*np.log10((Lsun*10**h.log_L)/L0)[safe]
+	# ~M606 = np.zeros(len(Mbol))
+	# ~M814 = np.zeros(len(Mbol))
+
+	# ~for i in range(len(Mbol)):
+		# ~bc606, bc814 = interp_eep(teff[i], sf[i], tefs, sfs, dat)
+		# ~M606[i] = Mbol[i] - bc606
+		# ~M814[i] = Mbol[i] - bc814
+
+	# ~np.savetxt('catalogs/Malpha_'+j+'.txt', (M606-M814, M606))
+	# ~plt.scatter(M606-M814, M606)
+# ~plt.gca().invert_yaxis()
+# ~plt.show()
+
+
+# ~name = ['a100','a125','a150','a175','a200']
+# ~for j in name:	
+	# ~raul = np.loadtxt('/home/david/codes/data/GC_mixing_length/'+j+'.txt')
+	# ~sf = raul[:,2]
+	# ~teff = 10**(raul[:,1])
+
+	# ~safe = np.where((teff > np.min(tefs))&(teff < np.max(tefs))&(sf > np.min(sfs))&(sf < np.max(sfs)))[0]
+	# ~teff = teff[safe]
+	# ~sf = sf[safe]
+
+	# ~Mbol = -2.5*np.log10((Lsun*10**raul[:,5])/L0)[safe]
+	# ~M606 = np.zeros(len(Mbol))
+	# ~M814 = np.zeros(len(Mbol))
+
+	# ~for i in range(len(Mbol)):
+		# ~bc606, bc814 = interp_eep(teff[i], sf[i], tefs, sfs, dat)
+		# ~M606[i] = Mbol[i] - bc606
+		# ~M814[i] = Mbol[i] - bc814
+
+	# ~np.savetxt('catalogs/alpha_'+j+'.txt', (M606-M814, M606))
+	# ~plt.scatter(M606-M814, M606)
+# ~plt.gca().invert_yaxis()
+# ~plt.show()
 

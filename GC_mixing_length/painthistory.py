@@ -81,7 +81,7 @@ for j in range(len(Magnitudes)):
 
     F606 = RectBivariateSpline(Logguni,Teffuni,mag606)
     F606vec = [float(F606(XX,YY)) for XX,YY in zip(logg,Tvec)]
-    F606vec = F606vec - 5*(logR - 7.65) + 5
+    F606vec = F606vec - 5*(logR - 7.6469) + 5
     mag.append(F606vec)
 
 with open(sys.argv[3],"w") as f:

@@ -47,21 +47,21 @@ def cluster(nb):
 	'ngc7078','ngc7089','ngc7099','palomar1','palomar12','palomar15','pyxis','ruprecht106','terzan7','terzan8']
 
 
-	with open('/home/david/codes/Analysis/GC_mixing_length/Harris2010.dat',"r") as f:
+	with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/Harris2010.dat',"r") as f:
 		lines=f.readlines()[1:]
 	f.close()
 	harris_clus=[]
 	for x in lines:
 		harris_clus.append(x.split(' ')[0])
 
-	with open('/home/david/codes/Analysis/GC_mixing_length/dotter2010.dat',"r") as f:
+	with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dotter2010.dat',"r") as f:
 		lines=f.readlines()[3:]
 	f.close()
 	dotter_clus=[]
 	for x in lines:
 		dotter_clus.append(x.split(' ')[0])
 
-	with open('/home/david/codes/Analysis/GC_mixing_length/roediger2014.dat',"r") as f:
+	with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/roediger2014.dat',"r") as f:
 		lines=f.readlines()[5:]
 	f.close()
 	roediger_clus=[]
@@ -73,7 +73,7 @@ def cluster(nb):
 	# find acs initial values in different caltalogs
 	index1 = harris_clus.index(clus_nb)
 	
-	with open('/home/david/codes/Analysis/GC_mixing_length/Harris2010.dat',"r") as f:
+	with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/Harris2010.dat',"r") as f:
 		lines=f.readlines()[1:]
 	f.close()
 	dist_mod=[]
@@ -91,7 +91,7 @@ def cluster(nb):
 
 	if clus_nb in dotter_clus :
 		index2 = dotter_clus.index(clus_nb)
-		with open('/home/david/codes/Analysis/GC_mixing_length/dotter2010.dat',"r") as f:
+		with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dotter2010.dat',"r") as f:
 			lines=f.readlines()[3:]
 		f.close()
 		age_dotter=[]
@@ -100,7 +100,7 @@ def cluster(nb):
 		age = age_dotter[index2]
 	elif clus_nb in roediger_clus:
 		index2 = roediger_clus.index(clus_nb)
-		with open('/home/david/codes/Analysis/GC_mixing_length/roediger2014.dat',"r") as f:
+		with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/roediger2014.dat',"r") as f:
 			lines=f.readlines()[5:]
 		f.close()
 		age_roediger=[]
@@ -113,7 +113,7 @@ def cluster(nb):
 
 	if clus_nb in dotter_clus :
 		index2 = dotter_clus.index(clus_nb)
-		with open('/home/david/codes/Analysis/GC_mixing_length/dotter2010.dat',"r") as f:
+		with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dotter2010.dat',"r") as f:
 			lines=f.readlines()[3:]
 		f.close()
 		afe_dotter=[]
@@ -494,7 +494,7 @@ for ig, g in enumerate(ind):
 	std = np.sqrt(np.sum(col_dist[rgb][close]**2)/len(col_dist[rgb][close]))
 
 	print(std, len(col_dist[rgb][close]))
-	# ~with open('/home/david/codes/Analysis/GC_mixing_length/sigma'+met+'.txt', 'a+') as fid_file:
+	# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/sigma'+met+'.txt', 'a+') as fid_file:
 		# ~fid_file.write(str(glc)+' '+str(len(col_dist[rgb][close]))+' '+str(std)+"\n")
 	# ~fid_file.close()
 	
@@ -548,7 +548,7 @@ col_dist_tot2 = np.abs(Color_new2 - np.array(ctot_sample)[lim_mag])
 
 std_tot2 = np.sqrt(np.sum(col_dist_tot2**2)/len(col_dist_tot2))
 
-# ~with open('/home/david/codes/Analysis/GC_mixing_length/sigma'+met+'.txt', 'a+') as fid_file:
+# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/sigma'+met+'.txt', 'a+') as fid_file:
 	# ~fid_file.write('Using the mean of all the '+str(len(ind))+' GCs \n')
 	# ~fid_file.write(str(len(ind))+'GCs'+' '+str(len(col_dist_tot))+' '+str(std_tot)+"\n")
 	# ~fid_file.write('Using the median of the sample \n')
@@ -556,45 +556,58 @@ std_tot2 = np.sqrt(np.sum(col_dist_tot2**2)/len(col_dist_tot2))
 # ~fid_file.close()
 #-----------------------------------------------------------------------
 # plot total start
-f1 = np.loadtxt('paintedZ3alpha10.data')
+f1 = np.loadtxt('painted_files/painted_a200.data')
 F606w1, F814w1 = f1[:,9], f1[:,10]
-f2 = np.loadtxt('paintedZ3alpha12.data')
-F606w2, F814w2 = f2[:,9], f2[:,10]
-f3 = np.loadtxt('paintedZ3alpha14.data')
-F606w3, F814w3 = f3[:,9], f3[:,10]
-f4 = np.loadtxt('paintedZ3alpha16.data')
-F606w4, F814w4 = f4[:,9], f4[:,10]
-f5 = np.loadtxt('paintedZ3alpha18.data')
-F606w5, F814w5 = f5[:,9], f5[:,10]
-f6 = np.loadtxt('paintedZ3alpha20.data')
-F606w6, F814w6 = f6[:,9], f6[:,10]
 
+
+name = ['a100','a125','a150','a175','a200']
+name2 = ['a100','a120','a140','a160','a180','a200']
+
+
+#------------------------------------------------------------------------
+afe_values=[-0.2, 0.0 , 0.2, 0.4, 0.6, 0.8] 
+
+afe_max = afe_values[np.searchsorted(afe_values, 0.2)]
+afe_min = afe_values[np.searchsorted(afe_values, 0.2)-1]
+
+
+mag_v0_min , mag_i0_min, Color_iso0_min, eep_first = iso_mag(np.log10(13.5e9), -2.0, 0.0, 0.0, afe_min)
+mag_v0_max , mag_i0_max, Color_iso0_max, eep_first = iso_mag(np.log10(13.5e9), -2.0, 0.0, 0.0, afe_max)
+lpp = (min(len(mag_v0_min), len(mag_v0_max))) # get minimum length to interpolate
+
+mag_v0 = (mag_v0_min[:lpp]*(afe_max - afe) + mag_v0_max[:lpp]*(afe - afe_min)) / (afe_max - afe_min)
+Color_iso0 = (Color_iso0_min[:lpp]*(afe_max - afe) + Color_iso0_max[:lpp]*(afe - afe_min)) / (afe_max - afe_min)
 
 plt.figure()
 # ~plt.scatter(corr_col,corr_mag, marker='.', s=10, alpha=0.8)
 plt.scatter(ctot,vtot, marker='.', s=10, color='grey', alpha=0.8)
-plt.scatter(ctot_sample,vtot_sample, marker='.', s=10, color='r', alpha=0.8)
-plt.scatter(ccentertot[2:],vcentertot[2:], marker='o', s=10, color='b', alpha=0.8)
-# ~for i in range(len(isoc)):
-	# ~plt.plot(isoc[i], isov[i])
-plt.plot(iso_midc, iso_midv)
-plt.scatter(F606w1 - F814w1, F606w1, marker='.', label='1.0')
-# ~plt.scatter(F606w2 - F814w2, F606w2, marker='.', label='1.2')
-# ~plt.scatter(F606w3 - F814w3, F606w3, marker='.', label='1.4')
-# ~plt.scatter(F606w4 - F814w4, F606w4, marker='.', label='1.6')
-plt.scatter(F606w5 - F814w5, F606w5, marker='.', label='1.8')
-plt.scatter(F606w6 - F814w6, F606w6, marker='.', label='2.0')
+# ~plt.scatter(ctot_sample,vtot_sample, marker='.', s=10, color='r', alpha=0.8)
+# ~plt.scatter(ccentertot[2:],vcentertot[2:], marker='o', s=10, color='b', alpha=0.8)
+plt.plot(iso_midc, iso_midv, c='r')
+# ~for j in name:
+	# ~f10 = np.loadtxt('catalogs/alpha_'+j+'.txt')
+	# ~col10, mag10 = f10[0,:], f10[1,:]
+	# ~plt.plot(col10,mag10, label= 'Raul '+j)
+# ~for j in name2:
+	# ~f11 = np.loadtxt('catalogs/Malpha_'+j+'.txt')
+	# ~col11, mag11 = f11[0,:], f11[1,:]
+	# ~plt.plot(col11,mag11, label= 'Mesa a200', c='k')
+for j in name2:
+	f1 = np.loadtxt('painted_files/painted_'+j+'.data')
+	F606w1, F814w1 = f1[:,9], f1[:,10]
+	plt.plot(F606w1 - F814w1, F606w1, label='painted a200')
+
+# ~plt.plot(col11-0.12,mag11, label= 'Mesa a200 rescaled', c='k', linestyle='--')
 plt.xlim(-0.5,3)
-# ~plt.ylim(25.75,10)
 plt.ylim(5,-5)
 plt.tick_params(labelsize=16)
 # ~plt.subplots_adjust(bottom=0.16)
-# ~lgnd = plt.legend(loc='best', fontsize = 24)
+# ~lgnd = plt.legend(loc='best', fontsize = 14)
 # ~lgnd.get_frame().set_edgecolor('k')
 # ~lgnd.get_frame().set_linewidth(2.0)
-# ~plt.xlabel('Rescaled color, F606W - F814W', fontsize = 20)
-# ~plt.ylabel('Rescaled magnitude, F606W', fontsize = 20)
-# ~plt.title('[Fe/H] < '+met+', '+str(len(ind))+' clusters', fontsize = 24)
+plt.xlabel(' F606W - F814W', fontsize = 20)
+plt.ylabel(' F606W', fontsize = 20)
+plt.title('[Fe/H] < '+met+', '+str(len(ind))+' clusters', fontsize = 24)
 plt.show() 
 plt.close()
 # ~kill
