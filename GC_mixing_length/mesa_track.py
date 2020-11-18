@@ -2,6 +2,7 @@ import numpy as np
 import mesa_reader as mr
 import matplotlib.pyplot as plt
 import math
+import os
 
 ########################################################################
 ########################################################################
@@ -155,17 +156,45 @@ Lsun = 3.828e26 #solar luminosity in W
 rsun = 6.957e+10	# in centimeters
 msun = 1.989e+33 #g
 
-# ~dat = np.loadtxt('catalogs/fehm200.HST_ACSWF')
-dat = np.loadtxt('/home/david/codes/data/GC_mixing_length/bol_corr/fehm175.HST_ACSWF')
-tefs = np.unique(dat[:,0])
-sfs = np.unique(dat[:,1])
+# ~directory = '/home/david/codes/data/GC_mixing_length/bol_corr/'
+# ~with open('/home/david/codes/Analysis/GC_mixing_length/bc_MIST.dat',"w") as fid:
+	# ~fid.write('%s %s %s %s %s %s \n' %('#','Teff','logg',' M_div_H', 'F606W', 'F814W'))
+	# ~for filename in os.listdir(directory):
+		# ~print(os.path.join(directory, filename))
+		# ~# dat = np.loadtxt('catalogs/fehm200.HST_ACSWF')
+		# ~dat = np.loadtxt(os.path.join(directory, filename))
+		# ~# tefs = np.unique(dat[:,0])
+		# ~# sfs = np.unique(dat[:,1])
+		# ~tefs = dat[:,0]
+		# ~sfs = dat[:,1]
+		# ~feH = dat[:,2]
+		# ~Fil1 = dat[:,10]
+		# ~Fil2 = dat[:,15]
+		# ~for i in range(len(tefs)):
+			# ~fid.write('%.8g %.8g %.8g %.8g %.8g\n' %(tefs[i], sfs[i], feH[i], Fil1[i], Fil2[i]))
+# ~fid.close()
+	
+
 
 al = ['10','12','14','16','18','20']
 
 
+# ~cmd = np.loadtxt('/home/david/codes/data/GC_mixing_length/iso/isochrones_a100.txt.HST_ACSWF')
+# ~cmd = np.loadtxt('/home/david/codes/data/GC_mixing_length/iso/isochrones_a100.txt')
+# ~V = cmd[:,15]
+# ~I = cmd[:,20]
+# ~T = cmd[:,8]
+# ~L = cmd[:,9]
+
+
+# ~print(V[0], I[0])
+# ~print(T[0], L[0])
+kill
+
 h = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history.data')
-h1 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a100_M07.data')
-h1a = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a100_M08.data')
+# ~h1a = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a100_M070.data')
+# ~h1b = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a100_M075.data')
+# ~h1c = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a100_M080.data')
 # ~h2 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a120.data')
 # ~h3 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a140.data')
 # ~h4 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a160.data')
@@ -180,11 +209,20 @@ h1a = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS
 # ~raulb = np.loadtxt('/home/david/codes/data/GC_mixing_length/a200.txt')
 # ~tfb, lb = raulb[:,1], raulb[:,5]
 
+# ~plt.plot(h.abs_mag_F606W - h.abs_mag_F814W, h.abs_mag_F606W)
+plt.plot(h.abs_mag_V - h.abs_mag_I, h.abs_mag_V)
+# ~plt.gca().invert_xaxis()
+plt.gca().invert_yaxis()
+plt.legend(loc='best')
+plt.show()
+plt.close()
 
-plt.figure()
-plt.plot(h.log_Teff, h.log_L, label='test', c='b')
-plt.plot(h1.log_Teff, h1.log_L, label='a = 1.0', c='r')
-plt.plot(h1a.log_Teff, h1a.log_L, label='a = 1.0', c='g')
+# ~plt.figure()
+# ~plt.plot(T,L, c='r', label='13.5 Gyr isochrone')
+# ~plt.plot(h.log_Teff, h.log_L, label='test', c='b')
+# ~plt.plot(h1a.log_Teff, h1a.log_L, label='a = 1.0, M = 0.7', c='b', linestyle=':')
+# ~plt.plot(h1b.log_Teff, h1b.log_L, label='a = 1.0, M = 0.75', c='b')
+# ~plt.plot(h1c.log_Teff, h1c.log_L, label='a = 1.0, M = 0.8', c='b', linestyle='--')
 # ~plt.plot(h2.log_Teff, h2.log_L, label='a = 1.2')
 # ~plt.plot(h3.log_Teff, h3.log_L, label='a = 1.4')
 # ~plt.plot(h4.log_Teff, h4.log_L, label='a = 1.6')
@@ -194,12 +232,12 @@ plt.plot(h1a.log_Teff, h1a.log_L, label='a = 1.0', c='g')
 # ~plt.plot(tf1,l1, label='Raul plot with a = 1', c='r', linestyle='--')
 # ~plt.scatter(tfa,la, label='Raul plot with a = 1', c='g', marker='o')
 # ~plt.scatter(tfb,lb, label='Raul plot with a = 2', c='g', marker='o')
-plt.gca().invert_xaxis()
-plt.legend(loc='best')
-plt.show()
-plt.close()
+# ~plt.gca().invert_xaxis()
+# ~plt.legend(loc='best')
+# ~plt.show()
+# ~plt.close()
 
-kill
+# ~kill
 
 # ~for j in al:
 # ~# load the data
@@ -208,6 +246,7 @@ kill
 
 
 # ~name2 = ['a100','a120','a140','a160','a180','a200']
+# ~name2 = ['a100_M070','a100_M075','a100_M080']
 
 # ~for j in name2:
 #j = name[4]
@@ -229,9 +268,13 @@ kill
 		# ~bc606, bc814 = interp_eep(teff[i], sf[i], tefs, sfs, dat)
 		# ~M606[i] = Mbol[i] - bc606
 		# ~M814[i] = Mbol[i] - bc814
+		# ~print(bc606)
+		# ~print(bc814)
 
 	# ~np.savetxt('catalogs/Malpha_'+j+'.txt', (M606-M814, M606))
-	# ~plt.scatter(M606-M814, M606)
+	# ~plt.plot(M606-M814, M606)
+# ~plt.xlim(0.3, 1.3)
+# ~plt.ylim(0, 7)
 # ~plt.gca().invert_yaxis()
 # ~plt.show()
 

@@ -19,6 +19,7 @@ from scipy.special import erf
 from scipy import stats
 from astropy import stats as stt
 from scipy import interpolate
+import mesa_reader as mr
 
 from scipy import optimize
 from scipy.signal import argrelextrema
@@ -563,6 +564,7 @@ F606w1, F814w1 = f1[:,9], f1[:,10]
 name = ['a100','a125','a150','a175','a200']
 name2 = ['a100','a120','a140','a160','a180','a200']
 
+h = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history.data')
 
 #------------------------------------------------------------------------
 afe_values=[-0.2, 0.0 , 0.2, 0.4, 0.6, 0.8] 
@@ -592,14 +594,16 @@ plt.plot(iso_midc, iso_midv, c='r')
 	# ~f11 = np.loadtxt('catalogs/Malpha_'+j+'.txt')
 	# ~col11, mag11 = f11[0,:], f11[1,:]
 	# ~plt.plot(col11,mag11, label= 'Mesa a200', c='k')
-for j in name2:
-	f1 = np.loadtxt('painted_files/painted_'+j+'.data')
-	F606w1, F814w1 = f1[:,9], f1[:,10]
-	plt.plot(F606w1 - F814w1, F606w1, label='painted a200')
-
+# ~for j in name2:
+	# ~f1 = np.loadtxt('painted_files/painted_'+j+'.data')
+	# ~F606w1, F814w1 = f1[:,9], f1[:,10]
+	# ~plt.plot(F606w1 - F814w1, F606w1, label='painted a200')
+# ~plt.plot(h.abs_mag_V - h.abs_mag_I, h.abs_mag_V, c='b')
+plt.plot(h.abs_mag_F606W - h.abs_mag_F814W, h.abs_mag_F606W)
 # ~plt.plot(col11-0.12,mag11, label= 'Mesa a200 rescaled', c='k', linestyle='--')
-plt.xlim(-0.5,3)
-plt.ylim(5,-5)
+# ~plt.xlim(-0.5,3)
+# ~plt.ylim(5,-5)
+plt.gca().invert_yaxis()
 plt.tick_params(labelsize=16)
 # ~plt.subplots_adjust(bottom=0.16)
 # ~lgnd = plt.legend(loc='best', fontsize = 14)
