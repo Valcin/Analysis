@@ -146,6 +146,32 @@ def searchsorted(arr, N, x):
 		if L>R:
 			done = True
 	return L
+
+def col_teff(V, I):
+	# for F606W
+	F6 = np.zeros(len(V))
+	F8 = np.zeros(len(I))
+	for i in range(len(V)):
+		if V[i]-I[i] < 0.4:
+			print(i, V[i]-I[i])
+			F6[i] = V[i] - 26.394 - 0.153*(V[i]-I[i]) - 0.096*(V[i]-I[i])**2 + 26.398
+		else:
+			F6[i] = V[i] - 26.331 - 0.340*(V[i]-I[i]) + 0.038*(V[i]-I[i])**2 + 26.398
+			
+	for j in range(len(I)):
+		if V[i]-I[i] < 0.1:
+			F8[i] = I[i] - 25.489 - 0.041*(V[i]-I[i]) + 0.093*(V[i]-I[i])**2 + 25.501
+		else:
+			F8[i] = I[i] - 25.496 + 0.014*(V[i]-I[i]) - 0.015*(V[i]-I[i])**2 + 25.501
+
+	return F6,F8
+
+
+def cut(V, R):
+	const = np.min(V-R)
+	min_pts = np.where(V-R == const)[0]
+	print(const, min_pts)
+	return
 ########################################################################
 ########################################################################
 Zsun = 0.0134
@@ -156,15 +182,30 @@ Lsun = 3.828e26 #solar luminosity in W
 rsun = 6.957e+10	# in centimeters
 msun = 1.989e+33 #g
 
-# ~directory = '/home/david/codes/data/GC_mixing_length/bol_corr/'
-# ~with open('/home/david/codes/Analysis/GC_mixing_length/bc_MIST.dat',"w") as fid:
-	# ~fid.write('%s %s %s %s %s %s \n' %('#','Teff','logg',' M_div_H', 'F606W', 'F814W'))
+#-----------------------------------------------------------------------
+### COLMAG
+# ~directory = '/home/david/codes/Analysis/GC_mixing_length/catalogs/colmag'
+# ~with open('/home/david/codes/Analysis/GC_mixing_length/bc_colmag.dat',"w") as fid:
+	# ~fid.write('%s %s %s %s %s \n' %('#Teff', 'log_g', 'M_div_h', 'F606W', 'F814W'))
 	# ~for filename in os.listdir(directory):
 		# ~print(os.path.join(directory, filename))
-		# ~# dat = np.loadtxt('catalogs/fehm200.HST_ACSWF')
 		# ~dat = np.loadtxt(os.path.join(directory, filename))
-		# ~# tefs = np.unique(dat[:,0])
-		# ~# sfs = np.unique(dat[:,1])
+		# ~tefs = dat[:,0]
+		# ~sfs = dat[:,1]
+		# ~feH = dat[:,2]
+		# ~Fil1 = dat[:,4]
+		# ~Fil2 = dat[:,5]
+		# ~for i in range(len(tefs)):
+			# ~fid.write('%.8g %.8g %.8g %.8g %.8g\n' %(tefs[i], sfs[i], feH[i], Fil1[i], Fil2[i]))
+# ~fid.close()
+
+# MIST
+# ~directory = '/home/david/codes/data/GC_mixing_length/bol_corr/'
+# ~with open('/home/david/codes/Analysis/GC_mixing_length/bc_MIST.dat',"w") as fid:
+	# ~fid.write('%s %s %s %s %s \n' %('#Teff', 'log_g', 'M_div_h', 'F606W', 'F814W'))
+	# ~for filename in os.listdir(directory):
+		# ~print(os.path.join(directory, filename))
+		# ~dat = np.loadtxt(os.path.join(directory, filename))
 		# ~tefs = dat[:,0]
 		# ~sfs = dat[:,1]
 		# ~feH = dat[:,2]
@@ -173,71 +214,37 @@ msun = 1.989e+33 #g
 		# ~for i in range(len(tefs)):
 			# ~fid.write('%.8g %.8g %.8g %.8g %.8g\n' %(tefs[i], sfs[i], feH[i], Fil1[i], Fil2[i]))
 # ~fid.close()
-	
 
-
-al = ['10','12','14','16','18','20']
-
-
-# ~cmd = np.loadtxt('/home/david/codes/data/GC_mixing_length/iso/isochrones_a100.txt.HST_ACSWF')
-# ~cmd = np.loadtxt('/home/david/codes/data/GC_mixing_length/iso/isochrones_a100.txt')
-# ~V = cmd[:,15]
-# ~I = cmd[:,20]
-# ~T = cmd[:,8]
-# ~L = cmd[:,9]
-
-
-# ~print(V[0], I[0])
-# ~print(T[0], L[0])
-kill
-
-h = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history.data')
-# ~h1a = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a100_M070.data')
-# ~h1b = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a100_M075.data')
-# ~h1c = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a100_M080.data')
-# ~h2 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a120.data')
-# ~h3 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a140.data')
-# ~h4 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a160.data')
-# ~h5 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a180.data')
-# ~h6 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a200.data')
-# ~raul = np.loadtxt('/home/david/codes/data/GC_mixing_length/alpha200.txt')
-# ~tf, l = raul[:,0], raul[:,1]
-# ~raul1 = np.loadtxt('/home/david/codes/data/GC_mixing_length/alpha100.txt')
-# ~tf1, l1 = raul1[:,0], raul1[:,1]
-# ~raula = np.loadtxt('/home/david/codes/data/GC_mixing_length/a100.txt')
-# ~tfa, la = raula[:,1], raula[:,5]
-# ~raulb = np.loadtxt('/home/david/codes/data/GC_mixing_length/a200.txt')
-# ~tfb, lb = raulb[:,1], raulb[:,5]
-
-# ~plt.plot(h.abs_mag_F606W - h.abs_mag_F814W, h.abs_mag_F606W)
-plt.plot(h.abs_mag_V - h.abs_mag_I, h.abs_mag_V)
-# ~plt.gca().invert_xaxis()
-plt.gca().invert_yaxis()
-plt.legend(loc='best')
-plt.show()
-plt.close()
-
-# ~plt.figure()
-# ~plt.plot(T,L, c='r', label='13.5 Gyr isochrone')
-# ~plt.plot(h.log_Teff, h.log_L, label='test', c='b')
-# ~plt.plot(h1a.log_Teff, h1a.log_L, label='a = 1.0, M = 0.7', c='b', linestyle=':')
-# ~plt.plot(h1b.log_Teff, h1b.log_L, label='a = 1.0, M = 0.75', c='b')
-# ~plt.plot(h1c.log_Teff, h1c.log_L, label='a = 1.0, M = 0.8', c='b', linestyle='--')
-# ~plt.plot(h2.log_Teff, h2.log_L, label='a = 1.2')
-# ~plt.plot(h3.log_Teff, h3.log_L, label='a = 1.4')
-# ~plt.plot(h4.log_Teff, h4.log_L, label='a = 1.6')
-# ~plt.plot(h5.log_Teff, h5.log_L, label='a = 1.8')
-# ~plt.plot(h6.log_Teff, h6.log_L, label='a = 2.0')
-# ~plt.plot(tf,l, label='Raul plot with a = 2', c='b', linestyle='--')
-# ~plt.plot(tf1,l1, label='Raul plot with a = 1', c='r', linestyle='--')
-# ~plt.scatter(tfa,la, label='Raul plot with a = 1', c='g', marker='o')
-# ~plt.scatter(tfb,lb, label='Raul plot with a = 2', c='g', marker='o')
-# ~plt.gca().invert_xaxis()
-# ~plt.legend(loc='best')
-# ~plt.show()
-# ~plt.close()
+#BOLCORR
+# ~filename = '/home/david/codes/bolometric-corrections/BCcodes/output.file.all'
+# ~with open('/home/david/codes/Analysis/GC_mixing_length/bc_CORRp0.dat',"w") as fid:
+	# ~fid.write('%s %s %s %s %s \n' %('#Teff', 'log_g', 'M_div_h', 'F606W', 'F814W'))
+	# ~dat = np.loadtxt(filename, usecols = (1,2,3,5,6))
+	# ~tefs = dat[:,2]
+	# ~sfs = dat[:,0]
+	# ~feH = dat[:,1]
+	# ~Fil1 = dat[:,3]
+	# ~Fil2 = dat[:,4]
+	# ~for i in range(len(tefs)):
+		# ~fid.write('%.8g %.8g %.8g %.8g %.8g\n' %(tefs[i], sfs[i], feH[i], Fil1[i], Fil2[i]))
+# ~fid.close()
 
 # ~kill
+# ~gs = np.linspace(0.0,5.0,20)
+# ~tefs = np.linspace(3000.0, 8000.0, 20)
+# ~feH = np.linspace(-2.5, 0.5, 8)
+# ~Ebv = 0.0
+# ~tot = 0
+# ~with open('/home/david/codes/Analysis/GC_mixing_length/temp.dat',"w") as fid:
+	# ~for i in range(len(gs)):
+		# ~for j in range(len(tefs)):
+			# ~for k in range(len(feH)):
+				# ~tot+= 1
+				# ~fid.write('%s %.8g %.8g %.8g %.8g\n' %('#'+str(tot), gs[i], feH[k], tefs[j], Ebv))
+# ~fid.close()
+
+
+#-----------------------------------------------------------------------
 
 # ~for j in al:
 # ~# load the data
@@ -302,4 +309,62 @@ plt.close()
 	# ~plt.scatter(M606-M814, M606)
 # ~plt.gca().invert_yaxis()
 # ~plt.show()
+
+
+#-----------------------------------------------------------------------
+
+# READ MESSA FILES
+
+# ~h = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history.data')
+# ~h1 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a100_M075_z0002.data')
+# ~h2 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a120_M075_z0002.data')
+# ~h3 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a140_M075_z0002.data')
+# ~h4 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a160_M075_z0002.data')
+# ~h5 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a180_M075_z0002.data')
+# ~h6 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a200_M075_z0002.data')
+
+# READ PAINTED FILES
+# ~p1 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a100.data')
+# ~V1, R1 = p1[:,9], p1[:,10]
+# ~p2 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a120.data')
+# ~V2, R2 = p2[:,9], p2[:,10]
+# ~p3 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a140.data')
+# ~V3, R3 = p3[:,9], p3[:,10]
+p4 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a160.data')
+V4, R4 = p4[:,9], p4[:,10]
+p5 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a180.data')
+V5, R5 = p5[:,9], p5[:,10]
+# ~p6 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a200.data')
+# ~V6, R6 = p6[:,9], p6[:,10]
+
+
+cut(V4,R4)
+#-----------------------------------------------------------------------
+
+plt.figure()
+# ~plt.plot(h.abs_mag_F606W - h.abs_mag_F814W , h.abs_mag_F606W, c='g', label='test')
+# ~plt.plot(h1.abs_mag_F606W - h1.abs_mag_F814W , h1.abs_mag_F606W, label='a = 1.0, M = 0.75, Z =0.0002', c='b')
+# ~plt.plot(h2.abs_mag_F606W - h2.abs_mag_F814W , h2.abs_mag_F606W, label='a = 1.2, M = 0.75, Z =0.0002', c='r')
+# ~plt.plot(v-i, v, c='k')
+plt.plot(V4-R4,V4, label='a = 1.6')
+plt.plot(V5-R5,V5, label='a = 1.8')
+plt.gca().invert_yaxis()
+plt.legend(loc='best')
+plt.show()
+plt.close()
+
+# ~plt.figure()
+# ~plt.plot(h.log_Teff, h.log_L, label='test', c='b')
+# ~plt.plot(h1.log_Teff, h1.log_L, label='a = 1.0, M = 0.75', c='b', linestyle=':')
+# ~plt.plot(h2.log_Teff, h2.log_L, label='a = 1.2')
+# ~plt.plot(h3.log_Teff, h3.log_L, label='a = 1.4')
+# ~plt.plot(h4.log_Teff, h4.log_L, label='a = 1.6')
+# ~plt.plot(h5.log_Teff, h5.log_L, label='a = 1.8')
+# ~plt.plot(h6.log_Teff, h6.log_L, label='a = 2.0')
+# ~plt.gca().invert_xaxis()
+# ~plt.legend(loc='best')
+# ~plt.show()
+# ~plt.close()
+
+
 

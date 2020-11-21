@@ -564,7 +564,19 @@ F606w1, F814w1 = f1[:,9], f1[:,10]
 name = ['a100','a125','a150','a175','a200']
 name2 = ['a100','a120','a140','a160','a180','a200']
 
-h = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history.data')
+
+# ~p1 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a100.data')
+# ~V1, R1 = p1[:,9], p1[:,10]
+# ~p2 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a120.data')
+# ~V2, R2 = p2[:,9], p2[:,10]
+# ~p3 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a140.data')
+# ~V3, R3 = p3[:,9], p3[:,10]
+p4 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a160.data')
+V4, R4 = p4[:,9], p4[:,10]
+p5 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a180.data')
+V5, R5 = p5[:,9], p5[:,10]
+# ~p6 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a200.data')
+# ~V6, R6 = p6[:,9], p6[:,10]
 
 #------------------------------------------------------------------------
 afe_values=[-0.2, 0.0 , 0.2, 0.4, 0.6, 0.8] 
@@ -585,7 +597,7 @@ plt.figure()
 plt.scatter(ctot,vtot, marker='.', s=10, color='grey', alpha=0.8)
 # ~plt.scatter(ctot_sample,vtot_sample, marker='.', s=10, color='r', alpha=0.8)
 # ~plt.scatter(ccentertot[2:],vcentertot[2:], marker='o', s=10, color='b', alpha=0.8)
-plt.plot(iso_midc, iso_midv, c='r')
+# ~plt.plot(iso_midc, iso_midv, c='r', label='mean of the 12 isochrones')
 # ~for j in name:
 	# ~f10 = np.loadtxt('catalogs/alpha_'+j+'.txt')
 	# ~col10, mag10 = f10[0,:], f10[1,:]
@@ -598,15 +610,16 @@ plt.plot(iso_midc, iso_midv, c='r')
 	# ~f1 = np.loadtxt('painted_files/painted_'+j+'.data')
 	# ~F606w1, F814w1 = f1[:,9], f1[:,10]
 	# ~plt.plot(F606w1 - F814w1, F606w1, label='painted a200')
-# ~plt.plot(h.abs_mag_V - h.abs_mag_I, h.abs_mag_V, c='b')
-plt.plot(h.abs_mag_F606W - h.abs_mag_F814W, h.abs_mag_F606W)
-# ~plt.plot(col11-0.12,mag11, label= 'Mesa a200 rescaled', c='k', linestyle='--')
-# ~plt.xlim(-0.5,3)
-# ~plt.ylim(5,-5)
-plt.gca().invert_yaxis()
+# ~plt.plot(V1-R1,V1, label='a = 1.0', c='b', linestyle='--')
+# ~plt.plot(V2-R2,V2, label='a = 1.2', c='r', linestyle='--')
+plt.plot(V4-R4,V4, label=r'$\alpha_{MLT}$ = 1.6')
+plt.plot(V5-R5,V5, label=r'$\alpha_{MLT}$ = 1.8')
+plt.xlim(-0.5,3)
+plt.ylim(5,-5)
+# ~plt.gca().invert_yaxis()
 plt.tick_params(labelsize=16)
 # ~plt.subplots_adjust(bottom=0.16)
-# ~lgnd = plt.legend(loc='best', fontsize = 14)
+lgnd = plt.legend(loc='best', fontsize = 14)
 # ~lgnd.get_frame().set_edgecolor('k')
 # ~lgnd.get_frame().set_linewidth(2.0)
 plt.xlabel(' F606W - F814W', fontsize = 20)
