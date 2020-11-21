@@ -348,6 +348,12 @@ def way(vgood, cgood, errgood, errgoodv, step = None):
 		#~ print(centergood[c], ccenter[c])	
 
 	return vcenter, ccenter, errcenter, size_bin, bingood, errcenterv
+
+def cut(p):
+	V, R = p[:,9], p[:,10]
+	const = np.min(V-R)
+	min_pts = np.where(V-R == const)[0]
+	return min_pts[0]
 ########################################################################
 ########################################################################
 ### define global variables
@@ -566,17 +572,23 @@ name2 = ['a100','a120','a140','a160','a180','a200']
 
 
 # ~p1 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a100.data')
-# ~V1, R1 = p1[:,9], p1[:,10]
+# ~m1 = cut(p1) # cut pre main sequence
+# ~V1, R1 = p1[m1:,9], p1[m1:,10]
 # ~p2 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a120.data')
-# ~V2, R2 = p2[:,9], p2[:,10]
+# ~m2 = cut(p2) # cut pre main sequence
+# ~V2, R2 = p2[m2:,9], p2[m2:,10]
 # ~p3 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a140.data')
-# ~V3, R3 = p3[:,9], p3[:,10]
+# ~m3 = cut(p3) # cut pre main sequence
+# ~V3, R3 = p3[m3:,9], p3[m3:,10]
 p4 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a160.data')
-V4, R4 = p4[:,9], p4[:,10]
+m4 = cut(p4) # cut pre main sequence
+V4, R4 = p4[m4:,9], p4[m4:,10]
 p5 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a180.data')
-V5, R5 = p5[:,9], p5[:,10]
+m5 = cut(p5) # cut pre main sequence
+V5, R5 = p5[m5:,9], p5[m5:,10]
 # ~p6 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a200.data')
-# ~V6, R6 = p6[:,9], p6[:,10]
+# ~m6 = cut(p6) # cut pre main sequence
+# ~V6, R6 = p6[m6:,9], p6[m6:,10]
 
 #------------------------------------------------------------------------
 afe_values=[-0.2, 0.0 , 0.2, 0.4, 0.6, 0.8] 

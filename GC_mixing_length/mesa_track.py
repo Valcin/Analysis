@@ -167,11 +167,11 @@ def col_teff(V, I):
 	return F6,F8
 
 
-def cut(V, R):
+def cut(p):
+	V, R = p[:,9], p[:,10]
 	const = np.min(V-R)
 	min_pts = np.where(V-R == const)[0]
-	print(const, min_pts)
-	return
+	return min_pts[0]
 ########################################################################
 ########################################################################
 Zsun = 0.0134
@@ -325,20 +325,26 @@ msun = 1.989e+33 #g
 
 # READ PAINTED FILES
 # ~p1 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a100.data')
-# ~V1, R1 = p1[:,9], p1[:,10]
+# ~m1 = cut(p1) # cut pre main sequence
+# ~V1, R1 = p1[m1:,9], p1[m1:,10]
 # ~p2 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a120.data')
-# ~V2, R2 = p2[:,9], p2[:,10]
+# ~m2 = cut(p2) # cut pre main sequence
+# ~V2, R2 = p2[m2:,9], p2[m2:,10]
 # ~p3 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a140.data')
-# ~V3, R3 = p3[:,9], p3[:,10]
+# ~m3 = cut(p3) # cut pre main sequence
+# ~V3, R3 = p3[m3:,9], p3[m3:,10]
 p4 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a160.data')
-V4, R4 = p4[:,9], p4[:,10]
+m4 = cut(p4) # cut pre main sequence
+V4, R4 = p4[m4:,9], p4[m4:,10]
 p5 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a180.data')
-V5, R5 = p5[:,9], p5[:,10]
+m5 = cut(p5) # cut pre main sequence
+V5, R5 = p5[m5:,9], p5[m5:,10]
 # ~p6 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a200.data')
-# ~V6, R6 = p6[:,9], p6[:,10]
+# ~m6 = cut(p6) # cut pre main sequence
+# ~V6, R6 = p6[m6:,9], p6[m6:,10]
 
 
-cut(V4,R4)
+
 #-----------------------------------------------------------------------
 
 plt.figure()
