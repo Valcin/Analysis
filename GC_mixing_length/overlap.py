@@ -570,51 +570,87 @@ F606w1, F814w1 = f1[:,9], f1[:,10]
 name = ['a100','a125','a150','a175','a200']
 name2 = ['a100','a120','a140','a160','a180','a200']
 
-
-# varying mass
-p0 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a180_M070.data')
+#-----------------------------------------------------------------------
+p0 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_fid.data')
 m0 = cut(p0) # cut pre main sequence
 V0, R0 = p0[m0:,9], p0[m0:,10]
-p1 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a180_M090.data')
-m1 = cut(p1) # cut pre main sequence
-V1, R1 = p1[m1:,9], p1[m1:,10]
-# varying metallicity
-# ~p9 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a180_z0001.data')
+
+#-----------------------------------------------------------------------
+#varying mixing length
+# ~p2 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a120.data')
+# ~m2 = cut(p2) # cut pre main sequence
+# ~V2, R2 = p2[m2:,9], p2[m2:,10]
+# ~p3 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a140.data')
+# ~m3 = cut(p3) # cut pre main sequence
+# ~V3, R3 = p3[m3:,9], p3[m3:,10]
+# ~p4 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a160.data')
+# ~m4 = cut(p4) # cut pre main sequence
+# ~V4, R4 = p4[m4:,9], p4[m4:,10]
+# ~p5 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a180.data')
+# ~m5 = cut(p5) # cut pre main sequence
+# ~V5, R5 = p5[m5:,9], p5[m5:,10]
+# ~p6 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a200.data')
+# ~m6 = cut(p6) # cut pre main sequence
+# ~V6, R6 = p6[m6:,9], p6[m6:,10]
+# ~p7 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a220.data')
+# ~m7 = cut(p7) # cut pre main sequence
+# ~V7, R7 = p7[m7:,9], p7[m7:,10]
+# ~p8 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a240.data')
+# ~m8 = cut(p8) # cut pre main sequence
+# ~V8, R8 = p8[m8:,9], p8[m8:,10]
+#-----------------------------------------------------------------------
+# varying mass
+# ~p0 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a180_M070.data')
+# ~p0 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a180_M055.data')
+# ~m0 = cut(p0) # cut pre main sequence
+# ~V0, R0 = p0[m0:,9], p0[m0:,10]
+# ~p1 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a180_M090.data')
+# ~p1 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a180_M105.data')
+# ~m1 = cut(p1) # cut pre main sequence
+# ~V1, R1 = p1[m1:,9], p1[m1:,10]
+# ~#-----------------------------------------------------------------------
+# ~# No ledoux parameter
+# ~p9 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a180_ledoux.data')
 # ~m9 = cut(p9) # cut pre main sequence
 # ~V9, R9 = p9[m9:,9], p9[m9:,10]
-# ~p10 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a180_z001.data')
+#-----------------------------------------------------------------------
+# COX MLT
+# ~p10 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a180_cox.data')
 # ~m10 = cut(p10) # cut pre main sequence
 # ~V10, R10 = p10[m10:,9], p10[m10:,10]
-# varying helium
-p11 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a180_y023.data')
-m11 = cut(p11) # cut pre main sequence
-V11, R11 = p11[m11:,9], p11[m11:,10]
-# ~p10 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a180_z001.data')
-# ~m10 = cut(p10) # cut pre main sequence
-# ~V10, R10 = p10[m10:,9], p10[m10:,10]
+# ~#-----------------------------------------------------------------------
+# ~# varying helium
+# ~p11 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a180_y020.data')
+# ~m11 = cut(p11) # cut pre main sequence
+# ~V11, R11 = p11[m11:,9], p11[m11:,10]
+# ~p12 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a180_y028.data')
+# ~m12 = cut(p12) # cut pre main sequence
+# ~V12, R12 = p12[m12:,9], p12[m12:,10]
+# ~#-----------------------------------------------------------------------
+# ~# type2
+# ~p13 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a180_type2.data')
+# ~m13 = cut(p13) # cut pre main sequence
+# ~V13, R13 = p13[m13:,9], p13[m13:,10]
+# ~#-----------------------------------------------------------------------
+# ~# rotational mixing
+# ~p14 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a180_rotmix.data')
+# ~m14 = cut(p14) # cut pre main sequence
+# ~V14, R14 = p14[m14:,9], p14[m14:,10]
+# ~#-----------------------------------------------------------------------
+# ~# rotational mixing
+# ~p15 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a180_diff.data')
+# ~m15 = cut(p15) # cut pre main sequence
+# ~V15, R15 = p15[m15:,9], p15[m15:,10]
+# ~#-----------------------------------------------------------------------
+# ~# rgb wind
+# ~p16 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a180_nowind.data')
+# ~m16 = cut(p16) # cut pre main sequence
+# ~V16, R16 = p16[m16:,9], p16[m16:,10]
+# ~p17 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a180_eta210.data')
+# ~m17 = cut(p17) # cut pre main sequence
+# ~V17, R17 = p17[m17:,9], p17[m17:,10]
 
-#varying mixing length
-p2 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a120.data')
-m2 = cut(p2) # cut pre main sequence
-V2, R2 = p2[m2:,9], p2[m2:,10]
-p3 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a140.data')
-m3 = cut(p3) # cut pre main sequence
-V3, R3 = p3[m3:,9], p3[m3:,10]
-p4 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a160.data')
-m4 = cut(p4) # cut pre main sequence
-V4, R4 = p4[m4:,9], p4[m4:,10]
-p5 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a180.data')
-m5 = cut(p5) # cut pre main sequence
-V5, R5 = p5[m5:,9], p5[m5:,10]
-p6 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a200.data')
-m6 = cut(p6) # cut pre main sequence
-V6, R6 = p6[m6:,9], p6[m6:,10]
-p7 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a220.data')
-m7 = cut(p7) # cut pre main sequence
-V7, R7 = p7[m7:,9], p7[m7:,10]
-p8 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a240.data')
-m8 = cut(p8) # cut pre main sequence
-V8, R8 = p8[m8:,9], p8[m8:,10]
+
 
 #------------------------------------------------------------------------
 afe_values=[-0.2, 0.0 , 0.2, 0.4, 0.6, 0.8] 
@@ -648,18 +684,24 @@ plt.scatter(ctot,vtot, marker='.', s=10, color='grey', alpha=0.8)
 	# ~f1 = np.loadtxt('painted_files/painted_'+j+'.data')
 	# ~F606w1, F814w1 = f1[:,9], f1[:,10]
 	# ~plt.plot(F606w1 - F814w1, F606w1, label='painted a200')
-plt.plot(V0-R0,V0, label= r'$\Delta M = 0.1', linewidth=2, c='b')
-plt.plot(V1-R1,V1, linewidth=2, c='b')
+plt.plot(V0-R0,V0, label= r'$\Delta$M = 0.25', linewidth=2, c='b')
+# ~plt.plot(V1-R1,V1, linewidth=2, c='b')
 # ~plt.plot(V2-R2,V2, label=r'$\alpha_{MLT}$ = 1.2', linewidth=2)
 # ~plt.plot(V3-R3,V3, label=r'$\alpha_{MLT}$ = 1.4', linewidth=2)
 # ~plt.plot(V4-R4,V4, label=r'$\alpha_{MLT}$ = 1.6', linewidth=2)
-plt.plot(V5-R5,V5, label='fiducial', linewidth=2, c='k')
+# ~plt.plot(V5-R5,V5, label='fiducial', linewidth=2, c='k')
 # ~plt.plot(V6-R6,V6, label=r'$\alpha_{MLT}$ = 2.0', linewidth=2)
 # ~plt.plot(V7-R7,V7, label=r'$\alpha_{MLT}$ = 2.2', linewidth=2)
 # ~plt.plot(V8-R8,V8, label=r'$\alpha_{MLT}$ = 2.4', linewidth=2)
-# ~plt.plot(V9-R9,V9, label='z = 0.0001', linewidth=2, c='r')
-# ~plt.plot(V10-R10,V10, label='z = 0.001', linewidth=2, c='r')
-# ~plt.plot(V11-R11,V11, label='y = 0.2004', linewidth=2, c='g')
+# ~plt.plot(V9-R9,V9, label='No Ledoux criterion', linewidth=2, c='r', linestyle='--')
+# ~plt.plot(V10-R10,V10, label='Cox MLT', linewidth=2, linestyle=':')
+# ~plt.plot(V11-R11,V11, label=r'$\Delta$Y = 0.04', linewidth=2, c='g')
+# ~plt.plot(V12-R12,V12, linewidth=2, c='g')
+# ~plt.plot(V13-R13,V13, label='No type 2 opacity', linewidth=2, linestyle=':')
+# ~plt.plot(V14-R14,V14, label='No rotational mixing', linewidth=2, linestyle=':')
+# ~plt.plot(V15-R15,V15, label='No element diffusion', linewidth=2, linestyle=':')
+# ~plt.plot(V16-R16,V16, label='No RBG wind', linewidth=2, linestyle=':')
+# ~plt.plot(V17-R17,V17, label='No RBG wind', linewidth=2, linestyle=':')
 # ~plt.xlim(-0.5,3)
 plt.xlim(-0.23,1.65)
 plt.ylim(5,-5)

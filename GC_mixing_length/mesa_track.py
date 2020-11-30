@@ -315,13 +315,14 @@ msun = 1.989e+33 #g
 
 # READ MESSA FILES
 
-# ~h = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history.data')
-# ~h1 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a100_M075_z0002.data')
-# ~h2 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a120_M075_z0002.data')
-# ~h3 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a140_M075_z0002.data')
-# ~h4 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a160_M075_z0002.data')
-# ~h5 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a180_M075_z0002.data')
-# ~h6 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a200_M075_z0002.data')
+h = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history.data')
+# ~h1 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a100.data')
+# ~h2 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a120.data')
+# ~h3 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a140.data')
+# ~h4 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a160.data')
+# ~h5 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_fid.data')
+# ~h6 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a200.data')
+# ~h7 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a180_windtest.data')
 
 # READ PAINTED FILES
 # ~p1 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a100.data')
@@ -333,12 +334,12 @@ msun = 1.989e+33 #g
 # ~p3 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a140.data')
 # ~m3 = cut(p3) # cut pre main sequence
 # ~V3, R3 = p3[m3:,9], p3[m3:,10]
-p4 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a160.data')
-m4 = cut(p4) # cut pre main sequence
-V4, R4 = p4[m4:,9], p4[m4:,10]
-p5 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a180.data')
-m5 = cut(p5) # cut pre main sequence
-V5, R5 = p5[m5:,9], p5[m5:,10]
+# ~p4 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a160.data')
+# ~m4 = cut(p4) # cut pre main sequence
+# ~V4, R4 = p4[m4:,9], p4[m4:,10]
+# ~p5 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a180.data')
+# ~m5 = cut(p5) # cut pre main sequence
+# ~V5, R5 = p5[m5:,9], p5[m5:,10]
 # ~p6 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a200.data')
 # ~m6 = cut(p6) # cut pre main sequence
 # ~V6, R6 = p6[m6:,9], p6[m6:,10]
@@ -347,30 +348,31 @@ V5, R5 = p5[m5:,9], p5[m5:,10]
 
 #-----------------------------------------------------------------------
 
-plt.figure()
+# ~plt.figure()
 # ~plt.plot(h.abs_mag_F606W - h.abs_mag_F814W , h.abs_mag_F606W, c='g', label='test')
 # ~plt.plot(h1.abs_mag_F606W - h1.abs_mag_F814W , h1.abs_mag_F606W, label='a = 1.0, M = 0.75, Z =0.0002', c='b')
 # ~plt.plot(h2.abs_mag_F606W - h2.abs_mag_F814W , h2.abs_mag_F606W, label='a = 1.2, M = 0.75, Z =0.0002', c='r')
 # ~plt.plot(v-i, v, c='k')
-plt.plot(V4-R4,V4, label='a = 1.6')
-plt.plot(V5-R5,V5, label='a = 1.8')
-plt.gca().invert_yaxis()
-plt.legend(loc='best')
-plt.show()
-plt.close()
+# ~plt.plot(V4-R4,V4, label='a = 1.6')
+# ~plt.plot(V5-R5,V5, label='a = 1.8')
+# ~plt.gca().invert_yaxis()
+# ~plt.legend(loc='best')
+# ~plt.show()
+# ~plt.close()
 
-# ~plt.figure()
-# ~plt.plot(h.log_Teff, h.log_L, label='test', c='b')
+plt.figure()
 # ~plt.plot(h1.log_Teff, h1.log_L, label='a = 1.0, M = 0.75', c='b', linestyle=':')
 # ~plt.plot(h2.log_Teff, h2.log_L, label='a = 1.2')
 # ~plt.plot(h3.log_Teff, h3.log_L, label='a = 1.4')
 # ~plt.plot(h4.log_Teff, h4.log_L, label='a = 1.6')
-# ~plt.plot(h5.log_Teff, h5.log_L, label='a = 1.8')
+# ~plt.plot(h5.log_Teff, h5.log_L, label='a = 1.8', c='k')
 # ~plt.plot(h6.log_Teff, h6.log_L, label='a = 2.0')
-# ~plt.gca().invert_xaxis()
-# ~plt.legend(loc='best')
-# ~plt.show()
-# ~plt.close()
+# ~plt.plot(h7.log_Teff, h7.log_L, linestyle=':', c='b')
+plt.plot(h.log_Teff, h.log_L, label='test', c='r', linestyle=':')
+plt.gca().invert_xaxis()
+plt.legend(loc='best')
+plt.show()
+plt.close()
 
 
 
