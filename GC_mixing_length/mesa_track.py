@@ -172,6 +172,31 @@ def cut(p):
 	const = np.min(V-R)
 	min_pts = np.where(V-R == const)[0]
 	return min_pts[0]
+	
+def cut2(h):
+	V = h.abs_mag_F606W
+	R = h.abs_mag_F814W
+	const = np.max(V)
+	min_pts = np.where(V == const)[0]
+	mag = V[min_pts[0]:]
+	col = V[min_pts[0]:] - R[min_pts[0]:]
+	return col, mag, min_pts[0]
+
+def error_compute(dbins, histo, bhisto):
+		amp = 1.0
+		while amp > 0.0:
+			integ = np.sum(dbins*histo)
+			above = np.where(histo > amp*np.max(histo))[0]
+			tinteg = np.sum(dbins*histo[above])
+			s = tinteg/integ
+			print('integral percentage is '+str(s))
+			if s > 0.68:
+				# ~print([np.min(above)])
+				# ~print([np.max(above)])
+				return bhisto[np.min(above)], bhisto[np.max(above)]
+				break
+			amp -= 0.01
+			#~ print('percentage of the amplitude is '+str(amp))	
 ########################################################################
 ########################################################################
 Zsun = 0.0134
@@ -316,16 +341,68 @@ msun = 1.989e+33 #g
 # READ MESSA FILES
 
 h = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history.data')
-# ~h1 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a100.data')
-# ~h2 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a120.data')
-# ~h3 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a140.data')
-# ~h4 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a160.data')
-# ~h5 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_fid.data')
-# ~h6 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a200.data')
-# ~h7 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a180_windtest.data')
+
+h1 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_M070.data')
+col1,mag1, mp = cut2(h1)
+h2 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_M090.data')
+col2,mag2, mp2 = cut2(h2)
+h3 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_y020.data')
+col3,mag3, mp3 = cut2(h3)
+h4 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_y028.data')
+col4,mag4, mp4 = cut2(h4)
+h5 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_ledoux.data')
+col5,mag5, mp5 = cut2(h5)
+h6 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_cox.data')
+col6,mag6, mp6 = cut2(h6)
+h7 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_type2.data')
+col7,mag7, mp7 = cut2(h7)
+h8 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_overshoot.data')
+col8,mag8, mp8 = cut2(h8)
+h9 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_reimers1.data')
+col9,mag9, mp9 = cut2(h9)
+h10 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_diffusion.data')
+col10,mag10, mp10 = cut2(h10)
+h11 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_mixing.data')
+col11,mag11, mp11 = cut2(h11)
+h12 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a120.data')
+col12,mag12, mp12 = cut2(h12)
+h13 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a140.data')
+col13,mag13, mp13 = cut2(h13)
+h14 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a160.data')
+col14,mag14, mp14 = cut2(h14)
+h15 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a180.data')
+col15,mag15, mp15 = cut2(h15)
+h16 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a190.data')
+col16,mag16, mp16 = cut2(h16)
+h17 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a200.data')
+col17,mag17, mp17 = cut2(h17)
+h18 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a210.data')
+col18,mag18, mp18 = cut2(h18)
+h19 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a220.data')
+col19,mag19, mp19 = cut2(h19)
+h20 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a240.data')
+col20,mag20, mp20 = cut2(h20)
+h21 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a260.data')
+col21,mag21, mp21 = cut2(h21)
+h22 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a280.data')
+col22,mag22, mp22 = cut2(h22)
+h23 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_alphafe.data')
+col23,mag23, mp23 = cut2(h23)
+h24 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a170.data')
+col24,mag24, mp24 = cut2(h24)
+h25= mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a230.data')
+col25,mag25, mp25= cut2(h25)
+h26 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a150.data')
+col26,mag26, mp26 = cut2(h26)
+h27= mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a250.data')
+col27,mag27, mp27= cut2(h27)
+# ~h28 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a130.data')
+# ~col28,mag28, mp28 = cut2(h28)
+# ~h29= mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a270.data')
+# ~col29,mag29, mp29= cut2(h29)
 
 # READ PAINTED FILES
-# ~p1 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a100.data')
+# ~p1 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_fid.data')
 # ~m1 = cut(p1) # cut pre main sequence
 # ~V1, R1 = p1[m1:,9], p1[m1:,10]
 # ~p2 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a120.data')
@@ -344,35 +421,78 @@ h = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/h
 # ~m6 = cut(p6) # cut pre main sequence
 # ~V6, R6 = p6[m6:,9], p6[m6:,10]
 
-
-
+# ~met='-2.0'
+# ~hist = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/distrib'+met+'.txt', usecols=(1,2,3,4,5,6))
+# ~hist2 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/distrib2'+met+'.txt', usecols=(1,2,3,4,5,6))
 #-----------------------------------------------------------------------
 
-# ~plt.figure()
-# ~plt.plot(h.abs_mag_F606W - h.abs_mag_F814W , h.abs_mag_F606W, c='g', label='test')
-# ~plt.plot(h1.abs_mag_F606W - h1.abs_mag_F814W , h1.abs_mag_F606W, label='a = 1.0, M = 0.75, Z =0.0002', c='b')
-# ~plt.plot(h2.abs_mag_F606W - h2.abs_mag_F814W , h2.abs_mag_F606W, label='a = 1.2, M = 0.75, Z =0.0002', c='r')
-# ~plt.plot(v-i, v, c='k')
-# ~plt.plot(V4-R4,V4, label='a = 1.6')
-# ~plt.plot(V5-R5,V5, label='a = 1.8')
-# ~plt.gca().invert_yaxis()
-# ~plt.legend(loc='best')
-# ~plt.show()
-# ~plt.close()
+
 
 plt.figure()
-# ~plt.plot(h1.log_Teff, h1.log_L, label='a = 1.0, M = 0.75', c='b', linestyle=':')
-# ~plt.plot(h2.log_Teff, h2.log_L, label='a = 1.2')
-# ~plt.plot(h3.log_Teff, h3.log_L, label='a = 1.4')
-# ~plt.plot(h4.log_Teff, h4.log_L, label='a = 1.6')
-# ~plt.plot(h5.log_Teff, h5.log_L, label='a = 1.8', c='k')
-# ~plt.plot(h6.log_Teff, h6.log_L, label='a = 2.0')
-# ~plt.plot(h7.log_Teff, h7.log_L, linestyle=':', c='b')
-plt.plot(h.log_Teff, h.log_L, label='test', c='r', linestyle=':')
-plt.gca().invert_xaxis()
+plt.plot(col12 , mag12, label='a = 1.20')
+plt.plot(col28 , mag12, label='a = 1.30')
+plt.plot(col13 , mag13, label='a = 1.40')
+plt.plot(col26 , mag26, label='a = 1.50')
+plt.plot(col14 , mag14, label='a = 1.60')
+plt.plot(col24 , mag24, label='a = 1.70')
+plt.plot(col15 , mag15, label='a = 1.80')
+plt.plot(col16 , mag16, label='a = 1.90')
+plt.plot(col17 , mag17, label='a = 2.00', c='k')
+plt.plot(col18 , mag18, label='a = 2.10')
+plt.plot(col19 , mag19, label='a = 2.20')
+plt.plot(col25 , mag25, label='a = 2.30')
+plt.plot(col20 , mag20, label='a = 2.40')
+plt.plot(col27 , mag27, label='a = 2.50')
+plt.plot(col21 , mag21, label='a = 2.60')
+plt.plot(col29 , mag21, label='a = 2.70')
+plt.plot(col22 , mag22, label='a = 2.80')
+# ~plt.plot(col1 , mag1, label='M = 0.70', c='b')
+# ~plt.plot(col2 , mag2, label='M = 0.90', c='b')
+# ~plt.plot(col3 , mag3, label='y = 0.2004', c='g')
+# ~plt.plot(col4 , mag4, label='y = 0.2804', c='g')
+# ~plt.plot(col5 , mag5, label='No ledoux', linestyle=':')
+# ~plt.plot(col6 , mag6, label='cox', linestyle=':')
+# ~plt.plot(col7 , mag7, label='No type 2', linestyle=':')
+# ~plt.plot(col8 , mag8, label='No overshoot', linestyle=':')
+# ~plt.plot(col9 , mag9, label='Reimers eta = 0.8', linestyle=':')
+# ~plt.plot(col10 , mag10, label='No element diffusion', linestyle=':')
+# ~plt.plot(col11 , mag11, label='No rotational mixing', linestyle=':')
+plt.plot(h.abs_mag_F606W - h.abs_mag_F814W , h.abs_mag_F606W, label='test', linestyle=':')
+plt.gca().invert_yaxis()
 plt.legend(loc='best')
 plt.show()
 plt.close()
 
+# ~plt.figure()
+# ~plt.plot(h0.log_Teff, h0.log_L, label='fiducial', c='k')
+# ~plt.plot(h1.log_Teff, h1.log_L, label='M = 0.70', c='b')
+# ~plt.plot(h2.log_Teff, h2.log_L, label='M = 0.90', c='b')
+# ~plt.plot(h3.log_Teff, h3.log_L, label='y = 0.2004', c='g')
+# ~plt.plot(h4.log_Teff, h4.log_L, label='y = 0.2804', c='g')
+# ~plt.plot(h5.log_Teff, h5.log_L, label='No ledoux', linestyle=':')
+# ~plt.plot(h6.log_Teff, h6.log_L, label='cox', linestyle=':')
+# ~plt.plot(h7.log_Teff, h7.log_L, label='No type 2', linestyle=':')
+# ~plt.plot(h.log_Teff, h.log_L, label='test', c='r', linestyle=':')
+# ~plt.gca().invert_xaxis()
+# ~plt.legend(loc='best')
+# ~plt.show()
+# ~plt.close()
+
+# ~binmix = np.linspace(1.2, 2.4,7)
+# ~dmix = np.diff(binmix)[0]
+# ~bincenter = (binmix[:-1] + binmix[1:]) / 2
+# ~mix_low, mix_high = error_compute(dmix, histo,bincenter)
+# ~mix_mean = (binmix[np.argmax(histo)] + binmix[np.argmax(histo)+1])/2.
+
+# ~plt.figure()
+# ~for j in range(12):
+	# ~print(j)
+	# ~plt.bar(bincenter, hist[j,:], width=0.2, align='center', edgecolor='k', alpha=0.6)
+# ~plt.bar(bincenter, hist2[12,:], width=0.2, align='center', edgecolor='k', alpha=0.6, color='b')
+# ~plt.bar(bincenter, hist[12,:], width=0.2, align='center', edgecolor='k', alpha=0.6, color='r')
+# ~plt.xlim(1.1, 2.5)
+# ~plt.show()
+# ~plt.close()
+# ~kill
 
 

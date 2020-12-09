@@ -354,6 +354,79 @@ def cut(p):
 	const = np.min(V-R)
 	min_pts = np.where(V-R == const)[0]
 	return min_pts[0]
+
+def cut2(h):
+	V = h.abs_mag_F606W
+	R = h.abs_mag_F814W
+	const = np.max(V)
+	min_pts = np.where(V == const)[0]
+	mag = V[min_pts[0]:]
+	col = V[min_pts[0]:] - R[min_pts[0]:]
+	return col, mag, min_pts[0]
+
+def alpha_distriubtion(col, mag):
+	dx, dy = [[],[],[],[],[],[],[],[]],  [[],[],[],[],[],[],[],[]]
+	dist_alpha = []
+	
+	for i in range(len(col)):
+		# delta = 0.1
+		if mag[i] < f16(col[i]) and mag[i] > f18(col[i]):
+			dx[0].append(col[i])
+			dy[0].append(mag[i])
+			dist_alpha.append(0.1)
+		# delta = 0.2
+		if (mag[i] < f15(col[i]) and mag[i] > f16(col[i])) or (mag[i] < f18(col[i]) and mag[i] > f19(col[i])):
+			dx[1].append(col[i])
+			dy[1].append(mag[i])
+			dist_alpha.append(0.2)
+		# delta = 0.3
+		if (mag[i] < f24(col[i]) and mag[i] > f15(col[i])) or (mag[i] < f19(col[i]) and mag[i] > f25(col[i])):
+			dx[2].append(col[i])
+			dy[2].append(mag[i])
+			dist_alpha.append(0.3)
+		# delta = 0.4
+		if (mag[i] < f14(col[i]) and mag[i] > f24(col[i])) or (mag[i] < f25(col[i]) and mag[i] > f20(col[i])):
+			dx[3].append(col[i])
+			dy[3].append(mag[i])
+			dist_alpha.append(0.4)
+		# delta = 0.5
+		if (mag[i] < f26(col[i]) and mag[i] > f14(col[i])) or (mag[i] < f20(col[i]) and mag[i] > f27(col[i])):
+			dx[4].append(col[i])
+			dy[4].append(mag[i])
+			dist_alpha.append(0.5)
+		# delta = 0.6
+		if (mag[i] < f13(col[i]) and mag[i] > f26(col[i])) or (mag[i] < f27(col[i]) and mag[i] > f21(col[i])):
+			dx[5].append(col[i])
+			dy[5].append(mag[i])
+			dist_alpha.append(0.6)
+		# delta = 0.7
+		if (mag[i] < f28(col[i]) and mag[i] > f13(col[i])) or (mag[i] < f21(col[i]) and mag[i] > f29(col[i])):
+			dx[6].append(col[i])
+			dy[6].append(mag[i])
+			dist_alpha.append(0.7)
+		# delta = 0.8
+		if (mag[i] < f12(col[i]) and mag[i] > f28(col[i])) or (mag[i] < f29(col[i]) and mag[i] > f22(col[i])):
+			dx[7].append(col[i])
+			dy[7].append(mag[i])
+			dist_alpha.append(0.8)
+
+	return np.mean(dist_alpha), dx[6], dy[6]
+			
+def error_compute(dbins, histo, bhisto):
+		amp = 1.0
+		while amp > 0.0:
+			integ = np.sum(dbins*histo)
+			above = np.where(histo > amp*np.max(histo))[0]
+			tinteg = np.sum(dbins*histo[above])
+			s = tinteg/integ
+			print('integral percentage is '+str(s))
+			if s > 0.68:
+				# ~print([np.min(above)])
+				# ~print([np.max(above)])
+				return bhisto[np.min(above)], bhisto[np.max(above)]
+				break
+			amp -= 0.01
+			#~ print('percentage of the amplitude is '+str(amp))	
 ########################################################################
 ########################################################################
 ### define global variables
@@ -384,6 +457,171 @@ Afe_dar = np.loadtxt('/home/david/codes/Analysis/GC/plots/data_'+ version2 +'_'+
 chunkbot = rescale[:,5]
 
 #-----------------------------------------------------------------------
+# plot total start
+
+name = ['a100','a125','a150','a175','a200']
+name2 = ['a100','a120','a140','a160','a180','a200']
+
+#-----------------------------------------------------------------------
+# ~p0 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_fid.data')
+# ~m0 = cut(p0) # cut pre main sequence
+# ~V0, R0 = p0[m0:,9], p0[m0:,10]
+# ~#-----------------------------------------------------------------------
+#varying mixing length
+# ~p2 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a120.data')
+# ~m2 = cut(p2) # cut pre main sequence
+# ~V2, R2 = p2[m2:,9], p2[m2:,10]
+# ~p3 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a140.data')
+# ~m3 = cut(p3) # cut pre main sequence
+# ~V3, R3 = p3[m3:,9], p3[m3:,10]
+# ~p4 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a160.data')
+# ~m4 = cut(p4) # cut pre main sequence
+# ~V4, R4 = p4[m4:,9], p4[m4:,10]
+# ~p6 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a200.data')
+# ~m6 = cut(p6) # cut pre main sequence
+# ~V6, R6 = p6[m6:,9], p6[m6:,10]
+# ~p7 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a220.data')
+# ~m7 = cut(p7) # cut pre main sequence
+# ~V7, R7 = p7[m7:,9], p7[m7:,10]
+# ~p8 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a240.data')
+# ~m8 = cut(p8) # cut pre main sequence
+# ~V8, R8 = p8[m8:,9], p8[m8:,10]
+#-----------------------------------------------------------------------
+# varying mass
+# ~p5 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_M070.data')
+# ~m5 = cut(p0) # cut pre main sequence
+# ~V5, R5 = p5[m5:,9], p5[m5:,10]
+# ~p1 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_M090.data')
+# ~m1 = cut(p1) # cut pre main sequence
+# ~V1, R1 = p1[m1:,9], p1[m1:,10]
+# ~#-----------------------------------------------------------------------
+# ~# No ledoux parameter
+# ~p9 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_ledoux.data')
+# ~m9 = cut(p9) # cut pre main sequence
+# ~V9, R9 = p9[m9:,9], p9[m9:,10]
+#-----------------------------------------------------------------------
+# COX MLT
+# ~p10 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_cox.data')
+# ~m10 = cut(p10) # cut pre main sequence
+# ~V10, R10 = p10[m10:,9], p10[m10:,10]
+# ~#-----------------------------------------------------------------------
+# ~# varying helium
+# ~p11 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_y020.data')
+# ~m11 = cut(p11) # cut pre main sequence
+# ~V11, R11 = p11[m11:,9], p11[m11:,10]
+# ~p12 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_y028.data')
+# ~m12 = cut(p12) # cut pre main sequence
+# ~V12, R12 = p12[m12:,9], p12[m12:,10]
+#-----------------------------------------------------------------------
+# type2
+# ~p13 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_type2.data')
+# ~m13 = cut(p13) # cut pre main sequence
+# ~V13, R13 = p13[m13:,9], p13[m13:,10]
+# ~#-----------------------------------------------------------------------
+# ~# rotational mixing
+# ~p14 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_rotmix.data')
+# ~m14 = cut(p14) # cut pre main sequence
+# ~V14, R14 = p14[m14:,9], p14[m14:,10]
+# ~#-----------------------------------------------------------------------
+# ~# diffusion
+# ~p15 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_diff.data')
+# ~m15 = cut(p15) # cut pre main sequence
+# ~V15, R15 = p15[m15:,9], p15[m15:,10]
+# ~#-----------------------------------------------------------------------
+# ~# rgb wind
+# ~p16 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_nowind.data')
+# ~m16 = cut(p16) # cut pre main sequence
+# ~V16, R16 = p16[m16:,9], p16[m16:,10]
+#-----------------------------------------------------------------------
+# overshoot
+# ~p17 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_overshoot.data')
+# ~m17 = cut(p17) # cut pre main sequence
+# ~V17, R17 = p17[m17:,9], p17[m17:,10]
+
+
+#-----------------------------------------------------------------------
+h1 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_M070.data')
+col1,mag1, mp = cut2(h1)
+h2 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_M090.data')
+col2,mag2, mp2 = cut2(h2)
+h3 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_y020.data')
+col3,mag3, mp3 = cut2(h3)
+h4 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_y028.data')
+col4,mag4, mp4 = cut2(h4)
+h5 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_ledoux.data')
+col5,mag5, mp5 = cut2(h5)
+h6 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_cox.data')
+col6,mag6, mp6 = cut2(h6)
+h7 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_type2.data')
+col7,mag7, mp7 = cut2(h7)
+h8 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_overshoot.data')
+col8,mag8, mp8 = cut2(h8)
+h9 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_reimers1.data')
+col9,mag9, mp9 = cut2(h9)
+h10 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_diffusion.data')
+col10,mag10, mp10 = cut2(h10)
+h11 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_mixing.data')
+col11,mag11, mp11 = cut2(h11)
+h12 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a120.data')
+col12,mag12, mp12 = cut2(h12)
+h13 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a140.data')
+col13,mag13, mp13 = cut2(h13)
+h14 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a160.data')
+col14,mag14, mp14 = cut2(h14)
+h15 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a180.data')
+col15,mag15, mp15 = cut2(h15)
+h16 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a190.data')
+col16,mag16, mp16 = cut2(h16)
+h17 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a200.data')
+col17,mag17, mp17 = cut2(h17)
+h18 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a210.data')
+col18,mag18, mp18 = cut2(h18)
+h19 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a220.data')
+col19,mag19, mp19 = cut2(h19)
+h20 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a240.data')
+col20,mag20, mp20 = cut2(h20)
+h21 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a260.data')
+col21,mag21, mp21 = cut2(h21)
+h22 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a280.data')
+col22,mag22, mp22 = cut2(h22)
+h23 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_alphafe.data')
+col23,mag23, mp23 = cut2(h23)
+h24 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a170.data')
+col24,mag24, mp24 = cut2(h24)
+h25= mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a230.data')
+col25,mag25, mp25= cut2(h25)
+h26 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a150.data')
+col26,mag26, mp26 = cut2(h26)
+h27= mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a250.data')
+col27,mag27, mp27= cut2(h27)
+h28 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a130.data')
+col28,mag28, mp28 = cut2(h28)
+h29= mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a270.data')
+col29,mag29, mp29= cut2(h29)
+#-----------------------------------------------------------------------
+# interpolate the tracks
+f12 = interpolate.interp1d(col12,mag12, 'nearest',fill_value="extrapolate")
+f13 = interpolate.interp1d(col13,mag13, 'nearest',fill_value="extrapolate")
+f14 = interpolate.interp1d(col14,mag14, 'nearest',fill_value="extrapolate")
+f15 = interpolate.interp1d(col15,mag15, 'nearest',fill_value="extrapolate")
+f16 = interpolate.interp1d(col16,mag16, 'nearest',fill_value="extrapolate")
+f17 = interpolate.interp1d(col17,mag17, 'nearest',fill_value="extrapolate")
+f18 = interpolate.interp1d(col18,mag18, 'nearest',fill_value="extrapolate")
+f19 = interpolate.interp1d(col19,mag19, 'nearest',fill_value="extrapolate")
+f20 = interpolate.interp1d(col20,mag20, 'nearest',fill_value="extrapolate")
+f21 = interpolate.interp1d(col21,mag21, 'nearest',fill_value="extrapolate")
+f22 = interpolate.interp1d(col22,mag22, 'nearest',fill_value="extrapolate")
+f24 = interpolate.interp1d(col24,mag24, 'nearest',fill_value="extrapolate")
+f25 = interpolate.interp1d(col25,mag25, 'nearest',fill_value="extrapolate")
+f26 = interpolate.interp1d(col26,mag26, 'nearest',fill_value="extrapolate")
+f27 = interpolate.interp1d(col27,mag27, 'nearest',fill_value="extrapolate")
+f28 = interpolate.interp1d(col28,mag28, 'nearest',fill_value="extrapolate")
+f29 = interpolate.interp1d(col29,mag29, 'nearest',fill_value="extrapolate")
+
+
+
+
+#-----------------------------------------------------------------------
 # global variable
 met = (input("what is the metallicity limit ? "))
 if met == '-1.5':
@@ -398,6 +636,10 @@ ctot = []
 vtot = []
 ctot_sample = []
 vtot_sample = []
+ctot_sample2 = []
+vtot_sample2 = []
+ctot_sample3 = []
+vtot_sample3 = []
 errtot = []
 errtotv = []
 errtot_sample = []
@@ -407,7 +649,12 @@ mean_stop = []
 isov = np.zeros((len(ind),265))
 isoc = np.zeros((len(ind),265))
 
+# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dist_alpha.txt', 'a+') as fid_file:
+	# ~fid_file.write('%s %s %s %s \n' %('#GC name', 'M0', 'M0 + 2', 'M0 + 4'))
+# ~fid_file.close()
 
+########################################################################
+########################################################################
 #-----------------------------------------------------------------------
 
 
@@ -483,14 +730,26 @@ for ig, g in enumerate(ind):
 
 	rgb = np.where(corr_mag < mstop - dm - abV - 1.0)[0]
 	close = np.where(col_dist[rgb] < 0.08)[0]
+	rgb2 = np.where(corr_mag < mstop - dm - abV - 3.0)[0]
+	close2 = np.where(col_dist[rgb2] < 0.08)[0]
+	rgb3 = np.where(corr_mag < mstop - dm - abV - 5.0)[0]
+	close3 = np.where(col_dist[rgb3] < 0.08)[0]
 
 	cocol = corr_col[rgb][close]
 	comag = corr_mag[rgb][close]
+	cocol2 = corr_col[rgb2][close2]
+	comag2 = corr_mag[rgb2][close2]
+	cocol3 = corr_col[rgb3][close3]
+	comag3 = corr_mag[rgb3][close3]
 
 	ctot.extend(corr_col)
 	vtot.extend(corr_mag)
 	ctot_sample.extend(cocol)
 	vtot_sample.extend(comag)
+	ctot_sample2.extend(cocol2)
+	vtot_sample2.extend(comag2)
+	ctot_sample3.extend(cocol3)
+	vtot_sample3.extend(comag3)
 	errtot.extend(err_color)
 	errtotv.extend(err_v)
 	errtot_sample.extend(err_color[rgb][close])
@@ -499,21 +758,51 @@ for ig, g in enumerate(ind):
 	vcenter, ccenter, errcenter, sbin, bingood, errcenterv = way(corr_mag[rgb][close], corr_col[rgb][close], err_color[rgb][close], err_v[rgb][close])
 
 	std = np.sqrt(np.sum(col_dist[rgb][close]**2)/len(col_dist[rgb][close]))
-
-	print(std, len(col_dist[rgb][close]))
+	# ~print(std, len(col_dist[rgb][close]))
 	# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/sigma'+met+'.txt', 'a+') as fid_file:
 		# ~fid_file.write(str(glc)+' '+str(len(col_dist[rgb][close]))+' '+str(std)+"\n")
 	# ~fid_file.close()
+		
+
+	histo, dx, dy = alpha_distriubtion(corr_col[rgb][close],corr_mag[rgb][close])
+	histo2, dx2, dy2 = alpha_distriubtion(corr_col[rgb2][close2],corr_mag[rgb2][close2])
+	histo3, dx3, dy3 = alpha_distriubtion(corr_col[rgb3][close3],corr_mag[rgb3][close3])
+	# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dist_alpha.txt', 'a+') as fid_file:
+		# ~fid_file.write('%s %.2f %.2f %.2f \n' %(clus_nb, histo, histo2, histo3))
+	# ~fid_file.close()
+
+
+	print(np.mean(histo))
+	print(np.mean(histo2))	
+	print(np.mean(histo3))	
 	
-	# ~plt.scatter(corr_col,corr_mag, marker='.', s=10, color='grey', alpha=0.8)
-	# ~plt.scatter(corr_col[rgb][close],corr_mag[rgb][close], marker='.', s=10, color='r', alpha=0.8)
+	plt.scatter(corr_col,corr_mag, marker='.', s=10, color='grey', alpha=0.8)
+	# plt.scatter(corr_col[rgb][close],corr_mag[rgb][close], marker='.', s=10, color='r', alpha=0.8)
+	# plt.scatter(corr_col[rgb2][close2],corr_mag[rgb2][close2], marker='.', s=10, color='b', alpha=0.8)
+	plt.scatter(dx,dy, marker='.', s=10, color='b', alpha=0.8)
+	plt.scatter(dx2,dy2, marker='.', s=10, color='r', alpha=0.8)
 	# ~#plt.scatter(ccenter,vcenter, marker='o', s=10, color='b', alpha=0.8)
-	# ~plt.xlim(-0.5,3)
-	# ~plt.ylim(5,-5)
-	# ~plt.tick_params(labelsize=16)
-	# ~plt.show() 
-	# ~plt.close()
-	
+	# ~plt.plot(col12 , mag12, label=r'$\Delta_{\alpha}$ = 0.8', c='c')
+	# ~plt.plot(col13 , mag13, label=r'$\Delta_{\alpha}$ = 0.6', c='orange')
+	# ~plt.plot(col26 , mag26, label=r'$\Delta_{\alpha}$ = 0.5', c='y')
+	# ~plt.plot(col14 , mag14, label=r'$\Delta_{\alpha}$ = 0.4', c='g')
+	# ~plt.plot(col24 , mag24, label=r'$\Delta_{\alpha}$ = 0.3', c='m')
+	# ~plt.plot(col15 , mag15, label=r'$\Delta_{\alpha}$ = 0.2', c='b')
+	# ~plt.plot(col16 , mag16, label=r'$\Delta_{\alpha}$ = 0.1', c='r')
+	plt.plot(col17 , mag17, label=r'$\alpha_{MLT}$ = 2.00', c='k')
+	# ~plt.plot(col18 , mag18, c='r')
+	# ~plt.plot(col19 , mag19, c='b')
+	# ~plt.plot(col25 , mag25, c='m')
+	# ~plt.plot(col20 , mag20, c='g')
+	# ~plt.plot(col27 , mag27, c='y')
+	# ~plt.plot(col21 , mag21, c='orange')
+	# ~plt.plot(col22 , mag22, c='c')
+	plt.xlim(0,1.5)
+	plt.ylim(5,-5)
+	plt.tick_params(labelsize=16)
+	plt.show() 
+	plt.close()
+	# ~kill
 #-----------------------------------------------------------------------
 # compute the mean isochrone and mean mstop
 iso_midc = np.mean(isoc, axis=0)
@@ -561,98 +850,24 @@ std_tot2 = np.sqrt(np.sum(col_dist_tot2**2)/len(col_dist_tot2))
 	# ~fid_file.write('Using the median of the sample \n')
 	# ~fid_file.write(str(len(ind))+'GCs'+' '+str(len(col_dist_tot2))+' '+str(std_tot2)+"\n")
 # ~fid_file.close()
-#-----------------------------------------------------------------------
-# plot total start
-f1 = np.loadtxt('painted_files/painted_a200.data')
-F606w1, F814w1 = f1[:,9], f1[:,10]
 
-
-name = ['a100','a125','a150','a175','a200']
-name2 = ['a100','a120','a140','a160','a180','a200']
 
 #-----------------------------------------------------------------------
-p0 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_fid.data')
-m0 = cut(p0) # cut pre main sequence
-V0, R0 = p0[m0:,9], p0[m0:,10]
+# compute the alpha histogram
+histotot, pxtot, pytot = alpha_distriubtion(ctot_sample,vtot_sample)
+histotot2, pxtot2, pytot2 = alpha_distriubtion(ctot_sample2,vtot_sample2)
+histotot3, pxtot3, pytot3 = alpha_distriubtion(ctot_sample3,vtot_sample3)
+# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dist_alpha.txt', 'a+') as fid_file:
+	# ~fid_file.write('%s %.2f %.2f %.2f \n' %('Total', histotot, histotot2, histotot3))
+# ~fid_file.close()
 
-#-----------------------------------------------------------------------
-#varying mixing length
-# ~p2 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a120.data')
-# ~m2 = cut(p2) # cut pre main sequence
-# ~V2, R2 = p2[m2:,9], p2[m2:,10]
-# ~p3 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a140.data')
-# ~m3 = cut(p3) # cut pre main sequence
-# ~V3, R3 = p3[m3:,9], p3[m3:,10]
-# ~p4 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a160.data')
-# ~m4 = cut(p4) # cut pre main sequence
-# ~V4, R4 = p4[m4:,9], p4[m4:,10]
-# ~p5 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a180.data')
-# ~m5 = cut(p5) # cut pre main sequence
-# ~V5, R5 = p5[m5:,9], p5[m5:,10]
-# ~p6 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a200.data')
-# ~m6 = cut(p6) # cut pre main sequence
-# ~V6, R6 = p6[m6:,9], p6[m6:,10]
-# ~p7 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a220.data')
-# ~m7 = cut(p7) # cut pre main sequence
-# ~V7, R7 = p7[m7:,9], p7[m7:,10]
-# ~p8 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a240.data')
-# ~m8 = cut(p8) # cut pre main sequence
-# ~V8, R8 = p8[m8:,9], p8[m8:,10]
-#-----------------------------------------------------------------------
-# varying mass
-# ~p0 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a180_M070.data')
-# ~p0 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a180_M055.data')
-# ~m0 = cut(p0) # cut pre main sequence
-# ~V0, R0 = p0[m0:,9], p0[m0:,10]
-# ~p1 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a180_M090.data')
-# ~p1 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a180_M105.data')
-# ~m1 = cut(p1) # cut pre main sequence
-# ~V1, R1 = p1[m1:,9], p1[m1:,10]
-# ~#-----------------------------------------------------------------------
-# ~# No ledoux parameter
-# ~p9 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a180_ledoux.data')
-# ~m9 = cut(p9) # cut pre main sequence
-# ~V9, R9 = p9[m9:,9], p9[m9:,10]
-#-----------------------------------------------------------------------
-# COX MLT
-# ~p10 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a180_cox.data')
-# ~m10 = cut(p10) # cut pre main sequence
-# ~V10, R10 = p10[m10:,9], p10[m10:,10]
-# ~#-----------------------------------------------------------------------
-# ~# varying helium
-# ~p11 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a180_y020.data')
-# ~m11 = cut(p11) # cut pre main sequence
-# ~V11, R11 = p11[m11:,9], p11[m11:,10]
-# ~p12 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a180_y028.data')
-# ~m12 = cut(p12) # cut pre main sequence
-# ~V12, R12 = p12[m12:,9], p12[m12:,10]
-# ~#-----------------------------------------------------------------------
-# ~# type2
-# ~p13 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a180_type2.data')
-# ~m13 = cut(p13) # cut pre main sequence
-# ~V13, R13 = p13[m13:,9], p13[m13:,10]
-# ~#-----------------------------------------------------------------------
-# ~# rotational mixing
-# ~p14 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a180_rotmix.data')
-# ~m14 = cut(p14) # cut pre main sequence
-# ~V14, R14 = p14[m14:,9], p14[m14:,10]
-# ~#-----------------------------------------------------------------------
-# ~# rotational mixing
-# ~p15 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a180_diff.data')
-# ~m15 = cut(p15) # cut pre main sequence
-# ~V15, R15 = p15[m15:,9], p15[m15:,10]
-# ~#-----------------------------------------------------------------------
-# ~# rgb wind
-# ~p16 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a180_nowind.data')
-# ~m16 = cut(p16) # cut pre main sequence
-# ~V16, R16 = p16[m16:,9], p16[m16:,10]
-# ~p17 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a180_eta210.data')
-# ~m17 = cut(p17) # cut pre main sequence
-# ~V17, R17 = p17[m17:,9], p17[m17:,10]
+# ~print(np.mean(histotot))
+# ~print(np.mean(histotot2))	
+# ~print(np.mean(histotot3))	
 
+########################################################################
+########################################################################
 
-
-#------------------------------------------------------------------------
 afe_values=[-0.2, 0.0 , 0.2, 0.4, 0.6, 0.8] 
 
 afe_max = afe_values[np.searchsorted(afe_values, 0.2)]
@@ -666,49 +881,76 @@ lpp = (min(len(mag_v0_min), len(mag_v0_max))) # get minimum length to interpolat
 mag_v0 = (mag_v0_min[:lpp]*(afe_max - afe) + mag_v0_max[:lpp]*(afe - afe_min)) / (afe_max - afe_min)
 Color_iso0 = (Color_iso0_min[:lpp]*(afe_max - afe) + Color_iso0_max[:lpp]*(afe - afe_min)) / (afe_max - afe_min)
 
+#-----------------------------------------------------------------------
+# plot mixing length variation
+# ~plt.figure()
+# ~# plt.scatter(corr_col,corr_mag, marker='.', s=10, alpha=0.8)
+# ~plt.scatter(ctot,vtot, marker='.', s=10, color='grey', alpha=0.8)
+# ~plt.scatter(ctot_sample,vtot_sample, marker='.', s=10, color='r', alpha=0.8)
+# ~plt.scatter(ctot_sample2,vtot_sample2, marker='.', s=10, color='b', alpha=0.8)
+# ~# plt.scatter(ccentertot[2:],vcentertot[2:], marker='o', s=10, color='b', alpha=0.8)
+# ~# plt.plot(iso_midc, iso_midv, c='r', label='mean of the 12 isochrones')
+# ~# plt.plot(V0-R0,V0, label='fiducial' ,linewidth=2, c='k')
+# ~plt.scatter(pxtot,pytot, marker='.', s=10, color='b', alpha=0.8)
+# ~plt.scatter(pxtot2,pytot2, marker='.', s=10, color='r', alpha=0.8)
+# ~plt.plot(col12 , mag12, label=r'$\Delta_{\alpha}$ = 0.8', c='c')
+# ~plt.plot(col13 , mag13, label=r'$\Delta_{\alpha}$ = 0.6', c='orange')
+# ~plt.plot(col14 , mag14, label=r'$\Delta_{\alpha}$ = 0.4', c='g')
+# ~plt.plot(col15 , mag15, label=r'$\Delta_{\alpha}$ = 0.2', c='b')
+# ~plt.plot(col16 , mag16, label=r'$\Delta_{\alpha}$ = 0.1', c='r')
+# ~plt.plot(col17 , mag17, label=r'$\alpha_{MLT}$ = 2.00', c='k')
+# ~plt.plot(col18 , mag18, c='r')
+# ~plt.plot(col19 , mag19, c='b')
+# ~plt.plot(col20 , mag20, c='g')
+# ~plt.plot(col21 , mag21, c='orange')
+# ~plt.plot(col22 , mag22, c='c')
+# ~# plt.xlim(-0.5,3)
+# ~plt.xlim(-0.23,1.65)
+# ~plt.ylim(5,-5)
+# ~# plt.gca().invert_yaxis()
+# ~plt.tick_params(labelsize=16)
+# ~# plt.subplots_adjust(bottom=0.16)
+# ~lgnd = plt.legend(loc='best', fontsize = 14)
+# ~# lgnd.get_frame().set_edgecolor('k')
+# ~# lgnd.get_frame().set_linewidth(2.0)
+# ~plt.xlabel(' F606W - F814W', fontsize = 20)
+# ~plt.ylabel(' F606W', fontsize = 20)
+# ~plt.title('[Fe/H] < '+met+', '+str(len(ind))+' clusters', fontsize = 24)
+# ~plt.show() 
+# ~plt.close()
+
+# ~kill
+#-----------------------------------------------------------------------
+# plot convection configuration
 plt.figure()
 # ~plt.scatter(corr_col,corr_mag, marker='.', s=10, alpha=0.8)
 plt.scatter(ctot,vtot, marker='.', s=10, color='grey', alpha=0.8)
+plt.axhline(np.max(vtot_sample), c='k', label=r'$M_{0}$')
+plt.axhline(np.max(vtot_sample2), c='r', label=r'$M_{0}$ - 2')
+plt.axhline(np.max(vtot_sample3), c='b', label=r'$M_{0}$ - 4')
 # ~plt.scatter(ctot_sample,vtot_sample, marker='.', s=10, color='r', alpha=0.8)
 # ~plt.scatter(ccentertot[2:],vcentertot[2:], marker='o', s=10, color='b', alpha=0.8)
 # ~plt.plot(iso_midc, iso_midv, c='r', label='mean of the 12 isochrones')
-# ~for j in name:
-	# ~f10 = np.loadtxt('catalogs/alpha_'+j+'.txt')
-	# ~col10, mag10 = f10[0,:], f10[1,:]
-	# ~plt.plot(col10,mag10, label= 'Raul '+j)
-# ~for j in name2:
-	# ~f11 = np.loadtxt('catalogs/Malpha_'+j+'.txt')
-	# ~col11, mag11 = f11[0,:], f11[1,:]
-	# ~plt.plot(col11,mag11, label= 'Mesa a200', c='k')
-# ~for j in name2:
-	# ~f1 = np.loadtxt('painted_files/painted_'+j+'.data')
-	# ~F606w1, F814w1 = f1[:,9], f1[:,10]
-	# ~plt.plot(F606w1 - F814w1, F606w1, label='painted a200')
-plt.plot(V0-R0,V0, label= r'$\Delta$M = 0.25', linewidth=2, c='b')
-# ~plt.plot(V1-R1,V1, linewidth=2, c='b')
-# ~plt.plot(V2-R2,V2, label=r'$\alpha_{MLT}$ = 1.2', linewidth=2)
-# ~plt.plot(V3-R3,V3, label=r'$\alpha_{MLT}$ = 1.4', linewidth=2)
-# ~plt.plot(V4-R4,V4, label=r'$\alpha_{MLT}$ = 1.6', linewidth=2)
-# ~plt.plot(V5-R5,V5, label='fiducial', linewidth=2, c='k')
-# ~plt.plot(V6-R6,V6, label=r'$\alpha_{MLT}$ = 2.0', linewidth=2)
-# ~plt.plot(V7-R7,V7, label=r'$\alpha_{MLT}$ = 2.2', linewidth=2)
-# ~plt.plot(V8-R8,V8, label=r'$\alpha_{MLT}$ = 2.4', linewidth=2)
-# ~plt.plot(V9-R9,V9, label='No Ledoux criterion', linewidth=2, c='r', linestyle='--')
-# ~plt.plot(V10-R10,V10, label='Cox MLT', linewidth=2, linestyle=':')
-# ~plt.plot(V11-R11,V11, label=r'$\Delta$Y = 0.04', linewidth=2, c='g')
-# ~plt.plot(V12-R12,V12, linewidth=2, c='g')
-# ~plt.plot(V13-R13,V13, label='No type 2 opacity', linewidth=2, linestyle=':')
-# ~plt.plot(V14-R14,V14, label='No rotational mixing', linewidth=2, linestyle=':')
-# ~plt.plot(V15-R15,V15, label='No element diffusion', linewidth=2, linestyle=':')
-# ~plt.plot(V16-R16,V16, label='No RBG wind', linewidth=2, linestyle=':')
-# ~plt.plot(V17-R17,V17, label='No RBG wind', linewidth=2, linestyle=':')
+# ~plt.plot(V0-R0,V0, label='fiducial' ,linewidth=2, c='k')
+# ~plt.plot(col17 , mag17, label='Fiducial', c='k')
+# ~plt.plot(col1 , mag1, label=r'$\Delta$M = 0.1', c='b')
+# ~plt.plot(col2 , mag2, c='b')
+# ~plt.plot(col3 , mag3, label=r'$\Delta$Y = 0.04', c='g')
+# ~plt.plot(col4 , mag4, c='g')
+# ~plt.plot(col5 , mag5, label='No Ledoux criterion', linestyle=':')
+# ~plt.plot(col6 , mag6, label='Cox MLT theory', linestyle=':')
+# ~plt.plot(col7 , mag7, label='No type 2 opacities', linestyle=':')
+# ~plt.plot(col8 , mag8, label='No overshoot', linestyle=':')
+# ~plt.plot(col9 , mag9, label= r'Reimers $\eta$ = 0.8', linestyle=':', c='c')
+# ~plt.plot(col10 , mag10, label='No element diffusion', linestyle=':', c='r')
+# ~plt.plot(col11 , mag11, label='No rotational mixing', linestyle=':')
 # ~plt.xlim(-0.5,3)
-plt.xlim(-0.23,1.65)
+plt.xlim(0,1.65)
 plt.ylim(5,-5)
 # ~plt.gca().invert_yaxis()
-plt.tick_params(labelsize=16)
+plt.tick_params(labelsize=14)
 # ~plt.subplots_adjust(bottom=0.16)
-lgnd = plt.legend(loc='best', fontsize = 14)
+lgnd = plt.legend(loc='best', fontsize = 12)
 # ~lgnd.get_frame().set_edgecolor('k')
 # ~lgnd.get_frame().set_linewidth(2.0)
 plt.xlabel(' F606W - F814W', fontsize = 20)
@@ -716,4 +958,4 @@ plt.ylabel(' F606W', fontsize = 20)
 plt.title('[Fe/H] < '+met+', '+str(len(ind))+' clusters', fontsize = 24)
 plt.show() 
 plt.close()
-# ~kill
+

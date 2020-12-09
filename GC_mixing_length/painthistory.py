@@ -56,6 +56,7 @@ for l in lines[4:]:
     
 labels = np.array(labels[1:])
 nlabels=len(labels)
+print(nlabels)
 labels = np.hstack(("star_age","star_mass","log_L",
                     "log_Lnuc","log_Teff","log_R",
                     "log_g","log_surf_z","log_center_T",labels[4:]))
