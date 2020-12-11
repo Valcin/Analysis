@@ -180,6 +180,21 @@ def cut2(h):
 	min_pts = np.where(V == const)[0]
 	mag = V[min_pts[0]:]
 	col = V[min_pts[0]:] - R[min_pts[0]:]
+
+	
+def cut2(h):
+	# ~V = h.abs_mag_F606W
+	# ~R = h.abs_mag_F814W
+	# ~const = np.max(V)
+	# ~min_pts = np.where(V == const)[0]
+	# ~mag = V[min_pts[0]:]
+	# ~col = V[min_pts[0]:] - R[min_pts[0]:]
+	V = h.log_L
+	R = h.log_Teff
+	const = np.min(V)
+	min_pts = np.where(V == const)[0]
+	mag = V[min_pts[0]:]
+	col = R[min_pts[0]:]
 	return col, mag, min_pts[0]
 
 def error_compute(dbins, histo, bhisto):
@@ -396,10 +411,10 @@ h26 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS
 col26,mag26, mp26 = cut2(h26)
 h27= mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a250.data')
 col27,mag27, mp27= cut2(h27)
-# ~h28 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a130.data')
-# ~col28,mag28, mp28 = cut2(h28)
-# ~h29= mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a270.data')
-# ~col29,mag29, mp29= cut2(h29)
+h28 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a130.data')
+col28,mag28, mp28 = cut2(h28)
+h29= mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a270.data')
+col29,mag29, mp29= cut2(h29)
 
 # READ PAINTED FILES
 # ~p1 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_fid.data')
@@ -430,7 +445,7 @@ col27,mag27, mp27= cut2(h27)
 
 plt.figure()
 plt.plot(col12 , mag12, label='a = 1.20')
-plt.plot(col28 , mag12, label='a = 1.30')
+plt.plot(col28 , mag28, label='a = 1.30')
 plt.plot(col13 , mag13, label='a = 1.40')
 plt.plot(col26 , mag26, label='a = 1.50')
 plt.plot(col14 , mag14, label='a = 1.60')
@@ -444,7 +459,7 @@ plt.plot(col25 , mag25, label='a = 2.30')
 plt.plot(col20 , mag20, label='a = 2.40')
 plt.plot(col27 , mag27, label='a = 2.50')
 plt.plot(col21 , mag21, label='a = 2.60')
-plt.plot(col29 , mag21, label='a = 2.70')
+plt.plot(col29 , mag29, label='a = 2.70')
 plt.plot(col22 , mag22, label='a = 2.80')
 # ~plt.plot(col1 , mag1, label='M = 0.70', c='b')
 # ~plt.plot(col2 , mag2, label='M = 0.90', c='b')
@@ -458,8 +473,18 @@ plt.plot(col22 , mag22, label='a = 2.80')
 # ~plt.plot(col10 , mag10, label='No element diffusion', linestyle=':')
 # ~plt.plot(col11 , mag11, label='No rotational mixing', linestyle=':')
 # ~plt.plot(h.abs_mag_F606W - h.abs_mag_F814W , h.abs_mag_F606W, label='test', linestyle=':')
-plt.gca().invert_yaxis()
-plt.legend(loc='best')
+# ~plt.gca().invert_yaxis()
+# ~plt.legend(loc='best')
+# ~plt.show()
+# ~plt.close()
+plt.xlabel(r'Log $\rm T_{eff}$', fontsize=16)
+plt.ylabel(r'Log L/$\rm L_{\odot}$', fontsize=16)
+plt.text(3.73,3.0,r'$\alpha$ = 2.8',va='center',fontsize=16,alpha=1.)
+plt.text(3.61,2.5,r'$\alpha$ = 1.2',va='center',fontsize=16,alpha=1.)
+plt.text(3.68,0.18,r'0.8 $M_{\odot}$,   Z = 0.0002',va='center',fontsize=16,alpha=1.,
+bbox=dict(boxstyle="round",fc=(1., 1.,1.,1.),ec='k'))
+plt.tick_params(labelsize=16)
+plt.gca().invert_xaxis()
 plt.show()
 plt.close()
 
