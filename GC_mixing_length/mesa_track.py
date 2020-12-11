@@ -340,7 +340,7 @@ msun = 1.989e+33 #g
 
 # READ MESSA FILES
 
-h = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history.data')
+# ~h = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history.data')
 
 h1 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_M070.data')
 col1,mag1, mp = cut2(h1)
@@ -457,7 +457,7 @@ plt.plot(col22 , mag22, label='a = 2.80')
 # ~plt.plot(col9 , mag9, label='Reimers eta = 0.8', linestyle=':')
 # ~plt.plot(col10 , mag10, label='No element diffusion', linestyle=':')
 # ~plt.plot(col11 , mag11, label='No rotational mixing', linestyle=':')
-plt.plot(h.abs_mag_F606W - h.abs_mag_F814W , h.abs_mag_F606W, label='test', linestyle=':')
+# ~plt.plot(h.abs_mag_F606W - h.abs_mag_F814W , h.abs_mag_F606W, label='test', linestyle=':')
 plt.gca().invert_yaxis()
 plt.legend(loc='best')
 plt.show()
