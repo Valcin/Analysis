@@ -3,6 +3,7 @@ import mesa_reader as mr
 import matplotlib.pyplot as plt
 import math
 import os
+from scipy import interpolate
 
 ########################################################################
 ########################################################################
@@ -78,6 +79,8 @@ def interp_eep(tef, sf, tefs, sfs, grid):
 	aqui = np.where((dat[:,0] == tefs[i_a])&(dat[:,1] == sfs[i_f])&(dat[:,3] == 0.00))[0]
 	pts1[0, 2] = dat[aqui,10]
 	pts2[0, 2] = dat[aqui,15]
+	# ~pts1[0, 2] = dat[aqui,3]
+	# ~pts2[0, 2] = dat[aqui,4]
 	
 	i_f = isf - 1
 	i_a = itef
@@ -325,28 +328,45 @@ msun = 1.989e+33 #g
 # ~plt.gca().invert_yaxis()
 # ~plt.show()
 
+dat = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/fehm200.HST_ACSWF')
+# ~dat = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/colmag.Castelli.HSTACSWFC3.Vega.M-2.txt')
+# ~dat = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/bc_CORRp0.dat')
+tefs = np.unique(dat[:,0])
+sfs = np.unique(dat[:,1])
+feH = np.unique(dat[:,2])
 
 name = ['a100','a125','a150','a175','a200']
+# ~name = ['alpha100','alpha125','alpha150','alpha175','alpha200']
 for j in name:	
-	raul = np.loadtxt('/home/david/codes/data/GC_mixing_length/'+j+'.txt')
+	raul = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/JimMacD/'+j+'.txt')
 	sf = raul[:,2]
 	teff = 10**(raul[:,1])
+	logR = raul[:,9]
+
 
 	safe = np.where((teff > np.min(tefs))&(teff < np.max(tefs))&(sf > np.min(sfs))&(sf < np.max(sfs)))[0]
 	teff = teff[safe]
 	sf = sf[safe]
 
+
 	Mbol = -2.5*np.log10((Lsun*10**raul[:,5])/L0)[safe]
-	M606 = np.zeros(len(Mbol))
+	M606 = np.zeros(len(Mbol)) 
 	M814 = np.zeros(len(Mbol))
 
 	for i in range(len(Mbol)):
 		bc606, bc814 = interp_eep(teff[i], sf[i], tefs, sfs, dat)
-		M606[i] = Mbol[i] - bc606
+		M606[i] = Mbol[i] - bc606 
 		M814[i] = Mbol[i] - bc814
 
 	np.savetxt('catalogs/alpha_'+j+'.txt', (M606-M814, M606))
-	plt.scatter(M606-M814, M606)
+	# ~plt.scatter(M606-M814, M606)
+
+	fcurve = interpolate.interp1d(M606, M606-M814)
+	mpts = np.linspace(np.min(M606), np.max(M606), 20)
+	
+	# ~plt.plot(M606-M814, M606)
+	plt.plot(fcurve(mpts), mpts)
+	plt.scatter(fcurve(mpts), mpts)
 plt.gca().invert_yaxis()
 plt.show()
 

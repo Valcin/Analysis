@@ -426,7 +426,151 @@ def error_compute(dbins, histo, bhisto):
 				return bhisto[np.min(above)], bhisto[np.max(above)]
 				break
 			amp -= 0.01
-			#~ print('percentage of the amplitude is '+str(amp))	
+			#~ print('percentage of the amplitude is '+str(amp))
+
+def interp_eep(tef, sf, tefs, sfs, grid):
+
+	Ntef = len(tefs)
+	Nsf = len(sfs)
+
+
+	isf = searchsorted(sfs, Nsf, sf)
+	itef = searchsorted(tefs, Ntef, tef)
+	#~ if isf==0 or itef==0 or isf==Nsf or itef==Ntef:
+		#~ return np.nan
+
+	pts1 = np.zeros((4,3))
+	pts2 = np.zeros((4,3))
+	# ~vals = np.zeros(4)
+
+	### construct box
+	i_f = isf - 1
+	i_a = itef - 1
+	pts1[0, 0] = tefs[i_a]
+	pts1[0, 1] = sfs[i_f]
+	pts2[0, 0] = tefs[i_a]
+	pts2[0, 1] = sfs[i_f]
+	aqui = np.where((dat[:,0] == tefs[i_a])&(dat[:,1] == sfs[i_f])&(dat[:,3] == 0.00))[0]
+	pts1[0, 2] = dat[aqui,10]
+	pts2[0, 2] = dat[aqui,15]
+	# ~pts1[0, 2] = dat[aqui,3]
+	# ~pts2[0, 2] = dat[aqui,4]
+	
+	i_f = isf - 1
+	i_a = itef
+	pts1[1, 0] = tefs[i_a]
+	pts1[1, 1] = sfs[i_f]
+	pts2[1, 0] = tefs[i_a]
+	pts2[1, 1] = sfs[i_f]
+	aqui = np.where((dat[:,0] == tefs[i_a])&(dat[:,1] == sfs[i_f])&(dat[:,3] == 0.0))[0]
+	pts1[1, 2] = dat[aqui,10]
+	pts2[1, 2] = dat[aqui,15]
+
+
+	i_f = isf
+	i_a = itef - 1
+	pts1[2, 0] = tefs[i_a]
+	pts1[2, 1] = sfs[i_f]
+	pts2[2, 0] = tefs[i_a]
+	pts2[2, 1] = sfs[i_f]
+	aqui = np.where((dat[:,0] == tefs[i_a])&(dat[:,1] == sfs[i_f])&(dat[:,3] == 0.0))[0]
+	pts1[2, 2] = dat[aqui,10]
+	pts2[2, 2] = dat[aqui,15]
+
+
+	i_f = isf
+	i_a = itef
+	pts1[3, 0] = tefs[i_a]
+	pts1[3, 1] = sfs[i_f]
+	pts2[3, 0] = tefs[i_a]
+	pts2[3, 1] = sfs[i_f]
+	aqui = np.where((dat[:,0] == tefs[i_a])&(dat[:,1] == sfs[i_f])&(dat[:,3] == 0.0))[0]
+	pts1[3, 2] = dat[aqui,10]
+	pts2[3, 2] = dat[aqui,15]
+	
+	#~ magtu[ind] = interp_box(tef, sf, pts, vals)
+	# ~print(tef, sf)
+	bc1 = bilinear_interpolation(tef, sf, pts1)
+	bc2 = bilinear_interpolation(tef, sf, pts2)
+	
+	#~ print(ind, pts)
+	#~ f = scipy.interpolate.interp2d(pts[:,0], pts[:,1], vals)
+	#~ znew = f(tef, sf)
+	#~ magtu[ind] = znew[0]
+
+
+	return bc1, bc2
+
+def searchsorted(arr, N, x):
+	"""N is length of arr
+	"""
+	L = 0
+	R = N-1
+	done = False
+	m = (L+R)//2
+	while not done:
+		if arr[m] < x:
+			L = m + 1
+			#~ print('moins')
+		elif arr[m] > x:
+			R = m - 1
+			#~ print('plus')
+		elif arr[m] == x:
+			L = m
+			done = True
+		m = (L+R)//2
+		#~ print(arr[m], x, L, R, m)
+		if L>R:
+			done = True
+	return L
+
+def bilinear_interpolation(x, y, pts):
+
+	#~ points = sorted(points)               # order points by x, then by y
+	#~ (x1, y1, q11), (_x1, y2, q12), (x2, _y1, q21), (_x2, _y2, q22) = points
+	x1 = pts[0,0]
+	y1 = pts[0,1]
+	q11 = pts[0,2]
+	
+	_x1 = pts[2,0]
+	y2 = pts[2,1]
+	q12 = pts[2,2]
+	
+	x2 = pts[1,0]
+	_y1 = pts[1,1]
+	q21 = pts[1,2]
+	
+	_x2 = pts[3,0]
+	_y2 = pts[3,1]
+	q22 = pts[3,2]
+	
+	#~ x1 = pts[0,0]
+	#~ x2 = pts[3,0]
+	#~ y1 = pts[0,1]
+	#~ y2 = pts[3,1]
+	
+	#~ q11 = pts[0,2]
+	#~ q12 = pts[1,2]
+	#~ q21 = pts[2,2]
+	#~ q22 = pts[3,2]
+	
+	# ~print(pts)
+	# ~print(x1,x,x2)
+	# ~print(y1,y,y2)
+
+	if x1 != _x1 or x2 != _x2 or y1 != _y1 or y2 != _y2:
+		raise ValueError('points do not form a rectangle')
+	if not x1 <= x <= x2 or not y1 <= y <= y2:
+		raise ValueError('(x, y) not within the rectangle')
+
+
+	fxy1 = (x2-x)/(x2-x1)*q11 + (x-x1)/(x2-x1)*q21
+	fxy2 = (x2-x)/(x2-x1)*q12 + (x-x1)/(x2-x1)*q22
+	
+	fxy = (y2-y)/(y2-y1)*fxy1 + (y-y1)/(y2-y1)*fxy2
+	
+	return fxy
+
 ########################################################################
 ########################################################################
 ### define global variables
@@ -455,6 +599,14 @@ Abs_dar = np.loadtxt('/home/david/codes/Analysis/GC/plots/data_'+ version2 +'_'+
 Afe_dar = np.loadtxt('/home/david/codes/Analysis/GC/plots/data_'+ version2 +'_'+str(model2)+'.txt', usecols=(14,))
 
 chunkbot = rescale[:,5]
+
+Zsun = 0.0134
+Fe_h = -2.0
+c = 2.9979e8 # in meters
+L0 = 3.0128e28 #zero-point luminosity in W
+Lsun = 3.828e26 #solar luminosity in W
+rsun = 6.957e+10	# in centimeters
+msun = 1.989e+33 #g
 
 #-----------------------------------------------------------------------
 # plot total start
@@ -940,13 +1092,13 @@ Color_iso0 = (Color_iso0_min[:lpp]*(afe_max - afe) + Color_iso0_max[:lpp]*(afe -
 # ~kill
 #-----------------------------------------------------------------------
 # plot convection configuration
-plt.figure()
-#plt.scatter(corr_col,corr_mag, marker='.', s=10, alpha=0.8)
-plt.scatter(ctot,vtot, marker='.', s=10, color='grey', alpha=0.8)
-plt.axhline(np.max(vtot_sample), c='k', label=r'$M_{0}$')
-plt.axhline(np.max(vtot_sample2), c='r', label=r'$M_{1}$')
-plt.axhline(np.max(vtot_sample3), c='b', label=r'$M_{2}$')
-plt.scatter(ctot_sample,vtot_sample, marker='.', s=10, color='k', alpha=0.8)
+# ~plt.figure()
+# ~#plt.scatter(corr_col,corr_mag, marker='.', s=10, alpha=0.8)
+# ~plt.scatter(ctot,vtot, marker='.', s=10, color='grey', alpha=0.8)
+# ~plt.axhline(np.max(vtot_sample), c='k', label=r'$M_{0}$')
+# ~plt.axhline(np.max(vtot_sample2), c='r', label=r'$M_{1}$')
+# ~plt.axhline(np.max(vtot_sample3), c='b', label=r'$M_{2}$')
+# ~plt.scatter(ctot_sample,vtot_sample, marker='.', s=10, color='k', alpha=0.8)
 # ~# plt.scatter(ccentertot[2:],vcentertot[2:], marker='o', s=10, color='b', alpha=0.8)
 # ~# plt.plot(iso_midc, iso_midv, c='r', label='mean of the 12 isochrones')
 # ~#plt.plot(V0-R0,V0, label='fiducial' ,linewidth=2, c='k')
@@ -966,6 +1118,53 @@ plt.scatter(ctot_sample,vtot_sample, marker='.', s=10, color='k', alpha=0.8)
 # ~plt.plot(col10 , mag10, label='No element diffusion', linestyle=':', c='r')
 # ~plt.plot(col11 , mag11, label='No rotational mixing', linestyle=':')
 
+# ~plt.xlim(-0.5,2.5)
+# ~plt.xlim(-0.23,1.65)
+# ~plt.ylim(5,-5)
+# ~plt.tick_params(labelsize=14)
+# ~plt.subplots_adjust(bottom=0.15, top=0.89)
+# ~lgnd = plt.legend(loc='best', fontsize = 12)
+# ~# lgnd.get_frame().set_edgecolor('k')
+# ~# lgnd.get_frame().set_linewidth(2.0)
+# ~plt.xlabel(' F606W - F814W', fontsize = 20)
+# ~plt.ylabel(' F606W', fontsize = 20)
+# ~#plt.title('[Fe/H] < '+met+', '+str(len(ind))+' clusters', fontsize = 24)
+# ~plt.show() 
+# ~plt.close()
+
+#-----------------------------------------------------------------------
+# plot convection configuration
+plt.figure()
+#plt.scatter(corr_col,corr_mag, marker='.', s=10, alpha=0.8)
+plt.scatter(ctot,vtot, marker='.', s=10, color='grey', alpha=0.8)
+c = ['g','b','c','orange','r']
+name = ['a100','a125','a150','a175','a200']
+name2 = [r'$\alpha$ = 1.0',r'$\alpha$ = 1.25',r'$\alpha$ = 1.5',r'$\alpha$ = 1.75',r'$\alpha$ = 2.0']
+dat = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/fehm200.HST_ACSWF')
+tefs = np.unique(dat[:,0])
+sfs = np.unique(dat[:,1])
+feH = np.unique(dat[:,2])
+for count,j in enumerate(name):	
+	raul = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/JimMacD/'+j+'.txt')
+	sf = raul[:,2]
+	teff = 10**(raul[:,1])
+	logR = raul[:,9]
+	safe = np.where((teff > np.min(tefs))&(teff < np.max(tefs))&(sf > np.min(sfs))&(sf < np.max(sfs)))[0]
+	teff = teff[safe]
+	sf = sf[safe]
+	Mbol = -2.5*np.log10((Lsun*10**raul[:,5])/L0)[safe]
+	M606 = np.zeros(len(Mbol)) 
+	M814 = np.zeros(len(Mbol))
+
+	for i in range(len(Mbol)):
+		bc606, bc814 = interp_eep(teff[i], sf[i], tefs, sfs, dat)
+		M606[i] = Mbol[i] - bc606 
+		M814[i] = Mbol[i] - bc814
+	fcurve = interpolate.interp1d(M606, M606-M814)
+	mpts = np.linspace(np.min(M606), np.max(M606), 20)
+	
+	# ~plt.plot(M606-M814, M606)
+	plt.plot(fcurve(mpts), mpts, label=name2[count], color=c[count])
 # ~plt.xlim(-0.5,2.5)
 plt.xlim(-0.23,1.65)
 plt.ylim(5,-5)
