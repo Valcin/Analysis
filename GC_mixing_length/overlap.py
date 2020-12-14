@@ -468,24 +468,33 @@ name2 = ['a100','a120','a140','a160','a180','a200']
 # ~V0, R0 = p0[m0:,9], p0[m0:,10]
 # ~#-----------------------------------------------------------------------
 #varying mixing length
-# ~p2 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a120.data')
-# ~m2 = cut(p2) # cut pre main sequence
-# ~V2, R2 = p2[m2:,9], p2[m2:,10]
-# ~p3 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a140.data')
-# ~m3 = cut(p3) # cut pre main sequence
-# ~V3, R3 = p3[m3:,9], p3[m3:,10]
-# ~p4 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a160.data')
-# ~m4 = cut(p4) # cut pre main sequence
-# ~V4, R4 = p4[m4:,9], p4[m4:,10]
-# ~p6 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a200.data')
-# ~m6 = cut(p6) # cut pre main sequence
-# ~V6, R6 = p6[m6:,9], p6[m6:,10]
-# ~p7 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a220.data')
-# ~m7 = cut(p7) # cut pre main sequence
-# ~V7, R7 = p7[m7:,9], p7[m7:,10]
-# ~p8 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a240.data')
-# ~m8 = cut(p8) # cut pre main sequence
-# ~V8, R8 = p8[m8:,9], p8[m8:,10]
+p2 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a120.data')
+m2 = cut(p2) # cut pre main sequence
+V2, R2 = p2[m2:,9], p2[m2:,10]
+p3 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a140.data')
+m3 = cut(p3) # cut pre main sequence
+V3, R3 = p3[m3:,9], p3[m3:,10]
+p4 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a160.data')
+m4 = cut(p4) # cut pre main sequence
+V4, R4 = p4[m4:,9], p4[m4:,10]
+p5 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a180.data')
+m5 = cut(p5) # cut pre main sequence
+V5, R5 = p5[m5:,9], p5[m5:,10]
+p6 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a200.data')
+m6 = cut(p6) # cut pre main sequence
+V6, R6 = p6[m6:,9], p6[m6:,10]
+p7 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a220.data')
+m7 = cut(p7) # cut pre main sequence
+V7, R7 = p7[m7:,9], p7[m7:,10]
+p8 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a240.data')
+m8 = cut(p8) # cut pre main sequence
+V8, R8 = p8[m8:,9], p8[m8:,10]
+p9 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a260.data')
+m9 = cut(p9) # cut pre main sequence
+V9, R9 = p9[m9:,9], p9[m9:,10]
+p10 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a280.data')
+m10 = cut(p10) # cut pre main sequence
+V10, R10 = p10[m10:,9], p10[m10:,10]
 #-----------------------------------------------------------------------
 # varying mass
 # ~p5 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_M070.data')
@@ -886,54 +895,65 @@ Color_iso0 = (Color_iso0_min[:lpp]*(afe_max - afe) + Color_iso0_max[:lpp]*(afe -
 # plot mixing length variation
 # ~plt.figure()
 # plt.scatter(corr_col,corr_mag, marker='.', s=10, alpha=0.8)
-plt.scatter(ctot,vtot, marker='.', s=10, color='grey', alpha=0.8)
+# ~plt.scatter(ctot,vtot, marker='.', s=10, color='grey', alpha=0.8)
 # ~plt.scatter(ctot_sample,vtot_sample, marker='.', s=10, color='r', alpha=0.8)
 # ~plt.scatter(ctot_sample2,vtot_sample2, marker='.', s=10, color='b', alpha=0.8)
 # ~# plt.scatter(ccentertot[2:],vcentertot[2:], marker='o', s=10, color='b', alpha=0.8)
 # ~# plt.plot(iso_midc, iso_midv, c='r', label='mean of the 12 isochrones')
-# ~# plt.plot(V0-R0,V0, label='fiducial' ,linewidth=2, c='k')
+# ~plt.plot(V2-R2,V2, label=r'$\Delta_{\alpha}$ = 0.8', c='c')
+# ~plt.plot(V3-R3,V3, label=r'$\Delta_{\alpha}$ = 0.6', c='orange')
+# ~plt.plot(V4-R4,V4, label=r'$\Delta_{\alpha}$ = 0.4', c='r')
+# ~plt.plot(V5-R5,V5, label=r'$\Delta_{\alpha}$ = 0.2', c='b')
+# ~plt.plot(V6-R6,V6, label=r'$\alpha_{MLT}$ = 2.00', c='k')
+# ~plt.plot(V7-R7,V7, c='b')
+# ~plt.plot(V8-R8,V8, c='r')
+# ~plt.plot(V9-R9,V9, c='orange')
+# ~plt.plot(V10-R10,V10, c='c')
 # ~plt.scatter(pxtot,pytot, marker='.', s=10, color='b', alpha=0.8)
 # ~plt.scatter(pxtot2,pytot2, marker='.', s=10, color='r', alpha=0.8)
-plt.plot(col12 , mag12, label=r'$\Delta_{\alpha}$ = 0.8', c='c')
-plt.plot(col13 , mag13, label=r'$\Delta_{\alpha}$ = 0.6', c='orange')
-plt.plot(col14 , mag14, label=r'$\Delta_{\alpha}$ = 0.4', c='r')
-plt.plot(col15 , mag15, label=r'$\Delta_{\alpha}$ = 0.2', c='b')
+# ~plt.plot(col12 , mag12, label=r'$\Delta_{\alpha}$ = 0.8', c='c')
+# ~plt.plot(col13 , mag13, label=r'$\Delta_{\alpha}$ = 0.6', c='orange')
+# ~plt.plot(col14 , mag14, label=r'$\Delta_{\alpha}$ = 0.4', c='r')
+# ~plt.plot(col15 , mag15, label=r'$\Delta_{\alpha}$ = 0.2', c='b')
 # ~plt.plot(col16 , mag16, label=r'$\Delta_{\alpha}$ = 0.1', c='r')
-plt.plot(col17 , mag17, label=r'$\alpha_{MLT}$ = 2.00', c='k')
+# ~plt.plot(col17 , mag17, label=r'$\alpha_{MLT}$ = 2.00', c='k')
 # ~plt.plot(col18 , mag18, c='r')
-plt.plot(col19 , mag19, c='b')
-plt.plot(col20 , mag20, c='r')
-plt.plot(col21 , mag21, c='orange')
-plt.plot(col22 , mag22, c='c')
+# ~plt.plot(col19 , mag19, c='b')
+# ~plt.plot(col20 , mag20, c='r')
+# ~plt.plot(col21 , mag21, c='orange')
+# ~plt.plot(col22 , mag22, c='c')
 # ~plt.xlim(-1,2.5)
-plt.xlim(-0.23,1.65)
-plt.ylim(5,-5)
-# plt.gca().invert_yaxis()
-plt.tick_params(labelsize=16)
-# plt.subplots_adjust(bottom=0.16)
-lgnd = plt.legend(loc='best', fontsize = 14)
-# lgnd.get_frame().set_edgecolor('k')
-# lgnd.get_frame().set_linewidth(2.0)
-plt.xlabel(' F606W - F814W', fontsize = 20)
-plt.ylabel(' F606W', fontsize = 20)
+# ~plt.xlim(-0.23,1.65)
+# ~plt.ylim(5,-5)
+# ~# plt.gca().invert_yaxis()
+# ~plt.tick_params(labelsize=16)
+# ~# plt.subplots_adjust(bottom=0.16)
+# ~lgnd = plt.legend(loc='best', fontsize = 14)
+# ~# lgnd.get_frame().set_edgecolor('k')
+# ~# lgnd.get_frame().set_linewidth(2.0)
+# ~plt.xlabel(' F606W - F814W', fontsize = 20)
+# ~plt.ylabel(' F606W', fontsize = 20)
 # ~plt.title('[Fe/H] < '+met+', '+str(len(ind))+' clusters', fontsize = 24)
-plt.show() 
-plt.close()
+# ~plt.show() 
+# ~plt.close()
 
 # ~kill
 #-----------------------------------------------------------------------
 # plot convection configuration
-# ~plt.figure()
-# ~plt.scatter(corr_col,corr_mag, marker='.', s=10, alpha=0.8)
-# ~plt.scatter(ctot,vtot, marker='.', s=10, color='grey', alpha=0.8)
-# ~plt.axhline(np.max(vtot_sample), c='k', label=r'$M_{0}$')
-# ~plt.axhline(np.max(vtot_sample2), c='r', label=r'$M_{1}$')
-# ~plt.axhline(np.max(vtot_sample3), c='b', label=r'$M_{2}$')
-# ~plt.scatter(ctot_sample,vtot_sample, marker='.', s=10, color='r', alpha=0.8)
-# ~plt.scatter(ccentertot[2:],vcentertot[2:], marker='o', s=10, color='b', alpha=0.8)
-# ~plt.plot(iso_midc, iso_midv, c='r', label='mean of the 12 isochrones')
-# ~plt.plot(V0-R0,V0, label='fiducial' ,linewidth=2, c='k')
+plt.figure()
+#plt.scatter(corr_col,corr_mag, marker='.', s=10, alpha=0.8)
+plt.scatter(ctot,vtot, marker='.', s=10, color='grey', alpha=0.8)
+plt.axhline(np.max(vtot_sample), c='k', label=r'$M_{0}$')
+plt.axhline(np.max(vtot_sample2), c='r', label=r'$M_{1}$')
+plt.axhline(np.max(vtot_sample3), c='b', label=r'$M_{2}$')
+plt.scatter(ctot_sample,vtot_sample, marker='.', s=10, color='k', alpha=0.8)
+# ~# plt.scatter(ccentertot[2:],vcentertot[2:], marker='o', s=10, color='b', alpha=0.8)
+# ~# plt.plot(iso_midc, iso_midv, c='r', label='mean of the 12 isochrones')
+# ~#plt.plot(V0-R0,V0, label='fiducial' ,linewidth=2, c='k')
+
 # ~plt.plot(col17 , mag17, label='Fiducial', c='k')
+# ~plt.plot(col12 , mag12, label=r'$\Delta_{\alpha}$ = 0.8', c='k', linestyle='--')
+# ~plt.plot(col22 , mag22, c='k', linestyle='--')
 # ~plt.plot(col1 , mag1, label=r'$\Delta$M = 0.1', c='b')
 # ~plt.plot(col2 , mag2, c='b')
 # ~plt.plot(col3 , mag3, label=r'$\Delta$Y = 0.04', c='g')
@@ -945,18 +965,18 @@ plt.close()
 # ~plt.plot(col9 , mag9, label= r'Reimers $\eta$ = 0.8', linestyle=':', c='c')
 # ~plt.plot(col10 , mag10, label='No element diffusion', linestyle=':', c='r')
 # ~plt.plot(col11 , mag11, label='No rotational mixing', linestyle=':')
-# ~plt.xlim(-0.5,3)
-# ~plt.xlim(0,1.65)
-# ~plt.ylim(5,-5)
-# ~plt.gca().invert_yaxis()
-# ~plt.tick_params(labelsize=14)
-# ~plt.subplots_adjust(bottom=0.16)
-# ~lgnd = plt.legend(loc='best', fontsize = 12)
-# ~lgnd.get_frame().set_edgecolor('k')
-# ~lgnd.get_frame().set_linewidth(2.0)
-# ~plt.xlabel(' F606W - F814W', fontsize = 20)
-# ~plt.ylabel(' F606W', fontsize = 20)
-# ~plt.title('[Fe/H] < '+met+', '+str(len(ind))+' clusters', fontsize = 24)
-# ~plt.show() 
-# ~plt.close()
+
+# ~plt.xlim(-0.5,2.5)
+plt.xlim(-0.23,1.65)
+plt.ylim(5,-5)
+plt.tick_params(labelsize=14)
+plt.subplots_adjust(bottom=0.15, top=0.89)
+lgnd = plt.legend(loc='best', fontsize = 12)
+# lgnd.get_frame().set_edgecolor('k')
+# lgnd.get_frame().set_linewidth(2.0)
+plt.xlabel(' F606W - F814W', fontsize = 20)
+plt.ylabel(' F606W', fontsize = 20)
+#plt.title('[Fe/H] < '+met+', '+str(len(ind))+' clusters', fontsize = 24)
+plt.show() 
+plt.close()
 

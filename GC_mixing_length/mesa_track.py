@@ -326,31 +326,31 @@ msun = 1.989e+33 #g
 # ~plt.show()
 
 
-# ~name = ['a100','a125','a150','a175','a200']
-# ~for j in name:	
-	# ~raul = np.loadtxt('/home/david/codes/data/GC_mixing_length/'+j+'.txt')
-	# ~sf = raul[:,2]
-	# ~teff = 10**(raul[:,1])
+name = ['a100','a125','a150','a175','a200']
+for j in name:	
+	raul = np.loadtxt('/home/david/codes/data/GC_mixing_length/'+j+'.txt')
+	sf = raul[:,2]
+	teff = 10**(raul[:,1])
 
-	# ~safe = np.where((teff > np.min(tefs))&(teff < np.max(tefs))&(sf > np.min(sfs))&(sf < np.max(sfs)))[0]
-	# ~teff = teff[safe]
-	# ~sf = sf[safe]
+	safe = np.where((teff > np.min(tefs))&(teff < np.max(tefs))&(sf > np.min(sfs))&(sf < np.max(sfs)))[0]
+	teff = teff[safe]
+	sf = sf[safe]
 
-	# ~Mbol = -2.5*np.log10((Lsun*10**raul[:,5])/L0)[safe]
-	# ~M606 = np.zeros(len(Mbol))
-	# ~M814 = np.zeros(len(Mbol))
+	Mbol = -2.5*np.log10((Lsun*10**raul[:,5])/L0)[safe]
+	M606 = np.zeros(len(Mbol))
+	M814 = np.zeros(len(Mbol))
 
-	# ~for i in range(len(Mbol)):
-		# ~bc606, bc814 = interp_eep(teff[i], sf[i], tefs, sfs, dat)
-		# ~M606[i] = Mbol[i] - bc606
-		# ~M814[i] = Mbol[i] - bc814
+	for i in range(len(Mbol)):
+		bc606, bc814 = interp_eep(teff[i], sf[i], tefs, sfs, dat)
+		M606[i] = Mbol[i] - bc606
+		M814[i] = Mbol[i] - bc814
 
-	# ~np.savetxt('catalogs/alpha_'+j+'.txt', (M606-M814, M606))
-	# ~plt.scatter(M606-M814, M606)
-# ~plt.gca().invert_yaxis()
-# ~plt.show()
+	np.savetxt('catalogs/alpha_'+j+'.txt', (M606-M814, M606))
+	plt.scatter(M606-M814, M606)
+plt.gca().invert_yaxis()
+plt.show()
 
-
+kill
 #-----------------------------------------------------------------------
 
 # READ MESSA FILES
