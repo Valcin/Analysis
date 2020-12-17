@@ -2,9 +2,12 @@ import numpy as np
 import mesa_reader as mr
 import matplotlib.pyplot as plt
 import math
+import matplotlib
 import os
 from scipy import interpolate
-
+from matplotlib import colors
+import sys
+sys.path.append('/home/david/codes/isochrones')# folder where isochrones is installed
 ########################################################################
 ########################################################################
 def bilinear_interpolation(x, y, pts):
@@ -214,7 +217,59 @@ def error_compute(dbins, histo, bhisto):
 				return bhisto[np.min(above)], bhisto[np.max(above)]
 				break
 			amp -= 0.01
-			#~ print('percentage of the amplitude is '+str(amp))	
+			#~ print('percentage of the amplitude is '+str(amp))
+
+def iso_mag(Age, metal, distance, A, afe_val = None):
+
+
+	if model == 'mist': 
+		
+		mag_v, eep_first = mist.mageep['F606W'](Age, metal, distance, A)
+		mag_i, eep_first = mist.mageep['F814W'](Age, metal, distance, A)
+		#~ mag_v = mist.mageep['F606'](Age, metal, distance, Abs)
+		#~ mag_i = mist.mageep['F814'](Age, metal, distance, Abs)
+
+
+	if model == 'dar': 
+		if afe_val == -0.2:
+			mag_v, eep_first = darm2.mageep['F606W'](Age, metal, distance, A)
+			mag_i, eep_first = darm2.mageep['F814W'](Age, metal, distance, A)
+		elif afe_val == 0.0:
+			mag_v, eep_first = darp0.mageep['F606W'](Age, metal, distance, A)
+			mag_i, eep_first = darp0.mageep['F814W'](Age, metal, distance, A)
+		elif afe_val == 0.2:
+			mag_v, eep_first = darp2.mageep['F606W'](Age, metal, distance, A)
+			mag_i, eep_first = darp2.mageep['F814W'](Age, metal, distance, A)
+			#~ mag_v, eep_first = darp2.mageep['V'](Age, metal, distance, A)
+			#~ mag_i, eep_first = darp2.mageep['I'](Age, metal, distance, A)
+		elif afe_val == 0.4:
+			mag_v, eep_first = darp4.mageep['F606W'](Age, metal, distance, A)
+			mag_i, eep_first = darp4.mageep['F814W'](Age, metal, distance, A)
+		elif afe_val == 0.6:
+			mag_v, eep_first = darp6.mageep['F606W'](Age, metal, distance, A)
+			mag_i, eep_first = darp6.mageep['F814W'](Age, metal, distance, A)
+		elif afe_val == 0.8:
+			mag_v, eep_first = darp8.mageep['F606W'](Age, metal, distance, A)
+			mag_i, eep_first = darp8.mageep['F814W'](Age, metal, distance, A)
+		
+	mag_i = mag_i[~np.isnan(mag_i)]# - Abs
+	mag_v = mag_v[~np.isnan(mag_v)]# - Abs
+	Color = (mag_v - mag_i)
+
+
+	#make a magnitude cut
+	#~ cut = np.where((mag_v < np.max(photo_v)) & (mag_v > np.min(photo_v)))[0]
+	#~ if len(cut)<1:
+		#~ print('ohlala problem with')
+		#~ print(Age, metal, distance, Abs)
+	#~ chosen = np.random.choice(cut, sample)
+	
+	#~ mag_v = mag_v[chosen]
+	#~ mag_i = mag_i[chosen]
+	#~ Color = Color[chosen]
+
+	# ~gc.collect()
+	return mag_v, mag_i, Color, eep_first	
 ########################################################################
 ########################################################################
 Zsun = 0.0134
@@ -328,49 +383,113 @@ msun = 1.989e+33 #g
 # ~plt.gca().invert_yaxis()
 # ~plt.show()
 
-dat = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/fehm200.HST_ACSWF')
+# ~dat = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/fehm200.HST_ACSWF')
 # ~dat = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/colmag.Castelli.HSTACSWFC3.Vega.M-2.txt')
 # ~dat = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/bc_CORRp0.dat')
-tefs = np.unique(dat[:,0])
-sfs = np.unique(dat[:,1])
-feH = np.unique(dat[:,2])
+# ~tefs = np.unique(dat[:,0])
+# ~sfs = np.unique(dat[:,1])
+# ~feH = np.unique(dat[:,2])
 
-name = ['a100','a125','a150','a175','a200']
+# ~name = ['a100','a125','a150','a175','a200']
 # ~name = ['alpha100','alpha125','alpha150','alpha175','alpha200']
-for j in name:	
-	raul = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/JimMacD/'+j+'.txt')
-	sf = raul[:,2]
-	teff = 10**(raul[:,1])
-	logR = raul[:,9]
+# ~for j in name:	
+	# ~raul = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/JimMacD/'+j+'.txt')
+	# ~sf = raul[:,2]
+	# ~teff = 10**(raul[:,1])
+	# ~logR = raul[:,9]
 
 
-	safe = np.where((teff > np.min(tefs))&(teff < np.max(tefs))&(sf > np.min(sfs))&(sf < np.max(sfs)))[0]
-	teff = teff[safe]
-	sf = sf[safe]
+	# ~safe = np.where((teff > np.min(tefs))&(teff < np.max(tefs))&(sf > np.min(sfs))&(sf < np.max(sfs)))[0]
+	# ~teff = teff[safe]
+	# ~sf = sf[safe]
 
 
-	Mbol = -2.5*np.log10((Lsun*10**raul[:,5])/L0)[safe]
-	M606 = np.zeros(len(Mbol)) 
-	M814 = np.zeros(len(Mbol))
+	# ~Mbol = -2.5*np.log10((Lsun*10**raul[:,5])/L0)[safe]
+	# ~M606 = np.zeros(len(Mbol)) 
+	# ~M814 = np.zeros(len(Mbol))
 
-	for i in range(len(Mbol)):
-		bc606, bc814 = interp_eep(teff[i], sf[i], tefs, sfs, dat)
-		M606[i] = Mbol[i] - bc606 
-		M814[i] = Mbol[i] - bc814
+	# ~for i in range(len(Mbol)):
+		# ~bc606, bc814 = interp_eep(teff[i], sf[i], tefs, sfs, dat)
+		# ~M606[i] = Mbol[i] - bc606 
+		# ~M814[i] = Mbol[i] - bc814
 
-	np.savetxt('catalogs/alpha_'+j+'.txt', (M606-M814, M606))
-	# ~plt.scatter(M606-M814, M606)
+	# ~np.savetxt('catalogs/alpha_'+j+'.txt', (M606-M814, M606))
 
-	fcurve = interpolate.interp1d(M606, M606-M814)
-	mpts = np.linspace(np.min(M606), np.max(M606), 20)
+
+	# ~print(M606[1:-1][::-1])
+	# ~fcurve = interpolate.interp1d(M606, M606-M814)
+	# ~fcurve = interpolate.CubicSpline(M606[1:-1][::-1], M606[1:-1][::-1]-M814[1:-1][::-1])
+	# ~mpts = np.linspace(np.min(M606), np.max(M606), 40)
 	
-	# ~plt.plot(M606-M814, M606)
-	plt.plot(fcurve(mpts), mpts)
-	plt.scatter(fcurve(mpts), mpts)
-plt.gca().invert_yaxis()
-plt.show()
+	# ~plt.scatter(M606-M814, M606)
+	# ~plt.plot(fcurve(mpts), mpts)
+	# ~plt.scatter(fcurve(mpts), mpts)
+# ~plt.gca().invert_yaxis()
+# ~plt.show()
 
-kill
+# ~kill
+
+#-----------------------------------------------------------------------
+
+# ~Age = np.log10(13.5e9)
+# ~distance = 0
+# ~Abs = 0
+# ~afe_init = 0.0
+# ~helium_y = ''
+# ~model='dar'
+# ~print(Age)
+
+# ~from isochrones.dartmouth import Dartmouth_FastIsochrone
+# ~darm2 = Dartmouth_FastIsochrone(afe='afem2', y=helium_y)
+# ~darp0 = Dartmouth_FastIsochrone(afe='afep0', y=helium_y)
+# ~darp2 = Dartmouth_FastIsochrone(afe='afep2', y=helium_y)
+# ~darp4 = Dartmouth_FastIsochrone(afe='afep4', y=helium_y)
+# ~darp6 = Dartmouth_FastIsochrone(afe='afep6', y=helium_y)
+# ~darp8 = Dartmouth_FastIsochrone(afe='afep8', y=helium_y)
+
+# ~binc = 200
+# ~niso = int((-200 -(-236))/2)
+# ~magtest= np.linspace(-5,5,binc)
+# ~col = np.zeros((binc,niso))
+# ~mag = np.zeros((binc,niso))
+# ~import cmasher as cmr
+# ~cm = cmr.ember
+# ~norm = colors.Normalize(vmin=-2.5,vmax=-0.5)
+# ~s_m = matplotlib.cm.ScalarMappable(cmap=cm, norm=norm)
+# ~s_m.set_array([])
+# ~import matplotlib.gridspec as gridspec
+# ~gs_in = gridspec.GridSpec(2, 2,hspace=0.5,height_ratios=[10,1],
+# ~width_ratios=[8,4],wspace=0.,left=0.10,right=0.9,bottom=0.1,top=0.9)
+# ~for ind,a in enumerate(range(-236, -200, 2)):
+	# ~met= a/100. 
+
+	# ~print(met)
+	# ~mag_v, mag_i, Color_iso, eep_first = iso_mag(Age, met, distance, Abs, afe_init)
+	# ~fmag_ini = interpolate.interp1d(mag_v, Color_iso, 'nearest',fill_value="extrapolate")
+	# ~# mag_vref, mag_iref, Color_isoref, eep_firstref = iso_mag(Age , -2.48, distance, Abs, afe_init)
+	# ~# mag_vref, mag_iref, Color_isoref, eep_firstref = iso_mag(Age , -0.5, distance, Abs, afe_init)
+	# ~# fmag_iniref = interpolate.interp1d(mag_vref, Color_isoref, 'nearest',fill_value="extrapolate")
+
+	# ~col[:,ind]= fmag_ini(magtest)
+	# ~mag[:,ind]= magtest
+	# ~plt.plot(Color_iso,mag_v, color=s_m.to_rgba(met))
+	#ax1.plot(fmag_iniref(magtest)/fmag_ini(magtest),magtest, color=s_m.to_rgba(met),lw=2)
+
+
+# ~plt.xlim(-0.23,1.65)
+# ~plt.ylim(5,-5)
+# ~plt.tick_params(labelsize=14)
+# ~plt.subplots_adjust(bottom=0.15, top=0.89)
+# ~lgnd = plt.legend(loc='best', fontsize = 12)
+# ~# lgnd.get_frame().set_edgecolor('k')
+# ~# lgnd.get_frame().set_linewidth(2.0)
+# ~plt.xlabel(' F606W - F814W', fontsize = 20)
+# ~plt.ylabel(' F606W', fontsize = 20)
+# ~#plt.title('[Fe/H] < '+met+', '+str(len(ind))+' clusters', fontsize = 24)
+# ~plt.show() 
+# ~plt.close()
+# ~kill
+
 #-----------------------------------------------------------------------
 
 # READ MESSA FILES
@@ -464,23 +583,23 @@ col29,mag29, mp29= cut2(h29)
 
 
 plt.figure()
-plt.plot(col12 , mag12, label='a = 1.20')
-plt.plot(col28 , mag28, label='a = 1.30')
-plt.plot(col13 , mag13, label='a = 1.40')
-plt.plot(col26 , mag26, label='a = 1.50')
-plt.plot(col14 , mag14, label='a = 1.60')
-plt.plot(col24 , mag24, label='a = 1.70')
-plt.plot(col15 , mag15, label='a = 1.80')
-plt.plot(col16 , mag16, label='a = 1.90')
+# ~plt.plot(col12 , mag12, label='a = 1.20', linestyle='--', c='k')
+# ~plt.plot(col28 , mag28, label='a = 1.30')
+# ~plt.plot(col13 , mag13, label='a = 1.40')
+# ~plt.plot(col26 , mag26, label='a = 1.50')
+# ~plt.plot(col14 , mag14, label='a = 1.60')
+# ~plt.plot(col24 , mag24, label='a = 1.70')
+# ~plt.plot(col15 , mag15, label='a = 1.80')
+# ~plt.plot(col16 , mag16, label='a = 1.90')
 plt.plot(col17 , mag17, label='a = 2.00', c='k')
-plt.plot(col18 , mag18, label='a = 2.10')
-plt.plot(col19 , mag19, label='a = 2.20')
-plt.plot(col25 , mag25, label='a = 2.30')
-plt.plot(col20 , mag20, label='a = 2.40')
-plt.plot(col27 , mag27, label='a = 2.50')
-plt.plot(col21 , mag21, label='a = 2.60')
-plt.plot(col29 , mag29, label='a = 2.70')
-plt.plot(col22 , mag22, label='a = 2.80')
+# ~plt.plot(col18 , mag18, label='a = 2.10')
+# ~plt.plot(col19 , mag19, label='a = 2.20')
+# ~plt.plot(col25 , mag25, label='a = 2.30')
+# ~plt.plot(col20 , mag20, label='a = 2.40')
+# ~plt.plot(col27 , mag27, label='a = 2.50')
+# ~plt.plot(col21 , mag21, label='a = 2.60')
+# ~plt.plot(col29 , mag29, label='a = 2.70')
+# ~plt.plot(col22 , mag22, label='a = 2.80', linestyle='--', c='k')
 # ~plt.plot(col1 , mag1, label='M = 0.70', c='b')
 # ~plt.plot(col2 , mag2, label='M = 0.90', c='b')
 # ~plt.plot(col3 , mag3, label='y = 0.2004', c='g')
@@ -494,15 +613,15 @@ plt.plot(col22 , mag22, label='a = 2.80')
 # ~plt.plot(col11 , mag11, label='No rotational mixing', linestyle=':')
 # ~plt.plot(h.abs_mag_F606W - h.abs_mag_F814W , h.abs_mag_F606W, label='test', linestyle=':')
 # ~plt.gca().invert_yaxis()
-# ~plt.legend(loc='best')
+plt.legend(loc='best')
 # ~plt.show()
 # ~plt.close()
-plt.xlabel(r'Log $\rm T_{eff}$', fontsize=16)
-plt.ylabel(r'Log L/$\rm L_{\odot}$', fontsize=16)
-plt.text(3.73,3.0,r'$\alpha$ = 2.8',va='center',fontsize=16,alpha=1.)
-plt.text(3.61,2.5,r'$\alpha$ = 1.2',va='center',fontsize=16,alpha=1.)
-plt.text(3.68,0.18,r'0.8 $M_{\odot}$,   Z = 0.0002',va='center',fontsize=16,alpha=1.,
-bbox=dict(boxstyle="round",fc=(1., 1.,1.,1.),ec='k'))
+# ~plt.xlabel(r'Log $\rm T_{eff}$', fontsize=16)
+# ~plt.ylabel(r'Log L/$\rm L_{\odot}$', fontsize=16)
+# ~plt.text(3.73,3.0,r'$\alpha$ = 2.8',va='center',fontsize=16,alpha=1.)
+# ~plt.text(3.61,2.5,r'$\alpha$ = 1.2',va='center',fontsize=16,alpha=1.)
+# ~plt.text(3.68,0.18,r'0.8 $M_{\odot}$,   Z = 0.0002',va='center',fontsize=16,alpha=1.,
+# ~bbox=dict(boxstyle="round",fc=(1., 1.,1.,1.),ec='k'))
 plt.tick_params(labelsize=16)
 plt.gca().invert_xaxis()
 plt.show()

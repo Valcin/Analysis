@@ -581,6 +581,21 @@ ncpu = 3 # number of cpu requested
 #~ print(ncpu)
 #~ kill
 #~ ncpu = int(os.environ["cpu_num"]) # number of cpu requested hipatia
+Age_t = np.log10(13.5e9)
+distance_t = 0
+Abs_t = 0
+afe_init_t = 0.0
+helium_y = ''
+model='dar'
+
+
+from isochrones.dartmouth import Dartmouth_FastIsochrone
+darm2 = Dartmouth_FastIsochrone(afe='afem2', y=helium_y)
+darp0 = Dartmouth_FastIsochrone(afe='afep0', y=helium_y)
+darp2 = Dartmouth_FastIsochrone(afe='afep2', y=helium_y)
+darp4 = Dartmouth_FastIsochrone(afe='afep4', y=helium_y)
+darp6 = Dartmouth_FastIsochrone(afe='afep6', y=helium_y)
+darp8 = Dartmouth_FastIsochrone(afe='afep8', y=helium_y)
 
 #-----------------------------------------------------------------------
 #file to be loaded
@@ -889,12 +904,15 @@ for ig, g in enumerate(ind):
 	Color_new = fmag(corr_mag)
 	col_dist = np.abs(Color_new - corr_col)
 
-	rgb = np.where(corr_mag < mstop - dm - abV - 1.0)[0]
-	close = np.where(col_dist[rgb] < 0.08)[0]
+	width = 0.06
+	rgb = np.where(corr_mag < mstop - dm - abV - 1.5)[0]
+	close = np.where(col_dist[rgb] < width)[0]
 	rgb2 = np.where(corr_mag < mstop - dm - abV - 3.0)[0]
-	close2 = np.where(col_dist[rgb2] < 0.08)[0]
+	close2 = np.where(col_dist[rgb2] < width)[0]
 	rgb3 = np.where(corr_mag < mstop - dm - abV - 5.0)[0]
-	close3 = np.where(col_dist[rgb3] < 0.08)[0]
+	close3 = np.where(col_dist[rgb3] < width)[0]
+
+	print(len(rgb))
 
 	cocol = corr_col[rgb][close]
 	comag = corr_mag[rgb][close]
@@ -919,18 +937,18 @@ for ig, g in enumerate(ind):
 	vcenter, ccenter, errcenter, sbin, bingood, errcenterv = way(corr_mag[rgb][close], corr_col[rgb][close], err_color[rgb][close], err_v[rgb][close])
 
 	std = np.sqrt(np.sum(col_dist[rgb][close]**2)/len(col_dist[rgb][close]))
-	# ~print(std, len(col_dist[rgb][close]))
-	# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/sigma'+met+'.txt', 'a+') as fid_file:
-		# ~fid_file.write(str(glc)+' '+str(len(col_dist[rgb][close]))+' '+str(std)+"\n")
-	# ~fid_file.close()
+	print(std, len(col_dist[rgb][close]))
+	with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/sigma'+met+'.txt', 'a+') as fid_file:
+		fid_file.write(str(glc)+' '+str(len(col_dist[rgb][close]))+' '+str(std)+"\n")
+	fid_file.close()
 		
 
 	histo, dx, dy = alpha_distriubtion(corr_col[rgb][close],corr_mag[rgb][close])
 	histo2, dx2, dy2 = alpha_distriubtion(corr_col[rgb2][close2],corr_mag[rgb2][close2])
 	histo3, dx3, dy3 = alpha_distriubtion(corr_col[rgb3][close3],corr_mag[rgb3][close3])
-	# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dist_alpha.txt', 'a+') as fid_file:
-		# ~fid_file.write('%s %.2f %.2f %.2f \n' %(clus_nb, histo, histo2, histo3))
-	# ~fid_file.close()
+	with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dist_alpha.txt', 'a+') as fid_file:
+		fid_file.write('%s %.2f %.2f %.2f \n' %(clus_nb, histo, histo2, histo3))
+	fid_file.close()
 
 
 	print(np.mean(histo))
@@ -1006,12 +1024,12 @@ col_dist_tot2 = np.abs(Color_new2 - np.array(ctot_sample)[lim_mag])
 
 std_tot2 = np.sqrt(np.sum(col_dist_tot2**2)/len(col_dist_tot2))
 
-# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/sigma'+met+'.txt', 'a+') as fid_file:
-	# ~fid_file.write('Using the mean of all the '+str(len(ind))+' GCs \n')
-	# ~fid_file.write(str(len(ind))+'GCs'+' '+str(len(col_dist_tot))+' '+str(std_tot)+"\n")
-	# ~fid_file.write('Using the median of the sample \n')
-	# ~fid_file.write(str(len(ind))+'GCs'+' '+str(len(col_dist_tot2))+' '+str(std_tot2)+"\n")
-# ~fid_file.close()
+with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/sigma'+met+'.txt', 'a+') as fid_file:
+	fid_file.write('Using the mean of all the '+str(len(ind))+' GCs \n')
+	fid_file.write(str(len(ind))+'GCs'+' '+str(len(col_dist_tot))+' '+str(std_tot)+"\n")
+	fid_file.write('Using the median of the sample \n')
+	fid_file.write(str(len(ind))+'GCs'+' '+str(len(col_dist_tot2))+' '+str(std_tot2)+"\n")
+fid_file.close()
 
 
 #-----------------------------------------------------------------------
@@ -1019,9 +1037,9 @@ std_tot2 = np.sqrt(np.sum(col_dist_tot2**2)/len(col_dist_tot2))
 histotot, pxtot, pytot = alpha_distriubtion(ctot_sample,vtot_sample)
 histotot2, pxtot2, pytot2 = alpha_distriubtion(ctot_sample2,vtot_sample2)
 histotot3, pxtot3, pytot3 = alpha_distriubtion(ctot_sample3,vtot_sample3)
-# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dist_alpha.txt', 'a+') as fid_file:
-	# ~fid_file.write('%s %.2f %.2f %.2f \n' %('Total', histotot, histotot2, histotot3))
-# ~fid_file.close()
+with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dist_alpha.txt', 'a+') as fid_file:
+	fid_file.write('%s %.2f %.2f %.2f \n' %('Total', histotot, histotot2, histotot3))
+fid_file.close()
 
 # ~print(np.mean(histotot))
 # ~print(np.mean(histotot2))	
@@ -1045,25 +1063,58 @@ Color_iso0 = (Color_iso0_min[:lpp]*(afe_max - afe) + Color_iso0_max[:lpp]*(afe -
 
 #-----------------------------------------------------------------------
 # plot mixing length variation
-# ~plt.figure()
-# plt.scatter(corr_col,corr_mag, marker='.', s=10, alpha=0.8)
-# ~plt.scatter(ctot,vtot, marker='.', s=10, color='grey', alpha=0.8)
-# ~plt.scatter(ctot_sample,vtot_sample, marker='.', s=10, color='r', alpha=0.8)
-# ~plt.scatter(ctot_sample2,vtot_sample2, marker='.', s=10, color='b', alpha=0.8)
-# ~# plt.scatter(ccentertot[2:],vcentertot[2:], marker='o', s=10, color='b', alpha=0.8)
-# ~# plt.plot(iso_midc, iso_midv, c='r', label='mean of the 12 isochrones')
-# ~plt.plot(V2-R2,V2, label=r'$\Delta_{\alpha}$ = 0.8', c='c')
-# ~plt.plot(V3-R3,V3, label=r'$\Delta_{\alpha}$ = 0.6', c='orange')
-# ~plt.plot(V4-R4,V4, label=r'$\Delta_{\alpha}$ = 0.4', c='r')
-# ~plt.plot(V5-R5,V5, label=r'$\Delta_{\alpha}$ = 0.2', c='b')
-# ~plt.plot(V6-R6,V6, label=r'$\alpha_{MLT}$ = 2.00', c='k')
-# ~plt.plot(V7-R7,V7, c='b')
-# ~plt.plot(V8-R8,V8, c='r')
-# ~plt.plot(V9-R9,V9, c='orange')
-# ~plt.plot(V10-R10,V10, c='c')
-# ~plt.scatter(pxtot,pytot, marker='.', s=10, color='b', alpha=0.8)
-# ~plt.scatter(pxtot2,pytot2, marker='.', s=10, color='r', alpha=0.8)
-# ~plt.plot(col12 , mag12, label=r'$\Delta_{\alpha}$ = 0.8', c='c')
+plt.figure()
+# ~# plt.scatter(corr_col,corr_mag, marker='.', s=10, alpha=0.8)
+plt.scatter(ctot,vtot, marker='.', s=10, color='grey', alpha=0.8)
+# plt.scatter(ctot_sample,vtot_sample, marker='.', s=10, color='r', alpha=0.8)
+# plt.scatter(ctot_sample2,vtot_sample2, marker='.', s=10, color='b', alpha=0.8)
+# plt.scatter(ccentertot[2:],vcentertot[2:], marker='o', s=10, color='b', alpha=0.8)
+# plt.plot(iso_midc, iso_midv, c='r', label='mean of the 12 isochrones')
+# plt.plot(V2-R2,V2, label=r'$\Delta_{\alpha}$ = 0.8', c='c')
+# plt.plot(V3-R3,V3, label=r'$\Delta_{\alpha}$ = 0.6', c='orange')
+# plt.plot(V4-R4,V4, label=r'$\Delta_{\alpha}$ = 0.4', c='r')
+# plt.plot(V5-R5,V5, label=r'$\Delta_{\alpha}$ = 0.2', c='b')
+# plt.plot(V6-R6,V6, label=r'$\alpha_{MLT}$ = 2.00', c='k')
+# plt.plot(V7-R7,V7, c='b')
+# plt.plot(V8-R8,V8, c='r')
+# plt.plot(V9-R9,V9, c='orange')
+# plt.plot(V10-R10,V10, c='c')
+binc = 200
+niso = int((-200 -(-236))/2)
+# ~magtest= np.linspace(14,26,binc)
+magtest= np.linspace(-5,5,binc)
+col = np.zeros((binc,niso))
+mag = np.zeros((binc,niso))
+import cmasher as cmr
+cm = cmr.ember
+norm = colors.Normalize(vmin=-2.36,vmax=-2.0)
+s_m = matplotlib.cm.ScalarMappable(cmap=cm, norm=norm)
+s_m.set_array([])
+import matplotlib.gridspec as gridspec
+gs_in = gridspec.GridSpec(2, 2,hspace=0.5,height_ratios=[10,1],
+width_ratios=[8,4],wspace=0.,left=0.10,right=0.9,bottom=0.1,top=0.9)
+for ind,a in enumerate(range(-236, -200, 2)):
+	met= a/100. 
+
+	print(met)
+	mag_v, mag_i, Color_iso, eep_first = iso_mag(Age_t, met, distance_t, Abs_t, afe_init_t)
+	fmag_ini = interpolate.interp1d(mag_v, Color_iso, 'nearest',fill_value="extrapolate")
+	# ~mag_vref, mag_iref, Color_isoref, eep_firstref = iso_mag(Age , -2.48, distance, Abs, afe_init)
+	# ~mag_vref, mag_iref, Color_isoref, eep_firstref = iso_mag(Age , -0.5, distance, Abs, afe_init)
+	# ~fmag_iniref = interpolate.interp1d(mag_vref, Color_isoref, 'nearest',fill_value="extrapolate")
+
+	col[:,ind]= fmag_ini(magtest)
+	mag[:,ind]= magtest
+	if ind == 0:
+		plt.plot(Color_iso,mag_v, color=s_m.to_rgba(met), label='13.5 Gyr isochrones')
+	else:
+		plt.plot(Color_iso,mag_v, color=s_m.to_rgba(met))
+	# ~ax1.plot(fmag_iniref(magtest)/fmag_ini(magtest),magtest, color=s_m.to_rgba(met),lw=2)
+cbar = plt.colorbar(s_m)
+cbar.ax.set_ylabel('Metallicity range', fontsize = 16)
+#plt.scatter(pxtot,pytot, marker='.', s=10, color='b', alpha=0.8)
+#plt.scatter(pxtot2,pytot2, marker='.', s=10, color='r', alpha=0.8)
+plt.plot(col12 , mag12, label=r'$\Delta_{\alpha}$ = 0.8', c='c')
 # ~plt.plot(col13 , mag13, label=r'$\Delta_{\alpha}$ = 0.6', c='orange')
 # ~plt.plot(col14 , mag14, label=r'$\Delta_{\alpha}$ = 0.4', c='r')
 # ~plt.plot(col15 , mag15, label=r'$\Delta_{\alpha}$ = 0.2', c='b')
@@ -1073,32 +1124,32 @@ Color_iso0 = (Color_iso0_min[:lpp]*(afe_max - afe) + Color_iso0_max[:lpp]*(afe -
 # ~plt.plot(col19 , mag19, c='b')
 # ~plt.plot(col20 , mag20, c='r')
 # ~plt.plot(col21 , mag21, c='orange')
-# ~plt.plot(col22 , mag22, c='c')
+plt.plot(col22 , mag22, c='c')
 # ~plt.xlim(-1,2.5)
-# ~plt.xlim(-0.23,1.65)
-# ~plt.ylim(5,-5)
-# ~# plt.gca().invert_yaxis()
-# ~plt.tick_params(labelsize=16)
-# ~# plt.subplots_adjust(bottom=0.16)
-# ~lgnd = plt.legend(loc='best', fontsize = 14)
-# ~# lgnd.get_frame().set_edgecolor('k')
-# ~# lgnd.get_frame().set_linewidth(2.0)
-# ~plt.xlabel(' F606W - F814W', fontsize = 20)
-# ~plt.ylabel(' F606W', fontsize = 20)
-# ~plt.title('[Fe/H] < '+met+', '+str(len(ind))+' clusters', fontsize = 24)
-# ~plt.show() 
-# ~plt.close()
+plt.xlim(-0.23,1.65)
+plt.ylim(5,-5)
+# plt.gca().invert_yaxis()
+plt.tick_params(labelsize=16)
+plt.subplots_adjust(bottom=0.15, top=0.89, right=0.930)
+lgnd = plt.legend(loc='best', fontsize = 14)
+# lgnd.get_frame().set_edgecolor('k')
+# lgnd.get_frame().set_linewidth(2.0)
+plt.xlabel(' F606W - F814W', fontsize = 20)
+plt.ylabel(' F606W', fontsize = 20)
+#plt.title('[Fe/H] < '+met+', '+str(len(ind))+' clusters', fontsize = 24)
+plt.show() 
+plt.close()
 
-# ~kill
+kill
 #-----------------------------------------------------------------------
 # plot convection configuration
 # ~plt.figure()
-# ~#plt.scatter(corr_col,corr_mag, marker='.', s=10, alpha=0.8)
-# ~plt.scatter(ctot,vtot, marker='.', s=10, color='grey', alpha=0.8)
-# ~plt.axhline(np.max(vtot_sample), c='k', label=r'$M_{0}$')
-# ~plt.axhline(np.max(vtot_sample2), c='r', label=r'$M_{1}$')
-# ~plt.axhline(np.max(vtot_sample3), c='b', label=r'$M_{2}$')
-# ~plt.scatter(ctot_sample,vtot_sample, marker='.', s=10, color='k', alpha=0.8)
+#plt.scatter(corr_col,corr_mag, marker='.', s=10, alpha=0.8)
+plt.scatter(ctot,vtot, marker='.', s=10, color='grey', alpha=0.8)
+plt.scatter(ctot_sample,vtot_sample, marker='.', s=10, color='k', alpha=0.8)
+plt.axhline(np.max(vtot_sample), c='k', label=r'$M_{0}$')
+plt.axhline(np.max(vtot_sample2), c='r', label=r'$M_{1}$')
+plt.axhline(np.max(vtot_sample3), c='b', label=r'$M_{2}$')
 # ~# plt.scatter(ccentertot[2:],vcentertot[2:], marker='o', s=10, color='b', alpha=0.8)
 # ~# plt.plot(iso_midc, iso_midv, c='r', label='mean of the 12 isochrones')
 # ~#plt.plot(V0-R0,V0, label='fiducial' ,linewidth=2, c='k')
@@ -1118,20 +1169,20 @@ Color_iso0 = (Color_iso0_min[:lpp]*(afe_max - afe) + Color_iso0_max[:lpp]*(afe -
 # ~plt.plot(col10 , mag10, label='No element diffusion', linestyle=':', c='r')
 # ~plt.plot(col11 , mag11, label='No rotational mixing', linestyle=':')
 
-# ~plt.xlim(-0.5,2.5)
-# ~plt.xlim(-0.23,1.65)
-# ~plt.ylim(5,-5)
-# ~plt.tick_params(labelsize=14)
-# ~plt.subplots_adjust(bottom=0.15, top=0.89)
-# ~lgnd = plt.legend(loc='best', fontsize = 12)
-# ~# lgnd.get_frame().set_edgecolor('k')
-# ~# lgnd.get_frame().set_linewidth(2.0)
-# ~plt.xlabel(' F606W - F814W', fontsize = 20)
-# ~plt.ylabel(' F606W', fontsize = 20)
-# ~#plt.title('[Fe/H] < '+met+', '+str(len(ind))+' clusters', fontsize = 24)
-# ~plt.show() 
-# ~plt.close()
-
+#plt.xlim(-0.5,2.5)
+plt.xlim(-0.23,1.65)
+plt.ylim(5,-5)
+plt.tick_params(labelsize=14)
+plt.subplots_adjust(bottom=0.15, top=0.89)
+lgnd = plt.legend(loc='best', fontsize = 12)
+# lgnd.get_frame().set_edgecolor('k')
+# lgnd.get_frame().set_linewidth(2.0)
+plt.xlabel(' F606W - F814W', fontsize = 20)
+plt.ylabel(' F606W', fontsize = 20)
+#plt.title('[Fe/H] < '+met+', '+str(len(ind))+' clusters', fontsize = 24)
+plt.show() 
+plt.close()
+kill
 #-----------------------------------------------------------------------
 # plot convection configuration
 plt.figure()
