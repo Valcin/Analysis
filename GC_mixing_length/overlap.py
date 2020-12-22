@@ -571,6 +571,15 @@ def bilinear_interpolation(x, y, pts):
 	
 	return fxy
 
+def chi2(C, M):
+	chideux = 1e6
+	Color_iso1[magpts],mag_v1[magpts]
+	plt.plot(Color_iso1[magpts],mag_v1[magpts])
+	plt.plot(Color_iso1[magpts],f12(Color_iso1[magpts]))
+	plts.show()
+	plt.close()
+	dis = np.abs(mag_v1[magpts] - f12(Color_iso1[magpts]))
+	
 ########################################################################
 ########################################################################
 ### define global variables
@@ -635,33 +644,33 @@ name2 = ['a100','a120','a140','a160','a180','a200']
 # ~V0, R0 = p0[m0:,9], p0[m0:,10]
 # ~#-----------------------------------------------------------------------
 #varying mixing length
-p2 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a120.data')
-m2 = cut(p2) # cut pre main sequence
-V2, R2 = p2[m2:,9], p2[m2:,10]
-p3 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a140.data')
-m3 = cut(p3) # cut pre main sequence
-V3, R3 = p3[m3:,9], p3[m3:,10]
-p4 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a160.data')
-m4 = cut(p4) # cut pre main sequence
-V4, R4 = p4[m4:,9], p4[m4:,10]
-p5 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a180.data')
-m5 = cut(p5) # cut pre main sequence
-V5, R5 = p5[m5:,9], p5[m5:,10]
-p6 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a200.data')
-m6 = cut(p6) # cut pre main sequence
-V6, R6 = p6[m6:,9], p6[m6:,10]
-p7 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a220.data')
-m7 = cut(p7) # cut pre main sequence
-V7, R7 = p7[m7:,9], p7[m7:,10]
-p8 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a240.data')
-m8 = cut(p8) # cut pre main sequence
-V8, R8 = p8[m8:,9], p8[m8:,10]
-p9 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a260.data')
-m9 = cut(p9) # cut pre main sequence
-V9, R9 = p9[m9:,9], p9[m9:,10]
-p10 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a280.data')
-m10 = cut(p10) # cut pre main sequence
-V10, R10 = p10[m10:,9], p10[m10:,10]
+# ~p2 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a120.data')
+# ~m2 = cut(p2) # cut pre main sequence
+# ~V2, R2 = p2[m2:,9], p2[m2:,10]
+# ~p3 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a140.data')
+# ~m3 = cut(p3) # cut pre main sequence
+# ~V3, R3 = p3[m3:,9], p3[m3:,10]
+# ~p4 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a160.data')
+# ~m4 = cut(p4) # cut pre main sequence
+# ~V4, R4 = p4[m4:,9], p4[m4:,10]
+# ~p5 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a180.data')
+# ~m5 = cut(p5) # cut pre main sequence
+# ~V5, R5 = p5[m5:,9], p5[m5:,10]
+# ~p6 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a200.data')
+# ~m6 = cut(p6) # cut pre main sequence
+# ~V6, R6 = p6[m6:,9], p6[m6:,10]
+# ~p7 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a220.data')
+# ~m7 = cut(p7) # cut pre main sequence
+# ~V7, R7 = p7[m7:,9], p7[m7:,10]
+# ~p8 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a240.data')
+# ~m8 = cut(p8) # cut pre main sequence
+# ~V8, R8 = p8[m8:,9], p8[m8:,10]
+# ~p9 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a260.data')
+# ~m9 = cut(p9) # cut pre main sequence
+# ~V9, R9 = p9[m9:,9], p9[m9:,10]
+# ~p10 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_a280.data')
+# ~m10 = cut(p10) # cut pre main sequence
+# ~V10, R10 = p10[m10:,9], p10[m10:,10]
 #-----------------------------------------------------------------------
 # varying mass
 # ~p5 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_M070.data')
@@ -714,85 +723,89 @@ V10, R10 = p10[m10:,9], p10[m10:,10]
 # ~m17 = cut(p17) # cut pre main sequence
 # ~V17, R17 = p17[m17:,9], p17[m17:,10]
 
-
+########################################################################
+########################################################################
+# read tracks for a given metallicity
+string_met = 'Z00020'
 #-----------------------------------------------------------------------
-h1 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_M070.data')
+h1 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/'+string_met+'/history_M070.data')
 col1,mag1, mp = cut2(h1)
-h2 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_M090.data')
+h2 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/'+string_met+'/history_M090.data')
 col2,mag2, mp2 = cut2(h2)
-h3 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_y020.data')
+h3 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/'+string_met+'/history_y020.data')
 col3,mag3, mp3 = cut2(h3)
-h4 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_y028.data')
+h4 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/'+string_met+'/history_y028.data')
 col4,mag4, mp4 = cut2(h4)
-h5 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_ledoux.data')
+h5 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/'+string_met+'/history_ledoux.data')
 col5,mag5, mp5 = cut2(h5)
-h6 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_cox.data')
+h6 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/'+string_met+'/history_cox.data')
 col6,mag6, mp6 = cut2(h6)
-h7 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_type2.data')
+h7 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/'+string_met+'/history_type2.data')
 col7,mag7, mp7 = cut2(h7)
-h8 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_overshoot.data')
+h8 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/'+string_met+'/history_overshoot.data')
 col8,mag8, mp8 = cut2(h8)
-h9 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_reimers1.data')
+h9 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/'+string_met+'/history_reimers1.data')
 col9,mag9, mp9 = cut2(h9)
-h10 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_diffusion.data')
+h10 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/'+string_met+'/history_diffusion.data')
 col10,mag10, mp10 = cut2(h10)
-h11 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_mixing.data')
+h11 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/'+string_met+'/history_mixing.data')
 col11,mag11, mp11 = cut2(h11)
-h12 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a120.data')
+h12 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/'+string_met+'/history_a120.data')
 col12,mag12, mp12 = cut2(h12)
-h13 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a140.data')
+h13 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/'+string_met+'/history_a140.data')
 col13,mag13, mp13 = cut2(h13)
-h14 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a160.data')
+h14 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/'+string_met+'/history_a160.data')
 col14,mag14, mp14 = cut2(h14)
-h15 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a180.data')
+h15 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/'+string_met+'/history_a180.data')
 col15,mag15, mp15 = cut2(h15)
-h16 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a190.data')
+h16 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/'+string_met+'/history_a190.data')
 col16,mag16, mp16 = cut2(h16)
-h17 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a200.data')
+h17 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/'+string_met+'/history_a200.data')
 col17,mag17, mp17 = cut2(h17)
-h18 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a210.data')
+h18 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/'+string_met+'/history_a210.data')
 col18,mag18, mp18 = cut2(h18)
-h19 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a220.data')
+h19 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/'+string_met+'/history_a220.data')
 col19,mag19, mp19 = cut2(h19)
-h20 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a240.data')
+h20 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/'+string_met+'/history_a240.data')
 col20,mag20, mp20 = cut2(h20)
-h21 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a260.data')
+h21 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/'+string_met+'/history_a260.data')
 col21,mag21, mp21 = cut2(h21)
-h22 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a280.data')
+h22 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/'+string_met+'/history_a280.data')
 col22,mag22, mp22 = cut2(h22)
-h23 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_alphafe.data')
+h23 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/'+string_met+'/history_alphafe.data')
 col23,mag23, mp23 = cut2(h23)
-h24 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a170.data')
+h24 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/'+string_met+'/history_a170.data')
 col24,mag24, mp24 = cut2(h24)
-h25= mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a230.data')
+h25= mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/'+string_met+'/history_a230.data')
 col25,mag25, mp25= cut2(h25)
-h26 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a150.data')
+h26 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/'+string_met+'/history_a150.data')
 col26,mag26, mp26 = cut2(h26)
-h27= mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a250.data')
+h27= mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/'+string_met+'/history_a250.data')
 col27,mag27, mp27= cut2(h27)
-h28 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a130.data')
+h28 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/'+string_met+'/history_a130.data')
 col28,mag28, mp28 = cut2(h28)
-h29= mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a270.data')
+h29= mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/'+string_met+'/history_a270.data')
 col29,mag29, mp29= cut2(h29)
+
 #-----------------------------------------------------------------------
 # interpolate the tracks
 f12 = interpolate.interp1d(col12,mag12, 'nearest',fill_value="extrapolate")
-f13 = interpolate.interp1d(col13,mag13, 'nearest',fill_value="extrapolate")
-f14 = interpolate.interp1d(col14,mag14, 'nearest',fill_value="extrapolate")
-f15 = interpolate.interp1d(col15,mag15, 'nearest',fill_value="extrapolate")
-f16 = interpolate.interp1d(col16,mag16, 'nearest',fill_value="extrapolate")
-f17 = interpolate.interp1d(col17,mag17, 'nearest',fill_value="extrapolate")
-f18 = interpolate.interp1d(col18,mag18, 'nearest',fill_value="extrapolate")
-f19 = interpolate.interp1d(col19,mag19, 'nearest',fill_value="extrapolate")
-f20 = interpolate.interp1d(col20,mag20, 'nearest',fill_value="extrapolate")
-f21 = interpolate.interp1d(col21,mag21, 'nearest',fill_value="extrapolate")
-f22 = interpolate.interp1d(col22,mag22, 'nearest',fill_value="extrapolate")
-f24 = interpolate.interp1d(col24,mag24, 'nearest',fill_value="extrapolate")
-f25 = interpolate.interp1d(col25,mag25, 'nearest',fill_value="extrapolate")
-f26 = interpolate.interp1d(col26,mag26, 'nearest',fill_value="extrapolate")
-f27 = interpolate.interp1d(col27,mag27, 'nearest',fill_value="extrapolate")
-f28 = interpolate.interp1d(col28,mag28, 'nearest',fill_value="extrapolate")
-f29 = interpolate.interp1d(col29,mag29, 'nearest',fill_value="extrapolate")
+f13 = interpolate.interp1d(col28,mag28, 'nearest',fill_value="extrapolate")
+f14 = interpolate.interp1d(col13,mag13, 'nearest',fill_value="extrapolate")
+f15 = interpolate.interp1d(col26,mag26, 'nearest',fill_value="extrapolate")
+f16 = interpolate.interp1d(col14,mag14, 'nearest',fill_value="extrapolate")
+f17 = interpolate.interp1d(col24,mag24, 'nearest',fill_value="extrapolate")
+f18 = interpolate.interp1d(col15,mag15, 'nearest',fill_value="extrapolate")
+f19 = interpolate.interp1d(col16,mag16, 'nearest',fill_value="extrapolate")
+f20 = interpolate.interp1d(col17,mag17, 'nearest',fill_value="extrapolate")
+f21 = interpolate.interp1d(col18,mag18, 'nearest',fill_value="extrapolate")
+f22 = interpolate.interp1d(col19,mag19, 'nearest',fill_value="extrapolate")
+f23 = interpolate.interp1d(col25,mag25, 'nearest',fill_value="extrapolate")
+f24 = interpolate.interp1d(col20,mag20, 'nearest',fill_value="extrapolate")
+f25 = interpolate.interp1d(col27,mag27, 'nearest',fill_value="extrapolate")
+f26 = interpolate.interp1d(col21,mag21, 'nearest',fill_value="extrapolate")
+f27 = interpolate.interp1d(col29,mag29, 'nearest',fill_value="extrapolate")
+f28 = interpolate.interp1d(col22,mag22, 'nearest',fill_value="extrapolate")
 
 
 
@@ -838,13 +851,15 @@ for ig, g in enumerate(ind):
 	glc = int(g)
 	# ~print(glc)
 	mstop = chunkbot[glc]
+#-----------------------------------------------------------------------
+#get best fit for each GC
 	print("the chosen cluster is {}".format(glc))
 	clus_nb, Age, metal, distance, Abs, afe_init, distplus, distmoins  = cluster(glc)
 	print(clus_nb, Age, metal, distance, Abs, afe_init, distplus, distmoins)
 	photo_v, err_v, photo_i, color, err_color, nmv, nmi, longueur = photometry()
 
-#------------------------------------------------------
-#rescale gc to put mstop at 0
+#-----------------------------------------------------------------------
+#rescale gc to compute absolute magnitude
 	if glc < 27:
 		age = Age_dar[glc]
 		metal = metal_dar[glc]
@@ -893,6 +908,7 @@ for ig, g in enumerate(ind):
 	mag_v1 = mag_v1 - dm - abV
 	Color_iso1 = Color_iso1 - abcol
 
+	fiso = interpolate.interp1d(Color_iso1,mag_v1, 'nearest',fill_value="extrapolate")
 	# ~isoc.append(Color_iso1)
 	# ~isov.append(mag_v1)
 	isoc[ig, :] = Color_iso1[:265]
@@ -912,7 +928,7 @@ for ig, g in enumerate(ind):
 	rgb3 = np.where(corr_mag < mstop - dm - abV - 5.0)[0]
 	close3 = np.where(col_dist[rgb3] < width)[0]
 
-	print(len(rgb))
+	# ~print(len(rgb))
 
 	cocol = corr_col[rgb][close]
 	comag = corr_mag[rgb][close]
@@ -938,17 +954,24 @@ for ig, g in enumerate(ind):
 
 	std = np.sqrt(np.sum(col_dist[rgb][close]**2)/len(col_dist[rgb][close]))
 	print(std, len(col_dist[rgb][close]))
-	with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/sigma'+met+'.txt', 'a+') as fid_file:
-		fid_file.write(str(glc)+' '+str(len(col_dist[rgb][close]))+' '+str(std)+"\n")
-	fid_file.close()
+	# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_met+'sigma'+met+'.txt', 'a+') as fid_file:
+		# ~fid_file.write(str(glc)+' '+str(len(col_dist[rgb][close]))+' '+str(std)+"\n")
+	# ~fid_file.close()
 		
 
+#-----------------------------------------------------------------------
+# compute alpha best fit and distribution
+
+	magpts = np.where(mag_v1 < mstop - dm - abV - 1.5)[0]
+	bestalpha = chi2(Color_iso1[magpts],mag_v1[magpts])
+	kill
+	
 	histo, dx, dy = alpha_distriubtion(corr_col[rgb][close],corr_mag[rgb][close])
 	histo2, dx2, dy2 = alpha_distriubtion(corr_col[rgb2][close2],corr_mag[rgb2][close2])
 	histo3, dx3, dy3 = alpha_distriubtion(corr_col[rgb3][close3],corr_mag[rgb3][close3])
-	with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dist_alpha.txt', 'a+') as fid_file:
-		fid_file.write('%s %.2f %.2f %.2f \n' %(clus_nb, histo, histo2, histo3))
-	fid_file.close()
+	# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_met+'dist_alpha.txt', 'a+') as fid_file:
+		# ~fid_file.write('%s %.2f %.2f %.2f \n' %(clus_nb, histo, histo2, histo3))
+	# ~fid_file.close()
 
 
 	print(np.mean(histo))
@@ -983,6 +1006,10 @@ for ig, g in enumerate(ind):
 	# ~plt.show() 
 	# ~plt.close()
 	# ~kill
+
+########################################################################	
+########################################################################
+# FOR ALL GCs	
 #-----------------------------------------------------------------------
 # compute the mean isochrone and mean mstop
 iso_midc = np.mean(isoc, axis=0)
@@ -1024,22 +1051,23 @@ col_dist_tot2 = np.abs(Color_new2 - np.array(ctot_sample)[lim_mag])
 
 std_tot2 = np.sqrt(np.sum(col_dist_tot2**2)/len(col_dist_tot2))
 
-with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/sigma'+met+'.txt', 'a+') as fid_file:
-	fid_file.write('Using the mean of all the '+str(len(ind))+' GCs \n')
-	fid_file.write(str(len(ind))+'GCs'+' '+str(len(col_dist_tot))+' '+str(std_tot)+"\n")
-	fid_file.write('Using the median of the sample \n')
-	fid_file.write(str(len(ind))+'GCs'+' '+str(len(col_dist_tot2))+' '+str(std_tot2)+"\n")
-fid_file.close()
+# ~with open('/home/david/codes/Analysis/GC_mixing_length/'+string_met+'catalogs/sigma'+met+'.txt', 'a+') as fid_file:
+	# ~fid_file.write('Using the mean of all the '+str(len(ind))+' GCs \n')
+	# ~fid_file.write(str(len(ind))+'GCs'+' '+str(len(col_dist_tot))+' '+str(std_tot)+"\n")
+	# ~fid_file.write('Using the median of the sample \n')
+	# ~fid_file.write(str(len(ind))+'GCs'+' '+str(len(col_dist_tot2))+' '+str(std_tot2)+"\n")
+# ~fid_file.close()
 
 
 #-----------------------------------------------------------------------
-# compute the alpha histogram
+# compute the alpha best fit and distribution
+
 histotot, pxtot, pytot = alpha_distriubtion(ctot_sample,vtot_sample)
 histotot2, pxtot2, pytot2 = alpha_distriubtion(ctot_sample2,vtot_sample2)
 histotot3, pxtot3, pytot3 = alpha_distriubtion(ctot_sample3,vtot_sample3)
-with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dist_alpha.txt', 'a+') as fid_file:
-	fid_file.write('%s %.2f %.2f %.2f \n' %('Total', histotot, histotot2, histotot3))
-fid_file.close()
+# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_met+'dist_alpha.txt', 'a+') as fid_file:
+	# ~fid_file.write('%s %.2f %.2f %.2f \n' %('Total', histotot, histotot2, histotot3))
+# ~fid_file.close()
 
 # ~print(np.mean(histotot))
 # ~print(np.mean(histotot2))	
