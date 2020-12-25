@@ -339,7 +339,7 @@ msun = 1.989e+33 #g
 # ~for j in al:
 # ~# load the data
 # ~h = mr.MesaData('/home/david/codes/data/GC_mixing_length/Z3alpha'+j+'/trimmed_history.data')
-# ~h = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_met+'/history.data')
+# ~h = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history.data')
 
 
 # ~name2 = ['a100','a120','a140','a160','a180','a200']
@@ -347,7 +347,7 @@ msun = 1.989e+33 #g
 
 # ~for j in name2:
 #j = name[4]
-	# ~h = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_met+'/history_'+j+'.data')
+	# ~h = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_'+j+'.data')
 	# ~G = 6.67259e-12 #cm3 g-1 s-2
 	# ~M = h.star_mass * msun
 	# ~R = 10**(h.log_R) * rsun
@@ -485,70 +485,67 @@ msun = 1.989e+33 #g
 #-----------------------------------------------------------------------
 
 # READ MESSA FILES
-string_met = 'Z00020'
-# ~h = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_met+'/history.data')
-
-# ~h1 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_met+'/history_M070.data')
-# ~col1,mag1, mp = cut2(h1)
-# ~h2 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_met+'/history_M090.data')
-# ~col2,mag2, mp2 = cut2(h2)
-# ~h3 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_met+'/history_y020.data')
-# ~col3,mag3, mp3 = cut2(h3)
-# ~h4 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_met+'/history_y028.data')
-# ~col4,mag4, mp4 = cut2(h4)
-# ~h5 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_met+'/history_ledoux.data')
-# ~col5,mag5, mp5 = cut2(h5)
-# ~h6 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_met+'/history_cox.data')
-# ~col6,mag6, mp6 = cut2(h6)
-# ~h7 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_met+'/history_type2.data')
-# ~col7,mag7, mp7 = cut2(h7)
-# ~h8 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_met+'/history_overshoot.data')
-# ~col8,mag8, mp8 = cut2(h8)
-# ~h9 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_met+'/history_reimers1.data')
-# ~col9,mag9, mp9 = cut2(h9)
-# ~h10 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_met+'/history_diffusion.data')
-# ~col10,mag10, mp10 = cut2(h10)
-# ~h11 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_met+'/history_mixing.data')
-# ~col11,mag11, mp11 = cut2(h11)
-h12 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_met+'/history_a120.data')
+string_met = 'Z00005'
+string_mass = 'M075'
+if (string_met == 'Z00020'and string_mass == 'M080'):
+	h1 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_M070.data')
+	col1,mag1, mp = cut2(h1)
+	h2 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_M090.data')
+	col2,mag2, mp2 = cut2(h2)
+	h3 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_y020.data')
+	col3,mag3, mp3 = cut2(h3)
+	h4 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_y028.data')
+	col4,mag4, mp4 = cut2(h4)
+	h5 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_ledoux.data')
+	col5,mag5, mp5 = cut2(h5)
+	h6 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_cox.data')
+	col6,mag6, mp6 = cut2(h6)
+	h7 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_type2.data')
+	col7,mag7, mp7 = cut2(h7)
+	h8 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_overshoot.data')
+	col8,mag8, mp8 = cut2(h8)
+	h9 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_reimers1.data')
+	col9,mag9, mp9 = cut2(h9)
+	h10 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_diffusion.data')
+	col10,mag10, mp10 = cut2(h10)
+	h11 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_mixing.data')
+	col11,mag11, mp11 = cut2(h11)
+	h23 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_alphafe.data')
+	col23,mag23, mp23 = cut2(h23)
+h12 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_a120.data')
 col12,mag12, mp12 = cut2(h12)
-h28 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_met+'/history_a130.data')
+h28 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_a130.data')
 col28,mag28, mp28 = cut2(h28)
-h13 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_met+'/history_a140.data')
+h13 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_a140.data')
 col13,mag13, mp13 = cut2(h13)
-h26 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_met+'/history_a150.data')
+h26 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_a150.data')
 col26,mag26, mp26 = cut2(h26)
-h14 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_met+'/history_a160.data')
+h14 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_a160.data')
 col14,mag14, mp14 = cut2(h14)
-h24 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_met+'/history_a170.data')
+h24 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_a170.data')
 col24,mag24, mp24 = cut2(h24)
-h15 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_met+'/history_a180.data')
+h15 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_a180.data')
 col15,mag15, mp15 = cut2(h15)
-h16 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_met+'/history_a190.data')
+h16 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_a190.data')
 col16,mag16, mp16 = cut2(h16)
-h17 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_met+'/history_a200.data')
+h17 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_a200.data')
 col17,mag17, mp17 = cut2(h17)
-h18 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_met+'/history_a210.data')
+h18 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_a210.data')
 col18,mag18, mp18 = cut2(h18)
-h19 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_met+'/history_a220.data')
+h19 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_a220.data')
 col19,mag19, mp19 = cut2(h19)
-h25= mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_met+'/history_a230.data')
+h25= mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_a230.data')
 col25,mag25, mp25= cut2(h25)
-h20 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_met+'/history_a240.data')
+h20 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_a240.data')
 col20,mag20, mp20 = cut2(h20)
-h27= mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_met+'/history_a250.data')
+h27= mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_a250.data')
 col27,mag27, mp27= cut2(h27)
-h21 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_met+'/history_a260.data')
+h21 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_a260.data')
 col21,mag21, mp21 = cut2(h21)
-h29= mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_met+'/history_a270.data')
+h29= mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_a270.data')
 col29,mag29, mp29= cut2(h29)
-h22 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_met+'/history_a280.data')
+h22 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_a280.data')
 col22,mag22, mp22 = cut2(h22)
-# ~h23 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_met+'/history_alphafe.data')
-# ~col23,mag23, mp23 = cut2(h23)
-
-
-
 
 
 # READ PAINTED FILES
@@ -594,7 +591,7 @@ plt.plot(col20 , mag20, label='a = 2.40')
 plt.plot(col27 , mag27, label='a = 2.50')
 plt.plot(col21 , mag21, label='a = 2.60')
 plt.plot(col29 , mag29, label='a = 2.70')
-# ~plt.plot(col22 , mag22, label='a = 2.80', linestyle='--', c='k')
+plt.plot(col22 , mag22, label='a = 2.80', linestyle='--', c='k')
 # ~plt.plot(col1 , mag1, label='M = 0.70', c='b')
 # ~plt.plot(col2 , mag2, label='M = 0.90', c='b')
 # ~plt.plot(col3 , mag3, label='y = 0.2004', c='g')
