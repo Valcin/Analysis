@@ -423,7 +423,9 @@ def alpha_distriubtion(col, mag, bestalpha):
 			# ~dy[7].append(mag[i])
 			# ~dist_alpha.append(0.8)
 
-	return np.mean(dist_alpha), dx[0], dy[0]
+	si = np.sqrt(np.sum(np.power(dist_alpha, 2))/len(dist_alpha))
+	# ~return np.mean(dist_alpha), dx[0], dy[0]
+	return si, dx[0], dy[0]
 			
 def error_compute(dbins, histo, bhisto):
 		amp = 1.0
@@ -968,11 +970,14 @@ for string_mass in smass:
 			col_dist = np.abs(Color_new - corr_col)
 
 			width = 0.06
-			rgb = np.where(corr_mag < mstop - dm - abV - 1.5)[0]
+			M0 = mstop - dm - abV - 1.5
+			M1 = mstop - dm - abV - 3.5
+			M2 = mstop - dm - abV - 5.5
+			rgb = np.where(corr_mag < M0)[0]
 			close = np.where(col_dist[rgb] < width)[0]
-			rgb2 = np.where(corr_mag < mstop - dm - abV - 3.0)[0]
+			rgb2 = np.where(corr_mag < M1)[0]
 			close2 = np.where(col_dist[rgb2] < width)[0]
-			rgb3 = np.where(corr_mag < mstop - dm - abV - 5.0)[0]
+			rgb3 = np.where(corr_mag < M2)[0]
 			close3 = np.where(col_dist[rgb3] < width)[0]
 
 			# ~print(len(rgb))
@@ -1011,7 +1016,8 @@ for string_mass in smass:
 		#-----------------------------------------------------------------------
 		# compute alpha best fit and distribution
 
-			magpts = np.where(mag_v1 < mstop - dm - abV - 1.5)[0]
+			magpts = np.where(mag_v1 < M0)[0]
+			# ~magpts = np.where(mag_v1 < 0)[0]
 			bestalpha = chi2(Color_iso1[magpts],mag_v1[magpts])
 			print(alpha_mix[bestalpha])
 			# ~kill
@@ -1019,23 +1025,30 @@ for string_mass in smass:
 			histo, dx, dy = alpha_distriubtion(corr_col[rgb][close],corr_mag[rgb][close], bestalpha)
 			histo2, dx2, dy2 = alpha_distriubtion(corr_col[rgb2][close2],corr_mag[rgb2][close2], bestalpha)
 			histo3, dx3, dy3 = alpha_distriubtion(corr_col[rgb3][close3],corr_mag[rgb3][close3], bestalpha)
-			# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dispersion/'+str(clus_nb)+'.txt', 'a+') as fid_file:
-				# ~fid_file.write('%s %.2f %.2f %.2f \n' %(alpha_mix[bestalpha], histo, histo2, histo3))
+
+			print(len(corr_mag[rgb2][close2]), len(corr_mag[rgb3][close3]))
+			if len(corr_mag[rgb2][close2]) < 10:
+				histo2 = 999
+			if len(corr_mag[rgb3][close3]) < 10:
+				histo3 = 999
+			# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dispersion/'+string_met+'.txt', 'a+') as fid_file:
+				# ~fid_file.write('%s %.4f %s %.2f %.2f %.2f \n' %(str(clus_nb),std, alpha_mix[bestalpha], histo, histo2, histo3))
 			# ~fid_file.close()
 
 
-			# ~print(np.mean(histo))
-			# ~print(np.mean(histo2))	
-			# ~print(np.mean(histo3))	
+			print(np.mean(histo))
+			print(np.mean(histo2))	
+			print(np.mean(histo3))	
 			
 			# ~plt.scatter(corr_col,corr_mag, marker='.', s=10, color='grey', alpha=0.8)
 			# ~#plt.scatter(corr_col,corr_mag, marker='.', s=10, alpha=0.8)
 			# plt.scatter(corr_col[rgb][close],corr_mag[rgb][close], marker='.', s=10, color='r', alpha=0.8)
-			# plt.scatter(corr_col[rgb2][close2],corr_mag[rgb2][close2], marker='.', s=10, color='b', alpha=0.8)
+			# ~plt.scatter(corr_col[rgb2][close2],corr_mag[rgb2][close2], marker='.', s=10, color='b', alpha=0.8)
+			# ~plt.scatter(corr_col[rgb3][close3],corr_mag[rgb3][close3], marker='.', s=10, color='r', alpha=0.8)
 			# ~plt.plot(Color_iso1,mag_v1, label=r'$isochrone$ = 2.00', c='c', linewidth=2.)
-			# ~plt.scatter(dx,dy, marker='.', s=10, color='b', alpha=0.8)
-			# ~plt.scatter(dx2,dy2, marker='.', s=10, color='r', alpha=0.8)
-			# ~plt.scatter(dx3,dy3, marker='.', s=10, color='y', alpha=0.8)
+			# ~# plt.scatter(dx,dy, marker='.', s=10, color='b', alpha=0.8)
+			# ~# plt.scatter(dx2,dy2, marker='.', s=10, color='r', alpha=0.8)
+			# ~# plt.scatter(dx3,dy3, marker='.', s=10, color='y', alpha=0.8)
 			# ~#plt.scatter(ccenter,vcenter, marker='o', s=10, color='b', alpha=0.8)
 			# ~plt.plot(col12 , mag12, label=r'$\Delta_{\alpha}$ = 0.8', c='c')
 			# ~plt.plot(col13 , mag13, label=r'$\Delta_{\alpha}$ = 0.6', c='orange')
@@ -1052,6 +1065,8 @@ for string_mass in smass:
 			# ~plt.plot(col27 , mag27, c='y')
 			# ~plt.plot(col21 , mag21, c='orange')
 			# ~plt.plot(col22 , mag22, c='c')
+			# ~plt.axhline(M1)
+			# ~plt.axhline(M2)
 			# ~plt.xlim(0,1.5)
 			# ~plt.ylim(5,-5)
 			# ~plt.tick_params(labelsize=16)
@@ -1112,17 +1127,23 @@ for string_mass in smass:
 		#-----------------------------------------------------------------------
 		# compute the alpha best fit and distribution
 		magpts = np.where(iso_midv < np.max(vtot_sample))[0]
+		# ~magpts = np.where(iso_midv < 0)[0]
 		bestalpha = chi2(iso_midc[magpts],iso_midv[magpts])
 		print(alpha_mix[bestalpha])
 		histotot, pxtot, pytot = alpha_distriubtion(ctot_sample,vtot_sample, bestalpha)
 		histotot2, pxtot2, pytot2 = alpha_distriubtion(ctot_sample2,vtot_sample2, bestalpha)
 		histotot3, pxtot3, pytot3 = alpha_distriubtion(ctot_sample3,vtot_sample3, bestalpha)
-		# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dispersion/All12.txt', 'a+') as fid_file:
-			# ~fid_file.write('%s %.2f %.2f %.2f \n' %(alpha_mix[bestalpha], histotot, histotot2, histotot3))
 
-		# ~print(np.mean(histotot))
-		# ~print(np.mean(histotot2))	
-		# ~print(np.mean(histotot3))	
+		if len(vtot_sample2) < 10:
+			histotot2 = 999
+		if len(vtot_sample3) < 10:
+			histotot3 = 999
+		# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dispersion/'+string_met+'.txt', 'a+') as fid_file:
+			# ~fid_file.write('%s %.4f %s %.2f %.2f %.2f \n' %('All 12 GCs',std_tot, alpha_mix[bestalpha], histotot, histotot2, histotot3))
+
+		print(np.mean(histotot))
+		print(np.mean(histotot2))	
+		print(np.mean(histotot3))	
 
 		########################################################################
 		########################################################################
@@ -1145,19 +1166,19 @@ for string_mass in smass:
 		# ~plt.figure()
 		# plt.scatter(corr_col,corr_mag, marker='.', s=10, alpha=0.8)
 		# ~plt.scatter(ctot,vtot, marker='.', s=10, color='grey', alpha=0.8)
-		# ~# plt.scatter(ctot_sample,vtot_sample, marker='.', s=10, color='r', alpha=0.8)
-		# ~# plt.scatter(ctot_sample2,vtot_sample2, marker='.', s=10, color='b', alpha=0.8)
-		# ~# plt.scatter(ccentertot[2:],vcentertot[2:], marker='o', s=10, color='b', alpha=0.8)
+		# plt.scatter(ctot_sample,vtot_sample, marker='.', s=10, color='r', alpha=0.8)
+		# plt.scatter(ctot_sample2,vtot_sample2, marker='.', s=10, color='b', alpha=0.8)
+		# plt.scatter(ccentertot[2:],vcentertot[2:], marker='o', s=10, color='b', alpha=0.8)
 		# ~plt.plot(iso_midc, iso_midv, c='c', label='mean of the 12 isochrones', linewidth=2.0)
-		# ~# plt.plot(V2-R2,V2, label=r'$\Delta_{\alpha}$ = 0.8', c='c')
-		# ~# plt.plot(V3-R3,V3, label=r'$\Delta_{\alpha}$ = 0.6', c='orange')
-		# ~# plt.plot(V4-R4,V4, label=r'$\Delta_{\alpha}$ = 0.4', c='r')
-		# ~# plt.plot(V5-R5,V5, label=r'$\Delta_{\alpha}$ = 0.2', c='b')
-		# plt.plot(V6-R6,V6, label=r'$\alpha_{MLT}$ = 2.00', c='k')
-		# ~# plt.plot(V7-R7,V7, c='b')
-		# ~# plt.plot(V8-R8,V8, c='r')
-		# ~# plt.plot(V9-R9,V9, c='orange')
-		# ~# plt.plot(V10-R10,V10, c='c')
+		# plt.plot(V2-R2,V2, label=r'$\Delta_{\alpha}$ = 0.8', c='c')
+		# plt.plot(V3-R3,V3, label=r'$\Delta_{\alpha}$ = 0.6', c='orange')
+		# plt.plot(V4-R4,V4, label=r'$\Delta_{\alpha}$ = 0.4', c='r')
+		# plt.plot(V5-R5,V5, label=r'$\Delta_{\alpha}$ = 0.2', c='b')
+		# ~# plt.plot(V6-R6,V6, label=r'$\alpha_{MLT}$ = 2.00', c='k')
+		# plt.plot(V7-R7,V7, c='b')
+		# plt.plot(V8-R8,V8, c='r')
+		# plt.plot(V9-R9,V9, c='orange')
+		# plt.plot(V10-R10,V10, c='c')
 		# ~binc = 200
 		# ~niso = int((-200 -(-236))/2)
 		# ~magtest= np.linspace(-5,5,binc)
@@ -1186,8 +1207,8 @@ for string_mass in smass:
 				# ~plt.plot(Color_iso,mag_v, color=s_m.to_rgba(met))
 		# ~cbar = plt.colorbar(s_m)
 		# ~cbar.ax.set_ylabel('Metallicity range', fontsize = 16)
-		#plt.scatter(pxtot,pytot, marker='.', s=10, color='b', alpha=0.8)
-		#plt.scatter(pxtot2,pytot2, marker='.', s=10, color='r', alpha=0.8)
+		# ~#plt.scatter(pxtot,pytot, marker='.', s=10, color='b', alpha=0.8)
+		# ~#plt.scatter(pxtot2,pytot2, marker='.', s=10, color='r', alpha=0.8)
 		# ~plt.plot(col12 , mag12, label=r'$\Delta_{\alpha}$ = 0.8', c='c')
 		# ~plt.plot(col13 , mag13, label=r'$\Delta_{\alpha}$ = 0.6', c='orange')
 		# ~plt.plot(col14 , mag14, label=r'$\Delta_{\alpha}$ = 0.4', c='r')
@@ -1216,14 +1237,14 @@ for string_mass in smass:
 
 		# ~kill
 		#-----------------------------------------------------------------------
-		# plot convection configuration
-		# ~plt.figure()
-		# ~#plt.scatter(corr_col,corr_mag, marker='.', s=10, alpha=0.8)
-		# ~plt.scatter(ctot,vtot, marker='.', s=10, color='grey', alpha=0.8)
-		# ~plt.scatter(ctot_sample,vtot_sample, marker='.', s=10, color='k', alpha=0.8)
-		# ~plt.axhline(np.max(vtot_sample), c='k', label=r'$M_{0}$')
-		# ~plt.axhline(np.max(vtot_sample2), c='r', label=r'$M_{1}$')
-		# ~plt.axhline(np.max(vtot_sample3), c='b', label=r'$M_{2}$')
+		# ~# plot convection configuration
+		plt.figure()
+		#plt.scatter(corr_col,corr_mag, marker='.', s=10, alpha=0.8)
+		plt.scatter(ctot,vtot, marker='.', s=10, color='grey', alpha=0.8)
+		plt.scatter(ctot_sample,vtot_sample, marker='.', s=10, color='k', alpha=0.8)
+		plt.axhline(np.max(vtot_sample), c='k', label=r'$M_{0}$')
+		plt.axhline(np.max(vtot_sample2), c='r', label=r'$M_{1}$')
+		plt.axhline(np.max(vtot_sample3), c='b', label=r'$M_{2}$')
 		# plt.scatter(ccentertot[2:],vcentertot[2:], marker='o', s=10, color='b', alpha=0.8)
 		# plt.plot(iso_midc, iso_midv, c='r', label='mean of the 12 isochrones')
 		#plt.plot(V0-R0,V0, label='fiducial' ,linewidth=2, c='k')
@@ -1244,19 +1265,19 @@ for string_mass in smass:
 		# ~plt.plot(col11 , mag11, label='No rotational mixing', linestyle=':')
 
 		#plt.xlim(-0.5,2.5)
-		# ~plt.xlim(-0.23,1.65)
-		# ~plt.ylim(5,-5)
-		# ~plt.tick_params(labelsize=14)
-		# ~plt.subplots_adjust(bottom=0.15, top=0.89)
-		# ~lgnd = plt.legend(loc='best', fontsize = 12)
-		# ~# lgnd.get_frame().set_edgecolor('k')
-		# ~# lgnd.get_frame().set_linewidth(2.0)
-		# ~plt.xlabel(' F606W - F814W', fontsize = 20)
-		# ~plt.ylabel(' F606W', fontsize = 20)
-		# ~#plt.title('[Fe/H] < '+met+', '+str(len(ind))+' clusters', fontsize = 24)
-		# ~plt.show() 
-		# ~plt.close()
-		# ~kill
+		plt.xlim(-0.23,1.65)
+		plt.ylim(5,-5)
+		plt.tick_params(labelsize=14)
+		plt.subplots_adjust(bottom=0.15, top=0.89)
+		lgnd = plt.legend(loc='best', fontsize = 12)
+		# lgnd.get_frame().set_edgecolor('k')
+		# lgnd.get_frame().set_linewidth(2.0)
+		plt.xlabel(' F606W - F814W', fontsize = 20)
+		plt.ylabel(' F606W', fontsize = 20)
+		#plt.title('[Fe/H] < '+met+', '+str(len(ind))+' clusters', fontsize = 24)
+		plt.show() 
+		plt.close()
+		kill
 		#-----------------------------------------------------------------------
 		# plot convection configuration
 		# ~plt.figure()
@@ -1305,32 +1326,35 @@ for string_mass in smass:
 		# ~plt.close()
 	#-------------------------------------------------------------------
 	# plot cmetallicity variation
-		if string_mass == 'M075':
-			plt.plot(col16 , mag16, label='Z = '+str(string_label[indmet]))
-		else:
-			plt.plot(col16 , mag16, linestyle='--')
-	#-------------------------------------------------------------------
-	# plot cmetallicity variation
-		if string_mass == 'M075':
-			plt.plot(col16 , mag16, label='Z = '+str(string_label[indmet]))
-		else:
-			plt.plot(col16 , mag16, linestyle='--')
+		# ~if string_mass == 'M075':
+			# ~plt.plot(col16 , mag16, label='Z = '+str(string_label[indmet]))
+		# ~else:
+			# ~plt.plot(col16 , mag16, linestyle='--')
+	# ~#-------------------------------------------------------------------
+	# ~# plot cmetallicity variation
+		# ~plt.plot(col1 , mag1, label = 'M = 0.65')
+		# ~plt.plot(col30 , mag30, label = 'M = 0.70')
+		# ~plt.plot(col16 , mag16, label = 'M = 0.75')
+		# ~plt.plot(col31 , mag31, label = 'M = 0.80')
+		# ~plt.plot(col2 , mag2, label = 'M = 0.85')
 			
-# ~#plt.scatter(corr_col,corr_mag, marker='.', s=10, alpha=0.8)
-plt.scatter(ctot,vtot, marker='.', s=10, color='grey', alpha=0.8)
-# ~#plt.xlim(-0.5,2.5)
-plt.xlim(-0.23,1.65)
-plt.ylim(5,-5)
-plt.tick_params(labelsize=14)
-plt.subplots_adjust(bottom=0.15, top=0.89)
-lgnd = plt.legend(loc='best', fontsize = 12)
-plt.text(1.0,4,r'0.75 $M_{\odot}$, $\alpha$ = 2.0',va='center',fontsize=16,alpha=1.,
-	bbox=dict(boxstyle="round",fc=(1., 1.,1.,1.),ec='k'))
-# lgnd.get_frame().set_edgecolor('k')
-# lgnd.get_frame().set_linewidth(2.0)
-plt.xlabel(' F606W - F814W', fontsize = 20)
-plt.ylabel(' F606W', fontsize = 20)
-#plt.title('[Fe/H] < '+met+', '+str(len(ind))+' clusters', fontsize = 24)
-plt.show() 
-plt.close()
-kill
+		# ~#plt.scatter(corr_col,corr_mag, marker='.', s=10, alpha=0.8)
+		# ~plt.scatter(ctot,vtot, marker='.', s=10, color='grey', alpha=0.8)
+		#plt.xlim(-0.5,2.5)
+		# ~plt.xlim(-0.23,1.65)
+		# ~plt.ylim(5,-5)
+		# ~plt.tick_params(labelsize=14)
+		# ~plt.subplots_adjust(bottom=0.15, top=0.89)
+		# ~lgnd = plt.legend(loc='best', fontsize = 12)
+		# ~plt.text(1.0,4,r'0.75 $M_{\odot}$, $\alpha$ = 1.9',va='center',fontsize=16,alpha=1.,
+			# ~bbox=dict(boxstyle="round",fc=(1., 1.,1.,1.),ec='k'))
+		# ~plt.text(0.87,4,r'Z = 0.00005, $\alpha$ = 1.9',va='center',fontsize=16,alpha=1.,
+			# ~bbox=dict(boxstyle="round",fc=(1., 1.,1.,1.),ec='k'))
+		# ~# lgnd.get_frame().set_edgecolor('k')
+		# ~# lgnd.get_frame().set_linewidth(2.0)
+		# ~plt.xlabel(' F606W - F814W', fontsize = 20)
+		# ~plt.ylabel(' F606W', fontsize = 20)
+		# ~#plt.title('[Fe/H] < '+met+', '+str(len(ind))+' clusters', fontsize = 24)
+		# ~plt.show() 
+		# ~plt.close()
+		# ~kill
