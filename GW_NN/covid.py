@@ -7,7 +7,7 @@ from neurodiffeq.ode import solve_system
 # ~from neurodiffeq.ode import solve3D_system
 from neurodiffeq.networks import FCNN    # fully-connect neural network
 from neurodiffeq.networks import SinActv # sin activation
-from neurodiffeq.ode import Monitor
+from neurodiffeq.monitors import Monitor1D
 
 
 #-------------------------------------------------------------------------
@@ -29,8 +29,17 @@ FCNN(n_hidden_units=32, n_hidden_layers=1, actv=SinActv),FCNN(n_hidden_units=32,
 # solve the ODE system
 #~ solution_lv, _ = solve_system(ode_system=cov, conditions=init_vals_lv, t_min=0.0, t_max=12,
 #~ nets=nets_lv, max_epochs=48000, monitor=Monitor(t_min=0.0, t_max=12, check_every=100))
-solution_lv, _ = solve_system(ode_system=cov, conditions=init_vals_lv, t_min=0.0, t_max=12,
-nets=nets_lv, max_epochs=2000)
+solution_lv, loss_ex = solve_system(ode_system=cov, conditions=init_vals_lv, t_min=0.0, t_max=12,
+nets=nets_lv, max_epochs=2000, monitor=Monitor1D(t_min=0.0, t_max=12, check_every=100))
+
+
+# ~plt.figure()
+# ~plt.plot(loss_ex['train_loss'], label='training loss')
+# ~plt.plot(loss_ex['valid_loss'], label='validation loss')
+# ~plt.yscale('log')
+# ~plt.title('loss during training')
+# ~plt.legend()
+# ~plt.show()
 
 ts = np.linspace(0, 12, 100)
 
