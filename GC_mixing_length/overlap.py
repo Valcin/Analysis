@@ -638,6 +638,8 @@ darp8 = Dartmouth_FastIsochrone(afe='afep8', y=helium_y)
 rescale = np.loadtxt('rescale_ig.csv',delimiter=',')
 ind1 = np.loadtxt('ind_met15.txt')
 ind2 = np.loadtxt('ind_met20.txt')
+ind3 = np.loadtxt('ind_met175m.txt')
+ind4 = np.loadtxt('ind_met175p.txt')
 
 version2 = '15'
 model = 'dar'
@@ -659,6 +661,12 @@ Lsun = 3.828e26 #solar luminosity in W
 rsun = 6.957e+10	# in centimeters
 msun = 1.989e+33 #g
 
+
+# ~string_met = 'Z00005'
+# ~smass = ['M075', 'M080']
+smass = ['M075']
+string_name = ['Z00005', 'Z00010', 'Z00015', 'Z00020']
+string_label = ['0.00005', '0.00010', '0.00015', '0.00020']
 #-----------------------------------------------------------------------
 # plot total start
 
@@ -752,14 +760,41 @@ name2 = ['a100','a120','a140','a160','a180','a200']
 
 ########################################################################
 ########################################################################
-# READ MESSA FILES
-# ~string_met = 'Z00005'
-# ~smass = ['M075', 'M080']
-smass = ['M075']
-string_name = ['Z00005', 'Z00010', 'Z00015', 'Z00020']
-string_label = ['0.00005', '0.00010', '0.00015', '0.00020']
-met = (input("what is the metallicity limit ? "))
 
+# ~for glc in list(range(27))+list(range(28,69)):
+	# ~print("the chosen cluster is {}".format(glc))
+	# ~clus_nb, Age, Metal, distance, Abs, afe_init, distplus, distmoins  = cluster(glc)
+	# ~print(clus_nb, Age, Metal, distance, Abs, afe_init, distplus, distmoins)
+	# ~photo_v, err_v, photo_i, color, err_color, nmv, nmi, longueur = photometry()
+
+	# ~if glc < 27:
+		# ~age = Age_dar[glc]
+		# ~metal = metal_dar[glc]
+		# ~dist = distance_dar[glc]
+		# ~Abso = Abs_dar[glc]
+		# ~afe = Afe_dar[glc]
+	# ~else:
+		# ~age = Age_dar[glc-1]
+		# ~metal = metal_dar[glc-1]
+		# ~dist = distance_dar[glc-1]
+		# ~Abso = Abs_dar[glc-1]
+		# ~afe = Afe_dar[glc-1]
+	# ~print(Metal, metal)
+	# ~with open('/home/david/codes/Analysis/GC_mixing_length/metal_comp.txt', 'a+') as fid_file:
+		# ~fid_file.write('%.3f %.3f \n' %(Metal, metal))
+	# ~fid_file.close()
+
+	# ~if metal <= -1.499 and metal >= -1.749:
+		# ~with open('/home/david/codes/Analysis/GC_mixing_length/ind_met175m.txt', 'a+') as fid_file:
+			# ~fid_file.write('%s \n' %(str(glc)))
+		# ~fid_file.close()
+	# ~if metal <= -1.749 and metal >= -1.999:
+		# ~with open('/home/david/codes/Analysis/GC_mixing_length/ind_met175p.txt', 'a+') as fid_file:
+			# ~fid_file.write('%s \n' %(str(glc)))
+		# ~fid_file.close()
+# ~kill
+
+met = (input("what is the metallicity limit ? "))
 for string_mass in smass:
 	for indmet, string_met in enumerate(string_name):
 		print(string_mass, string_met)
@@ -866,6 +901,10 @@ for string_mass in smass:
 			ind = ind1
 		elif met == '-2.0':
 			ind = ind2
+		if met == '-1.75m':
+			ind = ind3
+		elif met == '-1.75p':
+			ind = ind4
 
 		exV = 0.9110638171893733
 		exI = 0.5641590452038215
@@ -903,8 +942,8 @@ for string_mass in smass:
 		#-----------------------------------------------------------------------
 		#get best fit for each GC
 			print("the chosen cluster is {}".format(glc))
-			clus_nb, Age, metal, distance, Abs, afe_init, distplus, distmoins  = cluster(glc)
-			print(clus_nb, Age, metal, distance, Abs, afe_init, distplus, distmoins)
+			clus_nb, Age, Metal, distance, Abs, afe_init, distplus, distmoins  = cluster(glc)
+			print(clus_nb, Age, Metal, distance, Abs, afe_init, distplus, distmoins)
 			photo_v, err_v, photo_i, color, err_color, nmv, nmi, longueur = photometry()
 
 		#-----------------------------------------------------------------------
@@ -929,6 +968,7 @@ for string_mass in smass:
 			corr_mag = photo_v - dm - abV
 			corr_col = color - abcol
 
+			print(Metal, metal)
 		#-----------------------------------------------------------------------
 		# compute isochrones for each GC
 			helium_y = ''
@@ -1041,7 +1081,7 @@ for string_mass in smass:
 			print(np.mean(histo3))	
 			
 			# ~plt.scatter(corr_col,corr_mag, marker='.', s=10, color='grey', alpha=0.8)
-			# ~#plt.scatter(corr_col,corr_mag, marker='.', s=10, alpha=0.8)
+			plt.scatter(corr_col,corr_mag, marker='.', s=10, alpha=0.8)
 			# plt.scatter(corr_col[rgb][close],corr_mag[rgb][close], marker='.', s=10, color='r', alpha=0.8)
 			# ~plt.scatter(corr_col[rgb2][close2],corr_mag[rgb2][close2], marker='.', s=10, color='b', alpha=0.8)
 			# ~plt.scatter(corr_col[rgb3][close3],corr_mag[rgb3][close3], marker='.', s=10, color='r', alpha=0.8)
@@ -1238,13 +1278,13 @@ for string_mass in smass:
 		# ~kill
 		#-----------------------------------------------------------------------
 		# ~# plot convection configuration
-		plt.figure()
+		# ~plt.figure()
 		#plt.scatter(corr_col,corr_mag, marker='.', s=10, alpha=0.8)
-		plt.scatter(ctot,vtot, marker='.', s=10, color='grey', alpha=0.8)
-		plt.scatter(ctot_sample,vtot_sample, marker='.', s=10, color='k', alpha=0.8)
-		plt.axhline(np.max(vtot_sample), c='k', label=r'$M_{0}$')
-		plt.axhline(np.max(vtot_sample2), c='r', label=r'$M_{1}$')
-		plt.axhline(np.max(vtot_sample3), c='b', label=r'$M_{2}$')
+		# ~plt.scatter(ctot,vtot, marker='.', s=10, color='grey', alpha=0.8)
+		# ~plt.scatter(ctot_sample,vtot_sample, marker='.', s=10, color='k', alpha=0.8)
+		# ~plt.axhline(np.max(vtot_sample), c='k', label=r'$M_{0}$')
+		# ~plt.axhline(np.max(vtot_sample2), c='r', label=r'$M_{1}$')
+		# ~plt.axhline(np.max(vtot_sample3), c='b', label=r'$M_{2}$')
 		# plt.scatter(ccentertot[2:],vcentertot[2:], marker='o', s=10, color='b', alpha=0.8)
 		# plt.plot(iso_midc, iso_midv, c='r', label='mean of the 12 isochrones')
 		#plt.plot(V0-R0,V0, label='fiducial' ,linewidth=2, c='k')
@@ -1265,19 +1305,19 @@ for string_mass in smass:
 		# ~plt.plot(col11 , mag11, label='No rotational mixing', linestyle=':')
 
 		#plt.xlim(-0.5,2.5)
-		plt.xlim(-0.23,1.65)
-		plt.ylim(5,-5)
-		plt.tick_params(labelsize=14)
-		plt.subplots_adjust(bottom=0.15, top=0.89)
-		lgnd = plt.legend(loc='best', fontsize = 12)
-		# lgnd.get_frame().set_edgecolor('k')
-		# lgnd.get_frame().set_linewidth(2.0)
-		plt.xlabel(' F606W - F814W', fontsize = 20)
-		plt.ylabel(' F606W', fontsize = 20)
-		#plt.title('[Fe/H] < '+met+', '+str(len(ind))+' clusters', fontsize = 24)
-		plt.show() 
-		plt.close()
-		kill
+		# ~plt.xlim(-0.23,1.65)
+		# ~plt.ylim(5,-5)
+		# ~plt.tick_params(labelsize=14)
+		# ~plt.subplots_adjust(bottom=0.15, top=0.89)
+		# ~lgnd = plt.legend(loc='best', fontsize = 12)
+		# ~# lgnd.get_frame().set_edgecolor('k')
+		# ~# lgnd.get_frame().set_linewidth(2.0)
+		# ~plt.xlabel(' F606W - F814W', fontsize = 20)
+		# ~plt.ylabel(' F606W', fontsize = 20)
+		# ~#plt.title('[Fe/H] < '+met+', '+str(len(ind))+' clusters', fontsize = 24)
+		# ~plt.show() 
+		# ~plt.close()
+		# ~kill
 		#-----------------------------------------------------------------------
 		# plot convection configuration
 		# ~plt.figure()
@@ -1358,3 +1398,23 @@ for string_mass in smass:
 		# ~plt.show() 
 		# ~plt.close()
 		# ~kill
+	# ~#-------------------------------------------------------------------
+	# plot overlap
+		# ~plt.figure()
+		# ~plt.scatter(ctot,vtot, marker='.', s=10, alpha=0.8)
+		plt.xlim(-1.0,2.5)
+		# ~plt.xlim(-0.23,1.65)
+		plt.ylim(5,-5)
+		plt.tick_params(labelsize=14)
+		plt.subplots_adjust(bottom=0.15, top=0.89)
+		# ~lgnd = plt.legend(loc='best', fontsize = 12)
+		# lgnd.get_frame().set_edgecolor('k')
+		# lgnd.get_frame().set_linewidth(2.0)
+		plt.xlabel(' F606W - F814W', fontsize = 20)
+		plt.ylabel(' F606W', fontsize = 20)
+		# ~plt.title('[Fe/H] < '+met+', '+str(len(ind))+' clusters', fontsize = 24)
+		plt.title('-2.0 < [Fe/H] < -1.75, '+str(len(ind))+' clusters', fontsize = 24)
+		# ~plt.title('-1.75 < [Fe/H] < -1.5, '+str(len(ind))+' clusters', fontsize = 24)
+		plt.show() 
+		plt.close()
+		kill
