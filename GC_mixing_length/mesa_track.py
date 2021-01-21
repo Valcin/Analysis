@@ -181,18 +181,18 @@ def cut(p):
 
 	
 def cut2(h):
-	# ~V = h.abs_mag_F606W
-	# ~R = h.abs_mag_F814W
-	# ~const = np.max(V)
-	# ~min_pts = np.where(V == const)[0]
-	# ~mag = V[min_pts[0]:]
-	# ~col = V[min_pts[0]:] - R[min_pts[0]:]
-	V = h.log_L
-	R = h.log_Teff
-	const = np.min(V)
+	V = h.abs_mag_F606W
+	R = h.abs_mag_F814W
+	const = np.max(V)
 	min_pts = np.where(V == const)[0]
 	mag = V[min_pts[0]:]
-	col = R[min_pts[0]:]
+	col = V[min_pts[0]:] - R[min_pts[0]:]
+	# ~V = h.log_L
+	# ~R = h.log_Teff
+	# ~const = np.min(V)
+	# ~min_pts = np.where(V == const)[0]
+	# ~mag = V[min_pts[0]:]
+	# ~col = R[min_pts[0]:]
 	return col, mag, min_pts[0]
 
 def error_compute(dbins, histo, bhisto):
@@ -488,7 +488,7 @@ msun = 1.989e+33 #g
 # ~string_met = 'Z00005'
 string_mass = 'M075'
 # ~string_name = ['Z00005', 'Z00010', 'Z00015', 'Z00020']
-string_name = ['Z00010', 'Z00015', 'Z00020']
+string_name = ['Z00030']
 
 for string_met in string_name:
 	# ~if (string_met == 'Z00020'and string_mass == 'M080'):
@@ -612,21 +612,21 @@ for string_met in string_name:
 	# ~plt.plot(col10 , mag10, label='No element diffusion', linestyle=':')
 	# ~plt.plot(col11 , mag11, label='No rotational mixing', linestyle=':')
 	# plt.plot(h.abs_mag_F606W - h.abs_mag_F814W , h.abs_mag_F606W, label='test', linestyle=':')
-	# ~plt.gca().invert_yaxis()
-	# ~plt.legend(loc='best')
-	# ~plt.show()
-	# ~plt.close()
-	plt.xlabel(r'Log $\rm T_{eff}$', fontsize=16)
-	plt.ylabel(r'Log L/$\rm L_{\odot}$', fontsize=16)
-	plt.text(3.73,3.0,r'$\alpha$ = 2.8',va='center',fontsize=16,alpha=1.)
-	plt.text(3.62,2.5,r'$\alpha$ = 1.2',va='center',fontsize=16,alpha=1.)
-	plt.text(3.68,0.18,r'0.75 $M_{\odot}$,   Z = 0.0001',va='center',fontsize=16,alpha=1.,
-	bbox=dict(boxstyle="round",fc=(1., 1.,1.,1.),ec='k'))
-	plt.subplots_adjust(bottom=0.15, top=0.89, right=0.930)
-	plt.tick_params(labelsize=16)
-	plt.gca().invert_xaxis()
+	plt.gca().invert_yaxis()
+	plt.legend(loc='best')
 	plt.show()
 	plt.close()
+	# ~plt.xlabel(r'Log $\rm T_{eff}$', fontsize=16)
+	# ~plt.ylabel(r'Log L/$\rm L_{\odot}$', fontsize=16)
+	# ~plt.text(3.73,3.0,r'$\alpha$ = 2.8',va='center',fontsize=16,alpha=1.)
+	# ~plt.text(3.62,2.5,r'$\alpha$ = 1.2',va='center',fontsize=16,alpha=1.)
+	# ~plt.text(3.68,0.18,r'0.75 $M_{\odot}$,   Z = 0.0001',va='center',fontsize=16,alpha=1.,
+	# ~bbox=dict(boxstyle="round",fc=(1., 1.,1.,1.),ec='k'))
+	# ~plt.subplots_adjust(bottom=0.15, top=0.89, right=0.930)
+	# ~plt.tick_params(labelsize=16)
+	# ~plt.gca().invert_xaxis()
+	# ~plt.show()
+	# ~plt.close()
 	kill
 	# ~plt.figure()
 	# ~plt.plot(h17.log_Teff, h17.log_L, label='fiducial', c='k')

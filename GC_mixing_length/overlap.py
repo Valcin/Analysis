@@ -365,22 +365,39 @@ def cut2(h):
 	return col, mag, min_pts[0]
 
 def alpha_distriubtion(col, mag, bestalpha):
-	dx, dy = [[],[],[],[],[],[],[],[]],  [[],[],[],[],[],[],[],[]]
+	# ~dx, dy = [[],[],[],[],[],[],[],[]],  [[],[],[],[],[],[],[],[]]
 	dist_alpha = []
 	limi = min(bestalpha, 16-bestalpha)
 
 	for a in range(1, limi+1):
 		for i in range(len(col)):
-			if a == 1:
-				if mag[i] < finterp[bestalpha -1](col[i]) and mag[i] > finterp[bestalpha +1](col[i]):
-					dx[a-1].append(col[i])
-					dy[a-1].append(mag[i])
-					dist_alpha.append(a/10.)
-			else:
-				if (mag[i] < finterp[bestalpha -a](col[i]) and mag[i] > finterp[bestalpha -(a-1)](col[i])) or (mag[i] < finterp[bestalpha +(a-1)](col[i]) and mag[i] > finterp[bestalpha +a](col[i])):
-					dx[a-1].append(col[i])
-					dy[a-1].append(mag[i])
-					dist_alpha.append(a/10.)
+			# ~if a == 1:
+				# ~if mag[i] < finterp[bestalpha -1](col[i]) and mag[i] > finterp[bestalpha +1](col[i]):
+					# ~dx[a-1].append(col[i])
+					# ~dy[a-1].append(mag[i])
+					# ~dist_alpha.append(a/10.)
+
+					# ~xp = [np.float(finterp[bestalpha +1](col[i])),np.float(finterp[bestalpha -1](col[i]))]
+					# ~yp = [np.float(alpha_mix[bestalpha+1]),np.float(alpha_mix[bestalpha-1])]
+					# ~dist_alpha.append(np.interp(mag[i], xp, yp))
+					# ~print(xp, yp, np.interp(mag[i], xp, yp))
+					# ~kill
+			# ~else:
+			if (mag[i] < finterp[bestalpha -a](col[i]) and mag[i] > finterp[bestalpha -(a-1)](col[i])):
+				# ~dx[a-1].append(col[i])
+				# ~dy[a-1].append(mag[i])
+				# ~dist_alpha.append(a/10.)
+				xp = [np.float(finterp[bestalpha -(a-1)](col[i])),np.float(finterp[bestalpha -a](col[i]))]
+				yp = [np.float(-(a-1))*0.1,np.float(-a)*0.1]
+				dist_alpha.append(np.abs(np.interp(mag[i], xp, yp)))
+				
+			if (mag[i] < finterp[bestalpha +(a-1)](col[i]) and mag[i] > finterp[bestalpha +a](col[i])):
+				# ~dx[a-1].append(col[i])
+				# ~dy[a-1].append(mag[i])
+				# ~dist_alpha.append(a/10.)
+				xp = [np.float(finterp[bestalpha +a](col[i])),np.float(finterp[bestalpha +(a-1)](col[i]))]
+				yp = [np.float(a)*0.1,np.float(a-1)*0.1]
+				dist_alpha.append(np.abs(np.interp(mag[i], xp, yp)))
 	# ~for i in range(len(col)):
 		# ~# delta = 0.1
 		# ~if mag[i] < finterp[bestalpha -1](col[i]) and mag[i] > finterp[bestalpha +1](col[i]):
@@ -425,7 +442,8 @@ def alpha_distriubtion(col, mag, bestalpha):
 
 	si = np.sqrt(np.sum(np.power(dist_alpha, 2))/len(dist_alpha))
 	# ~return np.mean(dist_alpha), dx[0], dy[0]
-	return si, dx[0], dy[0]
+	# ~return si, dx[0], dy[0]
+	return si
 			
 def error_compute(dbins, histo, bhisto):
 		amp = 1.0
@@ -665,8 +683,11 @@ msun = 1.989e+33 #g
 # ~string_met = 'Z00005'
 # ~smass = ['M075', 'M080']
 smass = ['M075']
-string_name = ['Z00005', 'Z00010', 'Z00015', 'Z00020']
+string_name1 = ['Z00005', 'Z00010', 'Z00015', 'Z00020']
 string_label = ['0.00005', '0.00010', '0.00015', '0.00020']
+string_name2 = ['Z00015', 'Z00020', 'Z00025', 'Z00030']
+string_name3 = ['Z00025', 'Z00030', 'Z00035', 'Z00040']
+
 #-----------------------------------------------------------------------
 # plot total start
 
@@ -796,9 +817,49 @@ name2 = ['a100','a120','a140','a160','a180','a200']
 
 met = (input("what is the metallicity limit ? "))
 for string_mass in smass:
+	#-----------------------------------------------------------------------
+	# global variable
+	if met == '-1.5':
+		ind = ind1
+	elif met == '-2.0':
+		ind = ind2
+		string_name = string_name1
+		Gname ='G1'
+	elif met == '-1.75p':
+		ind = ind4
+		string_name = string_name2
+		Gname ='G2'
+	if met == '-1.75m':
+		ind = ind3
+		string_name = string_name3
+		Gname ='G3'
+
+	exV = 0.9110638171893733
+	exI = 0.5641590452038215
+
+	ctot = []
+	vtot = []
+	ctot_sample = []
+	vtot_sample = []
+	ctot_sample2 = []
+	vtot_sample2 = []
+	ctot_sample3 = []
+	vtot_sample3 = []
+	errtot = []
+	errtotv = []
+	errtot_sample = []
+	errtotv_sample = []
+	mean_stop = []
+
+	isov = np.zeros((len(ind),265))
+	isoc = np.zeros((len(ind),265))
+
+	# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dist_alpha.txt', 'a+') as fid_file:
+		# ~fid_file.write('%s %s %s %s \n' %('#GC name', 'M0', 'M0 + 2', 'M0 + 4'))
+	# ~fid_file.close()
 	for indmet, string_met in enumerate(string_name):
 		print(string_mass, string_met)
-		print(str(string_label[indmet]))
+		# ~print(str(string_label[indmet]))
 		# ~if (string_met == 'Z00020'and string_mass == 'M080'):
 			# ~h1 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_M070.data')
 			# ~col1,mag1, mp = cut2(h1)
@@ -894,42 +955,6 @@ for string_mass in smass:
 		finterp = [f12,f13,f14,f15,f16,f17,f18,f19,f20,f21,f22,f23,f24,f25,f26,f27,f28]
 
 
-
-		#-----------------------------------------------------------------------
-		# global variable
-		if met == '-1.5':
-			ind = ind1
-		elif met == '-2.0':
-			ind = ind2
-		if met == '-1.75m':
-			ind = ind3
-		elif met == '-1.75p':
-			ind = ind4
-
-		exV = 0.9110638171893733
-		exI = 0.5641590452038215
-
-		ctot = []
-		vtot = []
-		ctot_sample = []
-		vtot_sample = []
-		ctot_sample2 = []
-		vtot_sample2 = []
-		ctot_sample3 = []
-		vtot_sample3 = []
-		errtot = []
-		errtotv = []
-		errtot_sample = []
-		errtotv_sample = []
-		mean_stop = []
-
-		isov = np.zeros((len(ind),265))
-		isoc = np.zeros((len(ind),265))
-
-		# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dist_alpha.txt', 'a+') as fid_file:
-			# ~fid_file.write('%s %s %s %s \n' %('#GC name', 'M0', 'M0 + 2', 'M0 + 4'))
-		# ~fid_file.close()
-
 		########################################################################
 		########################################################################
 		#-----------------------------------------------------------------------
@@ -945,7 +970,10 @@ for string_mass in smass:
 			clus_nb, Age, Metal, distance, Abs, afe_init, distplus, distmoins  = cluster(glc)
 			print(clus_nb, Age, Metal, distance, Abs, afe_init, distplus, distmoins)
 			photo_v, err_v, photo_i, color, err_color, nmv, nmi, longueur = photometry()
-
+		#-----------------------------------------------------------------------
+		#remove cluster 49 because of multiple populations
+			if glc == 49:
+				continue
 		#-----------------------------------------------------------------------
 		#rescale gc to compute absolute magnitude
 			if glc < 27:
@@ -968,7 +996,7 @@ for string_mass in smass:
 			corr_mag = photo_v - dm - abV
 			corr_col = color - abcol
 
-			print(Metal, metal)
+			# ~print(Metal, metal)
 		#-----------------------------------------------------------------------
 		# compute isochrones for each GC
 			helium_y = ''
@@ -1047,7 +1075,7 @@ for string_mass in smass:
 			std = np.sqrt(np.sum(col_dist[rgb][close]**2)/len(col_dist[rgb][close]))
 			# ~print(std, len(col_dist[rgb][close]))
 			# ~if string_met == 'Z00005':
-				# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dispersion/'+str(clus_nb)+'.txt', 'a+') as fid_file:
+				# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dispersion/'+Gname+str(clus_nb)+'.txt', 'a+') as fid_file:
 					# ~fid_file.write('%s \n' %(str(clus_nb)))
 					# ~fid_file.write('%.4f \n' %(std))
 				# ~fid_file.close()
@@ -1062,26 +1090,29 @@ for string_mass in smass:
 			print(alpha_mix[bestalpha])
 			# ~kill
 			
-			histo, dx, dy = alpha_distriubtion(corr_col[rgb][close],corr_mag[rgb][close], bestalpha)
-			histo2, dx2, dy2 = alpha_distriubtion(corr_col[rgb2][close2],corr_mag[rgb2][close2], bestalpha)
-			histo3, dx3, dy3 = alpha_distriubtion(corr_col[rgb3][close3],corr_mag[rgb3][close3], bestalpha)
+			# ~histo, dx, dy = alpha_distriubtion(corr_col[rgb][close],corr_mag[rgb][close], bestalpha)
+			# ~histo2, dx2, dy2 = alpha_distriubtion(corr_col[rgb2][close2],corr_mag[rgb2][close2], bestalpha)
+			# ~histo3, dx3, dy3 = alpha_distriubtion(corr_col[rgb3][close3],corr_mag[rgb3][close3], bestalpha)
+			histo = alpha_distriubtion(corr_col[rgb][close],corr_mag[rgb][close], bestalpha)
+			histo2 = alpha_distriubtion(corr_col[rgb2][close2],corr_mag[rgb2][close2], bestalpha)
+			histo3 = alpha_distriubtion(corr_col[rgb3][close3],corr_mag[rgb3][close3], bestalpha)
 
-			print(len(corr_mag[rgb2][close2]), len(corr_mag[rgb3][close3]))
+			# ~print(len(corr_mag[rgb2][close2]), len(corr_mag[rgb3][close3]))
 			if len(corr_mag[rgb2][close2]) < 10:
 				histo2 = 999
 			if len(corr_mag[rgb3][close3]) < 10:
 				histo3 = 999
-			# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dispersion/'+string_met+'.txt', 'a+') as fid_file:
-				# ~fid_file.write('%s %.4f %s %.2f %.2f %.2f \n' %(str(clus_nb),std, alpha_mix[bestalpha], histo, histo2, histo3))
-			# ~fid_file.close()
+			with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dispersion/'+Gname+'_'+string_met+'.txt', 'a+') as fid_file:
+				fid_file.write('%s %.4f %s %.2f %.2f %.2f \n' %(str(clus_nb),std, alpha_mix[bestalpha], histo, histo2, histo3))
+			fid_file.close()
 
 
 			print(np.mean(histo))
 			print(np.mean(histo2))	
 			print(np.mean(histo3))	
-			
+
 			# ~plt.scatter(corr_col,corr_mag, marker='.', s=10, color='grey', alpha=0.8)
-			plt.scatter(corr_col,corr_mag, marker='.', s=10, alpha=0.8)
+			# ~plt.scatter(corr_col,corr_mag, marker='.', s=10, alpha=0.8)
 			# plt.scatter(corr_col[rgb][close],corr_mag[rgb][close], marker='.', s=10, color='r', alpha=0.8)
 			# ~plt.scatter(corr_col[rgb2][close2],corr_mag[rgb2][close2], marker='.', s=10, color='b', alpha=0.8)
 			# ~plt.scatter(corr_col[rgb3][close3],corr_mag[rgb3][close3], marker='.', s=10, color='r', alpha=0.8)
@@ -1108,11 +1139,12 @@ for string_mass in smass:
 			# ~plt.axhline(M1)
 			# ~plt.axhline(M2)
 			# ~plt.xlim(0,1.5)
+			# ~plt.xlim(-1.0,2.5)
 			# ~plt.ylim(5,-5)
 			# ~plt.tick_params(labelsize=16)
 			# ~plt.show() 
-			# ~plt.close()
-			# ~kill
+		# ~plt.close()
+		# ~kill
 
 		########################################################################	
 		########################################################################
@@ -1166,24 +1198,38 @@ for string_mass in smass:
 
 		#-----------------------------------------------------------------------
 		# compute the alpha best fit and distribution
-		magpts = np.where(iso_midv < np.max(vtot_sample))[0]
+		# ~magpts = np.where(iso_midv < np.max(vtot_sample))[0]
 		# ~magpts = np.where(iso_midv < 0)[0]
-		bestalpha = chi2(iso_midc[magpts],iso_midv[magpts])
-		print(alpha_mix[bestalpha])
-		histotot, pxtot, pytot = alpha_distriubtion(ctot_sample,vtot_sample, bestalpha)
-		histotot2, pxtot2, pytot2 = alpha_distriubtion(ctot_sample2,vtot_sample2, bestalpha)
-		histotot3, pxtot3, pytot3 = alpha_distriubtion(ctot_sample3,vtot_sample3, bestalpha)
+		# ~bestalpha = chi2(iso_midc[magpts],iso_midv[magpts])
+		# ~print(alpha_mix[bestalpha])
+		# ~histotot, pxtot, pytot = alpha_distriubtion(ctot_sample,vtot_sample, bestalpha)
+		# ~histotot2, pxtot2, pytot2 = alpha_distriubtion(ctot_sample2,vtot_sample2, bestalpha)
+		# ~histotot3, pxtot3, pytot3 = alpha_distriubtion(ctot_sample3,vtot_sample3, bestalpha)
+		# ~histotot = alpha_distriubtion(ctot_sample,vtot_sample, bestalpha)
+		# ~histotot2 = alpha_distriubtion(ctot_sample2,vtot_sample2, bestalpha)
+		# ~histotot3 = alpha_distriubtion(ctot_sample3,vtot_sample3, bestalpha)
 
-		if len(vtot_sample2) < 10:
-			histotot2 = 999
-		if len(vtot_sample3) < 10:
-			histotot3 = 999
-		# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dispersion/'+string_met+'.txt', 'a+') as fid_file:
-			# ~fid_file.write('%s %.4f %s %.2f %.2f %.2f \n' %('All 12 GCs',std_tot, alpha_mix[bestalpha], histotot, histotot2, histotot3))
+		# ~if len(vtot_sample2) < 10:
+			# ~histotot2 = 999
+		# ~if len(vtot_sample3) < 10:
+			# ~histotot3 = 999
 
-		print(np.mean(histotot))
-		print(np.mean(histotot2))	
-		print(np.mean(histotot3))	
+		allgc = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dispersion/'+Gname+'_'+string_met+'.txt', usecols=(1,2,3,4,5))
+		besta = np.mean(allgc[:,1])
+		deltaa = np.std(allgc[:,1])
+		besthist = np.mean(allgc[:,2])
+		besthist2 = np.mean(allgc[:,3])
+		petit = np.where(allgc[:,4] == 999.00)[0]
+		besthist3 = np.mean(np.delete(allgc[:,4], petit))
+		
+		with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dispersion/'+Gname+'_'+string_met+'.txt', 'a+') as fid_file:
+			fid_file.write('%s %.4f %.2f %.2f %.2f %.2f %.2f \n' %('All_12_GCs',std_tot, besta, besthist, besthist2, besthist3, deltaa))
+		fid_file.close()
+
+
+		# ~print(np.mean(histotot))
+		# ~print(np.mean(histotot2))	
+		# ~print(np.mean(histotot3))	
 
 		########################################################################
 		########################################################################
@@ -1402,19 +1448,19 @@ for string_mass in smass:
 	# plot overlap
 		# ~plt.figure()
 		# ~plt.scatter(ctot,vtot, marker='.', s=10, alpha=0.8)
-		plt.xlim(-1.0,2.5)
+		# ~plt.xlim(-1.0,2.5)
 		# ~plt.xlim(-0.23,1.65)
-		plt.ylim(5,-5)
-		plt.tick_params(labelsize=14)
-		plt.subplots_adjust(bottom=0.15, top=0.89)
+		# ~plt.ylim(5,-5)
+		# ~plt.tick_params(labelsize=14)
+		# ~plt.subplots_adjust(bottom=0.15, top=0.89)
 		# ~lgnd = plt.legend(loc='best', fontsize = 12)
-		# lgnd.get_frame().set_edgecolor('k')
-		# lgnd.get_frame().set_linewidth(2.0)
-		plt.xlabel(' F606W - F814W', fontsize = 20)
-		plt.ylabel(' F606W', fontsize = 20)
+		# ~# lgnd.get_frame().set_edgecolor('k')
+		# ~# lgnd.get_frame().set_linewidth(2.0)
+		# ~plt.xlabel(' F606W - F814W', fontsize = 20)
+		# ~plt.ylabel(' F606W', fontsize = 20)
 		# ~plt.title('[Fe/H] < '+met+', '+str(len(ind))+' clusters', fontsize = 24)
-		plt.title('-2.0 < [Fe/H] < -1.75, '+str(len(ind))+' clusters', fontsize = 24)
+		# ~plt.title('-2.0 < [Fe/H] < -1.75, '+str(len(ind)-1)+' clusters', fontsize = 24)
 		# ~plt.title('-1.75 < [Fe/H] < -1.5, '+str(len(ind))+' clusters', fontsize = 24)
-		plt.show() 
-		plt.close()
-		kill
+		# ~plt.show() 
+		# ~plt.close()
+		# ~kill
