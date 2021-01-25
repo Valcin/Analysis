@@ -364,82 +364,30 @@ def cut2(h):
 	col = V[min_pts[0]:] - R[min_pts[0]:]
 	return col, mag, min_pts[0]
 
-def alpha_distriubtion(col, mag, bestalpha):
+def alpha_distribution(col, mag, bestalpha):
 	# ~dx, dy = [[],[],[],[],[],[],[],[]],  [[],[],[],[],[],[],[],[]]
 	dist_alpha = []
 	limi = min(bestalpha, 16-bestalpha)
 
 	for a in range(1, limi+1):
 		for i in range(len(col)):
-			# ~if a == 1:
-				# ~if mag[i] < finterp[bestalpha -1](col[i]) and mag[i] > finterp[bestalpha +1](col[i]):
-					# ~dx[a-1].append(col[i])
-					# ~dy[a-1].append(mag[i])
-					# ~dist_alpha.append(a/10.)
-
-					# ~xp = [np.float(finterp[bestalpha +1](col[i])),np.float(finterp[bestalpha -1](col[i]))]
-					# ~yp = [np.float(alpha_mix[bestalpha+1]),np.float(alpha_mix[bestalpha-1])]
-					# ~dist_alpha.append(np.interp(mag[i], xp, yp))
-					# ~print(xp, yp, np.interp(mag[i], xp, yp))
-					# ~kill
-			# ~else:
-			if (mag[i] < finterp[bestalpha -a](col[i]) and mag[i] > finterp[bestalpha -(a-1)](col[i])):
+			if (col[i] < finterp[bestalpha -a](mag[i]) and col[i] > finterp[bestalpha -(a-1)](mag[i])):
 				# ~dx[a-1].append(col[i])
 				# ~dy[a-1].append(mag[i])
 				# ~dist_alpha.append(a/10.)
-				xp = [np.float(finterp[bestalpha -(a-1)](col[i])),np.float(finterp[bestalpha -a](col[i]))]
+				xp = [np.float(finterp[bestalpha -(a-1)](mag[i])),np.float(finterp[bestalpha -a](mag[i]))]
 				yp = [np.float(-(a-1))*0.1,np.float(-a)*0.1]
-				dist_alpha.append(np.abs(np.interp(mag[i], xp, yp)))
+				dist_alpha.append(np.abs(np.interp(col[i], xp, yp)))
 				
-			if (mag[i] < finterp[bestalpha +(a-1)](col[i]) and mag[i] > finterp[bestalpha +a](col[i])):
+			if (col[i] < finterp[bestalpha +(a-1)](mag[i]) and col[i] > finterp[bestalpha +a](mag[i])):
 				# ~dx[a-1].append(col[i])
 				# ~dy[a-1].append(mag[i])
 				# ~dist_alpha.append(a/10.)
-				xp = [np.float(finterp[bestalpha +a](col[i])),np.float(finterp[bestalpha +(a-1)](col[i]))]
+				xp = [np.float(finterp[bestalpha +a](mag[i])),np.float(finterp[bestalpha +(a-1)](mag[i]))]
 				yp = [np.float(a)*0.1,np.float(a-1)*0.1]
-				dist_alpha.append(np.abs(np.interp(mag[i], xp, yp)))
-	# ~for i in range(len(col)):
-		# ~# delta = 0.1
-		# ~if mag[i] < finterp[bestalpha -1](col[i]) and mag[i] > finterp[bestalpha +1](col[i]):
-			# ~dx[0].append(col[i])
-			# ~dy[0].append(mag[i])
-			# ~dist_alpha.append(0.1)
-		# delta = 0.2
-		# ~if (mag[i] < finterp[bestalpha -2](col[i]) and mag[i] > finterp[bestalpha -1](col[i])) or (mag[i] < finterp[bestalpha +1](col[i]) and mag[i] > finterp[bestalpha +2](col[i])):
-			# ~dx[1].append(col[i])
-			# ~dy[1].append(mag[i])
-			# ~dist_alpha.append(0.2)
-		# ~# delta = 0.3
-		# ~if (mag[i] < finterp[bestalpha -3](col[i]) and mag[i] > finterp[bestalpha -2](col[i])) or (mag[i] < finterp[bestalpha +2](col[i]) and mag[i] > finterp[bestalpha +3](col[i])):
-			# ~dx[2].append(col[i])
-			# ~dy[2].append(mag[i])
-			# ~dist_alpha.append(0.3)
-		# ~# delta = 0.4
-		# ~if (mag[i] < finterp[bestalpha -4](col[i]) and mag[i] > finterp[bestalpha -3](col[i])) or (mag[i] < finterp[bestalpha +3](col[i]) and mag[i] > finterp[bestalpha +4](col[i])):
-			# ~dx[3].append(col[i])
-			# ~dy[3].append(mag[i])
-			# ~dist_alpha.append(0.4)
-		# ~# delta = 0.5
-		# ~if (mag[i] < finterp[bestalpha -5](col[i]) and mag[i] > finterp[bestalpha -4](col[i])) or (mag[i] < finterp[bestalpha +4](col[i]) and mag[i] > finterp[bestalpha +5](col[i])):
-			# ~dx[4].append(col[i])
-			# ~dy[4].append(mag[i])
-			# ~dist_alpha.append(0.5)
-		# ~# delta = 0.6
-		# ~if (mag[i] < finterp[bestalpha -6](col[i]) and mag[i] > finterp[bestalpha -5](col[i])) or (mag[i] < finterp[bestalpha +5](col[i]) and mag[i] > finterp[bestalpha +6](col[i])):
-			# ~dx[5].append(col[i])
-			# ~dy[5].append(mag[i])
-			# ~dist_alpha.append(0.6)
-		# ~# delta = 0.7
-		# ~if (mag[i] < finterp[bestalpha -7](col[i]) and mag[i] > finterp[bestalpha -6](col[i])) or (mag[i] < finterp[bestalpha +6](col[i]) and mag[i] > finterp[bestalpha +7](col[i])):
-			# ~dx[6].append(col[i])
-			# ~dy[6].append(mag[i])
-			# ~dist_alpha.append(0.7)
-		# ~# delta = 0.8
-		# ~if (mag[i] < finterp[bestalpha -8](col[i]) and mag[i] > finterp[bestalpha -7](col[i])) or (mag[i] < finterp[bestalpha +7](col[i]) and mag[i] > finterp[bestalpha +8](col[i])):
-			# ~dx[7].append(col[i])
-			# ~dy[7].append(mag[i])
-			# ~dist_alpha.append(0.8)
-
+				dist_alpha.append(np.abs(np.interp(col[i], xp, yp)))
+				dist_alpha.append(np.abs(np.interp(col[i], xp, yp)))
+				
 	si = np.sqrt(np.sum(np.power(dist_alpha, 2))/len(dist_alpha))
 	# ~return np.mean(dist_alpha), dx[0], dy[0]
 	# ~return si, dx[0], dy[0]
@@ -606,23 +554,23 @@ def bilinear_interpolation(x, y, pts):
 
 def chi2(C, M):
 	dis = np.zeros(17)
-	dis[0] = np.sum(np.abs(M - finterp[0](C)))
-	dis[1] = np.sum(np.abs(M - finterp[1](C)))
-	dis[2] = np.sum(np.abs(M - finterp[2](C)))
-	dis[3] = np.sum(np.abs(M - finterp[3](C)))
-	dis[4] = np.sum(np.abs(M - finterp[4](C)))
-	dis[5] = np.sum(np.abs(M - finterp[5](C)))
-	dis[6] = np.sum(np.abs(M - finterp[6](C)))
-	dis[7] = np.sum(np.abs(M - finterp[7](C)))
-	dis[8] = np.sum(np.abs(M - finterp[8](C)))
-	dis[9] = np.sum(np.abs(M - finterp[9](C)))
-	dis[10] = np.sum(np.abs(M - finterp[10](C)))
-	dis[11] = np.sum(np.abs(M - finterp[11](C)))
-	dis[12] = np.sum(np.abs(M - finterp[12](C)))
-	dis[13] = np.sum(np.abs(M - finterp[13](C)))
-	dis[14] = np.sum(np.abs(M - finterp[14](C)))
-	dis[15] = np.sum(np.abs(M - finterp[15](C)))
-	dis[16] = np.sum(np.abs(M - finterp[16](C)))
+	dis[0] = np.sum(np.abs(C - finterp[0](M)))
+	dis[1] = np.sum(np.abs(C - finterp[1](M)))
+	dis[2] = np.sum(np.abs(C - finterp[2](M)))
+	dis[3] = np.sum(np.abs(C - finterp[3](M)))
+	dis[4] = np.sum(np.abs(C - finterp[4](M)))
+	dis[5] = np.sum(np.abs(C - finterp[5](M)))
+	dis[6] = np.sum(np.abs(C - finterp[6](M)))
+	dis[7] = np.sum(np.abs(C - finterp[7](M)))
+	dis[8] = np.sum(np.abs(C - finterp[8](M)))
+	dis[9] = np.sum(np.abs(C - finterp[9](M)))
+	dis[10] = np.sum(np.abs(C - finterp[10](M)))
+	dis[11] = np.sum(np.abs(C - finterp[11](M)))
+	dis[12] = np.sum(np.abs(C - finterp[12](M)))
+	dis[13] = np.sum(np.abs(C - finterp[13](M)))
+	dis[14] = np.sum(np.abs(C - finterp[14](M)))
+	dis[15] = np.sum(np.abs(C - finterp[15](M)))
+	dis[16] = np.sum(np.abs(C - finterp[16](M)))
 	return np.argmin(dis)
 	
 ########################################################################
@@ -932,23 +880,40 @@ for string_mass in smass:
 		#-----------------------------------------------------------------------
 		# interpolate the tracks
 		finterp =np.zeros(17)
-		f12 = interpolate.interp1d(col12,mag12, 'nearest',fill_value="extrapolate")
-		f13 = interpolate.interp1d(col28,mag28, 'nearest',fill_value="extrapolate")
-		f14 = interpolate.interp1d(col13,mag13, 'nearest',fill_value="extrapolate")
-		f15 = interpolate.interp1d(col26,mag26, 'nearest',fill_value="extrapolate")
-		f16 = interpolate.interp1d(col14,mag14, 'nearest',fill_value="extrapolate")
-		f17 = interpolate.interp1d(col24,mag24, 'nearest',fill_value="extrapolate")
-		f18 = interpolate.interp1d(col15,mag15, 'nearest',fill_value="extrapolate")
-		f19 = interpolate.interp1d(col16,mag16, 'nearest',fill_value="extrapolate")
-		f20 = interpolate.interp1d(col17,mag17, 'nearest',fill_value="extrapolate")
-		f21 = interpolate.interp1d(col18,mag18, 'nearest',fill_value="extrapolate")
-		f22 = interpolate.interp1d(col19,mag19, 'nearest',fill_value="extrapolate")
-		f23 = interpolate.interp1d(col25,mag25, 'nearest',fill_value="extrapolate")
-		f24 = interpolate.interp1d(col20,mag20, 'nearest',fill_value="extrapolate")
-		f25 = interpolate.interp1d(col27,mag27, 'nearest',fill_value="extrapolate")
-		f26 = interpolate.interp1d(col21,mag21, 'nearest',fill_value="extrapolate")
-		f27 = interpolate.interp1d(col29,mag29, 'nearest',fill_value="extrapolate")
-		f28 = interpolate.interp1d(col22,mag22, 'nearest',fill_value="extrapolate")
+		# ~f12 = interpolate.interp1d(col12,mag12, 'nearest',fill_value="extrapolate")
+		# ~f13 = interpolate.interp1d(col28,mag28, 'nearest',fill_value="extrapolate")
+		# ~f14 = interpolate.interp1d(col13,mag13, 'nearest',fill_value="extrapolate")
+		# ~f15 = interpolate.interp1d(col26,mag26, 'nearest',fill_value="extrapolate")
+		# ~f16 = interpolate.interp1d(col14,mag14, 'nearest',fill_value="extrapolate")
+		# ~f17 = interpolate.interp1d(col24,mag24, 'nearest',fill_value="extrapolate")
+		# ~f18 = interpolate.interp1d(col15,mag15, 'nearest',fill_value="extrapolate")
+		# ~f19 = interpolate.interp1d(col16,mag16, 'nearest',fill_value="extrapolate")
+		# ~f20 = interpolate.interp1d(col17,mag17, 'nearest',fill_value="extrapolate")
+		# ~f21 = interpolate.interp1d(col18,mag18, 'nearest',fill_value="extrapolate")
+		# ~f22 = interpolate.interp1d(col19,mag19, 'nearest',fill_value="extrapolate")
+		# ~f23 = interpolate.interp1d(col25,mag25, 'nearest',fill_value="extrapolate")
+		# ~f24 = interpolate.interp1d(col20,mag20, 'nearest',fill_value="extrapolate")
+		# ~f25 = interpolate.interp1d(col27,mag27, 'nearest',fill_value="extrapolate")
+		# ~f26 = interpolate.interp1d(col21,mag21, 'nearest',fill_value="extrapolate")
+		# ~f27 = interpolate.interp1d(col29,mag29, 'nearest',fill_value="extrapolate")
+		# ~f28 = interpolate.interp1d(col22,mag22, 'nearest',fill_value="extrapolate")
+		f12 = interpolate.interp1d(mag12,col12, 'nearest',fill_value="extrapolate")
+		f13 = interpolate.interp1d(mag28,col28, 'nearest',fill_value="extrapolate")
+		f14 = interpolate.interp1d(mag13,col13, 'nearest',fill_value="extrapolate")
+		f15 = interpolate.interp1d(mag26,col26, 'nearest',fill_value="extrapolate")
+		f16 = interpolate.interp1d(mag14,col14, 'nearest',fill_value="extrapolate")
+		f17 = interpolate.interp1d(mag24,col24, 'nearest',fill_value="extrapolate")
+		f18 = interpolate.interp1d(mag15,col15, 'nearest',fill_value="extrapolate")
+		f19 = interpolate.interp1d(mag16,col16, 'nearest',fill_value="extrapolate")
+		f20 = interpolate.interp1d(mag17,col17, 'nearest',fill_value="extrapolate")
+		f21 = interpolate.interp1d(mag18,col18, 'nearest',fill_value="extrapolate")
+		f22 = interpolate.interp1d(mag19,col19, 'nearest',fill_value="extrapolate")
+		f23 = interpolate.interp1d(mag25,col25, 'nearest',fill_value="extrapolate")
+		f24 = interpolate.interp1d(mag20,col20, 'nearest',fill_value="extrapolate")
+		f25 = interpolate.interp1d(mag27,col27, 'nearest',fill_value="extrapolate")
+		f26 = interpolate.interp1d(mag21,col21, 'nearest',fill_value="extrapolate")
+		f27 = interpolate.interp1d(mag29,col29, 'nearest',fill_value="extrapolate")
+		f28 = interpolate.interp1d(mag22,col22, 'nearest',fill_value="extrapolate")
 
 
 		alpha_mix = ['1.2','1.3','1.4','1.5','1.6','1.7','1.8','1.9','2.0','2.1','2.2','2.3','2.4','2.5','2.6','2.7','2.8']
@@ -1090,21 +1055,21 @@ for string_mass in smass:
 			print(alpha_mix[bestalpha])
 			# ~kill
 			
-			# ~histo, dx, dy = alpha_distriubtion(corr_col[rgb][close],corr_mag[rgb][close], bestalpha)
-			# ~histo2, dx2, dy2 = alpha_distriubtion(corr_col[rgb2][close2],corr_mag[rgb2][close2], bestalpha)
-			# ~histo3, dx3, dy3 = alpha_distriubtion(corr_col[rgb3][close3],corr_mag[rgb3][close3], bestalpha)
-			histo = alpha_distriubtion(corr_col[rgb][close],corr_mag[rgb][close], bestalpha)
-			histo2 = alpha_distriubtion(corr_col[rgb2][close2],corr_mag[rgb2][close2], bestalpha)
-			histo3 = alpha_distriubtion(corr_col[rgb3][close3],corr_mag[rgb3][close3], bestalpha)
+			# ~histo, dx, dy = alpha_distribution(corr_col[rgb][close],corr_mag[rgb][close], bestalpha)
+			# ~histo2, dx2, dy2 = alpha_distribution(corr_col[rgb2][close2],corr_mag[rgb2][close2], bestalpha)
+			# ~histo3, dx3, dy3 = alpha_distribution(corr_col[rgb3][close3],corr_mag[rgb3][close3], bestalpha)
+			histo = alpha_distribution(corr_col[rgb][close],corr_mag[rgb][close], bestalpha)
+			histo2 = alpha_distribution(corr_col[rgb2][close2],corr_mag[rgb2][close2], bestalpha)
+			histo3 = alpha_distribution(corr_col[rgb3][close3],corr_mag[rgb3][close3], bestalpha)
 
 			# ~print(len(corr_mag[rgb2][close2]), len(corr_mag[rgb3][close3]))
 			if len(corr_mag[rgb2][close2]) < 10:
 				histo2 = 999
 			if len(corr_mag[rgb3][close3]) < 10:
 				histo3 = 999
-			with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dispersion/'+Gname+'_'+string_met+'.txt', 'a+') as fid_file:
-				fid_file.write('%s %.4f %s %.2f %.2f %.2f \n' %(str(clus_nb),std, alpha_mix[bestalpha], histo, histo2, histo3))
-			fid_file.close()
+			# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dispersion/'+Gname+'_'+string_met+'.txt', 'a+') as fid_file:
+				# ~fid_file.write('%s %.4f %s %.2f %.2f %.2f \n' %(str(clus_nb),std, alpha_mix[bestalpha], histo, histo2, histo3))
+			# ~fid_file.close()
 
 
 			print(np.mean(histo))
@@ -1112,7 +1077,7 @@ for string_mass in smass:
 			print(np.mean(histo3))	
 
 			# ~plt.scatter(corr_col,corr_mag, marker='.', s=10, color='grey', alpha=0.8)
-			# ~plt.scatter(corr_col,corr_mag, marker='.', s=10, alpha=0.8)
+			plt.scatter(corr_col,corr_mag, marker='.', s=10, alpha=0.8)
 			# plt.scatter(corr_col[rgb][close],corr_mag[rgb][close], marker='.', s=10, color='r', alpha=0.8)
 			# ~plt.scatter(corr_col[rgb2][close2],corr_mag[rgb2][close2], marker='.', s=10, color='b', alpha=0.8)
 			# ~plt.scatter(corr_col[rgb3][close3],corr_mag[rgb3][close3], marker='.', s=10, color='r', alpha=0.8)
@@ -1202,29 +1167,29 @@ for string_mass in smass:
 		# ~magpts = np.where(iso_midv < 0)[0]
 		# ~bestalpha = chi2(iso_midc[magpts],iso_midv[magpts])
 		# ~print(alpha_mix[bestalpha])
-		# ~histotot, pxtot, pytot = alpha_distriubtion(ctot_sample,vtot_sample, bestalpha)
-		# ~histotot2, pxtot2, pytot2 = alpha_distriubtion(ctot_sample2,vtot_sample2, bestalpha)
-		# ~histotot3, pxtot3, pytot3 = alpha_distriubtion(ctot_sample3,vtot_sample3, bestalpha)
-		# ~histotot = alpha_distriubtion(ctot_sample,vtot_sample, bestalpha)
-		# ~histotot2 = alpha_distriubtion(ctot_sample2,vtot_sample2, bestalpha)
-		# ~histotot3 = alpha_distriubtion(ctot_sample3,vtot_sample3, bestalpha)
+		# ~histotot, pxtot, pytot = alpha_distribution(ctot_sample,vtot_sample, bestalpha)
+		# ~histotot2, pxtot2, pytot2 = alpha_distribution(ctot_sample2,vtot_sample2, bestalpha)
+		# ~histotot3, pxtot3, pytot3 = alpha_distribution(ctot_sample3,vtot_sample3, bestalpha)
+		# ~histotot = alpha_distribution(ctot_sample,vtot_sample, bestalpha)
+		# ~histotot2 = alpha_distribution(ctot_sample2,vtot_sample2, bestalpha)
+		# ~histotot3 = alpha_distribution(ctot_sample3,vtot_sample3, bestalpha)
 
 		# ~if len(vtot_sample2) < 10:
 			# ~histotot2 = 999
 		# ~if len(vtot_sample3) < 10:
 			# ~histotot3 = 999
 
-		allgc = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dispersion/'+Gname+'_'+string_met+'.txt', usecols=(1,2,3,4,5))
-		besta = np.mean(allgc[:,1])
-		deltaa = np.std(allgc[:,1])
-		besthist = np.mean(allgc[:,2])
-		besthist2 = np.mean(allgc[:,3])
-		petit = np.where(allgc[:,4] == 999.00)[0]
-		besthist3 = np.mean(np.delete(allgc[:,4], petit))
+		# ~allgc = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dispersion/'+Gname+'_'+string_met+'.txt', usecols=(1,2,3,4,5))
+		# ~besta = np.mean(allgc[:,1])
+		# ~deltaa = np.std(allgc[:,1])
+		# ~besthist = np.mean(allgc[:,2])
+		# ~besthist2 = np.mean(allgc[:,3])
+		# ~petit = np.where(allgc[:,4] == 999.00)[0]
+		# ~besthist3 = np.mean(np.delete(allgc[:,4], petit))
 		
-		with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dispersion/'+Gname+'_'+string_met+'.txt', 'a+') as fid_file:
-			fid_file.write('%s %.4f %.2f %.2f %.2f %.2f %.2f \n' %('All_12_GCs',std_tot, besta, besthist, besthist2, besthist3, deltaa))
-		fid_file.close()
+		# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dispersion/'+Gname+'_'+string_met+'.txt', 'a+') as fid_file:
+			# ~fid_file.write('%s %.4f %.2f %.2f %.2f %.2f %.2f \n' %('All_12_GCs',std_tot, besta, besthist, besthist2, besthist3, deltaa))
+		# ~fid_file.close()
 
 
 		# ~print(np.mean(histotot))
@@ -1448,19 +1413,19 @@ for string_mass in smass:
 	# plot overlap
 		# ~plt.figure()
 		# ~plt.scatter(ctot,vtot, marker='.', s=10, alpha=0.8)
-		# ~plt.xlim(-1.0,2.5)
-		# ~plt.xlim(-0.23,1.65)
-		# ~plt.ylim(5,-5)
-		# ~plt.tick_params(labelsize=14)
-		# ~plt.subplots_adjust(bottom=0.15, top=0.89)
-		# ~lgnd = plt.legend(loc='best', fontsize = 12)
-		# ~# lgnd.get_frame().set_edgecolor('k')
-		# ~# lgnd.get_frame().set_linewidth(2.0)
-		# ~plt.xlabel(' F606W - F814W', fontsize = 20)
-		# ~plt.ylabel(' F606W', fontsize = 20)
+		plt.xlim(-1.0,2.5)
+		# plt.xlim(-0.23,1.65)
+		plt.ylim(5,-5)
+		plt.tick_params(labelsize=14)
+		plt.subplots_adjust(bottom=0.15, top=0.89)
+		# lgnd = plt.legend(loc='best', fontsize = 12)
+		# lgnd.get_frame().set_edgecolor('k')
+		# lgnd.get_frame().set_linewidth(2.0)
+		plt.xlabel(' F606W - F814W', fontsize = 20)
+		plt.ylabel(' F606W', fontsize = 20)
 		# ~plt.title('[Fe/H] < '+met+', '+str(len(ind))+' clusters', fontsize = 24)
-		# ~plt.title('-2.0 < [Fe/H] < -1.75, '+str(len(ind)-1)+' clusters', fontsize = 24)
-		# ~plt.title('-1.75 < [Fe/H] < -1.5, '+str(len(ind))+' clusters', fontsize = 24)
-		# ~plt.show() 
-		# ~plt.close()
-		# ~kill
+		# ~plt.title('-2.0 < [Fe/H] < -1.75, '+str(len(ind))+' clusters', fontsize = 24)
+		plt.title('-1.75 < [Fe/H] < -1.5, '+str(len(ind)-1)+' clusters', fontsize = 24)
+		plt.show() 
+		plt.close()
+		kill

@@ -261,7 +261,24 @@ def iso_mag(Age, metal, distance, A, afe_val = None):
 	#~ Color = Color[chosen]
 
 	# ~gc.collect()
-	return mag_v, mag_i, Color, eep_first	
+	return mag_v, mag_i, Color, eep_first
+
+def dc_da(magval, bestalpha):
+	coledge1 = np.zeros(8)
+	coledge2 = np.zeros(8)
+	limi = min(bestalpha, 16-bestalpha)
+	# ~print(alpha_mix[bestalpha])
+	for a in range(1, limi+1):
+		coledge1[a-1] = np.abs(finterp[bestalpha -a](magval) - finterp[bestalpha](magval))/(a*0.1)
+		coledge2[a-1] = np.abs(finterp[bestalpha](magval) - finterp[bestalpha +a](magval))/(a*0.1)
+	return coledge1, coledge2
+
+def coord_fid(bestalpha):
+	cm2 = finterp[bestalpha](-2.0)
+	cp0 = finterp[bestalpha](0.0)
+	cp2 = finterp[bestalpha](2.0)
+	return cm2,cp0,cp2
+	
 ########################################################################
 ########################################################################
 Zsun = 0.0134
@@ -423,21 +440,25 @@ msun = 1.989e+33 #g
 
 #-----------------------------------------------------------------------
 
-# ~Age = np.log10(13.5e9)
-# ~distance = 0
-# ~Abs = 0
-# ~afe_init = 0.0
-# ~helium_y = ''
-# ~model='dar'
-# ~print(Age)
+Age = np.log10(13.32e9)
+distance = 0
+Abs = 0
+afe_init = 0.
+helium_y = ''
+model='dar'
+# ~model='mist'
+print(Age)
 
-# ~from isochrones.dartmouth import Dartmouth_FastIsochrone
-# ~darm2 = Dartmouth_FastIsochrone(afe='afem2', y=helium_y)
-# ~darp0 = Dartmouth_FastIsochrone(afe='afep0', y=helium_y)
-# ~darp2 = Dartmouth_FastIsochrone(afe='afep2', y=helium_y)
-# ~darp4 = Dartmouth_FastIsochrone(afe='afep4', y=helium_y)
-# ~darp6 = Dartmouth_FastIsochrone(afe='afep6', y=helium_y)
-# ~darp8 = Dartmouth_FastIsochrone(afe='afep8', y=helium_y)
+from isochrones.mist import MIST_Isochrone
+mist = MIST_Isochrone()
+
+from isochrones.dartmouth import Dartmouth_FastIsochrone
+darm2 = Dartmouth_FastIsochrone(afe='afem2', y=helium_y)
+darp0 = Dartmouth_FastIsochrone(afe='afep0', y=helium_y)
+darp2 = Dartmouth_FastIsochrone(afe='afep2', y=helium_y)
+darp4 = Dartmouth_FastIsochrone(afe='afep4', y=helium_y)
+darp6 = Dartmouth_FastIsochrone(afe='afep6', y=helium_y)
+darp8 = Dartmouth_FastIsochrone(afe='afep8', y=helium_y)
 
 # ~binc = 200
 # ~niso = int((-200 -(-236))/2)
@@ -466,29 +487,86 @@ msun = 1.989e+33 #g
 	# ~mag[:,ind]= magtest
 	# ~plt.plot(Color_iso,mag_v, color=s_m.to_rgba(met))
 	#ax1.plot(fmag_iniref(magtest)/fmag_ini(magtest),magtest, color=s_m.to_rgba(met),lw=2)
+	
+string_mass = 'M075'
+string_met = 'scatter_test'
+htest1 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_a1938.data')
+coltest1,magtest1, mptest1 = cut2(htest1)
+htest1bis = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_a1938bis.data')
+coltest1bis,magtest1bis, mptest1bis = cut2(htest1bis)
+htest2 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_z00045.data')
+coltest2,magtest2, mptest2 = cut2(htest2)
+htest3 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_z000142.data')
+coltest3,magtest3, mptest3 = cut2(htest3)
+htest4 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_m080.data')
+coltest4,magtest4, mptest4 = cut2(htest4)
+
+met1 = -2.0
+met2 = -1.755
+met3 = -1.5
+# ~met1 = -2.087
+# ~met2 = -1.8419
+# ~met3 = -1.586
+
+mag_v1, mag_i1, Color_iso1, eep_first1 = iso_mag(Age, met1, distance, Abs, afe_init)
+mag_v2, mag_i2, Color_iso2, eep_first2 = iso_mag(Age, met2, distance, Abs, afe_init)
+mag_v3, mag_i3, Color_iso3, eep_first3 = iso_mag(Age, met3, distance, Abs, afe_init)
 
 
-# ~plt.xlim(-0.23,1.65)
+# ~plt.plot(htest1.log_Teff, htest1.log_L)
+# ~plt.plot(htest1bis.log_Teff, htest1bis.log_L, linestyle=':')
+# ~plt.gca().invert_xaxis()
+# ~plt.legend(loc='best')
+# ~plt.show()
+# ~plt.close()
+# ~kill
+
+# ~plt.plot(coltest2 , magtest2, label=r'MESA track: M = 0.77 $M_{\odot}$, Z = 0.00045', c='r')
+# ~plt.plot(Color_iso3,mag_v3, c='r', label=r'Isochrone: Age = 13.32 Gyr, [Fe/H] = -1.5',linestyle=':')
+# ~plt.plot(coltest1 , magtest1, label=r'MESA track: M = 0.77 $M_{\odot}$, Z = 0.00025', c='k')
+# ~plt.plot(Color_iso2,mag_v2, c='k', label=r'Isochrone: Age = 13.32 Gyr, [Fe/H] = -1.75',linestyle=':')
+# ~plt.plot(coltest3 , magtest3, label=r'MESA track: M = 0.77 $M_{\odot}$, Z = 0.000142', c='c')
+# ~plt.plot(Color_iso1,mag_v1, c='c', label=r'Isochrone: Age = 13.32 Gyr, [Fe/H] = -2.0',linestyle=':')
+# ~plt.xlim(0.2,1.25)
 # ~plt.ylim(5,-5)
 # ~plt.tick_params(labelsize=14)
 # ~plt.subplots_adjust(bottom=0.15, top=0.89)
-# ~lgnd = plt.legend(loc='best', fontsize = 12)
-# ~# lgnd.get_frame().set_edgecolor('k')
-# ~# lgnd.get_frame().set_linewidth(2.0)
+# ~lgnd = plt.legend(loc='upper left', fontsize = 10)
+# ~plt.text(0.9,3,r'$\alpha$ = 1.938',va='center',fontsize=16,alpha=1.,
+	# ~bbox=dict(boxstyle="round",fc=(1., 1.,1.,1.),ec='k'))
 # ~plt.xlabel(' F606W - F814W', fontsize = 20)
 # ~plt.ylabel(' F606W', fontsize = 20)
-# ~#plt.title('[Fe/H] < '+met+', '+str(len(ind))+' clusters', fontsize = 24)
 # ~plt.show() 
 # ~plt.close()
-# ~kill
+
+plt.plot(coltest2 , magtest2, label=r'MESA track: M = 0.77 $M_{\odot}$, Z = 0.00045', c='r')
+plt.plot(Color_iso3,mag_v3, c='r', label=r'Isochrone: Age = 13.32 Gyr, [Fe/H] = -1.5',linestyle=':')
+plt.plot(coltest1 , magtest1, label=r'MESA track: M = 0.77 $M_{\odot}$, Z = 0.00025', c='k')
+plt.plot(Color_iso2,mag_v2, c='k', label=r'Isochrone: Age = 13.32 Gyr, [Fe/H] = -1.75',linestyle=':')
+plt.plot(coltest3 , magtest3, label=r'MESA track: M = 0.77 $M_{\odot}$, Z = 0.000142', c='c')
+plt.plot(Color_iso1,mag_v1, c='c', label=r'Isochrone: Age = 13.32 Gyr, [Fe/H] = -2.0',linestyle=':')
+plt.xlim(0.2,1.25)
+plt.ylim(5,-5)
+plt.tick_params(labelsize=14)
+plt.subplots_adjust(bottom=0.15, top=0.89)
+lgnd = plt.legend(loc='upper left', fontsize = 10)
+plt.text(0.9,3,r'$\alpha$ = 1.938',va='center',fontsize=16,alpha=1.,
+	bbox=dict(boxstyle="round",fc=(1., 1.,1.,1.),ec='k'))
+plt.xlabel(' F606W - F814W', fontsize = 20)
+plt.ylabel(' F606W', fontsize = 20)
+plt.show() 
+plt.close()
+kill
 
 #-----------------------------------------------------------------------
 
 # READ MESSA FILES
 # ~string_met = 'Z00005'
 string_mass = 'M075'
-# ~string_name = ['Z00005', 'Z00010', 'Z00015', 'Z00020']
-string_name = ['Z00030']
+string_name = ['Z00005', 'Z00010', 'Z00015', 'Z00020','Z00025', 'Z00030', 'Z00035', 'Z00040']
+# ~string_name = ['Z00015', 'Z00020','Z00025', 'Z00030', 'Z00035', 'Z00040']
+# ~string_name = ['Z00025', 'Z00030', 'Z00035', 'Z00040']
+# ~string_name = ['Z00030']
 
 for string_met in string_name:
 	# ~if (string_met == 'Z00020'and string_mass == 'M080'):
@@ -556,6 +634,71 @@ for string_met in string_name:
 	col22,mag22, mp22 = cut2(h22)
 
 
+	#-----------------------------------------------------------------------
+	# interpolate the tracks
+	finterp =np.zeros(17)
+	f12 = interpolate.interp1d(mag12,col12, 'nearest',fill_value="extrapolate")
+	f13 = interpolate.interp1d(mag28,col28, 'nearest',fill_value="extrapolate")
+	f14 = interpolate.interp1d(mag13,col13, 'nearest',fill_value="extrapolate")
+	f15 = interpolate.interp1d(mag26,col26, 'nearest',fill_value="extrapolate")
+	f16 = interpolate.interp1d(mag14,col14, 'nearest',fill_value="extrapolate")
+	f17 = interpolate.interp1d(mag24,col24, 'nearest',fill_value="extrapolate")
+	f18 = interpolate.interp1d(mag15,col15, 'nearest',fill_value="extrapolate")
+	f19 = interpolate.interp1d(mag16,col16, 'nearest',fill_value="extrapolate")
+	f20 = interpolate.interp1d(mag17,col17, 'nearest',fill_value="extrapolate")
+	f21 = interpolate.interp1d(mag18,col18, 'nearest',fill_value="extrapolate")
+	f22 = interpolate.interp1d(mag19,col19, 'nearest',fill_value="extrapolate")
+	f23 = interpolate.interp1d(mag25,col25, 'nearest',fill_value="extrapolate")
+	f24 = interpolate.interp1d(mag20,col20, 'nearest',fill_value="extrapolate")
+	f25 = interpolate.interp1d(mag27,col27, 'nearest',fill_value="extrapolate")
+	f26 = interpolate.interp1d(mag21,col21, 'nearest',fill_value="extrapolate")
+	f27 = interpolate.interp1d(mag29,col29, 'nearest',fill_value="extrapolate")
+	f28 = interpolate.interp1d(mag22,col22, 'nearest',fill_value="extrapolate")
+	
+
+	alpha_mix = ['1.2','1.3','1.4','1.5','1.6','1.7','1.8','1.9','2.0','2.1','2.2','2.3','2.4','2.5','2.6','2.7','2.8']
+	finterp = [f12,f13,f14,f15,f16,f17,f18,f19,f20,f21,f22,f23,f24,f25,f26,f27,f28]
+
+	bestalpha = 8
+	coledge1_m2, coledge2_m2 = dc_da(-2.0, bestalpha)
+	coledge1_p0, coledge2_p0 = dc_da(0.0, bestalpha)
+	coledge1_p2, coledge2_p2 = dc_da(2.0, bestalpha)
+
+	cm2,cp0,cp2 = coord_fid(bestalpha)
+
+	# ~print(coledge1_m2, coledge2_m2)
+	# ~print(coledge1_p0, coledge2_p0)
+	# ~print(coledge1_p2, coledge2_p2)
+	# ~print(cm2,cp0,cp2)
+	# ~kill
+
+
+	# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/c1_m2.txt', 'a+') as fid_file:
+		# ~fid_file.write('%s %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f \n' %(string_met, coledge1_m2[0],coledge1_m2[1],coledge1_m2[2],coledge1_m2[3],coledge1_m2[4],coledge1_m2[5],coledge1_m2[6],coledge1_m2[7]))
+	# ~fid_file.close()
+	# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/c2_m2.txt', 'a+') as fid_file:
+		# ~fid_file.write('%s %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f \n' %(string_met, coledge2_m2[0],coledge2_m2[1],coledge2_m2[2],coledge2_m2[3],coledge2_m2[4],coledge2_m2[5],coledge2_m2[6],coledge2_m2[7]))
+	# ~fid_file.close()
+	# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/c1_p0.txt', 'a+') as fid_file:
+		# ~fid_file.write('%s %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f \n' %(string_met, coledge1_p0[0],coledge1_p0[1],coledge1_p0[2],coledge1_p0[3],coledge1_p0[4],coledge1_p0[5],coledge1_p0[6],coledge1_p0[7]))
+	# ~fid_file.close()
+	# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/c2_p0.txt', 'a+') as fid_file:
+		# ~fid_file.write('%s %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f \n' %(string_met, coledge2_p0[0],coledge2_p0[1],coledge2_p0[2],coledge2_p0[3],coledge2_p0[4],coledge2_p0[5],coledge2_p0[6],coledge2_p0[7]))
+	# ~fid_file.close()
+	# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/c1_p2.txt', 'a+') as fid_file:
+		# ~fid_file.write('%s %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f \n' %(string_met, coledge1_p2[0],coledge1_p2[1],coledge1_p2[2],coledge1_p2[3],coledge1_p2[4],coledge1_p2[5],coledge1_p2[6],coledge1_p2[7]))
+	# ~fid_file.close()
+	# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/c2_p2.txt', 'a+') as fid_file:
+		# ~fid_file.write('%s %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f \n' %(string_met, coledge2_p2[0],coledge2_p2[1],coledge2_p2[2],coledge2_p2[3],coledge2_p2[4],coledge2_p2[5],coledge2_p2[6],coledge2_p2[7]))
+	# ~fid_file.close()
+
+	# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/coord_25.txt', 'a+') as fid_file:
+		# ~fid_file.write('%s %.4f %.4f %.4f \n' %(string_met, cm2,cp0,cp2))
+	# ~fid_file.close()
+	# ~kill
+
+########################################################################
+########################################################################
 	# READ PAINTED FILES
 	# ~p1 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/painted_files/painted_fid.data')
 	# ~m1 = cut(p1) # cut pre main sequence
@@ -582,27 +725,27 @@ for string_met in string_name:
 	#-----------------------------------------------------------------------
 
 
-	plt.figure()
-	plt.plot(col12 , mag12, label='a = 1.20')
-	plt.plot(col28 , mag28, label='a = 1.30')
-	plt.plot(col13 , mag13, label='a = 1.40')
-	plt.plot(col26 , mag26, label='a = 1.50')
-	plt.plot(col14 , mag14, label='a = 1.60')
-	plt.plot(col24 , mag24, label='a = 1.70')
-	plt.plot(col15 , mag15, label='a = 1.80')
-	plt.plot(col16 , mag16, label='a = 1.90')
-	plt.plot(col17 , mag17, label='a = 2.00')
-	plt.plot(col18 , mag18, label='a = 2.10')
-	plt.plot(col19 , mag19, label='a = 2.20')
-	plt.plot(col25 , mag25, label='a = 2.30')
-	plt.plot(col20 , mag20, label='a = 2.40')
-	plt.plot(col27 , mag27, label='a = 2.50')
-	plt.plot(col21 , mag21, label='a = 2.60')
-	plt.plot(col29 , mag29, label='a = 2.70')
-	plt.plot(col22 , mag22, label='a = 2.80')
+	# ~plt.figure()
+	# ~plt.plot(col12 , mag12, label='a = 1.20')
+	# ~plt.plot(col28 , mag28, label='a = 1.30')
+	# ~plt.plot(col13 , mag13, label='a = 1.40')
+	# ~plt.plot(col26 , mag26, label='a = 1.50')
+	# ~plt.plot(col14 , mag14, label='a = 1.60')
+	# ~plt.plot(col24 , mag24, label='a = 1.70')
+	# ~plt.plot(col15 , mag15, label='a = 1.80')
+	# ~plt.plot(col16 , mag16, label='a = 1.90')
+	# ~plt.plot(col17 , mag17, label='a = 2.00')
+	# ~plt.plot(col18 , mag18, label='a = 2.10')
+	# ~plt.plot(col19 , mag19, label='a = 2.20')
+	# ~plt.plot(col25 , mag25, label='a = 2.30')
+	# ~plt.plot(col20 , mag20, label='a = 2.40')
+	# ~plt.plot(col27 , mag27, label='a = 2.50')
+	# ~plt.plot(col21 , mag21, label='a = 2.60')
+	# ~plt.plot(col29 , mag29, label='a = 2.70')
+	# ~plt.plot(col22 , mag22, label='a = 2.80')
 	# ~plt.plot(col1 , mag1, label='M = 0.70', c='b')
 	# ~plt.plot(col2 , mag2, label='M = 0.90', c='b')
-	# ~plt.plot(col3 , mag3, label='y = 0.2004', c='g')
+	# ~plt.plot(col3 , mag3, label='y = 0.2004', c='r')
 	# ~plt.plot(col4 , mag4, label='y = 0.2804', c='g')
 	# ~plt.plot(col5 , mag5, label='No ledoux', linestyle=':')
 	# ~plt.plot(col6 , mag6, label='cox', linestyle=':')
@@ -612,10 +755,10 @@ for string_met in string_name:
 	# ~plt.plot(col10 , mag10, label='No element diffusion', linestyle=':')
 	# ~plt.plot(col11 , mag11, label='No rotational mixing', linestyle=':')
 	# plt.plot(h.abs_mag_F606W - h.abs_mag_F814W , h.abs_mag_F606W, label='test', linestyle=':')
-	plt.gca().invert_yaxis()
-	plt.legend(loc='best')
-	plt.show()
-	plt.close()
+	# ~plt.gca().invert_yaxis()
+	# ~plt.legend(loc='best')
+	# ~plt.show()
+	# ~plt.close()
 	# ~plt.xlabel(r'Log $\rm T_{eff}$', fontsize=16)
 	# ~plt.ylabel(r'Log L/$\rm L_{\odot}$', fontsize=16)
 	# ~plt.text(3.73,3.0,r'$\alpha$ = 2.8',va='center',fontsize=16,alpha=1.)
@@ -627,7 +770,7 @@ for string_met in string_name:
 	# ~plt.gca().invert_xaxis()
 	# ~plt.show()
 	# ~plt.close()
-	kill
+	# ~kill
 	# ~plt.figure()
 	# ~plt.plot(h17.log_Teff, h17.log_L, label='fiducial', c='k')
 	# ~plt.plot(h1.log_Teff, h1.log_L, label='M = 0.70', c='b')

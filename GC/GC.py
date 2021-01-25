@@ -1603,8 +1603,8 @@ T1 = 1000
 posnum = 1
 ite = 10000
 nwalkers = 100
-#~ model = 'mist'
-model = 'dar'
+model = 'mist'
+# ~model = 'dar'
 #~ #----------------
 if model == 'mist':
 	version = str(10)
@@ -1615,13 +1615,24 @@ if model == 'mist':
 	from isochrones.mist import MIST_Isochrone
 	mist = MIST_Isochrone()
 	lim_model = 5
-	mag_v, mag_i, Color_iso, eep_first = iso_mag(Age, metal+0.22, distance, Abs)
+	mag_v, mag_i, Color_iso, eep_first = iso_mag(Age, metal, distance, Abs)
 	#~ mag_v, mag_i, Color_iso, eep_first = iso_mag(Age, metal+0.22, 4430, 0.093)
+
+
 	
 	# mag_vbf, mag_i, Color_isobf = iso_mag(Age_bf[glc], metal_bf[glc], distance_bf[glc], Abs_bf[glc])
 	#print(Age, Age_bf[glc])
 
 	ct = [605-int(eep_first)]
+
+	# ~plt.figure()
+	# ~plt.plot(Color_iso[:ct[0]-1], mag_v[:ct[0]-1])
+	# ~plt.xlim(0.5,1.9)
+	# ~plt.ylim(15,30)
+	# ~plt.gca().invert_yaxis()
+	# ~plt.show()
+	# ~plt.close()
+	# ~kill
 
 	fmag_ini = interpolate.interp1d(mag_v[:ct[0]-1], Color_iso[:ct[0]-1], 'nearest',fill_value="extrapolate")
 
@@ -1776,7 +1787,14 @@ elif model == 'dar':
 	#~ mag_v, mag_i, Color_iso, eep_first = iso_mag(Age, metal, distance, 0.093, afe_init)
 	#~ mag_v, mag_i, Color_iso, eep_first = iso_mag(np.log10(13e9),metal, 10**(np.float32(15.17)/5. +1), 0.61, afe_init)
 
-
+	# ~plt.figure()
+	# ~plt.plot(Color_iso, mag_v)
+	# ~plt.xlim(0.5,1.9)
+	# ~plt.ylim(15,30)
+	# ~plt.gca().invert_yaxis()
+	# ~plt.show()
+	# ~plt.close()
+	# ~kill
 
 	
 	
@@ -2287,8 +2305,8 @@ plt.tick_params(labelsize=16)
 lgnd = plt.legend(loc='upper right', fontsize = 24)
 lgnd.legendHandles[0]._sizes = [286]
 lgnd.legendHandles[1]._sizes = [286]
-lgnd.get_frame().set_edgecolor('k')
-lgnd.get_frame().set_linewidth(2.0)
+# ~lgnd.get_frame().set_edgecolor('k')
+# ~lgnd.get_frame().set_linewidth(2.0)
 plt.xlabel('F606W - F814W', fontsize = 24)
 plt.ylabel('F606W', fontsize = 24)
 plt.title(clus_nb+' '+str(glc)+' '+ model, fontsize = 16)
