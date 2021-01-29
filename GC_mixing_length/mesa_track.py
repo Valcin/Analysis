@@ -269,8 +269,10 @@ def dc_da(magval, bestalpha):
 	limi = min(bestalpha, 16-bestalpha)
 	# ~print(alpha_mix[bestalpha])
 	for a in range(1, limi+1):
-		coledge1[a-1] = np.abs(finterp[bestalpha -a](magval) - finterp[bestalpha](magval))/(a*0.1)
-		coledge2[a-1] = np.abs(finterp[bestalpha](magval) - finterp[bestalpha +a](magval))/(a*0.1)
+		# ~coledge1[a-1] = np.abs(finterp[bestalpha -a](magval) - finterp[bestalpha](magval))/(a*0.1)
+		# ~coledge2[a-1] = np.abs(finterp[bestalpha](magval) - finterp[bestalpha +a](magval))/(a*0.1)
+		coledge1[a-1] = np.abs(finterp[bestalpha -a](magval) - finterp[bestalpha](magval))
+		coledge2[a-1] = np.abs(finterp[bestalpha](magval) - finterp[bestalpha +a](magval))
 	return coledge1, coledge2
 
 def coord_fid(bestalpha):
@@ -492,7 +494,8 @@ string_mass = 'M075'
 string_met = 'scatter_test'
 htest1 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_a1938.data')
 coltest1,magtest1, mptest1 = cut2(htest1)
-htest1bis = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_a1938bis.data')
+# ~htest1bis = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_a1938bis.data')
+htest1bis = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a1938bis.data')
 coltest1bis,magtest1bis, mptest1bis = cut2(htest1bis)
 htest2 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_z00045.data')
 coltest2,magtest2, mptest2 = cut2(htest2)
@@ -500,12 +503,21 @@ htest3 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+str
 coltest3,magtest3, mptest3 = cut2(htest3)
 htest4 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_m080.data')
 coltest4,magtest4, mptest4 = cut2(htest4)
+htest5 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_a1888.data')
+coltest5,magtest5, mptest5 = cut2(htest5)
+htest6 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_a1988.data')
+coltest6,magtest6, mptest6 = cut2(htest6)
+htest7 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_a1838.data')
+coltest7,magtest7, mptest7 = cut2(htest7)
+htest8 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_a2038.data')
+coltest8,magtest8, mptest8 = cut2(htest8)
+
 
 met1 = -2.0
-met2 = -1.755
+met2 = -1.75
 met3 = -1.5
 # ~met1 = -2.087
-# ~met2 = -1.8419
+# ~met2 = -1.839
 # ~met3 = -1.586
 
 mag_v1, mag_i1, Color_iso1, eep_first1 = iso_mag(Age, met1, distance, Abs, afe_init)
@@ -521,36 +533,33 @@ mag_v3, mag_i3, Color_iso3, eep_first3 = iso_mag(Age, met3, distance, Abs, afe_i
 # ~plt.close()
 # ~kill
 
+
+# ~bi = np.loadtxt('catalogs/basti_iso.txt')
+# ~plt.plot(bi[:,7] - bi[:,10],bi[:,7])
+
+
+# ~mist = np.loadtxt('catalogs/MIST_iso_601176d8da858.iso.cmd')
+# ~ct = [605-int(mist[0,0])]
+# ~plt.plot(mist[:ct[0]-1,14] - mist[:ct[0]-1,19], mist[:ct[0]-1,14])
+
+# ~mist2 = np.loadtxt('catalogs/0007700M.track.eep.cmd')
+# ~plt.plot(mist2[:ct[0]-1,10] - mist2[:ct[0]-1,15], mist2[:ct[0]-1,10])
+
+
 # ~plt.plot(coltest2 , magtest2, label=r'MESA track: M = 0.77 $M_{\odot}$, Z = 0.00045', c='r')
 # ~plt.plot(Color_iso3,mag_v3, c='r', label=r'Isochrone: Age = 13.32 Gyr, [Fe/H] = -1.5',linestyle=':')
+plt.plot(coltest1bis , magtest1bis, label=r'test', c='c')
 # ~plt.plot(coltest1 , magtest1, label=r'MESA track: M = 0.77 $M_{\odot}$, Z = 0.00025', c='k')
-# ~plt.plot(Color_iso2,mag_v2, c='k', label=r'Isochrone: Age = 13.32 Gyr, [Fe/H] = -1.75',linestyle=':')
+plt.plot(Color_iso2,mag_v2, c='k', label=r'Isochrone: Age = 13.32 Gyr, [Fe/H] = -1.75',linestyle=':')
 # ~plt.plot(coltest3 , magtest3, label=r'MESA track: M = 0.77 $M_{\odot}$, Z = 0.000142', c='c')
 # ~plt.plot(Color_iso1,mag_v1, c='c', label=r'Isochrone: Age = 13.32 Gyr, [Fe/H] = -2.0',linestyle=':')
-# ~plt.xlim(0.2,1.25)
-# ~plt.ylim(5,-5)
-# ~plt.tick_params(labelsize=14)
-# ~plt.subplots_adjust(bottom=0.15, top=0.89)
-# ~lgnd = plt.legend(loc='upper left', fontsize = 10)
-# ~plt.text(0.9,3,r'$\alpha$ = 1.938',va='center',fontsize=16,alpha=1.,
-	# ~bbox=dict(boxstyle="round",fc=(1., 1.,1.,1.),ec='k'))
-# ~plt.xlabel(' F606W - F814W', fontsize = 20)
-# ~plt.ylabel(' F606W', fontsize = 20)
-# ~plt.show() 
-# ~plt.close()
-
-plt.plot(coltest2 , magtest2, label=r'MESA track: M = 0.77 $M_{\odot}$, Z = 0.00045', c='r')
-plt.plot(Color_iso3,mag_v3, c='r', label=r'Isochrone: Age = 13.32 Gyr, [Fe/H] = -1.5',linestyle=':')
-plt.plot(coltest1 , magtest1, label=r'MESA track: M = 0.77 $M_{\odot}$, Z = 0.00025', c='k')
-plt.plot(Color_iso2,mag_v2, c='k', label=r'Isochrone: Age = 13.32 Gyr, [Fe/H] = -1.75',linestyle=':')
-plt.plot(coltest3 , magtest3, label=r'MESA track: M = 0.77 $M_{\odot}$, Z = 0.000142', c='c')
-plt.plot(Color_iso1,mag_v1, c='c', label=r'Isochrone: Age = 13.32 Gyr, [Fe/H] = -2.0',linestyle=':')
-plt.xlim(0.2,1.25)
-plt.ylim(5,-5)
+plt.axhline(0.18, linestyle ='--', label=r'$\rm Magnitude \: cut \: M_1$', c='k')
+plt.xlim(0.2,1.15)
+plt.ylim(6,-5)
 plt.tick_params(labelsize=14)
 plt.subplots_adjust(bottom=0.15, top=0.89)
 lgnd = plt.legend(loc='upper left', fontsize = 10)
-plt.text(0.9,3,r'$\alpha$ = 1.938',va='center',fontsize=16,alpha=1.,
+plt.text(0.9,3.5,r'$\alpha$ = 1.938',va='center',fontsize=16,alpha=1.,
 	bbox=dict(boxstyle="round",fc=(1., 1.,1.,1.),ec='k'))
 plt.xlabel(' F606W - F814W', fontsize = 20)
 plt.ylabel(' F606W', fontsize = 20)
@@ -558,15 +567,35 @@ plt.show()
 plt.close()
 kill
 
+# ~plt.plot(coltest1 , magtest1, label=r'MESA track: M = 0.77 $M_{\odot}$, Z = 0.00025', c='k')
+# ~plt.plot(coltest5 , magtest5, label=r'MESA track: $\rm \Delta_{\alpha} = 0.05$', c='r')
+# ~plt.plot(coltest6 , magtest6, c='r')
+# ~plt.plot(coltest7 , magtest7, label=r'MESA track: $\rm \Delta_{\alpha} = 0.1$', c='c')
+# ~plt.plot(coltest8 , magtest8, c='c')
+# ~plt.plot(Color_iso2,mag_v2, c='k', label=r'Isochrone: Age = 13.32 Gyr, [Fe/H] = -1.75',linestyle=':')
+# ~plt.axhline(0.18, linestyle ='--', label=r'$\rm Magnitude \: cut \: M_1$', c='k')
+# ~plt.xlim(0.4,1.15)
+# ~plt.ylim(0.5,-4)
+# ~plt.tick_params(labelsize=14)
+# ~plt.subplots_adjust(bottom=0.15, top=0.89)
+# ~lgnd = plt.legend(loc='upper left', fontsize = 10)
+# ~plt.text(0.9,3.5,r'$\alpha$ = 1.938',va='center',fontsize=16,alpha=1.,
+	# ~bbox=dict(boxstyle="round",fc=(1., 1.,1.,1.),ec='k'))
+# ~plt.xlabel(' F606W - F814W', fontsize = 20)
+# ~plt.ylabel(' F606W', fontsize = 20)
+# ~plt.show() 
+# ~plt.close()
+# ~kill
+
 #-----------------------------------------------------------------------
 
 # READ MESSA FILES
 # ~string_met = 'Z00005'
 string_mass = 'M075'
-string_name = ['Z00005', 'Z00010', 'Z00015', 'Z00020','Z00025', 'Z00030', 'Z00035', 'Z00040']
+# ~string_name = ['Z00005', 'Z00010', 'Z00015', 'Z00020','Z00025', 'Z00030', 'Z00035', 'Z00040']
 # ~string_name = ['Z00015', 'Z00020','Z00025', 'Z00030', 'Z00035', 'Z00040']
 # ~string_name = ['Z00025', 'Z00030', 'Z00035', 'Z00040']
-# ~string_name = ['Z00030']
+string_name = ['Z00040']
 
 for string_met in string_name:
 	# ~if (string_met == 'Z00020'and string_mass == 'M080'):
@@ -659,13 +688,43 @@ for string_met in string_name:
 	alpha_mix = ['1.2','1.3','1.4','1.5','1.6','1.7','1.8','1.9','2.0','2.1','2.2','2.3','2.4','2.5','2.6','2.7','2.8']
 	finterp = [f12,f13,f14,f15,f16,f17,f18,f19,f20,f21,f22,f23,f24,f25,f26,f27,f28]
 
-	bestalpha = 8
-	coledge1_m2, coledge2_m2 = dc_da(-2.0, bestalpha)
-	coledge1_p0, coledge2_p0 = dc_da(0.0, bestalpha)
-	coledge1_p2, coledge2_p2 = dc_da(2.0, bestalpha)
+	bestalpha = 8 # alpha = 2
+	# ~bestalpha = 4 # alpha = 1.6
+	# ~bestalpha = 12 # alpha = 2.4
 
 	cm2,cp0,cp2 = coord_fid(bestalpha)
 
+	# ~alvm2 = np.linspace(-2.1, -1.9, 20)
+	# ~for valm2 in alvm2:
+		# ~coledge1_m2, coledge2_m2 = dc_da(valm2, bestalpha)
+		# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/'+string_met+'_c1_m2.txt', 'a+') as fid_file:
+			# ~fid_file.write('%s %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f \n' %(string_met, coledge1_m2[0],coledge1_m2[1],coledge1_m2[2],coledge1_m2[3],coledge1_m2[4],coledge1_m2[5],coledge1_m2[6],coledge1_m2[7]))
+		# ~fid_file.close()
+		# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/'+string_met+'_c2_m2.txt', 'a+') as fid_file:
+			# ~fid_file.write('%s %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f \n' %(string_met, coledge2_m2[0],coledge2_m2[1],coledge2_m2[2],coledge2_m2[3],coledge2_m2[4],coledge2_m2[5],coledge2_m2[6],coledge2_m2[7]))
+		# ~fid_file.close()
+		
+	# ~alvp0 = np.linspace(-0.1, 0.1, 20)
+	# ~for valp0 in alvp0:
+		# ~coledge1_p0, coledge2_p0 = dc_da(valp0, bestalpha)
+		# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/'+string_met+'_c1_p0.txt', 'a+') as fid_file:
+			# ~fid_file.write('%s %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f \n' %(string_met, coledge1_p0[0],coledge1_p0[1],coledge1_p0[2],coledge1_p0[3],coledge1_p0[4],coledge1_p0[5],coledge1_p0[6],coledge1_p0[7]))
+		# ~fid_file.close()
+		# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/'+string_met+'_c2_p0.txt', 'a+') as fid_file:
+			# ~fid_file.write('%s %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f \n' %(string_met, coledge2_p0[0],coledge2_p0[1],coledge2_p0[2],coledge2_p0[3],coledge2_p0[4],coledge2_p0[5],coledge2_p0[6],coledge2_p0[7]))
+		# ~fid_file.close()
+		
+	# ~alvp2 = np.linspace(1.9, 2.1, 20)
+	# ~for valp2 in alvp2:
+		# ~coledge1_p2, coledge2_p2 = dc_da(valp2, bestalpha)
+		# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/'+string_met+'_c1_p2.txt', 'a+') as fid_file:
+			# ~fid_file.write('%s %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f \n' %(string_met, coledge1_p2[0],coledge1_p2[1],coledge1_p2[2],coledge1_p2[3],coledge1_p2[4],coledge1_p2[5],coledge1_p2[6],coledge1_p2[7]))
+		# ~fid_file.close()
+		# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/'+string_met+'_c2_p2.txt', 'a+') as fid_file:
+			# ~fid_file.write('%s %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f \n' %(string_met, coledge2_p2[0],coledge2_p2[1],coledge2_p2[2],coledge2_p2[3],coledge2_p2[4],coledge2_p2[5],coledge2_p2[6],coledge2_p2[7]))
+		# ~fid_file.close()
+
+	
 	# ~print(coledge1_m2, coledge2_m2)
 	# ~print(coledge1_p0, coledge2_p0)
 	# ~print(coledge1_p2, coledge2_p2)
@@ -673,26 +732,11 @@ for string_met in string_name:
 	# ~kill
 
 
-	# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/c1_m2.txt', 'a+') as fid_file:
-		# ~fid_file.write('%s %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f \n' %(string_met, coledge1_m2[0],coledge1_m2[1],coledge1_m2[2],coledge1_m2[3],coledge1_m2[4],coledge1_m2[5],coledge1_m2[6],coledge1_m2[7]))
-	# ~fid_file.close()
-	# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/c2_m2.txt', 'a+') as fid_file:
-		# ~fid_file.write('%s %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f \n' %(string_met, coledge2_m2[0],coledge2_m2[1],coledge2_m2[2],coledge2_m2[3],coledge2_m2[4],coledge2_m2[5],coledge2_m2[6],coledge2_m2[7]))
-	# ~fid_file.close()
-	# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/c1_p0.txt', 'a+') as fid_file:
-		# ~fid_file.write('%s %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f \n' %(string_met, coledge1_p0[0],coledge1_p0[1],coledge1_p0[2],coledge1_p0[3],coledge1_p0[4],coledge1_p0[5],coledge1_p0[6],coledge1_p0[7]))
-	# ~fid_file.close()
-	# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/c2_p0.txt', 'a+') as fid_file:
-		# ~fid_file.write('%s %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f \n' %(string_met, coledge2_p0[0],coledge2_p0[1],coledge2_p0[2],coledge2_p0[3],coledge2_p0[4],coledge2_p0[5],coledge2_p0[6],coledge2_p0[7]))
-	# ~fid_file.close()
-	# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/c1_p2.txt', 'a+') as fid_file:
-		# ~fid_file.write('%s %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f \n' %(string_met, coledge1_p2[0],coledge1_p2[1],coledge1_p2[2],coledge1_p2[3],coledge1_p2[4],coledge1_p2[5],coledge1_p2[6],coledge1_p2[7]))
-	# ~fid_file.close()
-	# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/c2_p2.txt', 'a+') as fid_file:
-		# ~fid_file.write('%s %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f \n' %(string_met, coledge2_p2[0],coledge2_p2[1],coledge2_p2[2],coledge2_p2[3],coledge2_p2[4],coledge2_p2[5],coledge2_p2[6],coledge2_p2[7]))
-	# ~fid_file.close()
 
-	# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/coord_25.txt', 'a+') as fid_file:
+	
+	
+
+	# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/coord_25_a24.txt', 'a+') as fid_file:
 		# ~fid_file.write('%s %.4f %.4f %.4f \n' %(string_met, cm2,cp0,cp2))
 	# ~fid_file.close()
 	# ~kill

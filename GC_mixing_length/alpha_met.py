@@ -27,26 +27,25 @@ def cut2(h):
 ########################################################################
 
 # ~Zsun = 0.0142
-# ~Zsun = 0.017
-# ~Zsun = 0.0134
 
-# ~Z = 1.72E-4
-# ~X = 0.7545
+# ~Z = 0.00025
 # ~Z = np.array([0.000142, 0.00025, 0.00045])
 # ~Y = 0.24 + 2*Z
 # ~Y1 = 0.245 + 1.5*Z
+# ~Y2 = 0.249 + 1.5*Z
 # ~X = 1.0 - Y -Z
 # ~X1 = 1.0 - Y1 -Z
+# ~X2 = 1.0 - Y2 -Z
 # ~print(X,Y,Z)
+# ~print(X1,Y1,Z)
 # ~Fe_H = np.log10(Z/Zsun)
-# ~Fe_H = -2.0
-# ~Z = 10**(Fe_H)*Zsun
 # ~XZ_GS98 = np.log10(0.02288)
-# ~XZ_GS93 = np.log10(0.0245)
-# ~fe_mesa = np.log10(Z/X) - XZ_GS98
+# ~XZ_ASO9 = np.log10(0.0178)
+# ~fe_mesa = np.log10(Z/X) - XZ_ASO9
 # ~fe_dsed = np.log10(Z/X1) - XZ_GS98
+# ~fe_mist = np.log10(Z/X2) - XZ_ASO9
 
-# ~print(fe_mesa, fe_dsed,Fe_H, Z)
+# ~print(fe_mesa, fe_dsed, fe_mist, Fe_H, Z)
 
 # ~kill
 
@@ -129,6 +128,14 @@ col9,mag9, mp9 = cut2(h9)
 met = '-1.5'
 if met == '-1.5':
 	ind = ind1
+elif met == '-2.0':
+	ind = ind2
+elif met == '-1.75p':
+	ind = ind4
+
+if met == '-1.75m':
+	ind = ind3
+
 
 res_ind = np.zeros(len(ind))
 for count,i in enumerate(ind):
@@ -147,7 +154,9 @@ res_ind = np.delete(res_ind, non)
 x= np.linspace(-2.5, -1.2, 50)
 y= np.linspace(-2.5, -1.2, 50)
 sigma_harris_s1 = np.sqrt(np.sum((np.array(harris)[(res_ind).astype(int)] - moi[(res_ind).astype(int)])**2)/len(moi[(res_ind).astype(int)]))
+print(met1)
 print(sigma_harris_s1)
+kill
 
 # ~m,b = np.polyfit(np.array(harris)[(res_ind).astype(int)],moi[(res_ind).astype(int)], 1, w = 1/(2*(metal_fin_dar[(res_ind).astype(int)] - metal_low_dar[(res_ind).astype(int)])))
 # ~coef = np.polyfit(np.array(harris)[(res_ind).astype(int)],moi[(res_ind).astype(int)],1)
@@ -159,54 +168,92 @@ print(sigma_harris_s1)
 # ~m1, b1, r_value, p_value, std_err = stats.linregress(np.array(harris)[(res_ind).astype(int)],moi[(res_ind).astype(int)])
 # ~print(m1, b1, r_value, p_value, std_err )
 
-c1_m2 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/c1_m2.txt', usecols=(1,2,3,4,5,6,7,8))
-c2_m2 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/c2_m2.txt', usecols=(1,2,3,4,5,6,7,8))
-c1_p0 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/c1_p0.txt', usecols=(1,2,3,4,5,6,7,8))
-c2_p0 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/c2_p0.txt', usecols=(1,2,3,4,5,6,7,8))
-c1_p2 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/c1_p2.txt', usecols=(1,2,3,4,5,6,7,8))
-c2_p2 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/c2_p2.txt', usecols=(1,2,3,4,5,6,7,8))
+# ~string_met = 'Z00010'
+# ~c1_m2 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/'+string_met+'_c1_m2.txt', usecols=(1,2,3,4,5,6,7,8))
+# ~c2_m2 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/'+string_met+'_c2_m2.txt', usecols=(1,2,3,4,5,6,7,8))
+# ~c1_p0 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/'+string_met+'_c1_p0.txt', usecols=(1,2,3,4,5,6,7,8))
+# ~c2_p0 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/'+string_met+'_c2_p0.txt', usecols=(1,2,3,4,5,6,7,8))
+# ~c1_p2 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/'+string_met+'_c1_p2.txt', usecols=(1,2,3,4,5,6,7,8))
+# ~c2_p2 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/'+string_met+'_c2_p2.txt', usecols=(1,2,3,4,5,6,7,8))
 
 # ~coord = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/coord.txt', usecols=(1,2,3))
 # ~metx = [0.0, 0.00005, 0.00010, 0.00015, 0.00020, 0.00025, 0.00030, 0.00035]
-# ~coord = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/coord_15.txt', usecols=(1,2,3))
+# ~coord20 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/coord_15.txt', usecols=(1,2,3))
+# ~coord16 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/coord_15_a16.txt', usecols=(1,2,3))
+# ~coord24 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/coord_15_a24.txt', usecols=(1,2,3))
 # ~metx = [0.0, 0.00005, 0.00010, 0.00015, 0.00020, 0.00025]
-coord = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/coord_25.txt', usecols=(1,2,3))
-metx = [0.0, 0.00005, 0.00010, 0.00015]
+# ~coord20 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/coord_25.txt', usecols=(1,2,3))
+# ~coord16 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/coord_25.txt', usecols=(1,2,3))
+# ~coord24 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/coord_25.txt', usecols=(1,2,3))
+# ~metx = [0.0, 0.00005, 0.00010, 0.00015]
 
-cm2,cp0,cp2 = coord[:,0], coord[:,1], coord[:,2]
-diffcm2 = np.zeros(len(metx))
-diffcp0 = np.zeros(len(metx))
-diffcp2 = np.zeros(len(metx))
-for i in range(len(cm2)):
-	diffcm2[i] = cm2[i]-cm2[0]
-	diffcp0[i] = cp0[i]-cp0[0]
-	diffcp2[i] = cp2[i]-cp2[0]
+# ~cm2,cp0,cp2 = coord20[:,0], coord20[:,1], coord20[:,2]
+# ~diffcm2 = np.zeros(len(metx))
+# ~diffcp0 = np.zeros(len(metx))
+# ~diffcp2 = np.zeros(len(metx))
+# ~for i in range(len(cm2)):
+	# ~diffcm2[i] = cm2[i]-cm2[0]
+	# ~diffcp0[i] = cp0[i]-cp0[0]
+	# ~diffcp2[i] = cp2[i]-cp2[0]
+# ~cm2a16,cp0a16,cp2a16 = coord16[:,0], coord16[:,1], coord16[:,2]
+# ~diffcm2a16 = np.zeros(len(metx))
+# ~diffcp0a16 = np.zeros(len(metx))
+# ~diffcp2a16 = np.zeros(len(metx))
+# ~for i in range(len(cm2)):
+	# ~diffcm2a16[i] = cm2a16[i]-cm2a16[0]
+	# ~diffcp0a16[i] = cp0a16[i]-cp0a16[0]
+	# ~diffcp2a16[i] = cp2a16[i]-cp2a16[0]
+# ~cm2a24,cp0a24,cp2a24 = coord24[:,0], coord24[:,1], coord24[:,2]
+# ~diffcm2a24 = np.zeros(len(metx))
+# ~diffcp0a24 = np.zeros(len(metx))
+# ~diffcp2a24 = np.zeros(len(metx))
+# ~for i in range(len(cm2)):
+	# ~diffcm2a24[i] = cm2a24[i]-cm2a24[0]
+	# ~diffcp0a24[i] = cp0a24[i]-cp0a24[0]
+	# ~diffcp2a24[i] = cp2a24[i]-cp2a24[0]
 
 
-m1, b1, r_value, p_value, std_err = stats.linregress(metx,diffcm2)
-print(m1, b1, r_value, p_value, std_err )
-m2, b2, r_value2, p_value2, std_err2 = stats.linregress(metx,diffcp0)
-print(m2, b2, r_value2, p_value2, std_err2 )
-m3, b3, r_value3, p_value3, std_err3 = stats.linregress(metx,diffcp2)
-print(m3, b3, r_value3, p_value3, std_err3 )
+# ~m1, b1, r_value, p_value, std_err = stats.linregress(metx,diffcm2)
+# ~print(m1, b1, r_value, p_value, std_err )
+# ~m2, b2, r_value2, p_value2, std_err2 = stats.linregress(metx,diffcp0)
+# ~print(m2, b2, r_value2, p_value2, std_err2 )
+# ~m3, b3, r_value3, p_value3, std_err3 = stats.linregress(metx,diffcp2)
+# ~print(m3, b3, r_value3, p_value3, std_err3 )
 
-plt.figure()
-plt.plot(metx, diffcm2, label='F606W = -2.0')
-plt.plot(metx, diffcp0, label='F606W = 0.0')
-plt.plot(metx, diffcp2, label='F606W = 2.0')
-plt.subplots_adjust(bottom = 0.13)
-# ~plt.title(r'$\rm Z_{fid} = 0.00025$')
-lgnd = plt.legend(loc='best', fontsize=12)
-plt.xlabel(r'$\rm \Delta_{Z}$', fontsize=16)
-plt.ylabel(r'$\rm \Delta_{color}$', fontsize=16)
-plt.show()
-plt.close()
-kill
+# ~plt.figure()
+# ~plt.plot(metx, diffcm2, label=r'$\rm \alpha = 2.0$', c='r')
+# ~plt.plot(metx, diffcm2, label='F606W = -2.0', c='r')
+# ~plt.plot(metx, diffcp0, label='F606W = 0.0', c='b')
+# ~plt.plot(metx, diffcp2, label='F606W = 2.0', c='g')
+# ~plt.plot(metx, diffcm2a16, linestyle='--', c='r', label=r'$\rm \alpha = 1.6$')
+# ~plt.plot(metx, diffcp0a16, linestyle='--', c='b')
+# ~plt.plot(metx, diffcp2a16, linestyle='--', c='g')
+# ~plt.plot(metx, diffcm2a24, linestyle=':', c='r', label=r'$\rm \alpha = 2.4$')
+# ~plt.plot(metx, diffcp0a24, linestyle=':', c='b')
+# ~plt.plot(metx, diffcp2a24, linestyle=':', c='g')
+# ~plt.subplots_adjust(bottom = 0.13)
+# ~plt.title(r'$\rm Z_{fid} = 0.00015$')
+# ~lgnd = plt.legend(loc='best', fontsize=12)
+# ~plt.xlabel(r'$\rm \Delta_{Z}$', fontsize=16)
+# ~plt.ylabel(r'$\rm \Delta_{color}$', fontsize=16)
+# ~plt.show()
+# ~plt.close()
+# ~kill
 
 # ~with open('/home/david/fig2_data.txt', 'a+') as fid_file:
 	# ~for i in range(len(np.array(harris)[(res_ind).astype(int)])):
 		# ~fid_file.write('%.4f %.4f %.4f %.4f \n' %(np.array(harris)[(res_ind[i]).astype(int)], moi[(res_ind[i]).astype(int)],metal_fin_dar[(res_ind[i]).astype(int)] - metal_low_dar[(res_ind[i]).astype(int)], metal_high_dar[(res_ind[i]).astype(int)] - metal_fin_dar[(res_ind[i]).astype(int)]))
-	# ~fid_file.close() 
+	# ~fid_file.close()
+
+
+dc_da10 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/Z00010_dcda2.txt')
+dc_da25 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/Z00025_dcda2.txt')
+dc_da40 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/Z00040_dcda2.txt')
+# ~dc_da10 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/Z00010_dcda.txt')
+# ~dc_da25 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/Z00025_dcda.txt')
+# ~dc_da40 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/Z00040_dcda.txt')
+
+
 
 ########################################################################
 ########################################################################
@@ -214,29 +261,121 @@ x= [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8]
 mx= [-0.1, -0.2, -0.3, -0.4, -0.5, -0.6, -0.7, -0.8]
 string_name = ['Z = 0.00005', 'Z = 0.00010', 'Z = 0.00015', 'Z = 0.00020','Z = 0.00025', 'Z = 0.00030', 'Z = 0.00035', 'Z = 0.00040']
 string_val = [0.00005, 0.00010, 0.00015, 0.00020, 0.00025, 0.00030, 0.00035, 0.00040]
-color=iter(cm.rainbow(np.linspace(0,1,8)))
+
+# ~print('z = 0.00010 ----------------')
+# ~m1, b1, r_value, p_value, std_err = stats.linregress(x[:2],dc_da10[2, :2])
+# ~print(m1, b1, r_value, p_value, std_err )
+# ~m2, b2, r_value2, p_value2, std_err2 = stats.linregress(x[:2],dc_da10[5, :2])
+# ~print(m2, b2, r_value2, p_value2, std_err2 )
+# ~m3, b3, r_value3, p_value3, std_err3 = stats.linregress(x[:2],dc_da10[8, :2])
+# ~print(m3, b3, r_value3, p_value3, std_err3 )
+# ~print('z = 0.00025 ----------------')
+# ~m1, b1, r_value, p_value, std_err = stats.linregress(x[:2],dc_da25[2, :2])
+# ~print(m1, b1, r_value, p_value, std_err )
+# ~m2, b2, r_value2, p_value2, std_err2 = stats.linregress(x[:2],dc_da25[5, :2])
+# ~print(m2, b2, r_value2, p_value2, std_err2 )
+# ~m3, b3, r_value3, p_value3, std_err3 = stats.linregress(x[:2],dc_da25[8, :2])
+# ~print(m3, b3, r_value3, p_value3, std_err3 )
+# ~print('z = 0.00040 ----------------')
+# ~m1, b1, r_value, p_value, std_err = stats.linregress(x[:2],dc_da40[2, :2])
+# ~print(m1, b1, r_value, p_value, std_err )
+# ~m2, b2, r_value2, p_value2, std_err2 = stats.linregress(x[:2],dc_da40[5, :2])
+# ~print(m2, b2, r_value2, p_value2, std_err2 )
+# ~m3, b3, r_value3, p_value3, std_err3 = stats.linregress(x[:2],dc_da40[8, :2])
+# ~print(m3, b3, r_value3, p_value3, std_err3 )
+# ~kill
+
 plt.figure()
-for i in range(len(c1_m2)):
-	c=next(color)
-	plt.plot(mx[:2], c1_p2[i,:2], color=c, label=string_name[i])
-	plt.plot(x[:2], c2_p2[i,:2], color=c)
-	plt.plot(mx[:2], c1_p0[i,:2], linestyle='--', color=c)
-	plt.plot(x[:2], c2_p0[i,:2], linestyle='--', color=c)
-	plt.plot(mx[:2], c1_m2[i,:2], linestyle=':', color=c)
-	plt.plot(x[:2], c2_m2[i,:2], linestyle=':', color=c)
-	# ~plt.plot(mx, c1_p2[i,:], color=c, label=string_name[i])
-	# ~plt.plot(x, c2_p2[i,:], color=c)
-	# ~plt.plot(mx, c1_p0[i,:], linestyle='--', color=c)
-	# ~plt.plot(x, c2_p0[i,:], linestyle='--', color=c)
-	# ~plt.plot(mx, c1_m2[i,:], linestyle=':', color=c)
-	# ~plt.plot(x, c2_m2[i,:], linestyle=':', color=c)
-plt.axvline(0.0, c='k', label=r'$\alpha = 2.0$')
+plt.plot(x[:2],dc_da10[2, :2], linestyle=':', c='b')
+plt.plot(x[:2],dc_da10[5, :2], linestyle='--', c='b')
+plt.plot(x[:2],dc_da10[8, :2], c='b', label='Z = 0.00010')
+plt.plot(x[:2],dc_da25[2, :2], linestyle=':', c='r')
+plt.plot(x[:2],dc_da25[5, :2], linestyle='--', c='r')
+plt.plot(x[:2],dc_da25[8, :2], c='r', label='Z = 0.00025')
+plt.plot(x[:2],dc_da40[2, :2], linestyle=':', c='g')
+plt.plot(x[:2],dc_da40[5, :2], linestyle='--', c='g')
+plt.plot(x[:2],dc_da40[8, :2], c='g', label='Z = 0.00040')
+# ~plt.plot(x,dc_da10[2, :], linestyle=':', c='b')
+# ~plt.plot(x,dc_da10[5, :], linestyle='--', c='b')
+# ~plt.plot(x,dc_da10[8, :], c='b', label='Z = 0.00010')
+# ~plt.plot(x,dc_da25[2, :], linestyle=':', c='r')
+# ~plt.plot(x,dc_da25[5, :], linestyle='--', c='r')
+# ~plt.plot(x,dc_da25[8, :], c='r', label='Z = 0.00025')
+# ~plt.plot(x,dc_da40[2, :], linestyle=':', c='g')
+# ~plt.plot(x,dc_da40[5, :], linestyle='--', c='g')
+# ~plt.plot(x,dc_da40[8, :], c='g', label='Z = 0.00040')
+plt.legend(loc='best', fontsize=14)
 plt.subplots_adjust(bottom = 0.13)
-# ~lgnd = plt.legend(loc='best', fontsize=12)
-plt.xlabel(r'$\rm \Delta_{\alpha}$', fontsize=16)
-plt.ylabel(r'$\rm \Delta_{color} / \Delta_{\alpha}$', fontsize=16)
+plt.xlabel(r'$\rm \Delta_{\alpha}$', fontsize=20)
+plt.ylabel(r'$\rm \Delta_{color} / \Delta_{\alpha}$', fontsize=20)
 plt.show()
 plt.close()
+kill
+
+# ~color=iter(cm.rainbow(np.linspace(0,1,8)))
+# ~plt.figure()
+# ~for i in range(len(c1_m2)):
+	# ~c=next(color)
+	# ~plt.plot(mx[:2], c1_p2[i,:2], color=c, label=string_name[i])
+	# ~plt.plot(x[:2], c2_p2[i,:2], color=c)
+	# ~plt.plot(mx[:2], c1_p0[i,:2], linestyle='--', color=c)
+	# ~plt.plot(x[:2], c2_p0[i,:2], linestyle='--', color=c)
+	# ~plt.plot(mx[:2], c1_m2[i,:2], linestyle=':', color=c)
+	# ~plt.plot(x[:2], c2_m2[i,:2], linestyle=':', color=c)
+
+# ~print(c1_p2)
+# ~print(np.mean(c1_p2[:,0]))
+# ~print(np.mean(c1_p2, axis=0))
+# ~print(c2_p2)
+# ~print(np.mean(c2_p2[:,0]))
+# ~print(np.mean(c2_p2, axis=0))
+# ~diff_p2l = np.mean(c1_p2, axis=0)/mx
+# ~diff_p2r = np.mean(c2_p2, axis=0)/x
+# ~print(diff_p2l, diff_p2r)
+# ~kill
+
+
+
+# ~diff_p2l = np.mean(c1_p2, axis=0)/mx
+# ~diff_p2r = np.mean(c2_p2, axis=0)/x
+# ~diff_p2t = (np.mean(c1_p2, axis=0) + np.mean(c2_p2, axis=0))/(np.multiply(x,2))
+# ~diff_p0l = np.mean(c1_p0, axis=0)/mx
+# ~diff_p0r = np.mean(c2_p0, axis=0)/x
+# ~diff_p0t = (np.mean(c1_p0, axis=0) + np.mean(c2_p0, axis=0))/(np.multiply(x,2))
+# ~diff_m2l = np.mean(c1_m2, axis=0)/mx
+# ~diff_m2r = np.mean(c2_m2, axis=0)/x
+# ~diff_m2t = (np.mean(c1_m2, axis=0) + np.mean(c2_m2, axis=0))/(np.multiply(x,2))
+
+
+# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/'+string_met+'_dcda2.txt', 'a+') as fid_file:
+	# ~fid_file.write('%.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f \n' %(diff_p2l[0],diff_p2l[1],diff_p2l[2],diff_p2l[3],diff_p2l[4],diff_p2l[5],diff_p2l[6],diff_p2l[7]))
+	# ~fid_file.write('%.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f \n' %(diff_p2r[0],diff_p2r[1],diff_p2r[2],diff_p2r[3],diff_p2r[4],diff_p2r[5],diff_p2r[6],diff_p2r[7]))
+	# ~fid_file.write('%.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f \n' %(diff_p2t[0],diff_p2t[1],diff_p2t[2],diff_p2t[3],diff_p2t[4],diff_p2t[5],diff_p2t[6],diff_p2t[7]))
+	# ~fid_file.write('%.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f \n' %(diff_p0l[0],diff_p0l[1],diff_p0l[2],diff_p0l[3],diff_p0l[4],diff_p0l[5],diff_p0l[6],diff_p0l[7]))
+	# ~fid_file.write('%.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f \n' %(diff_p0r[0],diff_p0r[1],diff_p0r[2],diff_p0r[3],diff_p0r[4],diff_p0r[5],diff_p0r[6],diff_p0r[7]))
+	# ~fid_file.write('%.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f \n' %(diff_p0t[0],diff_p0t[1],diff_p0t[2],diff_p0t[3],diff_p0t[4],diff_p0t[5],diff_p0t[6],diff_p0t[7]))
+	# ~fid_file.write('%.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f \n' %(diff_m2l[0],diff_m2l[1],diff_m2l[2],diff_m2l[3],diff_m2l[4],diff_m2l[5],diff_m2l[6],diff_m2l[7]))
+	# ~fid_file.write('%.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f \n' %(diff_m2r[0],diff_m2r[1],diff_m2r[2],diff_m2r[3],diff_m2r[4],diff_m2r[5],diff_m2r[6],diff_m2r[7]))
+	# ~fid_file.write('%.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f \n' %(diff_m2t[0],diff_m2t[1],diff_m2t[2],diff_m2t[3],diff_m2t[4],diff_m2t[5],diff_m2t[6],diff_m2t[7]))
+# ~fid_file.close()
+
+
+# ~c='r'
+# ~plt.plot(mx, np.mean(c1_p2, axis=0), color=c, label=string_met)
+# ~plt.plot(x, np.mean(c2_p2, axis=0), color=c)
+# ~plt.plot(mx, np.mean(c1_p0, axis=0), linestyle='--', color=c)
+# ~plt.plot(x, np.mean(c2_p0, axis=0), linestyle='--', color=c)
+# ~plt.plot(mx, np.mean(c1_m2, axis=0), linestyle=':', color=c)
+# ~plt.plot(x, np.mean(c2_m2, axis=0), linestyle=':', color=c)
+# ~plt.axvline(0.0, c='k', label=r'$\alpha = 2.0$')
+# ~plt.subplots_adjust(bottom = 0.13)
+# ~plt.title(string_met)
+# ~lgnd = plt.legend(loc='best', fontsize=12)
+# ~plt.xlabel(r'$\rm \Delta_{\alpha}$', fontsize=16)
+# ~plt.ylabel(r'$\rm \Delta_{color}$', fontsize=16)
+# ~plt.show()
+# ~plt.close()
+# ~kill
 
 # ~plt.figure()
 # ~plt.plot(metarr, metarr, c='b', label='x = y')

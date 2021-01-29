@@ -1194,7 +1194,12 @@ for string_mass in smass:
 
 		# ~print(np.mean(histotot))
 		# ~print(np.mean(histotot2))	
-		# ~print(np.mean(histotot3))	
+		# ~print(np.mean(histotot3))
+
+		# ~print(np.max(vtot_sample))
+		# ~print(np.max(vtot_sample2))
+		# ~print(np.max(vtot_sample3))
+		# ~kill
 
 		########################################################################
 		########################################################################
