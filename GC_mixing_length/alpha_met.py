@@ -89,21 +89,24 @@ h2 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_
 col2,mag2, mp2 = cut2(h2)
 h3 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/scatter_test/history_p1sigma.data')
 col3,mag3, mp3 = cut2(h3)
-h4 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/scatter_test/history_a180.data')
+h4 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/scatter_test/history_a197.data')
 col4,mag4, mp4 = cut2(h4)
-h5 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/scatter_test/history_a200.data')
+h5 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/scatter_test/history_a203.data')
 col5,mag5, mp5 = cut2(h5)
-h6 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/scatter_test/history_a185.data')
-col6,mag6, mp6 = cut2(h6)
-h7 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/scatter_test/history_a195.data')
-col7,mag7, mp7 = cut2(h7)
-h8 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/scatter_test/history_a1875.data')
-col8,mag8, mp8 = cut2(h8)
-h9 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/scatter_test/history_a1925.data')
-col9,mag9, mp9 = cut2(h9)
+# ~h6 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/scatter_test/history_a185.data')
+# ~col6,mag6, mp6 = cut2(h6)
+# ~h7 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/scatter_test/history_a195.data')
+# ~col7,mag7, mp7 = cut2(h7)
+# ~h8 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/scatter_test/history_a1875.data')
+# ~col8,mag8, mp8 = cut2(h8)
+# ~h9 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/scatter_test/history_a1925.data')
+# ~col9,mag9, mp9 = cut2(h9)
 
 ########################################################################
 ########################################################################
+#-----------------------------------------------------------------------
+### plot metallicity scatter ####
+#-----------------------------------------------------------------------
 
 # ~plt.figure()
 # ~plt.plot(metarr, metarr)
@@ -125,38 +128,38 @@ col9,mag9, mp9 = cut2(h9)
 # ~print(sigma_harris, len(moi))
 # ~print(sigma_omalley, len(moi[(omalley[:,5]).astype(int)]))
 
-met = '-1.5'
-if met == '-1.5':
-	ind = ind1
-elif met == '-2.0':
-	ind = ind2
-elif met == '-1.75p':
-	ind = ind4
+# ~met = '-1.75m'
+# ~if met == '-1.5':
+	# ~ind = ind1
+# ~elif met == '-2.0':
+	# ~ind = ind2
+# ~elif met == '-1.75p':
+	# ~ind = ind4
 
-if met == '-1.75m':
-	ind = ind3
+# ~if met == '-1.75m':
+	# ~ind = ind3
 
 
-res_ind = np.zeros(len(ind))
-for count,i in enumerate(ind):
-	if i < 27:
-		res_ind[count] = i
-	# ~if i == 49:
+# ~res_ind = np.zeros(len(ind))
+# ~for count,i in enumerate(ind):
+	# ~if i < 27:
+		# ~res_ind[count] = i
+	# if i == 49:
 		# ~res_ind[count] = 999
-	else:
-		res_ind[count] = i-1
+	# ~else:
+		# ~res_ind[count] = i-1
 
 
 
-non = np.where(res_ind == 48)[0]
-res_ind = np.delete(res_ind, non)
+# ~non = np.where(res_ind == 48)[0]
+# ~res_ind = np.delete(res_ind, non)
 
-x= np.linspace(-2.5, -1.2, 50)
-y= np.linspace(-2.5, -1.2, 50)
-sigma_harris_s1 = np.sqrt(np.sum((np.array(harris)[(res_ind).astype(int)] - moi[(res_ind).astype(int)])**2)/len(moi[(res_ind).astype(int)]))
-print(met1)
-print(sigma_harris_s1)
-kill
+# ~x= np.linspace(-2.5, -1.2, 50)
+# ~y= np.linspace(-2.5, -1.2, 50)
+# ~sigma_harris_s1 = np.sqrt(np.sum((np.array(harris)[(res_ind).astype(int)] - moi[(res_ind).astype(int)])**2)/len(moi[(res_ind).astype(int)]))
+# ~print(met)
+# ~print(sigma_harris_s1)
+# ~kill
 
 # ~m,b = np.polyfit(np.array(harris)[(res_ind).astype(int)],moi[(res_ind).astype(int)], 1, w = 1/(2*(metal_fin_dar[(res_ind).astype(int)] - metal_low_dar[(res_ind).astype(int)])))
 # ~coef = np.polyfit(np.array(harris)[(res_ind).astype(int)],moi[(res_ind).astype(int)],1)
@@ -168,33 +171,79 @@ kill
 # ~m1, b1, r_value, p_value, std_err = stats.linregress(np.array(harris)[(res_ind).astype(int)],moi[(res_ind).astype(int)])
 # ~print(m1, b1, r_value, p_value, std_err )
 
-# ~string_met = 'Z00010'
-# ~c1_m2 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/'+string_met+'_c1_m2.txt', usecols=(1,2,3,4,5,6,7,8))
-# ~c2_m2 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/'+string_met+'_c2_m2.txt', usecols=(1,2,3,4,5,6,7,8))
-# ~c1_p0 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/'+string_met+'_c1_p0.txt', usecols=(1,2,3,4,5,6,7,8))
-# ~c2_p0 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/'+string_met+'_c2_p0.txt', usecols=(1,2,3,4,5,6,7,8))
-# ~c1_p2 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/'+string_met+'_c1_p2.txt', usecols=(1,2,3,4,5,6,7,8))
-# ~c2_p2 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/'+string_met+'_c2_p2.txt', usecols=(1,2,3,4,5,6,7,8))
+# ~with open('/home/david/fig2_data.txt', 'a+') as fid_file:
+	# ~for i in range(len(np.array(harris)[(res_ind).astype(int)])):
+		# ~fid_file.write('%.4f %.4f %.4f %.4f \n' %(np.array(harris)[(res_ind[i]).astype(int)], moi[(res_ind[i]).astype(int)],metal_fin_dar[(res_ind[i]).astype(int)] - metal_low_dar[(res_ind[i]).astype(int)], metal_high_dar[(res_ind[i]).astype(int)] - metal_fin_dar[(res_ind[i]).astype(int)]))
+	# ~fid_file.close()
 
-# ~coord = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/coord.txt', usecols=(1,2,3))
-# ~metx = [0.0, 0.00005, 0.00010, 0.00015, 0.00020, 0.00025, 0.00030, 0.00035]
+# ~plt.figure()
+# ~plt.plot(metarr, metarr, c='b', label='x = y')
+# ~plt.scatter(np.array(harris)[(res_ind).astype(int)],moi[(res_ind).astype(int)], label='metallicity best fits')
+# ~# plt.plot(x,poly1d_fn(x), label='linear regression', c='r')
+# ~plt.errorbar(np.array(harris)[(res_ind).astype(int)],moi[(res_ind).astype(int)], yerr =[metal_fin_dar[(res_ind).astype(int)] - metal_low_dar[(res_ind).astype(int)],
+# ~metal_high_dar[(res_ind).astype(int)] - metal_fin_dar[(res_ind).astype(int)]], color='r', fmt='o', ecolor='k', markersize=5, label=r' Metallicity best fit ')
+# ~plt.xlabel('[Fe/H] (Harris catalog. 2010)', fontsize=16)
+# ~plt.ylabel('[Fe/H] (Valcin et al.)', fontsize=16)
+# ~plt.legend(loc='best', fontsize=16)
+# ~plt.subplots_adjust(bottom=0.135, left=0.12)
+# ~plt.tick_params(labelsize=14)
+# ~plt.xlim(-2.5,-1.2)
+# ~plt.ylim(-2.5,-1.2)
+# ~plt.show()
+
+########################################################################
+########################################################################
+#-----------------------------------------------------------------------
+### compute dcolor/dz ####
+#-----------------------------------------------------------------------
+metx = [0.0, 0.00005, 0.00010]
+cm2 = np.zeros(8)
+cp0 = np.zeros(8)
+cp2 = np.zeros(8)
+cm2[0] = np.mean(np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/Z00005_coord_cm2.txt'))
+cm2[1] = np.mean(np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/Z00010_coord_cm2.txt')
+cm2[2] = np.mean(np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/Z00015_coord_cm2.txt')
+cm2[3] = np.mean(np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/Z00020_coord_cm2.txt')
+cm2[4] = np.mean(np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/Z00025_coord_cm2.txt')
+cm2[5] = np.mean(np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/Z00030_coord_cm2.txt')
+cm2[6] = np.mean(np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/Z00035_coord_cm2.txt')
+cm2[7] = np.mean(np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/Z00040_coord_cm2.txt')
+cp0[0] = np.mean(np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/Z00005_coord_cp0.txt'))
+cp0[1] = np.mean(np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/Z00010_coord_cp0.txt')
+cp0[2] = np.mean(np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/Z00015_coord_cp0.txt')
+cp0[3] = np.mean(np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/Z00020_coord_cp0.txt')
+cp0[4] = np.mean(np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/Z00025_coord_cp0.txt')
+cp0[5] = np.mean(np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/Z00030_coord_cp0.txt')
+cp0[6] = np.mean(np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/Z00035_coord_cp0.txt')
+cp0[7] = np.mean(np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/Z00040_coord_cp0.txt')
+cp2[0] = np.mean(np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/Z00005_coord_cp2.txt'))
+cp2[1] = np.mean(np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/Z00010_coord_cp2.txt')
+cp2[2] = np.mean(np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/Z00015_coord_cp2.txt')
+cp2[3] = np.mean(np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/Z00020_coord_cp2.txt')
+cp2[4] = np.mean(np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/Z00025_coord_cp2.txt')
+cp2[5] = np.mean(np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/Z00030_coord_cp2.txt')
+cp2[6] = np.mean(np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/Z00035_coord_cp2.txt')
+cp2[7] = np.mean(np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/Z00040_coord_cp2.txt')
+# metx = [0.0, 0.00005, 0.00010, 0.00015, 0.00020, 0.00025, 0.00030, 0.00035]
 # ~coord20 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/coord_15.txt', usecols=(1,2,3))
 # ~coord16 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/coord_15_a16.txt', usecols=(1,2,3))
 # ~coord24 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/coord_15_a24.txt', usecols=(1,2,3))
-# ~metx = [0.0, 0.00005, 0.00010, 0.00015, 0.00020, 0.00025]
-# ~coord20 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/coord_25.txt', usecols=(1,2,3))
-# ~coord16 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/coord_25.txt', usecols=(1,2,3))
-# ~coord24 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/coord_25.txt', usecols=(1,2,3))
-# ~metx = [0.0, 0.00005, 0.00010, 0.00015]
+print(cm2)
+kill
+# ~cm2,cp0,cp2 = coord[:,0], coord[:,1], coord[:,2]
+diffcm2 = np.zeros(len(metx))
+diffcp0 = np.zeros(len(metx))
+diffcp2 = np.zeros(len(metx))
 
-# ~cm2,cp0,cp2 = coord20[:,0], coord20[:,1], coord20[:,2]
-# ~diffcm2 = np.zeros(len(metx))
-# ~diffcp0 = np.zeros(len(metx))
-# ~diffcp2 = np.zeros(len(metx))
-# ~for i in range(len(cm2)):
-	# ~diffcm2[i] = cm2[i]-cm2[0]
-	# ~diffcp0[i] = cp0[i]-cp0[0]
-	# ~diffcp2[i] = cp2[i]-cp2[0]
+
+zc = 4
+for i in range(len(metx)):
+	print(i)
+	diffcm2[i] = cm2[i+zc]-cm2[zc-i]
+	diffcp0[i] = cp0[i+zc]-cp0[zc-i]
+	diffcp2[i] = cp2[i+zc]-cp2[zc-i]
+
+print(diffcm2)
 # ~cm2a16,cp0a16,cp2a16 = coord16[:,0], coord16[:,1], coord16[:,2]
 # ~diffcm2a16 = np.zeros(len(metx))
 # ~diffcp0a16 = np.zeros(len(metx))
@@ -203,71 +252,60 @@ kill
 	# ~diffcm2a16[i] = cm2a16[i]-cm2a16[0]
 	# ~diffcp0a16[i] = cp0a16[i]-cp0a16[0]
 	# ~diffcp2a16[i] = cp2a16[i]-cp2a16[0]
-# ~cm2a24,cp0a24,cp2a24 = coord24[:,0], coord24[:,1], coord24[:,2]
-# ~diffcm2a24 = np.zeros(len(metx))
-# ~diffcp0a24 = np.zeros(len(metx))
-# ~diffcp2a24 = np.zeros(len(metx))
-# ~for i in range(len(cm2)):
-	# ~diffcm2a24[i] = cm2a24[i]-cm2a24[0]
-	# ~diffcp0a24[i] = cp0a24[i]-cp0a24[0]
-	# ~diffcp2a24[i] = cp2a24[i]-cp2a24[0]
 
+m1, b1, r_value, p_value, std_err = stats.linregress(metx,diffcm2)
+print(m1, b1, r_value, p_value, std_err )
+m2, b2, r_value2, p_value2, std_err2 = stats.linregress(metx,diffcp0)
+print(m2, b2, r_value2, p_value2, std_err2 )
+m3, b3, r_value3, p_value3, std_err3 = stats.linregress(metx,diffcp2)
+print(m3, b3, r_value3, p_value3, std_err3 )
 
-# ~m1, b1, r_value, p_value, std_err = stats.linregress(metx,diffcm2)
-# ~print(m1, b1, r_value, p_value, std_err )
-# ~m2, b2, r_value2, p_value2, std_err2 = stats.linregress(metx,diffcp0)
-# ~print(m2, b2, r_value2, p_value2, std_err2 )
-# ~m3, b3, r_value3, p_value3, std_err3 = stats.linregress(metx,diffcp2)
-# ~print(m3, b3, r_value3, p_value3, std_err3 )
-
-# ~plt.figure()
-# ~plt.plot(metx, diffcm2, label=r'$\rm \alpha = 2.0$', c='r')
-# ~plt.plot(metx, diffcm2, label='F606W = -2.0', c='r')
-# ~plt.plot(metx, diffcp0, label='F606W = 0.0', c='b')
-# ~plt.plot(metx, diffcp2, label='F606W = 2.0', c='g')
+plt.figure()
+plt.plot(metx, diffcm2, label=r'$\rm \alpha = 2.0$', c='r')
+plt.plot(metx, diffcm2, label='F606W = -2.0', c='r')
+plt.plot(metx, diffcp0, label='F606W = 0.0', c='b')
+plt.plot(metx, diffcp2, label='F606W = 2.0', c='g')
 # ~plt.plot(metx, diffcm2a16, linestyle='--', c='r', label=r'$\rm \alpha = 1.6$')
 # ~plt.plot(metx, diffcp0a16, linestyle='--', c='b')
 # ~plt.plot(metx, diffcp2a16, linestyle='--', c='g')
 # ~plt.plot(metx, diffcm2a24, linestyle=':', c='r', label=r'$\rm \alpha = 2.4$')
 # ~plt.plot(metx, diffcp0a24, linestyle=':', c='b')
 # ~plt.plot(metx, diffcp2a24, linestyle=':', c='g')
-# ~plt.subplots_adjust(bottom = 0.13)
-# ~plt.title(r'$\rm Z_{fid} = 0.00015$')
-# ~lgnd = plt.legend(loc='best', fontsize=12)
-# ~plt.xlabel(r'$\rm \Delta_{Z}$', fontsize=16)
-# ~plt.ylabel(r'$\rm \Delta_{color}$', fontsize=16)
-# ~plt.show()
-# ~plt.close()
-# ~kill
-
-# ~with open('/home/david/fig2_data.txt', 'a+') as fid_file:
-	# ~for i in range(len(np.array(harris)[(res_ind).astype(int)])):
-		# ~fid_file.write('%.4f %.4f %.4f %.4f \n' %(np.array(harris)[(res_ind[i]).astype(int)], moi[(res_ind[i]).astype(int)],metal_fin_dar[(res_ind[i]).astype(int)] - metal_low_dar[(res_ind[i]).astype(int)], metal_high_dar[(res_ind[i]).astype(int)] - metal_fin_dar[(res_ind[i]).astype(int)]))
-	# ~fid_file.close()
-
-
-dc_da10 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/Z00010_dcda2.txt')
-dc_da25 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/Z00025_dcda2.txt')
-dc_da40 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/Z00040_dcda2.txt')
-# ~dc_da10 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/Z00010_dcda.txt')
-# ~dc_da25 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/Z00025_dcda.txt')
-# ~dc_da40 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/Z00040_dcda.txt')
-
-
+plt.subplots_adjust(bottom = 0.13)
+# plt.title(r'$\rm Z_{fid} = 0.00015$')
+lgnd = plt.legend(loc='best', fontsize=12)
+plt.xlabel(r'$\rm \Delta_{Z}$', fontsize=16)
+plt.ylabel(r'$\rm \Delta_{color}$', fontsize=16)
+plt.show()
+plt.close()
+kill
 
 ########################################################################
 ########################################################################
+#-----------------------------------------------------------------------
+### compute dcolor/dalpha ####
+#-----------------------------------------------------------------------
 x= [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8]
 mx= [-0.1, -0.2, -0.3, -0.4, -0.5, -0.6, -0.7, -0.8]
 string_name = ['Z = 0.00005', 'Z = 0.00010', 'Z = 0.00015', 'Z = 0.00020','Z = 0.00025', 'Z = 0.00030', 'Z = 0.00035', 'Z = 0.00040']
 string_val = [0.00005, 0.00010, 0.00015, 0.00020, 0.00025, 0.00030, 0.00035, 0.00040]
 
-# ~print('z = 0.00010 ----------------')
-# ~m1, b1, r_value, p_value, std_err = stats.linregress(x[:2],dc_da10[2, :2])
+
+# ~dc_da10 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/Z00010_dcda2.txt')
+# ~dc_da15 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/Z00015_dcda2.txt')
+# ~dc_da25 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/Z00025_dcda2.txt')
+# ~dc_da40 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/Z00040_dcda2.txt')
+# ~dc_da15 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/Z00015_dcda.txt')
+# ~dc_da25 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/Z00025_dcda.txt')
+# ~dc_da40 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/Z00040_dcda.txt')
+
+
+# ~print('z = 0.00015 ----------------')
+# ~m1, b1, r_value, p_value, std_err = stats.linregress(x[:2],dc_da15[2, :2])
 # ~print(m1, b1, r_value, p_value, std_err )
-# ~m2, b2, r_value2, p_value2, std_err2 = stats.linregress(x[:2],dc_da10[5, :2])
+# ~m2, b2, r_value2, p_value2, std_err2 = stats.linregress(x[:2],dc_da15[5, :2])
 # ~print(m2, b2, r_value2, p_value2, std_err2 )
-# ~m3, b3, r_value3, p_value3, std_err3 = stats.linregress(x[:2],dc_da10[8, :2])
+# ~m3, b3, r_value3, p_value3, std_err3 = stats.linregress(x[:2],dc_da15[8, :2])
 # ~print(m3, b3, r_value3, p_value3, std_err3 )
 # ~print('z = 0.00025 ----------------')
 # ~m1, b1, r_value, p_value, std_err = stats.linregress(x[:2],dc_da25[2, :2])
@@ -285,32 +323,32 @@ string_val = [0.00005, 0.00010, 0.00015, 0.00020, 0.00025, 0.00030, 0.00035, 0.0
 # ~print(m3, b3, r_value3, p_value3, std_err3 )
 # ~kill
 
-plt.figure()
-plt.plot(x[:2],dc_da10[2, :2], linestyle=':', c='b')
-plt.plot(x[:2],dc_da10[5, :2], linestyle='--', c='b')
-plt.plot(x[:2],dc_da10[8, :2], c='b', label='Z = 0.00010')
-plt.plot(x[:2],dc_da25[2, :2], linestyle=':', c='r')
-plt.plot(x[:2],dc_da25[5, :2], linestyle='--', c='r')
-plt.plot(x[:2],dc_da25[8, :2], c='r', label='Z = 0.00025')
-plt.plot(x[:2],dc_da40[2, :2], linestyle=':', c='g')
-plt.plot(x[:2],dc_da40[5, :2], linestyle='--', c='g')
-plt.plot(x[:2],dc_da40[8, :2], c='g', label='Z = 0.00040')
-# ~plt.plot(x,dc_da10[2, :], linestyle=':', c='b')
-# ~plt.plot(x,dc_da10[5, :], linestyle='--', c='b')
-# ~plt.plot(x,dc_da10[8, :], c='b', label='Z = 0.00010')
+# ~plt.figure()
+# ~plt.plot(x[:2],dc_da15[2, :2], linestyle=':', c='b')
+# ~plt.plot(x[:2],dc_da15[5, :2], linestyle='--', c='b')
+# ~plt.plot(x[:2],dc_da15[8, :2], c='b', label='Z = 0.00015')
+# ~plt.plot(x[:2],dc_da25[2, :2], linestyle=':', c='r')
+# ~plt.plot(x[:2],dc_da25[5, :2], linestyle='--', c='r')
+# ~plt.plot(x[:2],dc_da25[8, :2], c='r', label='Z = 0.00025')
+# ~plt.plot(x[:2],dc_da40[2, :2], linestyle=':', c='g')
+# ~plt.plot(x[:2],dc_da40[5, :2], linestyle='--', c='g')
+# ~plt.plot(x[:2],dc_da40[8, :2], c='g', label='Z = 0.00040')
+# ~plt.plot(x,dc_da15[2, :], linestyle=':', c='b')
+# ~plt.plot(x,dc_da15[5, :], linestyle='--', c='b')
+# ~plt.plot(x,dc_da15[8, :], c='b', label='Z = 0.00015')
 # ~plt.plot(x,dc_da25[2, :], linestyle=':', c='r')
 # ~plt.plot(x,dc_da25[5, :], linestyle='--', c='r')
 # ~plt.plot(x,dc_da25[8, :], c='r', label='Z = 0.00025')
 # ~plt.plot(x,dc_da40[2, :], linestyle=':', c='g')
 # ~plt.plot(x,dc_da40[5, :], linestyle='--', c='g')
 # ~plt.plot(x,dc_da40[8, :], c='g', label='Z = 0.00040')
-plt.legend(loc='best', fontsize=14)
-plt.subplots_adjust(bottom = 0.13)
-plt.xlabel(r'$\rm \Delta_{\alpha}$', fontsize=20)
-plt.ylabel(r'$\rm \Delta_{color} / \Delta_{\alpha}$', fontsize=20)
-plt.show()
-plt.close()
-kill
+# ~plt.legend(loc='best', fontsize=14)
+# ~plt.subplots_adjust(bottom = 0.13)
+# ~plt.xlabel(r'$\rm \Delta_{\alpha}$', fontsize=20)
+# ~plt.ylabel(r'$\rm \Delta_{color} / \Delta_{\alpha}$', fontsize=20)
+# ~plt.show()
+# ~plt.close()
+# ~kill
 
 # ~color=iter(cm.rainbow(np.linspace(0,1,8)))
 # ~plt.figure()
@@ -333,8 +371,19 @@ kill
 # ~diff_p2r = np.mean(c2_p2, axis=0)/x
 # ~print(diff_p2l, diff_p2r)
 # ~kill
+########################################################################
+########################################################################
+#-----------------------------------------------------------------------
+### compute dcolor/dalpha ####
+#-----------------------------------------------------------------------
 
-
+# ~string_met = 'Z00015'
+# ~c1_m2 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/'+string_met+'_c1_m2.txt', usecols=(1,2,3,4,5,6,7,8))
+# ~c2_m2 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/'+string_met+'_c2_m2.txt', usecols=(1,2,3,4,5,6,7,8))
+# ~c1_p0 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/'+string_met+'_c1_p0.txt', usecols=(1,2,3,4,5,6,7,8))
+# ~c2_p0 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/'+string_met+'_c2_p0.txt', usecols=(1,2,3,4,5,6,7,8))
+# ~c1_p2 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/'+string_met+'_c1_p2.txt', usecols=(1,2,3,4,5,6,7,8))
+# ~c2_p2 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dcolor/'+string_met+'_c2_p2.txt', usecols=(1,2,3,4,5,6,7,8))
 
 # ~diff_p2l = np.mean(c1_p2, axis=0)/mx
 # ~diff_p2r = np.mean(c2_p2, axis=0)/x
@@ -358,7 +407,7 @@ kill
 	# ~fid_file.write('%.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f \n' %(diff_m2r[0],diff_m2r[1],diff_m2r[2],diff_m2r[3],diff_m2r[4],diff_m2r[5],diff_m2r[6],diff_m2r[7]))
 	# ~fid_file.write('%.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f \n' %(diff_m2t[0],diff_m2t[1],diff_m2t[2],diff_m2t[3],diff_m2t[4],diff_m2t[5],diff_m2t[6],diff_m2t[7]))
 # ~fid_file.close()
-
+# ~kill
 
 # ~c='r'
 # ~plt.plot(mx, np.mean(c1_p2, axis=0), color=c, label=string_met)
@@ -377,36 +426,25 @@ kill
 # ~plt.close()
 # ~kill
 
-# ~plt.figure()
-# ~plt.plot(metarr, metarr, c='b', label='x = y')
-# ~plt.scatter(np.array(harris)[(res_ind).astype(int)],moi[(res_ind).astype(int)], label='metallicity best fits')
-# ~# plt.plot(x,poly1d_fn(x), label='linear regression', c='r')
-# ~plt.errorbar(np.array(harris)[(res_ind).astype(int)],moi[(res_ind).astype(int)], yerr =[metal_fin_dar[(res_ind).astype(int)] - metal_low_dar[(res_ind).astype(int)],
-# ~metal_high_dar[(res_ind).astype(int)] - metal_fin_dar[(res_ind).astype(int)]], color='r', fmt='o', ecolor='k', markersize=5, label=r' Metallicity best fit ')
-# ~plt.xlabel('[Fe/H] (Harris catalog. 2010)', fontsize=16)
-# ~plt.ylabel('[Fe/H] (Valcin et al.)', fontsize=16)
-# ~plt.legend(loc='best', fontsize=16)
-# ~plt.subplots_adjust(bottom=0.135, left=0.12)
-# ~plt.tick_params(labelsize=14)
-# ~plt.xlim(-2.5,-1.2)
-# ~plt.ylim(-2.5,-1.2)
-# ~plt.show()
+########################################################################
+########################################################################
 
-# ~plt.figure()
-# ~plt.plot(col1 , mag1, label=r'$\rm [Fe/H] = -1.75, \alpha = 1.9$', c='k')
-# ~plt.plot(col2 , mag2, label=r'$\rm \Delta_{[Fe/H]}$', c='k', linestyle='--')
-# ~plt.plot(col3 , mag3, c='k', linestyle='--')
-# ~plt.plot(col4 , mag4, label=r'$\rm \Delta_{\alpha}$ = 0.1', c='b')
-# ~plt.plot(col5 , mag5, c='b')
+
+plt.figure()
+plt.plot(col1 , mag1, label=r'$\rm [Fe/H] = -1.75, \alpha = 2.0$', c='k')
+plt.plot(col2 , mag2, label=r'$\rm \Delta_{[Fe/H]} = 0.116$', c='k', linestyle='--')
+plt.plot(col3 , mag3, c='k', linestyle='--')
+plt.plot(col4 , mag4, label=r'$\rm \Delta_{\alpha}$ = 0.03', c='b')
+plt.plot(col5 , mag5, c='b')
 # ~plt.plot(col6 , mag6, label=r'$\rm \Delta_{\alpha}$ = 0.05', c='r')
 # ~plt.plot(col7 , mag7, c='r')
 # ~plt.plot(col8 , mag8, label=r'$\rm \Delta_{\alpha}$ = 0.025', c='c')
 # ~plt.plot(col9 , mag9, c='c')
-# ~plt.gca().invert_yaxis()
-# ~plt.legend(loc='best', fontsize=16)
-# ~plt.tick_params(labelsize=16)
-# ~plt.subplots_adjust(bottom=0.15, top=0.89)
-# ~plt.xlabel(' F606W - F814W', fontsize = 20)
-# ~plt.ylabel(' F606W', fontsize = 20)
-# ~plt.show() 
-# ~plt.close()
+plt.gca().invert_yaxis()
+plt.legend(loc='best', fontsize=16)
+plt.tick_params(labelsize=16)
+plt.subplots_adjust(bottom=0.15, top=0.89)
+plt.xlabel(' F606W - F814W', fontsize = 20)
+plt.ylabel(' F606W', fontsize = 20)
+plt.show() 
+plt.close()
