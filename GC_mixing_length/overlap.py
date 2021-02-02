@@ -1050,6 +1050,8 @@ for string_mass in smass:
 		# compute alpha best fit and distribution
 
 			magpts = np.where(mag_v1 < M0)[0]
+			print(len(magpts))
+			kill
 			# ~magpts = np.where(mag_v1 < 0)[0]
 			bestalpha = chi2(Color_iso1[magpts],mag_v1[magpts])
 			print(alpha_mix[bestalpha])
