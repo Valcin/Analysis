@@ -583,7 +583,7 @@ ncpu = 3 # number of cpu requested
 #~ print(ncpu)
 #~ kill
 #~ ncpu = int(os.environ["cpu_num"]) # number of cpu requested hipatia
-Age_t = np.log10(13.5e9)
+Age_t = np.log10(13.32e9)
 distance_t = 0
 Abs_t = 0
 afe_init_t = 0.0
@@ -628,13 +628,7 @@ rsun = 6.957e+10	# in centimeters
 msun = 1.989e+33 #g
 
 
-# ~string_met = 'Z00005'
-# ~smass = ['M075', 'M080']
-smass = ['M075']
-string_name1 = ['Z00005', 'Z00010', 'Z00015', 'Z00020']
-string_label = ['0.00005', '0.00010', '0.00015', '0.00020']
-string_name2 = ['Z00015', 'Z00020', 'Z00025', 'Z00030']
-string_name3 = ['Z00025', 'Z00030', 'Z00035', 'Z00040']
+
 
 #-----------------------------------------------------------------------
 # plot total start
@@ -729,6 +723,9 @@ name2 = ['a100','a120','a140','a160','a180','a200']
 
 ########################################################################
 ########################################################################
+#-----------------------------------------------------------------------
+##~# create sample file ####
+#-----------------------------------------------------------------------
 
 # ~for glc in list(range(27))+list(range(28,69)):
 	# ~print("the chosen cluster is {}".format(glc))
@@ -762,6 +759,21 @@ name2 = ['a100','a120','a140','a160','a180','a200']
 			# ~fid_file.write('%s \n' %(str(glc)))
 		# ~fid_file.close()
 # ~kill
+
+
+########################################################################
+########################################################################
+#-----------------------------------------------------------------------
+##~# main code ####
+#-----------------------------------------------------------------------
+# ~string_met = 'Z00005'
+# ~smass = ['M080']
+# ~string_name1 = ['Z00020']
+smass = ['M075']
+string_name1 = ['Z00005', 'Z00010', 'Z00015', 'Z00020']
+string_label = ['0.00005', '0.00010', '0.00015', '0.00020']
+string_name2 = ['Z00015', 'Z00020', 'Z00025', 'Z00030']
+string_name3 = ['Z00025', 'Z00030', 'Z00035', 'Z00040']
 
 met = (input("what is the metallicity limit ? "))
 for string_mass in smass:
@@ -808,19 +820,28 @@ for string_mass in smass:
 	for indmet, string_met in enumerate(string_name):
 		print(string_mass, string_met)
 		# ~print(str(string_label[indmet]))
-		# ~if (string_met == 'Z00020'and string_mass == 'M080'):
-			# ~h1 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_M070.data')
-			# ~col1,mag1, mp = cut2(h1)
-			# ~h2 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_M090.data')
-		if (string_met == 'Z00005'and string_mass == 'M075'):
-			h30 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_M070.data')
+		if (string_met == 'Z00020'and string_mass == 'M080'):
+			h32 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_a165.data')
+			col32,mag32, mp = cut2(h32)
+			h33 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_a235.data')
+			col33,mag33, mp = cut2(h33)
+			h30 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_a196.data')
 			col30,mag30, mp = cut2(h30)
-			h31 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_M080.data')
+			h31 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_a204.data')
 			col31,mag31, mp = cut2(h31)
-			h1 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_M065.data')
+			h1 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_M070.data')
 			col1,mag1, mp = cut2(h1)
-			h2 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_M085.data')
+			h2 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_M090.data')
 			col2,mag2, mp2 = cut2(h2)
+		# ~if (string_met == 'Z00005'and string_mass == 'M075'):
+			# ~h30 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_M070.data')
+			# ~col30,mag30, mp = cut2(h30)
+			# ~h31 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_M080.data')
+			# ~col31,mag31, mp = cut2(h31)
+			# ~h1 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_M065.data')
+			# ~col1,mag1, mp = cut2(h1)
+			# ~h2 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_M085.data')
+			# ~col2,mag2, mp2 = cut2(h2)
 			h3 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_y020.data')
 			col3,mag3, mp3 = cut2(h3)
 			h4 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_y028.data')
@@ -839,8 +860,12 @@ for string_mass in smass:
 			col10,mag10, mp10 = cut2(h10)
 			h11 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_mixing.data')
 			col11,mag11, mp11 = cut2(h11)
-			# ~h23 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_alphafe.data')
-			# ~col23,mag23, mp23 = cut2(h23)
+			# h23 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_alphafe.data')
+			# col23,mag23, mp23 = cut2(h23)
+		# ~h32 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_a155.data')
+		# ~col32,mag32, mp = cut2(h32)
+		# ~h33 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_a225.data')
+		# ~col33,mag33, mp = cut2(h33)
 		h12 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_a120.data')
 		col12,mag12, mp12 = cut2(h12)
 		h28 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_a130.data')
@@ -1038,6 +1063,8 @@ for string_mass in smass:
 			vcenter, ccenter, errcenter, sbin, bingood, errcenterv = way(corr_mag[rgb][close], corr_col[rgb][close], err_color[rgb][close], err_v[rgb][close])
 
 			std = np.sqrt(np.sum(col_dist[rgb][close]**2)/len(col_dist[rgb][close]))
+			std = np.sqrt(np.sum(col_dist[rgb][close]**2)/len(col_dist[rgb][close]))
+			std2 = np.sqrt(np.sum(col_dist[rgb2][close2]**2)/len(col_dist[rgb2][close2]))
 			# ~print(std, len(col_dist[rgb][close]))
 			# ~if string_met == 'Z00005':
 				# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dispersion/'+Gname+str(clus_nb)+'.txt', 'a+') as fid_file:
@@ -1049,9 +1076,9 @@ for string_mass in smass:
 		#-----------------------------------------------------------------------
 		# compute alpha best fit and distribution
 
-			magpts = np.where(mag_v1 < M0)[0]
-			print(len(magpts))
-			kill
+			# ~magpts = np.where(mag_v1 < M0)[0]
+			magpts = np.where(mag_v1 < M1)[0]
+
 			# ~magpts = np.where(mag_v1 < 0)[0]
 			bestalpha = chi2(Color_iso1[magpts],mag_v1[magpts])
 			print(alpha_mix[bestalpha])
@@ -1070,7 +1097,7 @@ for string_mass in smass:
 			if len(corr_mag[rgb3][close3]) < 10:
 				histo3 = 999
 			# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dispersion/'+Gname+'_'+string_met+'.txt', 'a+') as fid_file:
-				# ~fid_file.write('%s %.4f %s %.2f %.2f %.2f \n' %(str(clus_nb),std, alpha_mix[bestalpha], histo, histo2, histo3))
+				# ~fid_file.write('%s %.4f %.4f %s %.2f %.2f %.2f \n' %(str(clus_nb),std,std2, alpha_mix[bestalpha], histo, histo2, histo3))
 			# ~fid_file.close()
 
 
@@ -1079,7 +1106,7 @@ for string_mass in smass:
 			print(np.mean(histo3))	
 
 			# ~plt.scatter(corr_col,corr_mag, marker='.', s=10, color='grey', alpha=0.8)
-			plt.scatter(corr_col,corr_mag, marker='.', s=10, alpha=0.8)
+			# ~plt.scatter(corr_col,corr_mag, marker='.', s=10, alpha=0.8)
 			# plt.scatter(corr_col[rgb][close],corr_mag[rgb][close], marker='.', s=10, color='r', alpha=0.8)
 			# ~plt.scatter(corr_col[rgb2][close2],corr_mag[rgb2][close2], marker='.', s=10, color='b', alpha=0.8)
 			# ~plt.scatter(corr_col[rgb3][close3],corr_mag[rgb3][close3], marker='.', s=10, color='r', alpha=0.8)
@@ -1140,20 +1167,18 @@ for string_mass in smass:
 		fmag_tot = interpolate.interp1d(iso_midv, iso_midc, 'nearest',fill_value="extrapolate")
 		Color_new = fmag_tot(vtot_sample)
 		col_dist_tot = np.abs(Color_new - ctot_sample)
+		
+		Color_new2 = fmag_tot(vtot_sample2)
+		col_dist_tot2 = np.abs(Color_new2 - ctot_sample2)
 
-		# ~rgb = np.where(corr_mag < m_stop - dm - abV - 0.5)[0]
-
-		vcentertot, ccentertot, errcentertot, sbintot, bingoodtot, errcentervtot = way(vtot_sample, ctot_sample, errtot_sample, errtotv_sample)
+		# rgb = np.where(corr_mag < m_stop - dm - abV - 0.5)[0]
+		# vcentertot, ccentertot, errcentertot, sbintot, bingoodtot, errcentervtot = way(vtot_sample, ctot_sample, errtot_sample, errtotv_sample)
+		# fmag_tot2 = interpolate.interp1d(vcentertot[2:], ccentertot[2:], 'nearest',fill_value="extrapolate")
+		# lim_mag = np.where(vtot_sample > np.min(vcentertot[2:]))[0]
+		# Color_new2 = fmag_tot(np.array(vtot_sample)[lim_mag])
+		# col_dist_tot2 = np.abs(Color_new2 - np.array(ctot_sample)[lim_mag])
 
 		std_tot = np.sqrt(np.sum(col_dist_tot**2)/len(col_dist_tot))
-
-
-		fmag_tot2 = interpolate.interp1d(vcentertot[2:], ccentertot[2:], 'nearest',fill_value="extrapolate")
-		lim_mag = np.where(vtot_sample > np.min(vcentertot[2:]))[0]
-
-		Color_new2 = fmag_tot(np.array(vtot_sample)[lim_mag])
-		col_dist_tot2 = np.abs(Color_new2 - np.array(ctot_sample)[lim_mag])
-
 
 		std_tot2 = np.sqrt(np.sum(col_dist_tot2**2)/len(col_dist_tot2))
 		# ~if string_met == 'Z00005':
@@ -1181,16 +1206,16 @@ for string_mass in smass:
 		# ~if len(vtot_sample3) < 10:
 			# ~histotot3 = 999
 
-		# ~allgc = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dispersion/'+Gname+'_'+string_met+'.txt', usecols=(1,2,3,4,5))
-		# ~besta = np.mean(allgc[:,1])
-		# ~deltaa = np.std(allgc[:,1])
-		# ~besthist = np.mean(allgc[:,2])
-		# ~besthist2 = np.mean(allgc[:,3])
-		# ~petit = np.where(allgc[:,4] == 999.00)[0]
-		# ~besthist3 = np.mean(np.delete(allgc[:,4], petit))
+		# ~allgc = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/dispersion/'+Gname+'_'+string_met+'.txt', usecols=(1,2,3,4,5,6))
+		# ~besta = np.mean(allgc[:,2])
+		# ~deltaa = np.std(allgc[:,2])
+		# ~besthist = np.mean(allgc[:,3])
+		# ~besthist2 = np.mean(allgc[:,4])
+		# ~petit = np.where(allgc[:,5] == 999.00)[0]
+		# ~besthist3 = np.mean(np.delete(allgc[:,5], petit))
 		
 		# ~with open('/home/david/codes/Analysis/GC_mixing_length/catalogs/dispersion/'+Gname+'_'+string_met+'.txt', 'a+') as fid_file:
-			# ~fid_file.write('%s %.4f %.2f %.2f %.2f %.2f %.2f \n' %('All_12_GCs',std_tot, besta, besthist, besthist2, besthist3, deltaa))
+			# ~fid_file.write('%s %.4f %.4f %.2f %.2f %.2f %.2f \n' %('All_12_GCs',std_tot, std_tot2, besta, besthist, besthist2, besthist3))
 		# ~fid_file.close()
 
 
@@ -1206,110 +1231,128 @@ for string_mass in smass:
 		########################################################################
 		########################################################################
 
-		afe_values=[-0.2, 0.0 , 0.2, 0.4, 0.6, 0.8] 
+		# ~afe_values=[-0.2, 0.0 , 0.2, 0.4, 0.6, 0.8] 
 
-		afe_max = afe_values[np.searchsorted(afe_values, 0.2)]
-		afe_min = afe_values[np.searchsorted(afe_values, 0.2)-1]
+		# ~afe_max = afe_values[np.searchsorted(afe_values, 0.2)]
+		# ~afe_min = afe_values[np.searchsorted(afe_values, 0.2)-1]
 
 
-		mag_v0_min , mag_i0_min, Color_iso0_min, eep_first = iso_mag(np.log10(13.5e9), -2.0, 0.0, 0.0, afe_min)
-		mag_v0_max , mag_i0_max, Color_iso0_max, eep_first = iso_mag(np.log10(13.5e9), -2.0, 0.0, 0.0, afe_max)
-		lpp = (min(len(mag_v0_min), len(mag_v0_max))) # get minimum length to interpolate
+		# ~mag_v0_min , mag_i0_min, Color_iso0_min, eep_first = iso_mag(np.log10(13.5e9), -2.0, 0.0, 0.0, afe_min)
+		# ~mag_v0_max , mag_i0_max, Color_iso0_max, eep_first = iso_mag(np.log10(13.5e9), -2.0, 0.0, 0.0, afe_max)
+		# ~lpp = (min(len(mag_v0_min), len(mag_v0_max))) # get minimum length to interpolate
 
-		mag_v0 = (mag_v0_min[:lpp]*(afe_max - afe) + mag_v0_max[:lpp]*(afe - afe_min)) / (afe_max - afe_min)
-		Color_iso0 = (Color_iso0_min[:lpp]*(afe_max - afe) + Color_iso0_max[:lpp]*(afe - afe_min)) / (afe_max - afe_min)
+		# ~mag_v0 = (mag_v0_min[:lpp]*(afe_max - afe) + mag_v0_max[:lpp]*(afe - afe_min)) / (afe_max - afe_min)
+		# ~Color_iso0 = (Color_iso0_min[:lpp]*(afe_max - afe) + Color_iso0_max[:lpp]*(afe - afe_min)) / (afe_max - afe_min)
 
-		#-----------------------------------------------------------------------
-		# plot mixing length variation
-		# ~plt.figure()
-		# plt.scatter(corr_col,corr_mag, marker='.', s=10, alpha=0.8)
-		# ~plt.scatter(ctot,vtot, marker='.', s=10, color='grey', alpha=0.8)
-		# plt.scatter(ctot_sample,vtot_sample, marker='.', s=10, color='r', alpha=0.8)
-		# plt.scatter(ctot_sample2,vtot_sample2, marker='.', s=10, color='b', alpha=0.8)
-		# plt.scatter(ccentertot[2:],vcentertot[2:], marker='o', s=10, color='b', alpha=0.8)
-		# ~plt.plot(iso_midc, iso_midv, c='c', label='mean of the 12 isochrones', linewidth=2.0)
-		# plt.plot(V2-R2,V2, label=r'$\Delta_{\alpha}$ = 0.8', c='c')
-		# plt.plot(V3-R3,V3, label=r'$\Delta_{\alpha}$ = 0.6', c='orange')
-		# plt.plot(V4-R4,V4, label=r'$\Delta_{\alpha}$ = 0.4', c='r')
-		# plt.plot(V5-R5,V5, label=r'$\Delta_{\alpha}$ = 0.2', c='b')
-		# ~# plt.plot(V6-R6,V6, label=r'$\alpha_{MLT}$ = 2.00', c='k')
-		# plt.plot(V7-R7,V7, c='b')
-		# plt.plot(V8-R8,V8, c='r')
-		# plt.plot(V9-R9,V9, c='orange')
-		# plt.plot(V10-R10,V10, c='c')
-		# ~binc = 200
+########################################################################
+########################################################################
+#-----------------------------------------------------------------------
+### plot mixing length variation ###
+#-----------------------------------------------------------------------
+		
+		plt.figure()
+		# ~# plt.scatter(corr_col,corr_mag, marker='.', s=10, alpha=0.8)
+		plt.scatter(ctot,vtot, marker='.', s=10, color='grey', alpha=0.8)
+		# ~# plt.scatter(ctot_sample,vtot_sample, marker='.', s=10, color='r', alpha=0.8)
+		# ~# plt.scatter(ctot_sample2,vtot_sample2, marker='.', s=10, color='b', alpha=0.8)
+		# ~# plt.scatter(ccentertot[2:],vcentertot[2:], marker='o', s=10, color='b', alpha=0.8)
+		# plt.plot(iso_midc, iso_midv, c='c', label='mean of the 12 isochrones', linewidth=2.0)
+		# ~# plt.plot(V2-R2,V2, label=r'$\Delta_{\alpha}$ = 0.8', c='c')
+		# ~# plt.plot(V3-R3,V3, label=r'$\Delta_{\alpha}$ = 0.6', c='orange')
+		# ~# plt.plot(V4-R4,V4, label=r'$\Delta_{\alpha}$ = 0.4', c='r')
+		# ~# plt.plot(V5-R5,V5, label=r'$\Delta_{\alpha}$ = 0.2', c='b')
+		# plt.plot(V6-R6,V6, label=r'$\alpha_{MLT}$ = 2.00', c='k')
+		# ~# plt.plot(V7-R7,V7, c='b')
+		# ~# plt.plot(V8-R8,V8, c='r')
+		# ~# plt.plot(V9-R9,V9, c='orange')
+		# ~# plt.plot(V10-R10,V10, c='c')
+		#plt.scatter(pxtot,pytot, marker='.', s=10, color='b', alpha=0.8)
+		#plt.scatter(pxtot2,pytot2, marker='.', s=10, color='r', alpha=0.8)
+		# ~plt.plot(col32 , mag32, label=r'$\Delta_{\alpha}$ = 0.35', c='b', linestyle = ':')
+		plt.plot(col24 , mag24, label=r'$\Delta_{\alpha}$ = 0.2', c='b', linestyle = '--')
+		plt.plot(col15 , mag15, label=r'$\Delta_{\alpha}$ = 0.1', c='b')
+		# plt.plot(col16 , mag16, label=r'$\Delta_{\alpha}$ = 0.1', c='b')
+		plt.plot(col17 , mag17, c='b')
+		plt.plot(col18 , mag18, c='b', linestyle = '--')
+		# ~plt.plot(col33 , mag33, c='b', linestyle = ':')
+		binc = 200
 		# ~niso = int((-200 -(-236))/2)
-		# ~magtest= np.linspace(-5,5,binc)
-		# ~col = np.zeros((binc,niso))
-		# ~mag = np.zeros((binc,niso))
-		# ~import cmasher as cmr
-		# ~cm = cmr.ember
-		# ~norm = colors.Normalize(vmin=-2.36,vmax=-2.0)
-		# ~s_m = matplotlib.cm.ScalarMappable(cmap=cm, norm=norm)
-		# ~s_m.set_array([])
-		# ~import matplotlib.gridspec as gridspec
-		# ~gs_in = gridspec.GridSpec(2, 2,hspace=0.5,height_ratios=[10,1],
-		# ~width_ratios=[8,4],wspace=0.,left=0.10,right=0.9,bottom=0.1,top=0.9)
+		niso = int((-174 -(-200))/2)
+		magtest= np.linspace(-5,5,binc)
+		col = np.zeros((binc,niso))
+		mag = np.zeros((binc,niso))
+		import cmasher as cmr
+		cm = cmr.ember
+		# ~norm = colors.Normalize(vmin=-2.36,vmax=-2)
+		norm = colors.Normalize(vmin=-2.0,vmax=-1.75)
+		s_m = matplotlib.cm.ScalarMappable(cmap=cm, norm=norm)
+		s_m.set_array([])
+		import matplotlib.gridspec as gridspec
+		gs_in = gridspec.GridSpec(2, 2,hspace=0.5,height_ratios=[10,1],
+		width_ratios=[8,4],wspace=0.,left=0.10,right=0.9,bottom=0.1,top=0.9)
 		# ~for ind,a in enumerate(range(-236, -200, 2)):
-			# ~met= a/100. 
+		for ind,a in enumerate(range(-200, -174, 2)):
+			met= a/100. 
 
-			# ~print(met)
-			# ~mag_v, mag_i, Color_iso, eep_first = iso_mag(Age_t, met, distance_t, Abs_t, afe_init_t)
-			# ~fmag_ini = interpolate.interp1d(mag_v, Color_iso, 'nearest',fill_value="extrapolate")
+			print(met)
+			mag_v, mag_i, Color_iso, eep_first = iso_mag(Age_t, met, distance_t, Abs_t, afe_init_t)
+			fmag_ini = interpolate.interp1d(mag_v, Color_iso, 'nearest',fill_value="extrapolate")
 			
-			# ~col[:,ind]= fmag_ini(magtest)
-			# ~mag[:,ind]= magtest
-			# ~if ind == 0:
-				# ~plt.plot(Color_iso,mag_v, color=s_m.to_rgba(met), label='13.5 Gyr isochrones')
-			# ~else:
-				# ~plt.plot(Color_iso,mag_v, color=s_m.to_rgba(met))
-		# ~cbar = plt.colorbar(s_m)
-		# ~cbar.ax.set_ylabel('Metallicity range', fontsize = 16)
-		# ~#plt.scatter(pxtot,pytot, marker='.', s=10, color='b', alpha=0.8)
-		# ~#plt.scatter(pxtot2,pytot2, marker='.', s=10, color='r', alpha=0.8)
-		# ~plt.plot(col12 , mag12, label=r'$\Delta_{\alpha}$ = 0.8', c='c')
-		# ~plt.plot(col13 , mag13, label=r'$\Delta_{\alpha}$ = 0.6', c='orange')
-		# ~plt.plot(col14 , mag14, label=r'$\Delta_{\alpha}$ = 0.4', c='r')
-		# ~plt.plot(col15 , mag15, label=r'$\Delta_{\alpha}$ = 0.2', c='b')
-		# ~plt.plot(col16 , mag16, label=r'$\Delta_{\alpha}$ = 0.1', c='r')
-		# ~plt.plot(col17 , mag17, label=r'$\alpha_{MLT}$ = 2.00', c='k')
-		# ~plt.plot(col18 , mag18, c='r')
-		# ~plt.plot(col19 , mag19, c='b')
-		# ~plt.plot(col20 , mag20, c='r')
-		# ~plt.plot(col21 , mag21, c='orange')
-		# ~plt.plot(col22 , mag22, c='c')
+			col[:,ind]= fmag_ini(magtest)
+			mag[:,ind]= magtest
+			if ind == 0:
+				plt.plot(Color_iso,mag_v, color=s_m.to_rgba(met), label='DSED isochrones')
+			# ~if ind == 9:
+			if ind == 6:
+				plt.plot(Color_iso,mag_v, color=s_m.to_rgba(met), label='DSED isochrones')
+			# ~if ind == 17:
+			if ind == 12:
+				plt.plot(Color_iso,mag_v, color=s_m.to_rgba(met), label='DSED isochrones')
+			else:
+				plt.plot(Color_iso,mag_v, color=s_m.to_rgba(met))
+		cbar = plt.colorbar(s_m)
+		cbar.ax.set_ylabel('Metallicity range', fontsize = 16)
+
 		#plt.xlim(-1,2.5)
-		# ~plt.xlim(-0.23,1.65)
-		# ~plt.ylim(5,-5)
+		plt.xlim(-0.23,1.25)
+		plt.ylim(5,-5)
 		# plt.gca().invert_yaxis()
-		# ~plt.tick_params(labelsize=16)
-		# ~plt.subplots_adjust(bottom=0.15, top=0.89, right=0.930)
-		# ~lgnd = plt.legend(loc='best', fontsize = 14)
-		# lgnd.get_frame().set_edgecolor('k')
-		# lgnd.get_frame().set_linewidth(2.0)
-		# ~plt.xlabel(' F606W - F814W', fontsize = 20)
-		# ~plt.ylabel(' F606W', fontsize = 20)
-		# ~#plt.title('[Fe/H] < '+met+', '+str(len(ind))+' clusters', fontsize = 24)
-		# ~plt.show() 
-		# ~plt.close()
+		plt.tick_params(labelsize=16)
+		plt.subplots_adjust(bottom=0.15, top=0.89, right=0.930)
+		lgnd = plt.legend(loc='best', fontsize = 14)
+		# ~# lgnd.get_frame().set_edgecolor('k')
+		# ~# lgnd.get_frame().set_linewidth(2.0)
+		plt.xlabel(' F606W - F814W', fontsize = 20)
+		plt.ylabel(' F606W', fontsize = 20)
+		#plt.title('[Fe/H] < '+met+', '+str(len(ind))+' clusters', fontsize = 24)
+		plt.show() 
+		plt.close()
 
-		# ~kill
-		#-----------------------------------------------------------------------
-		# ~# plot convection configuration
+		kill
+########################################################################
+########################################################################
+#-----------------------------------------------------------------------
+##~# plot convection configuration ####
+#-----------------------------------------------------------------------
+		# 
 		# ~plt.figure()
-		#plt.scatter(corr_col,corr_mag, marker='.', s=10, alpha=0.8)
+		# ~#plt.scatter(corr_col,corr_mag, marker='.', s=10, alpha=0.8)
 		# ~plt.scatter(ctot,vtot, marker='.', s=10, color='grey', alpha=0.8)
-		# ~plt.scatter(ctot_sample,vtot_sample, marker='.', s=10, color='k', alpha=0.8)
-		# ~plt.axhline(np.max(vtot_sample), c='k', label=r'$M_{0}$')
-		# ~plt.axhline(np.max(vtot_sample2), c='r', label=r'$M_{1}$')
-		# ~plt.axhline(np.max(vtot_sample3), c='b', label=r'$M_{2}$')
-		# plt.scatter(ccentertot[2:],vcentertot[2:], marker='o', s=10, color='b', alpha=0.8)
-		# plt.plot(iso_midc, iso_midv, c='r', label='mean of the 12 isochrones')
-		#plt.plot(V0-R0,V0, label='fiducial' ,linewidth=2, c='k')
+		# plt.scatter(ctot_sample,vtot_sample, marker='.', s=10, color='k', alpha=0.8)
+		# plt.axhline(np.max(vtot_sample), c='k', label=r'$M_{0}$')
+		# plt.axhline(np.max(vtot_sample2), c='r', label=r'$M_{1}$')
+		# plt.axhline(np.max(vtot_sample3), c='b', label=r'$M_{2}$')
+		# ~# plt.scatter(ccentertot[2:],vcentertot[2:], marker='o', s=10, color='b', alpha=0.8)
+		# ~# plt.plot(iso_midc, iso_midv, c='r', label='mean of the 12 isochrones')
+		# ~#plt.plot(V0-R0,V0, label='fiducial' ,linewidth=2, c='k')
 
-		# ~plt.plot(col16 , mag16, label='Fiducial', c='k')
-		# ~plt.plot(col12 , mag12, label=r'$\Delta_{\alpha}$ = 0.8', c='k', linestyle='--')
-		# ~plt.plot(col22 , mag22, c='k', linestyle='--')
+		# ~plt.plot(col17 , mag17, label='Fiducial', c='k')
+		# ~plt.plot(col32 , mag32, label=r'$\Delta_{\alpha}$ = 0.35', c='k', linestyle='--')
+		# ~plt.plot(col33 , mag33, c='k', linestyle='--')
+		# ~plt.plot(col15 , mag15, label=r'$\Delta_{\alpha}$ = 0.2', c='k', linestyle=':')
+		# ~plt.plot(col19 , mag19, c='k', linestyle=':')
+		# ~plt.plot(col30 , mag30, label=r'$\Delta_{\alpha}$ = 0.04', c='k', linestyle=(0, (3, 1, 1, 1, 1, 1)))
+		# ~plt.plot(col31 , mag31, c='k', linestyle=(0, (3, 1, 1, 1, 1, 1)))
 		# ~plt.plot(col1 , mag1, label=r'$\Delta$M = 0.1', c='b')
 		# ~plt.plot(col2 , mag2, c='b')
 		# ~plt.plot(col3 , mag3, label=r'$\Delta$Y = 0.04', c='g')
@@ -1322,9 +1365,13 @@ for string_mass in smass:
 		# ~plt.plot(col10 , mag10, label='No element diffusion', linestyle=':', c='r')
 		# ~plt.plot(col11 , mag11, label='No rotational mixing', linestyle=':')
 
-		#plt.xlim(-0.5,2.5)
-		# ~plt.xlim(-0.23,1.65)
+		# ~plt.xlim(-0.5,2.5)
 		# ~plt.ylim(5,-5)
+		# ~plt.xlim(0.5,1.4)
+		# ~plt.ylim(-3.5, 0)
+		# ~plt.xlim(0.68,0.83)
+		# ~plt.ylim(-0.9, -0.3)
+		# ~plt.gca().invert_yaxis()
 		# ~plt.tick_params(labelsize=14)
 		# ~plt.subplots_adjust(bottom=0.15, top=0.89)
 		# ~lgnd = plt.legend(loc='best', fontsize = 12)
@@ -1336,18 +1383,26 @@ for string_mass in smass:
 		# ~plt.show() 
 		# ~plt.close()
 		# ~kill
-		#-----------------------------------------------------------------------
-		# plot convection configuration
+########################################################################
+########################################################################
+#-----------------------------------------------------------------------
+### plot raul values ####
+#-----------------------------------------------------------------------
+		
 		# ~plt.figure()
 		# ~#plt.scatter(corr_col,corr_mag, marker='.', s=10, alpha=0.8)
 		# ~plt.scatter(ctot,vtot, marker='.', s=10, color='grey', alpha=0.8)
 		# ~c = ['g','b','c','orange','r']
 		# ~name = ['a100','a125','a150','a175','a200']
-		# ~name2 = [r'$\alpha$ = 1.0',r'$\alpha$ = 1.25',r'$\alpha$ = 1.5',r'$\alpha$ = 1.75',r'$\alpha$ = 2.0']
+		# ~name2 = [r'$\rm \Delta_{\alpha}(JimMacD) = -0.4$',r'$\rm \Delta_{\alpha}(JimMacD) = -0.15$',r'$\rm \Delta_{\alpha}(JimMacD) = +0.1$',r'$\rm \Delta_{\alpha}(JimMacD) = +0.35$',r'$\rm \Delta_{\alpha}(JimMacD) = +0.6$']
 		# ~dat = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/fehm200.HST_ACSWF')
 		# ~tefs = np.unique(dat[:,0])
 		# ~sfs = np.unique(dat[:,1])
 		# ~feH = np.unique(dat[:,2])
+		# ~plt.plot(col32 , mag32, label=r'$\rm \Delta_{\alpha}(MESA) = \pm 0.35$', c='k', linestyle='--')
+		# ~plt.plot(col33 , mag33, c='k', linestyle='--')
+		# ~plt.plot(col16 , mag16, c='k', label=r'$\rm \alpha_{MESA} = 1.9$',linestyle=':')
+		# ~plt.plot(col17 , mag17, c='k', label=r'$\rm \alpha_{MESA} = 2.0$')
 		# ~for count,j in enumerate(name):	
 			# ~raul = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/JimMacD/'+j+'.txt')
 			# ~sf = raul[:,2]
@@ -1382,14 +1437,23 @@ for string_mass in smass:
 		# ~#plt.title('[Fe/H] < '+met+', '+str(len(ind))+' clusters', fontsize = 24)
 		# ~plt.show() 
 		# ~plt.close()
-	#-------------------------------------------------------------------
-	# plot cmetallicity variation
+		# ~kill
+########################################################################
+########################################################################
+#-----------------------------------------------------------------------
+### plot cmetallicity variation ####
+#-----------------------------------------------------------------------
+	
 		# ~if string_mass == 'M075':
 			# ~plt.plot(col16 , mag16, label='Z = '+str(string_label[indmet]))
 		# ~else:
 			# ~plt.plot(col16 , mag16, linestyle='--')
-	# ~#-------------------------------------------------------------------
-	# ~# plot cmetallicity variation
+########################################################################
+########################################################################
+#-----------------------------------------------------------------------
+### plot cmetallicity variation ####
+#-----------------------------------------------------------------------
+
 		# ~plt.plot(col1 , mag1, label = 'M = 0.65')
 		# ~plt.plot(col30 , mag30, label = 'M = 0.70')
 		# ~plt.plot(col16 , mag16, label = 'M = 0.75')
@@ -1416,23 +1480,26 @@ for string_mass in smass:
 		# ~plt.show() 
 		# ~plt.close()
 		# ~kill
-	# ~#-------------------------------------------------------------------
-	# plot overlap
+########################################################################
+########################################################################
+#-----------------------------------------------------------------------
+### plot overlap ####
+#-----------------------------------------------------------------------
 		# ~plt.figure()
 		# ~plt.scatter(ctot,vtot, marker='.', s=10, alpha=0.8)
-		plt.xlim(-1.0,2.5)
-		# plt.xlim(-0.23,1.65)
-		plt.ylim(5,-5)
-		plt.tick_params(labelsize=14)
-		plt.subplots_adjust(bottom=0.15, top=0.89)
-		# lgnd = plt.legend(loc='best', fontsize = 12)
-		# lgnd.get_frame().set_edgecolor('k')
-		# lgnd.get_frame().set_linewidth(2.0)
-		plt.xlabel(' F606W - F814W', fontsize = 20)
-		plt.ylabel(' F606W', fontsize = 20)
+		# ~plt.xlim(-1.0,2.5)
+		# ~# plt.xlim(-0.23,1.65)
+		# ~plt.ylim(5,-5)
+		# ~plt.tick_params(labelsize=14)
+		# ~plt.subplots_adjust(bottom=0.15, top=0.89)
+		# ~# lgnd = plt.legend(loc='best', fontsize = 12)
+		# ~# lgnd.get_frame().set_edgecolor('k')
+		# ~# lgnd.get_frame().set_linewidth(2.0)
+		# ~plt.xlabel(' F606W - F814W', fontsize = 20)
+		# ~plt.ylabel(' F606W', fontsize = 20)
 		# ~plt.title('[Fe/H] < '+met+', '+str(len(ind))+' clusters', fontsize = 24)
 		# ~plt.title('-2.0 < [Fe/H] < -1.75, '+str(len(ind))+' clusters', fontsize = 24)
-		plt.title('-1.75 < [Fe/H] < -1.5, '+str(len(ind)-1)+' clusters', fontsize = 24)
-		plt.show() 
-		plt.close()
-		kill
+		# ~plt.title('-1.75 < [Fe/H] < -1.5, '+str(len(ind)-1)+' clusters', fontsize = 24)
+		# ~plt.show() 
+		# ~plt.close()
+		# ~kill

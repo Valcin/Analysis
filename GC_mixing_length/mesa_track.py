@@ -468,33 +468,33 @@ darp4 = Dartmouth_FastIsochrone(afe='afep4', y=helium_y)
 darp6 = Dartmouth_FastIsochrone(afe='afep6', y=helium_y)
 darp8 = Dartmouth_FastIsochrone(afe='afep8', y=helium_y)
 
-# ~binc = 200
-# ~niso = int((-200 -(-236))/2)
-# ~magtest= np.linspace(-5,5,binc)
-# ~col = np.zeros((binc,niso))
-# ~mag = np.zeros((binc,niso))
-# ~import cmasher as cmr
-# ~cm = cmr.ember
-# ~norm = colors.Normalize(vmin=-2.5,vmax=-0.5)
-# ~s_m = matplotlib.cm.ScalarMappable(cmap=cm, norm=norm)
-# ~s_m.set_array([])
-# ~import matplotlib.gridspec as gridspec
-# ~gs_in = gridspec.GridSpec(2, 2,hspace=0.5,height_ratios=[10,1],
-# ~width_ratios=[8,4],wspace=0.,left=0.10,right=0.9,bottom=0.1,top=0.9)
-# ~for ind,a in enumerate(range(-236, -200, 2)):
-	# ~met= a/100. 
+binc = 200
+niso = int((-200 -(-236))/2)
+magtest= np.linspace(-5,5,binc)
+col = np.zeros((binc,niso))
+mag = np.zeros((binc,niso))
+import cmasher as cmr
+cm = cmr.ember
+norm = colors.Normalize(vmin=-2.5,vmax=-0.5)
+s_m = matplotlib.cm.ScalarMappable(cmap=cm, norm=norm)
+s_m.set_array([])
+import matplotlib.gridspec as gridspec
+gs_in = gridspec.GridSpec(2, 2,hspace=0.5,height_ratios=[10,1],
+width_ratios=[8,4],wspace=0.,left=0.10,right=0.9,bottom=0.1,top=0.9)
+for ind,a in enumerate(range(-236, -200, 2)):
+	met= a/100. 
 
-	# ~print(met)
-	# ~mag_v, mag_i, Color_iso, eep_first = iso_mag(Age, met, distance, Abs, afe_init)
-	# ~fmag_ini = interpolate.interp1d(mag_v, Color_iso, 'nearest',fill_value="extrapolate")
-	# ~# mag_vref, mag_iref, Color_isoref, eep_firstref = iso_mag(Age , -2.48, distance, Abs, afe_init)
-	# ~# mag_vref, mag_iref, Color_isoref, eep_firstref = iso_mag(Age , -0.5, distance, Abs, afe_init)
-	# ~# fmag_iniref = interpolate.interp1d(mag_vref, Color_isoref, 'nearest',fill_value="extrapolate")
+	print(met)
+	mag_v, mag_i, Color_iso, eep_first = iso_mag(Age, met, distance, Abs, afe_init)
+	fmag_ini = interpolate.interp1d(mag_v, Color_iso, 'nearest',fill_value="extrapolate")
+	# mag_vref, mag_iref, Color_isoref, eep_firstref = iso_mag(Age , -2.48, distance, Abs, afe_init)
+	# mag_vref, mag_iref, Color_isoref, eep_firstref = iso_mag(Age , -0.5, distance, Abs, afe_init)
+	# fmag_iniref = interpolate.interp1d(mag_vref, Color_isoref, 'nearest',fill_value="extrapolate")
 
-	# ~col[:,ind]= fmag_ini(magtest)
-	# ~mag[:,ind]= magtest
-	# ~plt.plot(Color_iso,mag_v, color=s_m.to_rgba(met))
-	#ax1.plot(fmag_iniref(magtest)/fmag_ini(magtest),magtest, color=s_m.to_rgba(met),lw=2)
+	col[:,ind]= fmag_ini(magtest)
+	mag[:,ind]= magtest
+	plt.plot(Color_iso,mag_v, color=s_m.to_rgba(met))
+	# ~#ax1.plot(fmag_iniref(magtest)/fmag_ini(magtest),magtest, color=s_m.to_rgba(met),lw=2)
 	
 string_mass = 'M075'
 string_met = 'scatter_test'
@@ -518,16 +518,16 @@ htest8 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+str
 coltest8,magtest8, mptest8 = cut2(htest8)
 
 
-met1 = -2.0
-met2 = -1.75
-met3 = -1.5
+# ~met1 = -1.95
+# ~met2 = -1.75
+# ~met3 = -1.5
 # ~met1 = -2.087
 # ~met2 = -1.839
 # ~met3 = -1.586
 
-mag_v1, mag_i1, Color_iso1, eep_first1 = iso_mag(Age, met1, distance, Abs, afe_init)
-mag_v2, mag_i2, Color_iso2, eep_first2 = iso_mag(Age, met2, distance, Abs, afe_init)
-mag_v3, mag_i3, Color_iso3, eep_first3 = iso_mag(Age, met3, distance, Abs, afe_init)
+# ~mag_v1, mag_i1, Color_iso1, eep_first1 = iso_mag(Age, met1, distance, Abs, afe_init)
+# ~mag_v2, mag_i2, Color_iso2, eep_first2 = iso_mag(Age, met2, distance, Abs, afe_init)
+# ~mag_v3, mag_i3, Color_iso3, eep_first3 = iso_mag(Age, met3, distance, Abs, afe_init)
 
 
 # ~plt.plot(htest1.log_Teff, htest1.log_L)
@@ -539,55 +539,21 @@ mag_v3, mag_i3, Color_iso3, eep_first3 = iso_mag(Age, met3, distance, Abs, afe_i
 # ~kill
 
 
-# ~bi = np.loadtxt('catalogs/basti_iso.txt')
-# ~plt.plot(bi[:,7] - bi[:,10],bi[:,7])
-# ~bi = np.loadtxt('catalogs/m075fehm20afep0.hst_acs')
-# ~bi = np.loadtxt('catalogs/tmp1612262138.iso')
-# ~plt.plot(bi[:,10] - bi[:,15],bi[:,10])
 
-
-# ~mist = np.loadtxt('catalogs/MIST_iso_601176d8da858.iso.cmd')
-# ~ct = [605-int(mist[0,0])]
-# ~plt.plot(mist[:ct[0]-1,14] - mist[:ct[0]-1,19], mist[:ct[0]-1,14])
-
-# ~mist2 = np.loadtxt('catalogs/0007700M.track.eep.cmd')
-# ~plt.plot(mist2[:ct[0]-1,10] - mist2[:ct[0]-1,15], mist2[:ct[0]-1,10])
-
-
-
-plt.plot(coltest2 , magtest2, label=r'MESA track: M = 0.77 $M_{\odot}$, Z = 0.00045', c='r')
-plt.plot(Color_iso3,mag_v3, c='r', label=r'Isochrone: Age = 13.32 Gyr, [Fe/H] = -1.5',linestyle=':')
-plt.plot(coltest1 , magtest1, label=r'MESA track: M = 0.77 $M_{\odot}$, Z = 0.00025', c='k')
-plt.plot(Color_iso2,mag_v2, c='k', label=r'Isochrone: Age = 13.32 Gyr, [Fe/H] = -1.75',linestyle=':')
-plt.plot(coltest3 , magtest3, label=r'MESA track: M = 0.77 $M_{\odot}$, Z = 0.000142', c='c')
-plt.plot(Color_iso1,mag_v1, c='c', label=r'Isochrone: Age = 13.32 Gyr, [Fe/H] = -2.0',linestyle=':')
-plt.axhline(0.18, linestyle ='--', label=r'$\rm Magnitude \: cut \: M_1$', c='k')
-plt.xlim(0.4,1.15)
-plt.ylim(6,-5)
-plt.ylim(0.5,-4)
-plt.tick_params(labelsize=14)
-plt.subplots_adjust(bottom=0.15, top=0.89)
-lgnd = plt.legend(loc='upper left', fontsize = 10)
-plt.text(0.9,3.5,r'$\alpha$ = 1.938',va='center',fontsize=16,alpha=1.,
-	bbox=dict(boxstyle="round",fc=(1., 1.,1.,1.),ec='k'))
-plt.xlabel(' F606W - F814W', fontsize = 20)
-plt.ylabel(' F606W', fontsize = 20)
-plt.show() 
-plt.close()
-kill
-
-# ~plt.plot(coltest1 , magtest1, label=r'MESA track: M = 0.77 $M_{\odot}$, Z = 0.00025', c='k')
-# ~plt.plot(coltest5 , magtest5, label=r'MESA track: $\rm \Delta_{\alpha} = 0.05$', c='r')
-# ~plt.plot(coltest6 , magtest6, c='r')
-# ~plt.plot(coltest7 , magtest7, label=r'MESA track: $\rm \Delta_{\alpha} = 0.1$', c='c')
-# ~plt.plot(coltest8 , magtest8, c='c')
-# ~plt.plot(Color_iso2,mag_v2, c='k', label=r'Isochrone: Age = 13.32 Gyr, [Fe/H] = -1.75',linestyle=':')
+# ~plt.plot(coltest1 , magtest1, c='k', label=r'MESA track')
+# ~plt.plot(Color_iso2,mag_v2, c='k',linestyle=':', label=r'DSED Isochrone')
 # ~plt.axhline(0.18, linestyle ='--', label=r'$\rm Magnitude \: cut \: M_1$', c='k')
-# ~plt.xlim(0.2,1.15)
+# ~plt.plot(coltest2 , magtest2, c='r', label=r'[Fe/H] = -1.5')
+# ~plt.plot(coltest1 , magtest1, c='k', label=r'[Fe/H] = -1.75')
+# ~plt.plot(coltest3 , magtest3, c='c', label=r'[Fe/H] = -2.0')
+# ~plt.plot(Color_iso3,mag_v3, c='r',linestyle=':')
+# ~plt.plot(Color_iso1,mag_v1, c='c',linestyle=':')
+# ~plt.xlim(0.6,1.15)
+# ~plt.ylim(6,-5)
 # ~plt.ylim(0.5,-4)
-# ~plt.tick_params(labelsize=14)
+# ~plt.tick_params(labelsize=16)
 # ~plt.subplots_adjust(bottom=0.15, top=0.89)
-# ~lgnd = plt.legend(loc='upper left', fontsize = 10)
+# ~lgnd = plt.legend(loc='upper left', fontsize = 12)
 # ~plt.text(0.9,3.5,r'$\alpha$ = 1.938',va='center',fontsize=16,alpha=1.,
 	# ~bbox=dict(boxstyle="round",fc=(1., 1.,1.,1.),ec='k'))
 # ~plt.xlabel(' F606W - F814W', fontsize = 20)
@@ -595,6 +561,28 @@ kill
 # ~plt.show() 
 # ~plt.close()
 # ~kill
+
+
+
+plt.plot(coltest1 , magtest1, label=r'MESA track', c='k')
+plt.plot(Color_iso2,mag_v2, c='k', label=r'DSED Isochrone',linestyle=':')
+plt.plot(coltest5 , magtest5, label=r'$\rm \Delta_{\alpha} = 0.05$', c='r')
+plt.plot(coltest6 , magtest6, c='r')
+plt.plot(coltest7 , magtest7, label=r'$\rm \Delta_{\alpha} = 0.1$', c='c')
+plt.plot(coltest8 , magtest8, c='c')
+plt.axhline(0.18, linestyle ='--', label=r'$\rm Magnitude \: cut \: M_1$', c='k')
+plt.xlim(0.6,1.15)
+plt.ylim(0.5,-4)
+plt.tick_params(labelsize=14)
+plt.subplots_adjust(bottom=0.15, top=0.89)
+lgnd = plt.legend(loc='upper left', fontsize = 12)
+plt.text(0.9,3.5,r'$\alpha$ = 1.938',va='center',fontsize=16,alpha=1.,
+	bbox=dict(boxstyle="round",fc=(1., 1.,1.,1.),ec='k'))
+plt.xlabel(' F606W - F814W', fontsize = 20)
+plt.ylabel(' F606W', fontsize = 20)
+plt.show() 
+plt.close()
+kill
 
 ########################################################################
 ########################################################################
@@ -794,7 +782,11 @@ for string_met in string_name:
 	# ~met='-2.0'
 	# ~hist = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/distrib'+met+'.txt', usecols=(1,2,3,4,5,6))
 	# ~hist2 = np.loadtxt('/home/david/codes/Analysis/GC_mixing_length/catalogs/distrib2'+met+'.txt', usecols=(1,2,3,4,5,6))
-	#-----------------------------------------------------------------------
+########################################################################
+########################################################################
+#-----------------------------------------------------------------------
+### compute and write color differences ####
+#-----------------------------------------------------------------------
 
 
 	# ~plt.figure()
