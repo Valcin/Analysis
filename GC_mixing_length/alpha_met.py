@@ -445,7 +445,7 @@ string_val = [0.00005, 0.00010, 0.00015, 0.00020, 0.00025, 0.00030, 0.00035, 0.0
 ########################################################################
 ########################################################################
 string_mass = 'M075'
-string_met = 'Z00015'
+string_met = 'Z00025'
 h1 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/scatter_test/'+string_met+'/history_fid.data')
 col1,mag1, mp1 = cut2(h1)
 h2 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/scatter_test/'+string_met+'/history_m1sigma.data')
@@ -465,7 +465,7 @@ if string_met == 'Z00015':
 	h7 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/scatter_test/'+string_met+'/history_a203.data')
 	col7,mag7, mp7 = cut2(h7)
 
-	plt.axhline(0.18, linestyle ='--', label=r'$\rm Magnitude \: cut \: M_1$', c='g')
+	plt.axhline(0.18, linestyle ='--', label=r'$\rm Magnitude \: cut \: \mathcal{M}_1$', c='g')
 	plt.axhline(-2.0, c='grey')
 	plt.plot(col3 , mag3, c='k', linestyle='--')
 	plt.plot(col4 , mag4, label=r'$\rm \Delta_{\alpha}$ = 0.02', c='c')
@@ -491,7 +491,7 @@ if string_met == 'Z00025':
 	h9 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/scatter_test/'+string_met+'/history_a205.data')
 	col9,mag9, mp9 = cut2(h9)
 
-	plt.axhline(0.18, linestyle ='--', label=r'$\rm Magnitude \: cut \: M_1$', c='g')
+	plt.axhline(0.18, linestyle ='--', label=r'$\rm Magnitude \: cut \: \mathcal{M}_1$', c='g')
 	plt.axhline(-2.0, c='grey')
 	plt.plot(col3 , mag3, c='k', linestyle='--')
 	plt.plot(col4 , mag4, label=r'$\rm \Delta_{\alpha}$ = 0.03', c='b')
@@ -504,10 +504,10 @@ if string_met == 'Z00025':
 	plt.plot(col2 , mag2, label=r'$\rm \Delta_{[Fe/H]} = 0.09$', c='k', linestyle='--')
 	plt.title('Z = 0.00025')
 
-# ~plt.xlim(0.82, 0.9)
-# ~plt.ylim(-2.1, -1.9)
-plt.xlim(left=0.65)
-plt.ylim(top=0.5)
+plt.xlim(0.82, 0.9)
+plt.ylim(-2.1, -1.9)
+# ~plt.xlim(left=0.65)
+# ~plt.ylim(top=0.5)
 plt.gca().invert_yaxis()
 plt.legend(loc='best', fontsize=13)
 plt.tick_params(labelsize=16)
