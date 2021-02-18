@@ -62,24 +62,72 @@ some_3d_time_dependent_pde_solution, _ = _solve_3dspatial_temporal(
     monitor=MonitorMinimal(check_every=10)
 )
 
-#-------------------------------------------------------------------------
-#-------------------------------------------------------------------------
-#-------------------------------------------------------------------------
-#-------------------------------------------------------------------------
+########################################################################
+########################################################################
+#-----------------------------------------------------------------------
+### configure the solver ####
+#-----------------------------------------------------------------------
+
 
 # specify the ODE system and its parameters
-def ADM(K11,K12,K13,K22,K23,K33,K,a,b1,b2,b3,G11,G12,G13,G22,G23,G33,t,r,theta,phi):
+def ADM(K11,K12,K13,K22,K23,K33,K,a,b1,b2,b3,G11,G12,G13,G22,G23,G33, r, theta, phi, t):
+
+	# define the metric
+	G11 = 1./(1 - (2*M)/r)
+	G12 = 0
+	G13 = 0
+	G21 = 0
+	G22 = 1./(1 - (2*M)/r) * r**2
+	G23 = 0
+	G31 = 0
+	G32 = 0
+	G33 = 1./(1 - (2*M)/r) * r**2 * torch.sin(theta)**2
+
+	# define the christoffel coefficients
+	C111 = 1/2.*G11*(diff(G11, r) + diff(G11, r) - diff(G11, r))
+	C112 = 1/2.*G11*(diff(G11, theta) + diff(G12, r) - diff(G12, r))
+	C113 = 1/2.*G11*(diff(G13, phi) + diff(G13, r) - diff(G13, r))
+	C121 = 1/2.*G11*(diff(G12, r) + diff(G11, theta) - diff(G21, r))
+	C122 = 1/2.*G11*(diff(G12, theta) + diff(G12, theta) - diff(G22, r))
+	C123 = 1/2.*G11*(diff(G12, phi) + diff(G13, theta) - diff(G23, r))
+	C131 = 1/2.*G11*(diff(G13, r) + diff(G11, phi) - diff(G31, r))
+	C132 = 1/2.*G11*(diff(G13, theta) + diff(G12, phi) - diff(G32, r))
+	C133 = 1/2.*G11*(diff(G13, phi) + diff(G13, phi) - diff(G33, r))
+	C211 = 1/2.*G22*(diff(G21, r) + diff(G21, r) - diff(G11, theta))
+	C212 = 1/2.*G22*(diff(G21, theta) + diff(G22, r) - diff(G12, theta))
+	C213 = 1/2.*G22*(diff(G21, phi) + diff(G23, r) - diff(G13, theta))
+	C221 = 1/2.*G22*(diff(G22, r) + diff(G21, theta) - diff(G21, theta))
+	C222 = 1/2.*G22*(diff(G22, theta) + diff(G22, theta) - diff(G22, theta))
+	C223 = 1/2.*G22*(diff(G22, phi) + diff(G23, theta) - diff(G23, theta))
+	C231 = 1/2.*G22*(diff(G23, r) + diff(G21, phi) - diff(G31, theta))
+	C232 = 1/2.*G22*(diff(G23, theta) + diff(G22, phi) - diff(G32, theta))
+	C233 = 1/2.*G22*(diff(G23, phi) + diff(G23, phi) - diff(G33, theta))
+	C311 = 1/2.*G33*(diff(G31, r) + diff(G31, r) - diff(G11, phi))
+	C312 = 1/2.*G33*(diff(G31, theta) + diff(G32, r) - diff(G12, phi))
+	C313 = 1/2.*G33*(diff(G31, phi) + diff(G33, r) - diff(G13, phi))
+	C321 = 1/2.*G33*(diff(G32, r) + diff(G31, theta) - diff(G21, phi))
+	C322 = 1/2.*G33*(diff(G32, theta) + diff(G32, theta) - diff(G22, phi))
+	C323 = 1/2.*G33*(diff(G32, phi) + diff(G33, theta) - diff(G23, phi))
+	C331 = 1/2.*G33*(diff(G33, r) + diff(G31, phi) - diff(G31, phi))
+	C332 = 1/2.*G33*(diff(G33, theta) + diff(G32, phi) - diff(G32, phi))
+	C333 = 1/2.*G33*(diff(G33, phi) + diff(G33, phi) - diff(G33, phi))
+ 
 
 	# define the Ricci tensor for all configurations
-	R11 = (8*r*M)/(2*r**2 + M**2 * r)**2
+	R11 = 1/2.*G11*(diff(G11, r) + diff(G11, r) - diff(G11, r))
 	R12 = 0
 	R13 = 0
-	R22 = (4*r**3 * M)/(2*r**2 + M**2 * r)**2
+	R21 = 
+	R22 = 
 	R23 = 0
-	R33 = torch.sin(theta)**2 * R22
-	R = 0 # total Ricci
+	R31 = 
+	R32 = 
+	R33 =
 
-	#define source terms
+	# Compute total Ricci scalar
+	R = 
+
+	#define source terms (here vacuum)
 	rho = 0
 	S1 = 0
 	S2 = 0
