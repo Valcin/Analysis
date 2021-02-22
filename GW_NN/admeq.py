@@ -113,16 +113,49 @@ def ADM(K11,K12,K13,K22,K23,K33,K,a,b1,b2,b3,G11,G12,G13,G22,G23,G33, r, theta, 
 	C333 = 1/2.*G33*(diff(G33, phi) + diff(G33, phi) - diff(G33, phi))
  
 
+	# define Ricci iteration
+	R11_1 = diff(C111, r) - diff(C111, r) + C111*C111 + C111*C212 + C111*C313 - C111*C111 - C112*C211 - C113*C311
+	R11_2 = diff(C211, theta) - diff(C212, r) + C211*C121 + C211*C222 + C211*C323 - C211*C112 - C212*C212 - C213*C312
+	R11_3 = diff(C311, phi) - diff(C313, r) + C311*C131 + C311*C232 + C311*C333 - C311*C113 - C312*C213 - C313*C313
+	R12_1 = diff(C112, r) - diff(C111, theta) + C112*C111 + C112*C212 + C112*C313 - C111*C121 - C112*C221 - C113*C321
+	R12_2 = diff(C212, theta) - diff(C212, theta) + C212*C121 + C212*C222 + C212*C323 - C211*C122 - C212*C222 - C213*C322
+	R12_3 = diff(C312, phi) - diff(C313, theta) + C312*C131 + C312*C232 + C312*C333 - C311*C123 - C312*C223 - C313*C323
+	R13_1 = diff(C113, r) - diff(C111, phi) + C113*C111 + C113*C212 + C113*C313 - C111*C131 - C112*C231 - C113*C331
+	R13_2 = diff(C213, theta) - diff(C212, phi) + C213*C121 + C213*C222 + C213*C323 - C211*C132 - C212*C232 - C213*C332
+	R13_3 = diff(C313, phi) - diff(C313, phi) + C313*C131 + C313*C232 + C313*C333 - C311*C133 - C312*C233 - C313*C333
+	
+	R21_1 = diff(C121, r) - diff(C121, r) + C121*C111 + C121*C212 + C121*C313 - C121*C111 - C122*C211 - C123*C311
+	R21_2 = diff(C221, theta) - diff(C222, r) + C221*C121 + C221*C222 + C221*C323 - C221*C112 - C222*C212 - C223*C312
+	R21_3 = diff(C321, phi) - diff(C323, r) + C311*C131 + C321*C232 + C321*C333 - C321*C113 - C322*C213 - C323*C313
+	R22_1 = diff(C122, r) - diff(C121, theta) + C122*C111 + C122*C212 + C122*C313 - C121*C121 - C122*C221 - C123*C321
+	R22_2 = diff(C222, theta) - diff(C222, theta) + C222*C121 + C222*C222 + C222*C323 - C221*C122 - C222*C222 - C223*C322
+	R22_3 = diff(C322, phi) - diff(C323, theta) + C322*C131 + C322*C232 + C322*C333 - C321*C123 - C322*C223 - C323*C323
+	R23_1 = diff(C123, r) - diff(C121, phi) + C123*C111 + C123*C212 + C123*C313 - C121*C131 - C122*C231 - C123*C331
+	R23_2 = diff(C223, theta) - diff(C222, phi) + C223*C121 + C223*C222 + C223*C323 - C221*C132 - C222*C232 - C223*C332
+	R23_3 = diff(C323, phi) - diff(C323, phi) + C323*C131 + C323*C232 + C323*C333 - C321*C133 - C322*C233 - C323*C333
+
+	R31_1 = diff(C131, r) - diff(C131, r) + C131*C111 + C131*C212 + C131*C313 - C131*C111 - C132*C211 - C133*C311
+	R31_2 = diff(C231, theta) - diff(C232, r) + C231*C121 + C231*C222 + C231*C323 - C231*C112 - C232*C212 - C233*C312
+	R31_3 = diff(C331, phi) - diff(C333, r) + C331*C131 + C331*C232 + C331*C333 - C331*C113 - C332*C213 - C333*C313
+	R32_1 = diff(C132, r) - diff(C131, theta) + C132*C111 + C132*C212 + C132*C313 - C131*C121 - C132*C221 - C133*C321
+	R32_2 = diff(C232, theta) - diff(C232, theta) + C232*C121 + C232*C222 + C232*C323 - C231*C122 - C232*C222 - C233*C322
+	R32_3 = diff(C332, phi) - diff(C333, theta) + C332*C131 + C332*C232 + C332*C333 - C331*C123 - C332*C223 - C333*C323
+	R33_1 = diff(C133, r) - diff(C131, phi) + C133*C111 + C133*C212 + C133*C313 - C131*C131 - C132*C231 - C133*C331
+	R33_2 = diff(C233, theta) - diff(C232, phi) + C233*C121 + C233*C222 + C233*C323 - C231*C132 - C232*C232 - C233*C332
+	R33_3 = diff(C333, phi) - diff(C333, phi) + C333*C131 + C333*C232 + C333*C333 - C331*C133 - C332*C233 - C333*C333
+
+	
 	# define the Ricci tensor for all configurations
-	R11 = 1/2.*G11*(diff(G11, r) + diff(G11, r) - diff(G11, r))
-	R12 = 0
-	R13 = 0
-	R21 = 
-	R22 = 
-	R23 = 0
-	R31 = 
-	R32 = 
-	R33 =
+	R11 = R11_1 + R11_2 + R11_3
+	R12 = R12_1 + R12_2 + R12_3
+	R13 = R13_1 + R13_2 + R13_3
+	R21 = R21_1 + R21_2 + R21_3
+	R22 = R22_1 + R22_2 + R22_3
+	R23 = R23_1 + R23_2 + R23_3
+	R31 = R31_1 + R31_2 + R31_3
+	R32 = R32_1 + R32_2 + R32_3
+	R33 = R33_1 + R33_2 + R33_3
+
 
 	# Compute total Ricci scalar
 	R = 
