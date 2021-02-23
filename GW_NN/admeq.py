@@ -176,10 +176,20 @@ def ADM(K11,K12,K13,K22,K23,K33,K,a,b1,b2,b3,G11,G12,G13,G22,G23,G33, r, theta, 
 	S32 = 0
 	S33 = 0
 
-	#define contravariant Ricci tensor
-	K_11 = (1./G11)*()
+	#define contravariant Ricci tensor (assuming only G11, G22 and G33 to modified if different)
+	K_11 = G_11*G_11*K11
+	K_12 = G_11*G_22*K12
+	K_13 = G_11*G_33*K13
+	K_21 = G_22*G_11*K21
+	K_22 = G_22*G_22*K22
+	K_23 = G_22*G_33*K23
+	K_31 = G_33*G_11*K31
+	K_32 = G_33*G_22*K32
+	K_33 = G_33*G_33*K33
 
-	return [R + K**2 - K11*(1./G11)*(1./G11)*K11 - K12*(1./G11)*(1./G22)*K11]
+	return [R + K**2 - K11*k_11 - K12*k_12 - K13*k_13 - K21*k_21 - K22*k_22 - K23*k_23 - K31*k_31 - K32*k_32 - K33*k_33 - 16*np.pi*rho,
+	
+	]
 
 # specify the initial conditions
 init_vals_lv = [IVP(t_0=0.0, x_0=0.0),#K11 
