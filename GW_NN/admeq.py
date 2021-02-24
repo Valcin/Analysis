@@ -217,6 +217,15 @@ def ADM(K11,K12,K13,K22,K23,K33,K,a,b1,b2,b3,G11,G12,G13,G22,G23,G33, r, theta, 
 	D1kder_11 + D2kder_12 + D3kder_13 - 8*np.pi*S1,
 	D1kder_21 + D2kder_22 + D3kder_23 - 8*np.pi*S2,
 	D1kder_31 + D2kder_32 + D3kder_33 - 8*np.pi*S3,
+	-2*a*K11 + (diff(b1,r) - b1*C111 - b2*C211 - b3*C311) + (diff(b1,r) - b1*C111 - b2*C211 - b3*C311) - diff(G11,t),
+	-2*a*K12 + (diff(b2,r) - b1*C112 - b2*C212 - b3*C312) + (diff(b1,theta) - b1*C121 - b2*C221 - b3*C321) - diff(G12,t),
+	-2*a*K13 + (diff(b3,r) - b1*C113 - b2*C213 - b3*C313) + (diff(b1,phi) - b1*C131 - b2*C231 - b3*C331) - diff(G13,t),
+	-2*a*K21 + (diff(b1,theta) - b1*C121 - b2*C221 - b3*C321) + (diff(b2,r) - b1*C112 - b2*C212 - b3*C312) - diff(G21,t),
+	-2*a*K22 + (diff(b2,theta) - b1*C122 - b2*C222 - b3*C322) + (diff(b2,theta) - b1*C122 - b2*C222 - b3*C322) - diff(G22,t),
+	-2*a*K23 + (diff(b3,theta) - b1*C123 - b2*C223 - b3*C323) + (diff(b2,phi) - b1*C132 - b2*C232 - b3*C332) - diff(G23,t),
+	-2*a*K31 + (diff(b1,phi) - b1*C131 - b2*C231 - b3*C331) + (diff(b3,r) - b1*C113 - b2*C213 - b3*C313) - diff(G31,t),
+	-2*a*K32 + (diff(b2,phi) - b1*C132 - b2*C232 - b3*C332) + (diff(b3,theta) - b1*C123 - b2*C223 - b3*C323) - diff(G32,t),
+	-2*a*K33 + (diff(b3,phi) - b1*C133 - b2*C233 - b3*C333) + (diff(b3,phi) - b1*C133 - b2*C233 - b3*C333) - diff(G33,t),
 	]
 
 # specify the initial conditions
