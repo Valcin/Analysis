@@ -70,7 +70,7 @@ some_3d_time_dependent_pde_solution, _ = _solve_3dspatial_temporal(
 
 
 # specify the ODE system and its parameters
-def ADM(K11,K12,K13,K22,K23,K33,K,a,b1,b2,b3,G11,G12,G13,G22,G23,G33, r, theta, phi, t):
+def ADM(K11,K12,K13,K21,K22,K23,K31,K32,K33,K,a,b1,b2,b3,G11,G12,G13,G21,G22,G23,G31,G32,G33, r, theta, phi, t):
 
 	# Underscore in name for contravariant
 
@@ -86,33 +86,33 @@ def ADM(K11,K12,K13,K22,K23,K33,K,a,b1,b2,b3,G11,G12,G13,G22,G23,G33, r, theta, 
 	G_33 = 1./G33
 
 	# define the christoffel coefficients only accounting for G11, G22, G33 (TO MODIFY)
-	C111 = 1/2.*G_11*(diff(G11, r) + diff(G11, r) - diff(G11, r))
-	C112 = 1/2.*G_11*(diff(G11, theta) + diff(G12, r) - diff(G12, r))
-	C113 = 1/2.*G_11*(diff(G13, phi) + diff(G13, r) - diff(G13, r))
-	C121 = 1/2.*G_11*(diff(G12, r) + diff(G11, theta) - diff(G21, r))
-	C122 = 1/2.*G_11*(diff(G12, theta) + diff(G12, theta) - diff(G22, r))
-	C123 = 1/2.*G_11*(diff(G12, phi) + diff(G13, theta) - diff(G23, r))
-	C131 = 1/2.*G_11*(diff(G13, r) + diff(G11, phi) - diff(G31, r))
-	C132 = 1/2.*G_11*(diff(G13, theta) + diff(G12, phi) - diff(G32, r))
-	C133 = 1/2.*G_11*(diff(G13, phi) + diff(G13, phi) - diff(G33, r))
-	C211 = 1/2.*G_22*(diff(G21, r) + diff(G21, r) - diff(G11, theta))
-	C212 = 1/2.*G_22*(diff(G21, theta) + diff(G22, r) - diff(G12, theta))
-	C213 = 1/2.*G_22*(diff(G21, phi) + diff(G23, r) - diff(G13, theta))
-	C221 = 1/2.*G_22*(diff(G22, r) + diff(G21, theta) - diff(G21, theta))
-	C222 = 1/2.*G_22*(diff(G22, theta) + diff(G22, theta) - diff(G22, theta))
-	C223 = 1/2.*G_22*(diff(G22, phi) + diff(G23, theta) - diff(G23, theta))
-	C231 = 1/2.*G_22*(diff(G23, r) + diff(G21, phi) - diff(G31, theta))
-	C232 = 1/2.*G_22*(diff(G23, theta) + diff(G22, phi) - diff(G32, theta))
-	C233 = 1/2.*G_22*(diff(G23, phi) + diff(G23, phi) - diff(G33, theta))
-	C311 = 1/2.*G_33*(diff(G31, r) + diff(G31, r) - diff(G11, phi))
-	C312 = 1/2.*G_33*(diff(G31, theta) + diff(G32, r) - diff(G12, phi))
-	C313 = 1/2.*G_33*(diff(G31, phi) + diff(G33, r) - diff(G13, phi))
-	C321 = 1/2.*G_33*(diff(G32, r) + diff(G31, theta) - diff(G21, phi))
-	C322 = 1/2.*G_33*(diff(G32, theta) + diff(G32, theta) - diff(G22, phi))
-	C323 = 1/2.*G_33*(diff(G32, phi) + diff(G33, theta) - diff(G23, phi))
-	C331 = 1/2.*G_33*(diff(G33, r) + diff(G31, phi) - diff(G31, phi))
-	C332 = 1/2.*G_33*(diff(G33, theta) + diff(G32, phi) - diff(G32, phi))
-	C333 = 1/2.*G_33*(diff(G33, phi) + diff(G33, phi) - diff(G33, phi))
+	C111 = 1/2.*G_11*(diff(G11, r) + diff(G11, r) - diff(G11, r)) + 1/2.*G_12*(diff(G21, r) + diff(G21, r) - diff(G11, theta)) + 1/2.*G_13*(diff(G31, r) + diff(G31, r) - diff(G11, phi))
+	C112 = 1/2.*G_11*(diff(G11, theta) + diff(G12, r) - diff(G12, r)) + 1/2.*G_12*(diff(G21, theta) + diff(G22, r) - diff(G12, theta)) + 1/2.*G_13*(diff(G31, theta) + diff(G32, r) - diff(G12, phi))
+	C113 = 1/2.*G_11*(diff(G11, phi) + diff(G13, r) - diff(G13, r))	+ 1/2.*G_12*(diff(G21, phi) + diff(G23, r) - diff(G13, theta))	+ 1/2.*G_13*(diff(G31, phi) + diff(G33, r) - diff(G13, phi))	
+	C121 = 1/2.*G_11*(diff(G12, r) + diff(G11, theta) - diff(G21, r)) + 1/2.*G_12*(diff(G22, r) + diff(G21, theta) - diff(G21, theta)) + 1/2.*G_13*(diff(G32, r) + diff(G31, theta) - diff(G21, phi))
+	C122 = 1/2.*G_11*(diff(G12, theta) + diff(G12, theta) - diff(G22, r)) + 1/2.*G_12*(diff(G22, theta) + diff(G22, theta) - diff(G22, theta)) + 1/2.*G_13*(diff(G32, theta) + diff(G32, theta) - diff(G22, phi))
+	C123 = 1/2.*G_11*(diff(G12, phi) + diff(G13, theta) - diff(G23, r)) + 1/2.*G_12*(diff(G22, phi) + diff(G23, theta) - diff(G23, theta)) + 1/2.*G_13*(diff(G32, phi) + diff(G33, theta) - diff(G23, phi))
+	C131 = 1/2.*G_11*(diff(G13, r) + diff(G11, phi) - diff(G31, r)) + 1/2.*G_12*(diff(G23, r) + diff(G21, phi) - diff(G31, theta)) + 1/2.*G_13*(diff(G33, r) + diff(G31, phi) - diff(G31, phi))
+	C132 = 1/2.*G_11*(diff(G13, theta) + diff(G12, phi) - diff(G32, r)) + 1/2.*G_12*(diff(G23, theta) + diff(G22, phi) - diff(G32, theta)) + 1/2.*G_13*(diff(G33, theta) + diff(G32, phi) - diff(G32, phi))
+	C133 = 1/2.*G_11*(diff(G13, phi) + diff(G13, phi) - diff(G33, r)) + 1/2.*G_12*(diff(G23, phi) + diff(G23, phi) - diff(G33, theta)) + 1/2.*G_13*(diff(G33, phi) + diff(G33, phi) - diff(G33, phi))
+	C211 = 1/2.*G_21*(diff(G11, r) + diff(G11, r) - diff(G11, r)) + 1/2.*G_22*(diff(G21, r) + diff(G21, r) - diff(G11, theta)) + 1/2.*G_23*(diff(G31, r) + diff(G31, r) - diff(G11, phi))
+	C212 = 1/2.*G_21*(diff(G11, theta) + diff(G12, r) - diff(G12, r)) + 1/2.*G_22*(diff(G21, theta) + diff(G22, r) - diff(G12, theta)) + 1/2.*G_23*(diff(G31, theta) + diff(G32, r) - diff(G12, phi))
+	C213 = 1/2.*G_21*(diff(G11, phi) + diff(G13, r) - diff(G13, r)) + 1/2.*G_22*(diff(G21, phi) + diff(G23, r) - diff(G13, theta)) + 1/2.*G_23*(diff(G31, phi) + diff(G33, r) - diff(G13, phi))
+	C221 = 1/2.*G_21*(diff(G12, r) + diff(G11, theta) - diff(G21, r)) + 1/2.*G_22*(diff(G22, r) + diff(G21, theta) - diff(G21, theta)) + 1/2.*G_23*(diff(G32, r) + diff(G31, theta) - diff(G21, phi))
+	C222 = 1/2.*G_21*(diff(G12, theta) + diff(G12, theta) - diff(G22, r)) + 1/2.*G_22*(diff(G22, theta) + diff(G22, theta) - diff(G22, theta)) + 1/2.*G_23*(diff(G32, theta) + diff(G32, theta) - diff(G22, phi))
+	C223 = 1/2.*G_21*(diff(G12, phi) + diff(G13, theta) - diff(G23, r)) + 1/2.*G_22*(diff(G22, phi) + diff(G23, theta) - diff(G23, theta)) + 1/2.*G_23*(diff(G32, phi) + diff(G33, theta) - diff(G23, phi))
+	C231 = 1/2.*G_21*(diff(G13, r) + diff(G11, phi) - diff(G31, r)) + 1/2.*G_22*(diff(G23, r) + diff(G21, phi) - diff(G31, theta)) + 1/2.*G_23*(diff(G33, r) + diff(G31, phi) - diff(G31, phi))
+	C232 = 1/2.*G_21*(diff(G13, theta) + diff(G12, phi) - diff(G32, r)) + 1/2.*G_22*(diff(G23, theta) + diff(G22, phi) - diff(G32, theta)) + 1/2.*G_32*(diff(G33, theta) + diff(G32, phi) - diff(G32, phi))
+	C233 = 1/2.*G_21*(diff(G13, phi) + diff(G13, phi) - diff(G33, r)) + 1/2.*G_22*(diff(G23, phi) + diff(G23, phi) - diff(G33, theta)) + 1/2.*G_23*(diff(G33, phi) + diff(G33, phi) - diff(G33, phi))
+	C311 = 1/2.*G_31*(diff(G11, r) + diff(G11, r) - diff(G11, r)) + 1/2.*G_32*(diff(G21, r) + diff(G21, r) - diff(G11, theta)) + 1/2.*G_33*(diff(G31, r) + diff(G31, r) - diff(G11, phi))
+	C312 = 1/2.*G_31*(diff(G11, theta) + diff(G12, r) - diff(G12, r)) + 1/2.*G_32*(diff(G21, theta) + diff(G22, r) - diff(G12, theta)) + 1/2.*G_33*(diff(G31, theta) + diff(G32, r) - diff(G12, phi))
+	C313 = 1/2.*G_31*(diff(G11, phi) + diff(G13, r) - diff(G13, r)) + 1/2.*G_32*(diff(G21, phi) + diff(G23, r) - diff(G13, theta)) + 1/2.*G_33*(diff(G31, phi) + diff(G33, r) - diff(G13, phi))
+	C321 = 1/2.*G_31*(diff(G12, r) + diff(G11, theta) - diff(G21, r)) + 1/2.*G_32*(diff(G22, r) + diff(G21, theta) - diff(G21, theta)) + 1/2.*G_33*(diff(G32, r) + diff(G31, theta) - diff(G21, phi))
+	C322 = 1/2.*G_31*(diff(G12, theta) + diff(G12, theta) - diff(G22, r)) + 1/2.*G_32*(diff(G22, theta) + diff(G22, theta) - diff(G22, theta)) + 1/2.*G_33*(diff(G32, theta) + diff(G32, theta) - diff(G22, phi))
+	C323 = 1/2.*G_31*(diff(G12, phi) + diff(G13, theta) - diff(G23, r)) + 1/2.*G_32*(diff(G22, phi) + diff(G23, theta) - diff(G23, theta)) + 1/2.*G_33*(diff(G32, phi) + diff(G33, theta) - diff(G23, phi))
+	C331 = 1/2.*G_31*(diff(G13, r) + diff(G11, phi) - diff(G31, r)) + 1/2.*G_32*(diff(G23, r) + diff(G21, phi) - diff(G31, theta)) + 1/2.*G_33*(diff(G33, r) + diff(G31, phi) - diff(G31, phi))
+	C332 = 1/2.*G_31*(diff(G13, theta) + diff(G12, phi) - diff(G32, r)) + 1/2.*G_32*(diff(G23, theta) + diff(G22, phi) - diff(G32, theta)) + 1/2.*G_33*(diff(G33, theta) + diff(G32, phi) - diff(G32, phi))
+	C333 = 1/2.*G_31*(diff(G13, phi) + diff(G13, phi) - diff(G33, r)) + 1/2.*G_32*(diff(G23, phi) + diff(G23, phi) - diff(G33, theta)) + 1/2.*G_33*(diff(G33, phi) + diff(G33, phi) - diff(G33, phi))
  
 
 	# define Ricci iteration
@@ -189,7 +189,7 @@ def ADM(K11,K12,K13,K22,K23,K33,K,a,b1,b2,b3,G11,G12,G13,G22,G23,G33, r, theta, 
 	K_32 = G_33*G_22*K32
 	K_33 = G_33*G_33*K33
 	
-	#define mixed Ricci tensor (first index up second down) and assuming only G11, G22 and G33 to modified if different
+	#define mixed Ricci tensor (first index up second down)
 	K1_1 = G_11*K11 + G_12*K21 + G_13*K31
 	K1_2 = G_11*K12 + G_12*K22 + G_13*K32
 	K1_3 = G_11*K13 + G_12*K23 + G_13*K33
@@ -276,8 +276,11 @@ def ADM(K11,K12,K13,K22,K23,K33,K,a,b1,b2,b3,G11,G12,G13,G22,G23,G33, r, theta, 
 init_vals_lv = [IVP(t_0=0.0, x_0=0.0),#K11 
 IVP(t_0=0.0, x_0=0.0),  #K12
 IVP(t_0=0.0, x_0=0.0), #K13
+IVP(t_0=0.0, x_0=0.0), #K21
 IVP(t_0=0.0, x_0=0.0), #K22
 IVP(t_0=0.0, x_0=0.0), #K23
+IVP(t_0=0.0, x_0=0.0), #K31
+IVP(t_0=0.0, x_0=0.0), #K32
 IVP(t_0=0.0, x_0=0.0), #K33
 IVP(t_0=0.0, x_0=0.0), #K
 IVP(t_0=0.0, x_0=lambda r: torch.sqrt(1 - 2*M/r)), #a
@@ -287,8 +290,11 @@ IVP(t_0=0.0, x_0=0.0), #b3
 IVP(t_0=0.0, x_0=lambda r: 1./(1 - (2*M)/r)), #G11
 IVP(t_0=0.0, x_0=0.0), #G12
 IVP(t_0=0.0, x_0=0.0), #G13
+IVP(t_0=0.0, x_0=0.0), #G21
 IVP(t_0=0.0, x_0=lambda r: 1./(1 - (2*M)/r) * r**2), #G22
 IVP(t_0=0.0, x_0=0.0), #G23
+IVP(t_0=0.0, x_0=0.0), #G31
+IVP(t_0=0.0, x_0=0.0), #G32
 IVP(t_0=0.0, x_0=lambda r: 1./(1 - (2*M)/r) * r**2 * torch.sin(theta)**2), #G33
 ]
 
