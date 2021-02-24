@@ -72,6 +72,8 @@ some_3d_time_dependent_pde_solution, _ = _solve_3dspatial_temporal(
 # specify the ODE system and its parameters
 def ADM(K11,K12,K13,K22,K23,K33,K,a,b1,b2,b3,G11,G12,G13,G22,G23,G33, r, theta, phi, t):
 
+	# Underscore in name for contravariant
+
 	# define the contravariant metric
 	G_11 = 1./G11
 	G_12 = 1./G12
@@ -187,8 +189,34 @@ def ADM(K11,K12,K13,K22,K23,K33,K,a,b1,b2,b3,G11,G12,G13,G22,G23,G33, r, theta, 
 	K_32 = G_33*G_22*K32
 	K_33 = G_33*G_33*K33
 
-	return [R + K**2 - K11*k_11 - K12*k_12 - K13*k_13 - K21*k_21 - K22*k_22 - K23*k_23 - K31*k_31 - K32*k_32 - K33*k_33 - 16*np.pi*rho,
+	#define k group to derive for the momentum constraint
+	kder_11 = K_11 - G_11*K
+	kder_12 = K_12 - G_12*K
+	kder_13 = K_13 - G_13*K
+	kder_21 = K_21 - G_21*K
+	kder_22 = K_22 - G_22*K
+	kder_23 = K_23 - G_23*K
+	kder_31 = K_31 - G_31*K
+	kder_32 = K_32 - G_32*K
+	kder_33 = K_33 - G_33*K
 	
+	#define covariant derivative of k group
+	D1kder_11 = diff(kder_11, r) + kder_11*C111 + kder_21*C121 + kder_31*C131 + kder_11*C111 + Kder_12*C121 + Kder_13*C131
+	D2kder_12 = diff(kder_12, theta) + kder_12*C112 + kder_22*C122 + kder_32*C132 + kder_11*C212 + Kder_12*C222 + Kder_13*C232
+	D3kder_13 = diff(kder_13, phi) + kder_13*C113 + kder_23*C123 + kder_33*C133 + kder_11*C313 + Kder_12*C323 + Kder_13*C333
+	D1kder_21 = diff(kder_21, r) + kder_11*C211 + kder_21*C221 + kder_31*C231 + kder_21*C111 + Kder_22*C121 + Kder_23*C131
+	D2kder_22 = diff(kder_22, theta) + kder_12*C212 + kder_22*C222 + kder_32*C232 + kder_21*C212 + Kder_22*C222 + Kder_23*C232
+	D3kder_23 = diff(kder_23, phi) + kder_13*C213 + kder_23*C223 + kder_33*C233 + kder_21*C313 + Kder_22*C323 + Kder_23*C333
+	D1kder_31 = diff(kder_31, r) + kder_11*C311 + kder_21*C321 + kder_31*C331 + kder_31*C111 + Kder_32*C121 + Kder_33*C131
+	D2kder_32 = diff(kder_32, theta) + kder_12*C312 + kder_22*C322 + kder_32*C332 + kder_31*C212 + Kder_32*C222 + Kder_33*C232
+	D3kder_33 = diff(kder_33, phi) + kder_13*C313 + kder_23*C323 + kder_33*C333 + kder_31*C313 + Kder_32*C323 + Kder_33*C333
+	
+
+
+	return [R + K**2 - K11*k_11 - K12*k_12 - K13*k_13 - K22*k_22 - K23*k_23 - K33*k_33 - 16*np.pi*rho,
+	D1kder_11 + D2kder_12 + D3kder_13 - 8*np.pi*S1,
+	D1kder_21 + D2kder_22 + D3kder_23 - 8*np.pi*S2,
+	D1kder_31 + D2kder_32 + D3kder_33 - 8*np.pi*S3,
 	]
 
 # specify the initial conditions
