@@ -188,6 +188,17 @@ def ADM(K11,K12,K13,K22,K23,K33,K,a,b1,b2,b3,G11,G12,G13,G22,G23,G33, r, theta, 
 	K_31 = G_33*G_11*K31
 	K_32 = G_33*G_22*K32
 	K_33 = G_33*G_33*K33
+	
+	#define mixed Ricci tensor (first index up second down) and assuming only G11, G22 and G33 to modified if different
+	K1_1 = G_11*K11 + G_12*K21 + G_13*K31
+	K1_2 = G_11*K12 + G_12*K22 + G_13*K32
+	K1_3 = G_11*K13 + G_12*K23 + G_13*K33
+	K2_1 = G_21*K11 + G_22*K21 + G_23*K31
+	K2_2 = G_21*K12 + G_22*K22 + G_23*K32
+	K2_3 = G_21*K13 + G_22*K23 + G_23*K33
+	K3_1 = G_31*K11 + G_32*K21 + G_33*K31
+	K3_2 = G_31*K12 + G_32*K22 + G_33*K32
+	K3_3 = G_31*K13 + G_32*K23 + G_33*K33
 
 	#define k group to derive for the momentum constraint
 	kder_11 = K_11 - G_11*K
@@ -212,7 +223,30 @@ def ADM(K11,K12,K13,K22,K23,K33,K,a,b1,b2,b3,G11,G12,G13,G22,G23,G33, r, theta, 
 	D3kder_33 = diff(kder_33, phi) + kder_13*C313 + kder_23*C323 + kder_33*C333 + kder_31*C313 + Kder_32*C323 + Kder_33*C333
 	
 
+	# define lapse second covariant derivative
+	DDa_11 = diff(diff(a,r),r) - diff(a,r)*C111 - diff(a,theta)*C211 - diff(a,phi)*C311
+	DDa_12 = diff(diff(a,theta),r) - diff(a,r)*C112 - diff(a,theta)*C212 - diff(a,phi)*C312
+	DDa_13 = diff(diff(a,phi),r) - diff(a,r)*C113 - diff(a,theta)*C213 - diff(a,phi)*C313
+	DDa_21 = diff(diff(a,r),theta) - diff(a,r)*C121 - diff(a,theta)*C221 - diff(a,phi)*C321
+	DDa_22 = diff(diff(a,theta),theta) - diff(a,r)*C122 - diff(a,theta)*C222 - diff(a,phi)*C322
+	DDa_23 = diff(diff(a,phi),theta) - diff(a,r)*C123 - diff(a,theta)*C223 - diff(a,phi)*C323
+	DDa_31 = diff(diff(a,r),phi) - diff(a,r)*C131 - diff(a,theta)*C231 - diff(a,phi)*C331
+	DDa_32 = diff(diff(a,theta),phi) - diff(a,r)*C132 - diff(a,theta)*C232 - diff(a,phi)*C332
+	DDa_33 = diff(diff(a,phi),phi) - diff(a,r)*C133 - diff(a,theta)*C233 - diff(a,phi)*C333
+	
+	# define source groupe term in curvature evolution equation
+	Stot11 = S11 - 1/2.*G11*(S-rho)
+	Stot12 = S12 - 1/2.*G12*(S-rho)
+	Stot13 = S13 - 1/2.*G13*(S-rho)
+	Stot21 = S21 - 1/2.*G21*(S-rho)
+	Stot22 = S22 - 1/2.*G22*(S-rho)
+	Stot23 = S23 - 1/2.*G23*(S-rho)
+	Stot31 = S31 - 1/2.*G31*(S-rho)
+	Stot32 = S32 - 1/2.*G32*(S-rho)
+	Stot33 = S33 - 1/2.*G33*(S-rho)
 
+
+	# written only for the 6 independent terms
 	return [R + K**2 - K11*k_11 - K12*k_12 - K13*k_13 - K22*k_22 - K23*k_23 - K33*k_33 - 16*np.pi*rho,
 	D1kder_11 + D2kder_12 + D3kder_13 - 8*np.pi*S1,
 	D1kder_21 + D2kder_22 + D3kder_23 - 8*np.pi*S2,
@@ -226,6 +260,16 @@ def ADM(K11,K12,K13,K22,K23,K33,K,a,b1,b2,b3,G11,G12,G13,G22,G23,G33, r, theta, 
 	-2*a*K31 + (diff(b1,phi) - b1*C131 - b2*C231 - b3*C331) + (diff(b3,r) - b1*C113 - b2*C213 - b3*C313) - diff(G31,t),
 	-2*a*K32 + (diff(b2,phi) - b1*C132 - b2*C232 - b3*C332) + (diff(b3,theta) - b1*C123 - b2*C223 - b3*C323) - diff(G32,t),
 	-2*a*K33 + (diff(b3,phi) - b1*C133 - b2*C233 - b3*C333) + (diff(b3,phi) - b1*C133 - b2*C233 - b3*C333) - diff(G33,t),
+	a*(R11 - 2*K11*K1_1 - 2*K12*K2_1 - 2*K13*K3_1 + K*K11) - DDa_11 - 8*np.pi*a*Stot11 + b1*diff(K11,r) + b2*diff(K11,theta) + b3*diff(K11,phi) + K11*diff(b1,r) + K12*diff(b2,r) + K13*diff(b3,r) + K11*diff(b1,r) + K21*diff(b2,r) + K31*diff(b3,r) - diff(K11,t),
+	a*(R12 - 2*K11*K1_2 - 2*K12*K2_2 - 2*K13*K3_2 + K*K12) - DDa_12 - 8*np.pi*a*Stot12 + b1*diff(K12,r) + b2*diff(K12,theta) + b3*diff(K12,phi) + K11*diff(b1,theta) + K12*diff(b2,theta) + K13*diff(b3,theta) + K12*diff(b1,r) + K22*diff(b2,r) + K32*diff(b3,r) - diff(K12,t),
+	a*(R13 - 2*K11*K1_3 - 2*K12*K2_3 - 2*K13*K3_3 + K*K13) - DDa_13 - 8*np.pi*a*Stot13 + b1*diff(K13,r) + b2*diff(K13,theta) + b3*diff(K13,phi) + K11*diff(b1,phi) + K12*diff(b2,phi) + K13*diff(b3,phi) + K13*diff(b1,r) + K23*diff(b2,r) + K33*diff(b3,r) - diff(K13,t),
+	a*(R21 - 2*K21*K1_1 - 2*K22*K2_1 - 2*K23*K3_1 + K*K11) - DDa_21 - 8*np.pi*a*Stot21 + b1*diff(K21,r) + b2*diff(K21,theta) + b3*diff(K21,phi) + K21*diff(b1,r) + K22*diff(b2,r) + K23*diff(b3,r) + K11*diff(b1,theta) + K21*diff(b2,theta) + K31*diff(b3,theta) - diff(K21,t),
+	a*(R22 - 2*K21*K1_2 - 2*K22*K2_2 - 2*K23*K3_2 + K*K22) - DDa_22 - 8*np.pi*a*Stot22 + b1*diff(K22,r) + b2*diff(K22,theta) + b3*diff(K22,phi) + K21*diff(b1,theta) + K22*diff(b2,theta) + K23*diff(b3,theta) + K12*diff(b1,theta) + K22*diff(b2,theta) + K32*diff(b3,theta) - diff(K22,t),
+	a*(R23 - 2*K21*K1_3 - 2*K22*K2_3 - 2*K23*K3_3 + K*K23) - DDa_23 - 8*np.pi*a*Stot23 + b1*diff(K23,r) + b2*diff(K23,theta) + b3*diff(K23,phi) + K21*diff(b1,phi) + K22*diff(b2,phi) + K23*diff(b3,phi) + K13*diff(b1,theta) + K23*diff(b2,theta) + K33*diff(b3,theta) - diff(K23,t),
+	a*(R31 - 2*K31*K1_1 - 2*K32*K2_1 - 2*K33*K3_1 + K*K31) - DDa_31 - 8*np.pi*a*Stot31 + b1*diff(K31,r) + b2*diff(K31,theta) + b3*diff(K31,phi) + K31*diff(b1,r) + K32*diff(b2,r) + K33*diff(b3,r) + K11*diff(b1,phi) + K21*diff(b2,phi) + K31*diff(b3,phi) - diff(K31,t),
+	a*(R32 - 2*K31*K1_2 - 2*K32*K2_2 - 2*K33*K3_2 + K*K32) - DDa_32 - 8*np.pi*a*Stot32 + b1*diff(K32,r) + b2*diff(K32,theta) + b3*diff(K32,phi) + K31*diff(b1,theta) + K32*diff(b2,theta) + K33*diff(b3,theta) + K12*diff(b1,phi) + K22*diff(b2,phi) + K32*diff(b3,phi) - diff(K32,t),
+	a*(R33 - 2*K31*K1_3 - 2*K32*K2_3 - 2*K33*K3_3 + K*K33) - DDa_33 - 8*np.pi*a*Stot33 + b1*diff(K33,r) + b2*diff(K33,theta) + b3*diff(K33,phi) + K31*diff(b1,phi) + K32*diff(b2,phi) + K33*diff(b3,phi) + K13*diff(b1,phi) + K23*diff(b2,phi) + K33*diff(b3,phi) - diff(K33,t),
+	G_11*K11 + G_22*K22 + G_33*K33 - K
 	]
 
 # specify the initial conditions
