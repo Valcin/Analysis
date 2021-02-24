@@ -247,7 +247,7 @@ def ADM(K11,K12,K13,K22,K23,K33,K,a,b1,b2,b3,G11,G12,G13,G22,G23,G33, r, theta, 
 
 
 	# written only for the 6 independent terms
-	return [R + K**2 - K11*k_11 - K12*k_12 - K13*k_13 - K22*k_22 - K23*k_23 - K33*k_33 - 16*np.pi*rho,
+	return [R + K**2 - K11*k_11 - K12*k_12 - K13*k_13 - K21*k_21 - K22*k_22 - K23*k_23 - K31*k_31 - K32*k_32 - K33*k_33 - 16*np.pi*rho,
 	D1kder_11 + D2kder_12 + D3kder_13 - 8*np.pi*S1,
 	D1kder_21 + D2kder_22 + D3kder_23 - 8*np.pi*S2,
 	D1kder_31 + D2kder_32 + D3kder_33 - 8*np.pi*S3,
