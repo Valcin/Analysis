@@ -178,16 +178,17 @@ def ADM(K11,K12,K13,K21,K22,K23,K31,K32,K33,K,a,b1,b2,b3,G11,G12,G13,G21,G22,G23
 	S32 = 0
 	S33 = 0
 
-	#define contravariant Ricci tensor (assuming only G11, G22 and G33 to modified if different)
-	K_11 = G_11*G_11*K11
-	K_12 = G_11*G_22*K12
-	K_13 = G_11*G_33*K13
-	K_21 = G_22*G_11*K21
-	K_22 = G_22*G_22*K22
-	K_23 = G_22*G_33*K23
-	K_31 = G_33*G_11*K31
-	K_32 = G_33*G_22*K32
-	K_33 = G_33*G_33*K33
+	#define contravariant Ricci tensor
+	K_11 = G_11*(G_11*K11 + G_12*K12 + G_13*K13) + G_12*(G_11*K21 + G_12*K22 + G_13*K23) + G_13*(G_11*K31 + G_12*K32 + G_13*K33)
+	K_12 = G_11*(G_21*K11 + G_22*K12 + G_23*K13) + G_12*(G_21*K21 + G_22*K22 + G_23*K23) + G_13*(G_21*K31 + G_22*K32 + G_23*K33)
+	K_13 = G_11*(G_31*K11 + G_32*K12 + G_33*K13) + G_12*(G_31*K21 + G_32*K22 + G_33*K23) + G_13*(G_31*K31 + G_32*K32 + G_33*K33)
+	K_21 = G_21*(G_11*K11 + G_12*K12 + G_13*K13) + G_22*(G_11*K21 + G_12*K22 + G_13*K23) + G_23*(G_11*K31 + G_12*K32 + G_13*K33)
+	K_22 = G_21*(G_21*K11 + G_22*K12 + G_23*K13) + G_22*(G_21*K21 + G_22*K22 + G_23*K23) + G_23*(G_21*K31 + G_22*K32 + G_23*K33)
+	K_23 = G_21*(G_31*K11 + G_32*K12 + G_33*K13) + G_22*(G_31*K21 + G_32*K22 + G_33*K23) + G_23*(G_31*K31 + G_32*K32 + G_33*K33)
+	K_31 = G_31*(G_11*K11 + G_12*K12 + G_13*K13) + G_32*(G_11*K21 + G_12*K22 + G_13*K23) + G_33*(G_11*K31 + G_12*K32 + G_13*K33)
+	K_32 = G_31*(G_21*K11 + G_22*K12 + G_23*K13) + G_32*(G_21*K21 + G_22*K22 + G_23*K23) + G_33*(G_21*K31 + G_22*K32 + G_23*K33)
+	K_33 = G_31*(G_31*K11 + G_32*K12 + G_33*K13) + G_32*(G_31*K21 + G_32*K22 + G_33*K23) + G_33*(G_31*K31 + G_32*K32 + G_33*K33)
+
 	
 	#define mixed Ricci tensor (first index up second down)
 	K1_1 = G_11*K11 + G_12*K21 + G_13*K31
@@ -300,11 +301,33 @@ IVP(t_0=0.0, x_0=lambda r: 1./(1 - (2*M)/r) * r**2 * torch.sin(theta)**2), #G33
 
 # specify the network to be used to approximate each dependent variable
 nets_lv = [FCNN(n_hidden_units=32, n_hidden_layers=1, actv=SinActv),
-FCNN(n_hidden_units=32, n_hidden_layers=1, actv=SinActv),FCNN(n_hidden_units=32, n_hidden_layers=1, actv=SinActv)]
+FCNN(n_hidden_units=32, n_hidden_layers=1, actv=SinActv),
+FCNN(n_hidden_units=32, n_hidden_layers=1, actv=SinActv),
+FCNN(n_hidden_units=32, n_hidden_layers=1, actv=SinActv),
+FCNN(n_hidden_units=32, n_hidden_layers=1, actv=SinActv),
+FCNN(n_hidden_units=32, n_hidden_layers=1, actv=SinActv),
+FCNN(n_hidden_units=32, n_hidden_layers=1, actv=SinActv),
+FCNN(n_hidden_units=32, n_hidden_layers=1, actv=SinActv),
+FCNN(n_hidden_units=32, n_hidden_layers=1, actv=SinActv),
+FCNN(n_hidden_units=32, n_hidden_layers=1, actv=SinActv),
+FCNN(n_hidden_units=32, n_hidden_layers=1, actv=SinActv),
+FCNN(n_hidden_units=32, n_hidden_layers=1, actv=SinActv),
+FCNN(n_hidden_units=32, n_hidden_layers=1, actv=SinActv),
+FCNN(n_hidden_units=32, n_hidden_layers=1, actv=SinActv),
+FCNN(n_hidden_units=32, n_hidden_layers=1, actv=SinActv),
+FCNN(n_hidden_units=32, n_hidden_layers=1, actv=SinActv),
+FCNN(n_hidden_units=32, n_hidden_layers=1, actv=SinActv),
+FCNN(n_hidden_units=32, n_hidden_layers=1, actv=SinActv),
+FCNN(n_hidden_units=32, n_hidden_layers=1, actv=SinActv),
+FCNN(n_hidden_units=32, n_hidden_layers=1, actv=SinActv),
+FCNN(n_hidden_units=32, n_hidden_layers=1, actv=SinActv),
+FCNN(n_hidden_units=32, n_hidden_layers=1, actv=SinActv),
+FCNN(n_hidden_units=32, n_hidden_layers=1, actv=SinActv)
+]
 
 # solve the ODE system
 #~ solution_lv, _ = solve_system(ode_system=cov, conditions=init_vals_lv, t_min=0.0, t_max=12,
 #~ nets=nets_lv, max_epochs=48000, monitor=Monitor(t_min=0.0, t_max=12, check_every=100))
-solution_lv, _ = solve2D_system(pde_system=adm, conditions=init_vals_lv, xy_min=(0, 0), xy_max=(12, 12), max_epochs=2000)
+solution_lv, _ = solve2D_system(pde_system=ADM, conditions=init_vals_lv, xy_min=(0, 0), xy_max=(12, 12), max_epochs=2000)
 
 
