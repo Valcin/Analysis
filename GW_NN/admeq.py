@@ -2,11 +2,12 @@ import torch
 from torch import nn, optim
 from neurodiffeq import diff
 from neurodiffeq.networks import FCNN
-from neurodiffeq.temporal import generator_3dspatial_body, generator_3dspatial_surface, generator_temporal
-from neurodiffeq.temporal import FirstOrderInitialCondition, BoundaryCondition
-from neurodiffeq.temporal import SingleNetworkApproximator3DSpatialTemporal
+from ncf import generator_3dspatial_body, generator_3dspatial_surface
+from ncf import _solve_3dspatial_temporal
+from ncf import SingleNetworkApproximator3DSpatialTemporal
+from neurodiffeq.temporal import FirstOrderInitialCondition, BoundaryCondition, generator_temporal
 from neurodiffeq.temporal import MonitorMinimal
-from neurodiffeq.temporal import _solve_3dspatial_temporal
+
 
 
 ########################################################################

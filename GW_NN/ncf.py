@@ -15,7 +15,7 @@ class SingleNetworkApproximator3DSpatialTemporal(Approximator):
         zz = torch.unsqueeze(zz, dim=1)
         tt = torch.unsqueeze(tt, dim=1)
         xyzt = torch.cat((xx, yy, zz, tt), dim=1)
-        uu_raw = self.single_network(xyzt)
+        # ~uu_raw = self.single_network(xyzt)
         if self.u0dot is None:
             uu = torch.exp(-tt) * self.u0(xx, yy, zz) + (1 - torch.exp(-tt)) * self.single_network(xyzt)
         else:
@@ -31,13 +31,24 @@ class SingleNetworkApproximator3DSpatialTemporal(Approximator):
     def calculate_loss(self, xx, yy, zz, tt, x, y, z, t):
         uu = self.__call__(xx, yy, zz, tt)
         equation_mse = torch.mean(self.pde(uu, xx, yy, zz, tt)**2)
-        return equation_mse  # TODO plus the regularization term (use the information carried by self.boundary_conditions)
+        boundary_mse = self.boundary_strictness * sum(self._boundary_mse(t, bc) for bc in self.boundary_conditions)
+        return equation_mse + boundary_mse
 
-    def calculate_metrics(self, xx, yy, zz, tt, metrics):
-        uu = self.__call__(xx, yy, zz)
+    def _boundary_mse(self, t, bc):
+        x, y, z = next(bc.points_generator)
+
+        xx, tt = _cartesian_prod_dims(x, t, x_grad=True, t_grad=False)
+        yy, tt = _cartesian_prod_dims(y, t, x_grad=True, t_grad=False)
+        zz, tt = _cartesian_prod_dims(z, t, x_grad=True, t_grad=False)
+        uu = self.__call__(xx, yy, zz, tt)
+        return torch.mean(bc.form(uu, xx, yy, zz, tt) ** 2)
+
+
+    def calculate_metrics(self, xx, yy, zz, tt, x, y, z, t, metrics):
+        uu = self.__call__(xx, yy, zz, tt)
 
         return {
-            metric_name: metric_func(*uu, xx, yy, zz)
+            metric_name: metric_func(uu, xx, yy, zz, tt)
             for metric_name, metric_func in metrics.items()
         }
 
