@@ -115,6 +115,7 @@ def _valid_3dspatial_temporal(valid_generator_spatial, valid_generator_temporal,
         epoch_metrics[k] = v.item()
 
     return epoch_loss, epoch_metrics
+
 ########################################################################
 # A generator for generating 3D points in the problem domain: yield (xx, yy, zz) where xx, yy, zz are 1-D tensors
 def generator_3dspatial_body(...):
