@@ -100,6 +100,21 @@ def _train_3dspatial_temporal(train_generator_spatial, train_generator_temporal,
 
     return epoch_loss, epoch_metrics
 
+
+def _valid_3dspatial_temporal(valid_generator_spatial, valid_generator_temporal, approximator, metrics):
+    x, y, z = next(valid_generator_spatial)
+    t = next(valid_generator_temporal)
+    xx, tt = _cartesian_prod_dims(x, t)
+    yy, tt = _cartesian_prod_dims(y, t)
+    zz, tt = _cartesian_prod_dims(z, t)
+
+    epoch_loss = approximator.calculate_loss(xx, yy, zz, tt, x, y, z, t).item()
+
+    epoch_metrics = approximator.calculate_metrics(xx, yy, zz, tt, x, y, z, t, metrics)
+    for k, v in epoch_metrics.items():
+        epoch_metrics[k] = v.item()
+
+    return epoch_loss, epoch_metrics
 ########################################################################
 # A generator for generating 3D points in the problem domain: yield (xx, yy, zz) where xx, yy, zz are 1-D tensors
 def generator_3dspatial_body(...):
@@ -112,13 +127,4 @@ def generator_3dspatial_surface(...):
 
 
 
-# the logic for training one epoch
-# should be similar to `_valid_2dspatial_temporal`
-def _valid_3dspatial_temporal(valid_generator_spatial, valid_generator_temporal, approximator, metrics):
 
-    # generate x, y, z dimensions from train_generator_spatial
-    # generate time slices from train_generator_temporal
-    # Do a cartesian product of the above two to make the training set
-    # calculate the loss custom metrics of this epoch
-
-    return epoch_loss, epoch_metrics
