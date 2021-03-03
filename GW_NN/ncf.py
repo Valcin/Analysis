@@ -53,15 +53,6 @@ class SingleNetworkApproximator3DSpatialTemporal(Approximator):
         }
 
 
-# A generator for generating 3D points in the problem domain: yield (xx, yy, zz) where xx, yy, zz are 1-D tensors
-def generator_3dspatial_body(...):
-    pass
-
-# A generator for generating 3D points on the boundary: yield (xx, yy, zz) where xx, yy, zz are 1-D tensors
-def generator_3dspatial_surface(...):
-    pass
-
-
 def _solve_3dspatial_temporal(
     train_generator_spatial, train_generator_temporal, valid_generator_spatial, valid_generator_temporal,
     approximator, optimizer, batch_size, max_epochs, shuffle, metrics, monitor
@@ -72,19 +63,53 @@ def _solve_3dspatial_temporal(
         train_routine=_train_3dspatial_temporal, valid_routine=_valid_3dspatial_temporal
     )
 
-
-# the logic for training one epoch
-# should be similar to `_train_2dspatial_temporal`
 def _train_3dspatial_temporal(train_generator_spatial, train_generator_temporal, approximator, optimizer, metrics, shuffle, batch_size):
-    
-    # generate x, y, z dimensions from train_generator_spatial
-    # generate time slices from train_generator_temporal
-    # Do a cartesian product of the above two to make the training set
-    # pass the training points to the neural network in batches
-    # for each batch calculate the loss and update the weights
-    # calculate the loss custom metrics of this epoch
+    x, y, z = next(train_generator_spatial)
+    t = next(train_generator_temporal)
+    xx, tt = _cartesian_prod_dims(x, t)
+    yy, tt = _cartesian_prod_dims(y, t)
+    zz, tt = _cartesian_prod_dims(z, t)
+    training_set_size = len(xx)
+    idx = torch.randperm(training_set_size) if shuffle else torch.arange(training_set_size)
+
+    batch_start, batch_end = 0, batch_size
+    while batch_start < training_set_size:
+        if batch_end > training_set_size:
+            batch_end = training_set_size
+        batch_idx = idx[batch_start:batch_end]
+        batch_xx = xx[batch_idx]
+        batch_yy = yy[batch_idx]
+        batch_zz = zz[batch_idx]
+        batch_tt = tt[batch_idx]
+
+        batch_loss = approximator.calculate_loss(batch_xx, batch_yy, batch_zz, batch_tt, x, y, z, t)
+
+        optimizer.zero_grad()
+        batch_loss.backward()
+        optimizer.step()
+
+        batch_start += batch_size
+        batch_end += batch_size
+
+    # TODO: this can give us the real loss after an epoch, but can be very memory intensive
+    epoch_loss = approximator.calculate_loss(xx, yy, zz, tt, x, y, z, t).item()
+
+    epoch_metrics = approximator.calculate_metrics(xx, yy, zz, tt, x, y, z, t, metrics)
+    for k, v in epoch_metrics.items():
+        epoch_metrics[k] = v.item()
 
     return epoch_loss, epoch_metrics
+
+########################################################################
+# A generator for generating 3D points in the problem domain: yield (xx, yy, zz) where xx, yy, zz are 1-D tensors
+def generator_3dspatial_body(...):
+    pass
+
+# A generator for generating 3D points on the boundary: yield (xx, yy, zz) where xx, yy, zz are 1-D tensors
+def generator_3dspatial_surface(...):
+    pass
+
+
 
 
 # the logic for training one epoch
