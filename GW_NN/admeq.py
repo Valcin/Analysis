@@ -2,7 +2,7 @@ import torch
 from torch import nn, optim
 from neurodiffeq import diff
 from neurodiffeq.networks import FCNN
-from ncf import generator_3dspatial_body, generator_3dspatial_surface
+# ~from ncf import generator_3dspatial_body, generator_3dspatial_surface
 from ncf import _solve_3dspatial_temporal
 from ncf import SingleNetworkApproximator3DSpatialTemporal
 from neurodiffeq.temporal import FirstOrderInitialCondition, BoundaryCondition, generator_temporal
@@ -228,7 +228,7 @@ def ADM(K11,K12,K13,K21,K22,K23,K31,K32,K33,K,a,b1,b2,b3,G11,G12,G13,G21,G22,G23
 #-----------------------------------------------------------------------
 
 # specify the initial conditions
-init_vals_lv = [IVP(t_0=0.0, x_0=0.0),#K11 
+init_vals = [IVP(t_0=0.0, x_0=0.0),#K11 
 IVP(t_0=0.0, x_0=0.0),  #K12
 IVP(t_0=0.0, x_0=0.0), #K13
 IVP(t_0=0.0, x_0=0.0), #K21
@@ -252,14 +252,6 @@ IVP(t_0=0.0, x_0=0.0), #G31
 IVP(t_0=0.0, x_0=0.0), #G32
 IVP(t_0=0.0, x_0=lambda x: 1./(1 - (2*M)/x) * x**2 * torch.sin(y)**2), #G33
 ]
-
-
-
-# solve the ODE system
-#~ solution_lv, _ = solve_system(ode_system=cov, conditions=init_vals_lv, t_min=0.0, t_max=12,
-#~ nets=nets_lv, max_epochs=48000, monitor=Monitor(t_min=0.0, t_max=12, check_every=100))
-solution_lv, _ = solve2D_system(pde_system=ADM, conditions=init_vals_lv, xy_min=(0, 0), xy_max=(12, 12), max_epochs=2000)
-
 
 # e.g. make u(x, y, z, t) = x^2 +y^2 + z^2 at the boundary
 # ~boundary_surface_1 = BoundaryCondition(
