@@ -175,6 +175,83 @@ def _valid_3dspatial_temporal(valid_generator_spatial, valid_generator_temporal,
 
     return epoch_loss, epoch_metrics
 
+
+def generator_3dspatial_segment(size, start, end, random=True):
+    """Return a generator that generates 3D points in a line segment.
+
+    :param size:
+        Number of points to generated when `__next__` is invoked.
+    :type size: int
+    :param x_min:
+        Lower bound of x.
+    :type x_min: float
+    :param x_max:
+        Upper bound of x.
+    :type x_max: float
+    :param y_min:
+        Lower bound of y.
+    :type y_min: float
+    :param y_max:
+        Upper bound of y.
+    :param z_min:
+        Lower bound of z.
+    :type z_min: float
+    :param z_max:
+        Upper bound of z.
+    :type z_max: float
+    :param random:
+
+        - If set to False, then return a grid where the points are equally spaced in the x,y and z dimension.
+        - If set to True then generate points randomly.
+
+        Defaults to True.
+    :type random: bool
+    """
+    x1, y1, z1 = start
+    x2, y2, z2 = end
+    step = 1./size
+    center = torch.linspace(0. + 0.5*step, 1. - 0.5*step, size)
+    noise_lo = -step*0.5
+    while True:
+        if random:
+            noise = step*torch.rand(size) + noise_lo
+            center = center + noise
+        yield x1 + (x2-x1)*center, y1 + (y2-y1)*center, z1 + (z2-z1)*center
+
+
+def generator_3dspatial_cube(size, x_min, x_max, y_min, y_max, z_min, z_max, random=True):
+    """Return a generator that generates 3D points in a cube.
+
+    :param size:
+        Number of points to generated when `__next__` is invoked.
+    :type size: int
+    :param start:
+        The starting point of the line segment.
+    :type start: tuple[float, float]
+    :param end:
+        The ending point of the line segment.
+    :type end: tuple[float, float]
+    :param random:
+        - If set to False, then return eqally spaced points range from `start` to `end`.
+        - If set to Rrue then generate points randomly.
+
+        Defaults to True.
+    :type random: bool
+    """
+    x_size, y_size, z_size = size
+    x_generator = generator_1dspatial(x_size, x_min, x_max, random)
+    y_generator = generator_1dspatial(y_size, y_min, y_max, random)
+    z_generator = generator_1dspatial(z_size, z_min, z_max, random)
+    while True:
+        x = next(x_generator)
+        y = next(y_generator)
+        z = next(z_generator)
+        xyz = torch.cartesian_prod(x, y, z)
+        xx = torch.squeeze(xyz[:, 0])
+        yy = torch.squeeze(xyz[:, 1])
+        zz = torch.squeeze(xyz[:, 2])
+        yield xx, yy, zz
+
 ########################################################################
 # A generator for generating 3D points in the problem domain: yield (xx, yy, zz) where xx, yy, zz are 1-D tensors
 # ~def generator_3dspatial_body(...):

@@ -6,8 +6,7 @@ from neurodiffeq.networks import FCNN
 from ncf import _solve_3dspatial_temporal
 from ncf import SingleNetworkApproximator3DSpatialTemporal
 from neurodiffeq.temporal import FirstOrderInitialCondition, BoundaryCondition, generator_temporal
-from neurodiffeq.temporal import MonitorMinimal
-
+from neurodiffeq.temporal import MonitorMinimal, generator_1dspatial
 
 
 ########################################################################
@@ -268,30 +267,8 @@ IVP(t_0=0.0, x_0=lambda x: 1./(1 - (2*M)/x) * x**2 * torch.sin(y)**2), #G33
 # ~)
 
 # specify the network to be used to approximate each dependent variable
-fcnn = [FCNN(n_hidden_units=32, n_hidden_layers=2, actv=SinActv),
-FCNN(n_hidden_units=32, n_hidden_layers=2, actv=SinActv),
-FCNN(n_hidden_units=32, n_hidden_layers=2, actv=SinActv),
-FCNN(n_hidden_units=32, n_hidden_layers=2, actv=SinActv),
-FCNN(n_hidden_units=32, n_hidden_layers=2, actv=SinActv),
-FCNN(n_hidden_units=32, n_hidden_layers=2, actv=SinActv),
-FCNN(n_hidden_units=32, n_hidden_layers=2, actv=SinActv),
-FCNN(n_hidden_units=32, n_hidden_layers=2, actv=SinActv),
-FCNN(n_hidden_units=32, n_hidden_layers=2, actv=SinActv),
-FCNN(n_hidden_units=32, n_hidden_layers=2, actv=SinActv),
-FCNN(n_hidden_units=32, n_hidden_layers=2, actv=SinActv),
-FCNN(n_hidden_units=32, n_hidden_layers=2, actv=SinActv),
-FCNN(n_hidden_units=32, n_hidden_layers=2, actv=SinActv),
-FCNN(n_hidden_units=32, n_hidden_layers=2, actv=SinActv),
-FCNN(n_hidden_units=32, n_hidden_layers=2, actv=SinActv),
-FCNN(n_hidden_units=32, n_hidden_layers=2, actv=SinActv),
-FCNN(n_hidden_units=32, n_hidden_layers=2, actv=SinActv),
-FCNN(n_hidden_units=32, n_hidden_layers=2, actv=SinActv),
-FCNN(n_hidden_units=32, n_hidden_layers=2, actv=SinActv),
-FCNN(n_hidden_units=32, n_hidden_layers=2, actv=SinActv),
-FCNN(n_hidden_units=32, n_hidden_layers=2, actv=SinActv),
-FCNN(n_hidden_units=32, n_hidden_layers=2, actv=SinActv),
-FCNN(n_hidden_units=32, n_hidden_layers=2, actv=SinActv)
-]
+# ~fcnn = [FCNN(n_hidden_units=32, n_hidden_layers=2, actv=SinActv),
+# ~FCNN(n_hidden_units=32, n_hidden_layers=2, actv=SinActv)]
 
 
 fcnn_approximator = SingleNetworkApproximator3DSpatialTemporal(
@@ -307,9 +284,9 @@ fcnn_approximator = SingleNetworkApproximator3DSpatialTemporal(
 adam = optim.Adam(fcnn_approximator.parameters(), lr=0.001)
 
 train_gen_spatial = generator_3dspatial_body(...)
-train_gen_temporal = generator_temporal(...)
+train_gen_temporal = generator_temporal(size=32, t_min=T_MIN, t_max=T_MAX)
 valid_gen_spatial = generator_3dspatial_body(...)
-valid_gen_temporal = generator_temporal(...)
+valid_gen_temporal = generator_temporal(size=16, t_min=T_MIN, t_max=T_MAX, random=False)
 
 some_3d_time_dependent_pde_solution, _ = _solve_3dspatial_temporal(
     train_generator_spatial=train_gen_spatial,
