@@ -252,33 +252,24 @@ IVP(t_0=0.0, x_0=0.0), #G32
 IVP(t_0=0.0, x_0=lambda x: 1./(1 - (2*M)/x) * x**2 * torch.sin(y)**2), #G33
 ]
 
-# e.g. make u(x, y, z, t) = x^2 +y^2 + z^2 at the boundary
-# ~boundary_surface_1 = BoundaryCondition(
-    # ~form=lambda u, x, y, z: u - (x**2 + y**2 + z**2),
-    # ~points_generator=generator_3dspatial_surface( ... )
-# ~)
-# ~boundary_surface_2 = BoundaryCondition(
-    # ~form=lambda u, x, y, z: u - (x**2 + y**2 + z**2),
-    # ~points_generator=generator_3dspatial_surface( ... )
-# ~)
-# ~boundary_surface_3 = BoundaryCondition(
-    # ~form=lambda u, x, y, z: u - (x**2 + y**2 + z**2),
-    # ~points_generator=generator_3dspatial_surface( ... )
-# ~)
-
 # specify the network to be used to approximate each dependent variable
 # ~fcnn = [FCNN(n_hidden_units=32, n_hidden_layers=2, actv=SinActv),
 # ~FCNN(n_hidden_units=32, n_hidden_layers=2, actv=SinActv)]
 
 
+#n_input is the number of independent variables
+#n_output is the number of dependent variables
+fcnn = FCNN(
+    n_input_units=4,
+    n_output_units=23,
+    n_hidden_units=64,
+    n_hidden_layers=2,
+    actv=nn.Tanh
+)
+
 fcnn_approximator = SingleNetworkApproximator3DSpatialTemporal(
     single_network=fcnn,
-    pde=some_3d_time_dependent_pde,
-    boundary_conditions=[
-        boundary_surface_1,
-        boundary_surface_2,
-        boundary_surface_3,
-    ]
+    pde=some_3d_time_dependent_pde
 )
 
 adam = optim.Adam(fcnn_approximator.parameters(), lr=0.001)
