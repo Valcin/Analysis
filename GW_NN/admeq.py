@@ -2,7 +2,7 @@ import torch
 from torch import nn, optim
 from neurodiffeq import diff
 from neurodiffeq.networks import FCNN
-# ~from ncf import generator_3dspatial_body, generator_3dspatial_surface
+from ncf import generator_3dspatial_cube
 from ncf import _solve_3dspatial_temporal
 from ncf import SingleNetworkApproximator3DSpatialTemporal
 from neurodiffeq.temporal import FirstOrderInitialCondition, BoundaryCondition, generator_temporal
@@ -225,31 +225,62 @@ def ADM(K11,K12,K13,K21,K22,K23,K31,K32,K33,K,a,b1,b2,b3,G11,G12,G13,G21,G22,G23
 #-----------------------------------------------------------------------
 ### configure the solver ####
 #-----------------------------------------------------------------------
+# define cst and boundary values
+X_MIN, X_MAX = -1.0, 1.0
+Y_MIN, Y_MAX = -1.0, 1.0
+Z_MIN, Z_MAX = -1.0, 1.0
+T_MIN, T_MAX = 0.0, 12.0
+
 
 # specify the initial conditions
-init_vals = [IVP(t_0=0.0, x_0=0.0),#K11 
-IVP(t_0=0.0, x_0=0.0),  #K12
-IVP(t_0=0.0, x_0=0.0), #K13
-IVP(t_0=0.0, x_0=0.0), #K21
-IVP(t_0=0.0, x_0=0.0), #K22
-IVP(t_0=0.0, x_0=0.0), #K23
-IVP(t_0=0.0, x_0=0.0), #K31
-IVP(t_0=0.0, x_0=0.0), #K32
-IVP(t_0=0.0, x_0=0.0), #K33
-IVP(t_0=0.0, x_0=0.0), #K
-IVP(t_0=0.0, x_0=lambda x: torch.sqrt(1 - 2*M/x)), #a
-IVP(t_0=0.0, x_0=0.0), #b1
-IVP(t_0=0.0, x_0=0.0), #b2
-IVP(t_0=0.0, x_0=0.0), #b3
-IVP(t_0=0.0, x_0=lambda x: 1./(1 - (2*M)/x)), #G11
-IVP(t_0=0.0, x_0=0.0), #G12
-IVP(t_0=0.0, x_0=0.0), #G13
-IVP(t_0=0.0, x_0=0.0), #G21
-IVP(t_0=0.0, x_0=lambda x: 1./(1 - (2*M)/x) * x**2), #G22
-IVP(t_0=0.0, x_0=0.0), #G23
-IVP(t_0=0.0, x_0=0.0), #G31
-IVP(t_0=0.0, x_0=0.0), #G32
-IVP(t_0=0.0, x_0=lambda x: 1./(1 - (2*M)/x) * x**2 * torch.sin(y)**2), #G33
+# ~init_vals = [IVP(t_0=0.0, x_0=0.0),#K11 
+# ~IVP(t_0=0.0, x_0=0.0),  #K12
+# ~IVP(t_0=0.0, x_0=0.0), #K13
+# ~IVP(t_0=0.0, x_0=0.0), #K21
+# ~IVP(t_0=0.0, x_0=0.0), #K22
+# ~IVP(t_0=0.0, x_0=0.0), #K23
+# ~IVP(t_0=0.0, x_0=0.0), #K31
+# ~IVP(t_0=0.0, x_0=0.0), #K32
+# ~IVP(t_0=0.0, x_0=0.0), #K33
+# ~IVP(t_0=0.0, x_0=0.0), #K
+# ~IVP(t_0=0.0, x_0=lambda x: torch.sqrt(1 - 2*M/x)), #a
+# ~IVP(t_0=0.0, x_0=0.0), #b1
+# ~IVP(t_0=0.0, x_0=0.0), #b2
+# ~IVP(t_0=0.0, x_0=0.0), #b3
+# ~IVP(t_0=0.0, x_0=lambda x: 1./(1 - (2*M)/x)), #G11
+# ~IVP(t_0=0.0, x_0=0.0), #G12
+# ~IVP(t_0=0.0, x_0=0.0), #G13
+# ~IVP(t_0=0.0, x_0=0.0), #G21
+# ~IVP(t_0=0.0, x_0=lambda x: 1./(1 - (2*M)/x) * x**2), #G22
+# ~IVP(t_0=0.0, x_0=0.0), #G23
+# ~IVP(t_0=0.0, x_0=0.0), #G31
+# ~IVP(t_0=0.0, x_0=0.0), #G32
+# ~IVP(t_0=0.0, x_0=lambda x: 1./(1 - (2*M)/x) * x**2 * torch.sin(y)**2), #G33
+# ~]
+
+init_vals = [FirstOrderInitialCondition(u0=0.0),#K11 
+FirstOrderInitialCondition(u0=0.0),  #K12
+FirstOrderInitialCondition(u0=0.0), #K13
+FirstOrderInitialCondition(u0=0.0), #K21
+FirstOrderInitialCondition(u0=0.0), #K22
+FirstOrderInitialCondition(u0=0.0), #K23
+FirstOrderInitialCondition(u0=0.0), #K31
+FirstOrderInitialCondition(u0=0.0), #K32
+FirstOrderInitialCondition(u0=0.0), #K33
+FirstOrderInitialCondition(u0=0.0), #K
+FirstOrderInitialCondition(u0=lambda x: torch.sqrt(1 - 2*M/x)), #a
+FirstOrderInitialCondition(u0=0.0), #b1
+FirstOrderInitialCondition(u0=0.0), #b2
+FirstOrderInitialCondition(u0=0.0), #b3
+FirstOrderInitialCondition(u0=lambda x: 1./(1 - (2*M)/x)), #G11
+FirstOrderInitialCondition(u0=0.0), #G12
+FirstOrderInitialCondition(u0=0.0), #G13
+FirstOrderInitialCondition(u0=0.0), #G21
+FirstOrderInitialCondition(u0=lambda x: 1./(1 - (2*M)/x) * x**2), #G22
+FirstOrderInitialCondition(u0=0.0), #G23
+FirstOrderInitialCondition(u0=0.0), #G31
+FirstOrderInitialCondition(u0=0.0), #G32
+FirstOrderInitialCondition(u0=lambda x: 1./(1 - (2*M)/x) * x**2 * torch.sin(y)**2), #G33
 ]
 
 # specify the network to be used to approximate each dependent variable
@@ -269,14 +300,15 @@ fcnn = FCNN(
 
 fcnn_approximator = SingleNetworkApproximator3DSpatialTemporal(
     single_network=fcnn,
-    pde=some_3d_time_dependent_pde
+    pde=ADM,
+    initial_condition=init_vals
 )
 
 adam = optim.Adam(fcnn_approximator.parameters(), lr=0.001)
 
-train_gen_spatial = generator_3dspatial_body(...)
+train_gen_spatial = generator_3dspatial_cube(size=(16, 16), x_min=X_MIN, x_max=X_MAX, y_min=Y_MIN, y_max=Y_MAX, z_min=Z_MIN, z_max=Z_MAX)
 train_gen_temporal = generator_temporal(size=32, t_min=T_MIN, t_max=T_MAX)
-valid_gen_spatial = generator_3dspatial_body(...)
+train_gen_spatial = generator_3dspatial_cube(size=(8, 8), x_min=X_MIN, x_max=X_MAX, y_min=Y_MIN, y_max=Y_MAX, z_min=Z_MIN, z_max=Z_MAX)
 valid_gen_temporal = generator_temporal(size=16, t_min=T_MIN, t_max=T_MAX, random=False)
 
 some_3d_time_dependent_pde_solution, _ = _solve_3dspatial_temporal(

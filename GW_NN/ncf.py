@@ -262,78 +262,78 @@ def generator_3dspatial_cube(size, x_min, x_max, y_min, y_max, z_min, z_max, ran
     # ~pass
 
 
-class GeneratorSpherical(BaseGenerator):
-    r"""A generator for generating points in spherical coordinates.
+# ~class GeneratorSpherical(BaseGenerator):
+    # ~r"""A generator for generating points in spherical coordinates.
 
-    :param size: Number of points in 3-D sphere.
-    :type size: int
-    :param r_min: Radius of the interior boundary.
-    :type r_min: float, optional
-    :param r_max: Radius of the exterior boundary.
-    :type r_max: float, optional
-    :param method:
-        The distribution of the 3-D points generated.
+    # ~:param size: Number of points in 3-D sphere.
+    # ~:type size: int
+    # ~:param r_min: Radius of the interior boundary.
+    # ~:type r_min: float, optional
+    # ~:param r_max: Radius of the exterior boundary.
+    # ~:type r_max: float, optional
+    # ~:param method:
+        # ~The distribution of the 3-D points generated.
 
-        - If set to 'equally-radius-noisy', radius of the points will be drawn
-          from a uniform distribution :math:`r \sim U[r_{min}, r_{max}]`.
-        - If set to 'equally-spaced-noisy', squared radius of the points will be drawn
-          from a uniform distribution :math:`r^2 \sim U[r_{min}^2, r_{max}^2]`
+        # ~- If set to 'equally-radius-noisy', radius of the points will be drawn
+          # ~from a uniform distribution :math:`r \sim U[r_{min}, r_{max}]`.
+        # ~- If set to 'equally-spaced-noisy', squared radius of the points will be drawn
+          # ~from a uniform distribution :math:`r^2 \sim U[r_{min}^2, r_{max}^2]`
 
-        Defaults to 'equally-spaced-noisy'.
+        # ~Defaults to 'equally-spaced-noisy'.
 
-    :type method: str, optional
+    # ~:type method: str, optional
 
-    .. note::
-        Not to be confused with ``Generator3D``.
-    """
+    # ~.. note::
+        # ~Not to be confused with ``Generator3D``.
+    # ~"""
 
-    # noinspection PyMissingConstructor
-    def __init__(self, size, r_min=0., r_max=1., method='equally-spaced-noisy'):
-        super(GeneratorSpherical, self).__init__()
-        if r_min < 0 or r_max < r_min:
-            raise ValueError(f"Illegal range [{r_min}, {r_max}]")
+    # ~# noinspection PyMissingConstructor
+    # ~def __init__(self, size, r_min=0., r_max=1., method='equally-spaced-noisy'):
+        # ~super(GeneratorSpherical, self).__init__()
+        # ~if r_min < 0 or r_max < r_min:
+            # ~raise ValueError(f"Illegal range [{r_min}, {r_max}]")
 
-        if method == 'equally-spaced-noisy':
-            lower = r_min ** 2
-            upper = r_max ** 2
-            rng = upper - lower
-            self.get_r = lambda: torch.sqrt(rng * torch.rand(self.shape) + lower)
-        elif method == "equally-radius-noisy":
-            lower = r_min
-            upper = r_max
-            rng = upper - lower
-            self.get_r = lambda: rng * torch.rand(self.shape) + lower
-        else:
-            raise ValueError(f'Unknown method: {method}')
+        # ~if method == 'equally-spaced-noisy':
+            # ~lower = r_min ** 2
+            # ~upper = r_max ** 2
+            # ~rng = upper - lower
+            # ~self.get_r = lambda: torch.sqrt(rng * torch.rand(self.shape) + lower)
+        # ~elif method == "equally-radius-noisy":
+            # ~lower = r_min
+            # ~upper = r_max
+            # ~rng = upper - lower
+            # ~self.get_r = lambda: rng * torch.rand(self.shape) + lower
+        # ~else:
+            # ~raise ValueError(f'Unknown method: {method}')
 
-        self.size = size  # stored for `solve_spherical_system` to access
-        self.shape = (size,)  # used for `self.get_example()`
+        # ~self.size = size  # stored for `solve_spherical_system` to access
+        # ~self.shape = (size,)  # used for `self.get_example()`
 
-    def get_examples(self):
-        a = torch.rand(self.shape)
-        b = torch.rand(self.shape)
-        c = torch.rand(self.shape)
-        denom = a + b + c
-        # `x`, `y`, `z` here are just for computation of `theta` and `phi`
-        epsilon = 1e-6
-        x = torch.sqrt(a / denom) + epsilon
-        y = torch.sqrt(b / denom) + epsilon
-        z = torch.sqrt(c / denom) + epsilon
-        # `sign_x`, `sign_y`, `sign_z` are either -1 or +1
-        sign_x = torch.randint(0, 2, self.shape, dtype=x.dtype) * 2 - 1
-        sign_y = torch.randint(0, 2, self.shape, dtype=y.dtype) * 2 - 1
-        sign_z = torch.randint(0, 2, self.shape, dtype=z.dtype) * 2 - 1
+    # ~def get_examples(self):
+        # ~a = torch.rand(self.shape)
+        # ~b = torch.rand(self.shape)
+        # ~c = torch.rand(self.shape)
+        # ~denom = a + b + c
+        # ~# `x`, `y`, `z` here are just for computation of `theta` and `phi`
+        # ~epsilon = 1e-6
+        # ~x = torch.sqrt(a / denom) + epsilon
+        # ~y = torch.sqrt(b / denom) + epsilon
+        # ~z = torch.sqrt(c / denom) + epsilon
+        # ~# `sign_x`, `sign_y`, `sign_z` are either -1 or +1
+        # ~sign_x = torch.randint(0, 2, self.shape, dtype=x.dtype) * 2 - 1
+        # ~sign_y = torch.randint(0, 2, self.shape, dtype=y.dtype) * 2 - 1
+        # ~sign_z = torch.randint(0, 2, self.shape, dtype=z.dtype) * 2 - 1
 
-        x = x * sign_x
-        y = y * sign_y
-        z = z * sign_z
+        # ~x = x * sign_x
+        # ~y = y * sign_y
+        # ~z = z * sign_z
 
-        theta = torch.acos(z).requires_grad_(True)
-        phi = -torch.atan2(y, x) + np.pi  # atan2 ranges (-pi, pi] instead of [0, 2pi)
-        phi.requires_grad_(True)
-        r = self.get_r().requires_grad_(True)
+        # ~theta = torch.acos(z).requires_grad_(True)
+        # ~phi = -torch.atan2(y, x) + np.pi  # atan2 ranges (-pi, pi] instead of [0, 2pi)
+        # ~phi.requires_grad_(True)
+        # ~r = self.get_r().requires_grad_(True)
 
-        return r, theta, phi
+        # ~return r, theta, phi
 
 
 
