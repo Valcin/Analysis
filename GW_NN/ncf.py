@@ -1,4 +1,7 @@
+import torch
+import numpy as np
 from neurodiffeq.temporal import Approximator
+from neurodiffeq.temporal import generator_1dspatial, _solve_spatial_temporal, _cartesian_prod_dims
 
 # the model and the loss
 # should be similar to `SingleNetworkApproximator2DSpatialTemporal`
@@ -58,8 +61,9 @@ class SingleNetworkApproximator3DSpatialTemporalSystem(Approximator):
     def __init__(self, single_network, pde, initial_condition, boundary_conditions, boundary_strictness=1.):
         self.single_network = single_network
         self.pde = pde
-        self.u0 = initial_condition.u0
-        self.u0dot = initial_condition.u0dot if hasattr(initial_condition, 'u0dot') else None
+        # ~self.u0 = initial_condition.u0
+        # ~self.u0dot = initial_condition.u0dot if hasattr(initial_condition, 'u0dot') else None
+        self.initial_condition = (ic.u0 for ic in initial_condition)
         self.boundary_conditions = boundary_conditions
         self.boundary_strictness = boundary_strictness
 
@@ -69,9 +73,13 @@ class SingleNetworkApproximator3DSpatialTemporalSystem(Approximator):
         zz = torch.unsqueeze(zz, dim=1)
         tt = torch.unsqueeze(tt, dim=1)
         xyzt = torch.cat((xx, yy, zz, tt), dim=1)
-        # ~uu_raw = self.single_network(xyzt)
-        if self.u0dot is None:
-            uu = torch.exp(-tt) * self.u0(xx, yy, zz) + (1 - torch.exp(-tt)) * self.single_network(xyzt)
+        uu_raw = self.single_network(xyzt)
+        print(uu_raw.size())
+
+        # ~if self.u0dot is None:
+        if not hasattr(self.initial_condition, 'u0dot'): #check if udot is defined 
+            uu = torch.exp(-tt) * next(self.initial_condition)(xx, yy, zz) + (1 - torch.exp(-tt)) * self.single_network(xyzt)
+
         else:
             # not sure about this line
             uu = (1 - (1 - torch.exp(-tt))**2) * self.u0(xx, yy,zz) \

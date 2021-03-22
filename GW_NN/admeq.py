@@ -1,12 +1,14 @@
 import torch
+import numpy as np
 from torch import nn, optim
 from neurodiffeq import diff
 from neurodiffeq.networks import FCNN
 from ncf import generator_3dspatial_cube
 from ncf import _solve_3dspatial_temporal
-from ncf import SingleNetworkApproximator3DSpatialTemporal
+from ncf import SingleNetworkApproximator3DSpatialTemporalSystem
 from neurodiffeq.temporal import FirstOrderInitialCondition, BoundaryCondition, generator_temporal
 from neurodiffeq.temporal import MonitorMinimal, generator_1dspatial
+
 
 
 ########################################################################
@@ -17,7 +19,7 @@ from neurodiffeq.temporal import MonitorMinimal, generator_1dspatial
 
 
 # specify the ODE system and its parameters
-def ADM(K11,K12,K13,K21,K22,K23,K31,K32,K33,K,a,b1,b2,b3,G11,G12,G13,G21,G22,G23,G31,G32,G33, r, y, z, t):
+def ADM(K11,K12,K13,K21,K22,K23,K31,K32,K33,K,a,b1,b2,b3,G11,G12,G13,G21,G22,G23,G31,G32,G33, x, y, z, t):
 
 	# Underscore in name for contravariant
 
@@ -33,7 +35,8 @@ def ADM(K11,K12,K13,K21,K22,K23,K31,K32,K33,K,a,b1,b2,b3,G11,G12,G13,G21,G22,G23
 	G_33 = 1./G33
 
 	# define the christoffel coefficients only accounting for G11, G22, G33 (TO MODIFY)
-	C111 = 1/2.*G_11*(diff(G11, x) + diff(G11, x) - diff(G11, x)) + 1/2.*G_12*(diff(G21, x) + diff(G21, x) - diff(G11, y)) + 1/2.*G_13*(diff(G31, x) + diff(G31, x) - diff(G11, z))
+	C111 = 1/2.*G_11*(diff(G11, x))
+	# ~C111 = 1/2.*G_11*(diff(G11, x) + diff(G11, x) - diff(G11, x)) + 1/2.*G_12*(diff(G21, x) + diff(G21, x) - diff(G11, y)) + 1/2.*G_13*(diff(G31, x) + diff(G31, x) - diff(G11, z))
 	C112 = 1/2.*G_11*(diff(G11, y) + diff(G12, x) - diff(G12, x)) + 1/2.*G_12*(diff(G21, y) + diff(G22, x) - diff(G12, y)) + 1/2.*G_13*(diff(G31, y) + diff(G32, x) - diff(G12, z))
 	C113 = 1/2.*G_11*(diff(G11, z) + diff(G13, x) - diff(G13, x))	+ 1/2.*G_12*(diff(G21, z) + diff(G23, x) - diff(G13, y))	+ 1/2.*G_13*(diff(G31, z) + diff(G33, x) - diff(G13, z))	
 	C121 = 1/2.*G_11*(diff(G12, x) + diff(G11, y) - diff(G21, x)) + 1/2.*G_12*(diff(G22, x) + diff(G21, y) - diff(G21, y)) + 1/2.*G_13*(diff(G32, x) + diff(G31, y) - diff(G21, z))
@@ -258,30 +261,31 @@ T_MIN, T_MAX = 0.0, 12.0
 # ~IVP(t_0=0.0, x_0=lambda x: 1./(1 - (2*M)/x) * x**2 * torch.sin(y)**2), #G33
 # ~]
 
-init_vals = [FirstOrderInitialCondition(u0=0.0),#K11 
-FirstOrderInitialCondition(u0=0.0),  #K12
-FirstOrderInitialCondition(u0=0.0), #K13
-FirstOrderInitialCondition(u0=0.0), #K21
-FirstOrderInitialCondition(u0=0.0), #K22
-FirstOrderInitialCondition(u0=0.0), #K23
-FirstOrderInitialCondition(u0=0.0), #K31
-FirstOrderInitialCondition(u0=0.0), #K32
-FirstOrderInitialCondition(u0=0.0), #K33
-FirstOrderInitialCondition(u0=0.0), #K
-FirstOrderInitialCondition(u0=lambda x: torch.sqrt(1 - 2*M/x)), #a
-FirstOrderInitialCondition(u0=0.0), #b1
-FirstOrderInitialCondition(u0=0.0), #b2
-FirstOrderInitialCondition(u0=0.0), #b3
-FirstOrderInitialCondition(u0=lambda x: 1./(1 - (2*M)/x)), #G11
-FirstOrderInitialCondition(u0=0.0), #G12
-FirstOrderInitialCondition(u0=0.0), #G13
-FirstOrderInitialCondition(u0=0.0), #G21
-FirstOrderInitialCondition(u0=lambda x: 1./(1 - (2*M)/x) * x**2), #G22
-FirstOrderInitialCondition(u0=0.0), #G23
-FirstOrderInitialCondition(u0=0.0), #G31
-FirstOrderInitialCondition(u0=0.0), #G32
-FirstOrderInitialCondition(u0=lambda x: 1./(1 - (2*M)/x) * x**2 * torch.sin(y)**2), #G33
+init_vals = [FirstOrderInitialCondition(u0=lambda x,y,z:0.0),#K11 
+FirstOrderInitialCondition(u0=lambda x,y,z:0.0),  #K12
+FirstOrderInitialCondition(u0=lambda x,y,z:0.0), #K13
+FirstOrderInitialCondition(u0=lambda x,y,z:0.0), #K21
+FirstOrderInitialCondition(u0=lambda x,y,z:0.0), #K22
+FirstOrderInitialCondition(u0=lambda x,y,z:0.0), #K23
+FirstOrderInitialCondition(u0=lambda x,y,z:0.0), #K31
+FirstOrderInitialCondition(u0=lambda x,y,z:0.0), #K32
+FirstOrderInitialCondition(u0=lambda x,y,z:0.0), #K33
+FirstOrderInitialCondition(u0=lambda x,y,z:0.0), #K
+FirstOrderInitialCondition(u0=lambda x,y,z: torch.sqrt(1 - 2*M/x)), #a
+FirstOrderInitialCondition(u0=lambda x,y,z:0.0), #b1
+FirstOrderInitialCondition(u0=lambda x,y,z:0.0), #b2
+FirstOrderInitialCondition(u0=lambda x,y,z:0.0), #b3
+FirstOrderInitialCondition(u0=lambda x,y,z: 1./(1 - (2*M)/x)), #G11
+FirstOrderInitialCondition(u0=lambda x,y,z:0.0), #G12
+FirstOrderInitialCondition(u0=lambda x,y,z:0.0), #G13
+FirstOrderInitialCondition(u0=lambda x,y,z:0.0), #G21
+FirstOrderInitialCondition(u0=lambda x,y,z: 1./(1 - (2*M)/x) * x**2), #G22
+FirstOrderInitialCondition(u0=lambda x,y,z:0.0), #G23
+FirstOrderInitialCondition(u0=lambda x,y,z:0.0), #G31
+FirstOrderInitialCondition(u0=lambda x,y,z:0.0), #G32
+FirstOrderInitialCondition(u0=lambda x,y,z: 1./(1 - (2*M)/x) * x**2 * torch.sin(y)**2), #G33
 ]
+# ~init_vals = FirstOrderInitialCondition(u0=lambda x,y,z:0.0)#K11
 
 # specify the network to be used to approximate each dependent variable
 # ~fcnn = [FCNN(n_hidden_units=32, n_hidden_layers=2, actv=SinActv),
@@ -298,20 +302,22 @@ fcnn = FCNN(
     actv=nn.Tanh
 )
 
-fcnn_approximator = SingleNetworkApproximator3DSpatialTemporal(
+
+fcnn_approximator = SingleNetworkApproximator3DSpatialTemporalSystem(
     single_network=fcnn,
     pde=ADM,
-    initial_condition=init_vals
+    initial_condition=init_vals,
+    boundary_conditions=[]
 )
 
 adam = optim.Adam(fcnn_approximator.parameters(), lr=0.001)
 
-train_gen_spatial = generator_3dspatial_cube(size=(16, 16), x_min=X_MIN, x_max=X_MAX, y_min=Y_MIN, y_max=Y_MAX, z_min=Z_MIN, z_max=Z_MAX)
+train_gen_spatial = generator_3dspatial_cube(size=(16, 16, 16), x_min=X_MIN, x_max=X_MAX, y_min=Y_MIN, y_max=Y_MAX, z_min=Z_MIN, z_max=Z_MAX)
 train_gen_temporal = generator_temporal(size=32, t_min=T_MIN, t_max=T_MAX)
-train_gen_spatial = generator_3dspatial_cube(size=(8, 8), x_min=X_MIN, x_max=X_MAX, y_min=Y_MIN, y_max=Y_MAX, z_min=Z_MIN, z_max=Z_MAX)
+valid_gen_spatial = generator_3dspatial_cube(size=(8, 8, 8), x_min=X_MIN, x_max=X_MAX, y_min=Y_MIN, y_max=Y_MAX, z_min=Z_MIN, z_max=Z_MAX)
 valid_gen_temporal = generator_temporal(size=16, t_min=T_MIN, t_max=T_MAX, random=False)
 
-some_3d_time_dependent_pde_solution, _ = _solve_3dspatial_temporal(
+adm_solution, _ = _solve_3dspatial_temporal(
     train_generator_spatial=train_gen_spatial,
     train_generator_temporal=train_gen_temporal,
     valid_generator_spatial=valid_gen_spatial,
