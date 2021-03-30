@@ -73,12 +73,11 @@ class SingleNetworkApproximator3DSpatialTemporalSystem(Approximator):
         zz = torch.unsqueeze(zz, dim=1)
         tt = torch.unsqueeze(tt, dim=1)
         xyzt = torch.cat((xx, yy, zz, tt), dim=1)
-        uu_raw = self.single_network(xyzt)
-        print(uu_raw.size())
+        # uu_raw = self.single_network(xyzt)
 
         # ~if self.u0dot is None:
         if not hasattr(self.initial_condition, 'u0dot'): #check if udot is defined 
-            uu = torch.exp(-tt) * next(self.initial_condition)(xx, yy, zz) + (1 - torch.exp(-tt)) * self.single_network(xyzt)
+            uu = torch.exp(-tt) * self.initial_condition(xx, yy, zz) + (1 - torch.exp(-tt)) * self.single_network(xyzt)
 
         else:
             # not sure about this line

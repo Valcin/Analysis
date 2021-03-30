@@ -13,6 +13,9 @@ from neurodiffeq.temporal import MonitorMinimal, generator_1dspatial
 
 ########################################################################
 ########################################################################
+#For TESTS
+########################################################################
+########################################################################
 #-----------------------------------------------------------------------
 ### define the function ####
 #-----------------------------------------------------------------------
@@ -21,8 +24,37 @@ from neurodiffeq.temporal import MonitorMinimal, generator_1dspatial
 # specify the ODE system and its parameters
 def ADM(K11,K12,K13,K21,K22,K23,K31,K32,K33,K,a,b1,b2,b3,G11,G12,G13,G21,G22,G23,G31,G32,G33, x, y, z, t):
 
-	# Underscore in name for contravariant
+	#unsqueeze all variables (dependent and independent) to work with safe_diff dimension requirements
+	x = torch.unsqueeze(x, dim=1)
+	y = torch.unsqueeze(y, dim=1)
+	z = torch.unsqueeze(z, dim=1)
+	t = torch.unsqueeze(t, dim=1)
+	G11 = torch.unsqueeze(G11, dim=1)
+	G12 = torch.unsqueeze(G12, dim=1)
+	G13 = torch.unsqueeze(G13, dim=1)
+	G21 = torch.unsqueeze(G21, dim=1)
+	G22 = torch.unsqueeze(G22, dim=1)
+	G23 = torch.unsqueeze(G23, dim=1)
+	G31 = torch.unsqueeze(G31, dim=1)
+	G32 = torch.unsqueeze(G32, dim=1)
+	G33 = torch.unsqueeze(G33, dim=1)
+	K11 = torch.unsqueeze(K11, dim=1)
+	K12 = torch.unsqueeze(K12, dim=1)
+	K13 = torch.unsqueeze(K13, dim=1)
+	K21 = torch.unsqueeze(K21, dim=1)
+	K22 = torch.unsqueeze(K22, dim=1)
+	K23 = torch.unsqueeze(K23, dim=1)
+	K31 = torch.unsqueeze(K31, dim=1)
+	K32 = torch.unsqueeze(K32, dim=1)
+	K33 = torch.unsqueeze(K33, dim=1)
+	a = torch.unsqueeze(a, dim=1)
+	b1 = torch.unsqueeze(b1, dim=1)
+	b2 = torch.unsqueeze(b2, dim=1)
+	b3 = torch.unsqueeze(b3, dim=1)
+	K = torch.unsqueeze(K, dim=1)
 
+
+	# Underscore in name for contravariant
 	# define the contravariant metric
 	G_11 = 1./G11
 	G_12 = 1./G12
@@ -35,8 +67,8 @@ def ADM(K11,K12,K13,K21,K22,K23,K31,K32,K33,K,a,b1,b2,b3,G11,G12,G13,G21,G22,G23
 	G_33 = 1./G33
 
 	# define the christoffel coefficients only accounting for G11, G22, G33 (TO MODIFY)
-	C111 = 1/2.*G_11*(diff(G11, x))
-	# ~C111 = 1/2.*G_11*(diff(G11, x) + diff(G11, x) - diff(G11, x)) + 1/2.*G_12*(diff(G21, x) + diff(G21, x) - diff(G11, y)) + 1/2.*G_13*(diff(G31, x) + diff(G31, x) - diff(G11, z))
+
+	C111 = 1/2.*G_11*(diff(G11, x) + diff(G11, x) - diff(G11, x)) + 1/2.*G_12*(diff(G21, x) + diff(G21, x) - diff(G11, y)) + 1/2.*G_13*(diff(G31, x) + diff(G31, x) - diff(G11, z))
 	C112 = 1/2.*G_11*(diff(G11, y) + diff(G12, x) - diff(G12, x)) + 1/2.*G_12*(diff(G21, y) + diff(G22, x) - diff(G12, y)) + 1/2.*G_13*(diff(G31, y) + diff(G32, x) - diff(G12, z))
 	C113 = 1/2.*G_11*(diff(G11, z) + diff(G13, x) - diff(G13, x))	+ 1/2.*G_12*(diff(G21, z) + diff(G23, x) - diff(G13, y))	+ 1/2.*G_13*(diff(G31, z) + diff(G33, x) - diff(G13, z))	
 	C121 = 1/2.*G_11*(diff(G12, x) + diff(G11, y) - diff(G21, x)) + 1/2.*G_12*(diff(G22, x) + diff(G21, y) - diff(G21, y)) + 1/2.*G_13*(diff(G32, x) + diff(G31, y) - diff(G21, z))
@@ -163,15 +195,15 @@ def ADM(K11,K12,K13,K21,K22,K23,K31,K32,K33,K,a,b1,b2,b3,G11,G12,G13,G21,G22,G23
 	kder_33 = K_33 - G_33*K
 	
 	#define covariant derivative of k group
-	D1kder_11 = diff(kder_11, x) + kder_11*C111 + kder_21*C121 + kder_31*C131 + kder_11*C111 + Kder_12*C121 + Kder_13*C131
-	D2kder_12 = diff(kder_12, y) + kder_12*C112 + kder_22*C122 + kder_32*C132 + kder_11*C212 + Kder_12*C222 + Kder_13*C232
-	D3kder_13 = diff(kder_13, z) + kder_13*C113 + kder_23*C123 + kder_33*C133 + kder_11*C313 + Kder_12*C323 + Kder_13*C333
-	D1kder_21 = diff(kder_21, x) + kder_11*C211 + kder_21*C221 + kder_31*C231 + kder_21*C111 + Kder_22*C121 + Kder_23*C131
-	D2kder_22 = diff(kder_22, y) + kder_12*C212 + kder_22*C222 + kder_32*C232 + kder_21*C212 + Kder_22*C222 + Kder_23*C232
-	D3kder_23 = diff(kder_23, z) + kder_13*C213 + kder_23*C223 + kder_33*C233 + kder_21*C313 + Kder_22*C323 + Kder_23*C333
-	D1kder_31 = diff(kder_31, x) + kder_11*C311 + kder_21*C321 + kder_31*C331 + kder_31*C111 + Kder_32*C121 + Kder_33*C131
-	D2kder_32 = diff(kder_32, y) + kder_12*C312 + kder_22*C322 + kder_32*C332 + kder_31*C212 + Kder_32*C222 + Kder_33*C232
-	D3kder_33 = diff(kder_33, z) + kder_13*C313 + kder_23*C323 + kder_33*C333 + kder_31*C313 + Kder_32*C323 + Kder_33*C333
+	D1kder_11 = diff(kder_11, x) + kder_11*C111 + kder_21*C121 + kder_31*C131 + kder_11*C111 + kder_12*C121 + kder_13*C131
+	D2kder_12 = diff(kder_12, y) + kder_12*C112 + kder_22*C122 + kder_32*C132 + kder_11*C212 + kder_12*C222 + kder_13*C232
+	D3kder_13 = diff(kder_13, z) + kder_13*C113 + kder_23*C123 + kder_33*C133 + kder_11*C313 + kder_12*C323 + kder_13*C333
+	D1kder_21 = diff(kder_21, x) + kder_11*C211 + kder_21*C221 + kder_31*C231 + kder_21*C111 + kder_22*C121 + kder_23*C131
+	D2kder_22 = diff(kder_22, y) + kder_12*C212 + kder_22*C222 + kder_32*C232 + kder_21*C212 + kder_22*C222 + kder_23*C232
+	D3kder_23 = diff(kder_23, z) + kder_13*C213 + kder_23*C223 + kder_33*C233 + kder_21*C313 + kder_22*C323 + kder_23*C333
+	D1kder_31 = diff(kder_31, x) + kder_11*C311 + kder_21*C321 + kder_31*C331 + kder_31*C111 + kder_32*C121 + kder_33*C131
+	D2kder_32 = diff(kder_32, y) + kder_12*C312 + kder_22*C322 + kder_32*C332 + kder_31*C212 + kder_32*C222 + kder_33*C232
+	D3kder_33 = diff(kder_33, z) + kder_13*C313 + kder_23*C323 + kder_33*C333 + kder_31*C313 + kder_32*C323 + kder_33*C333
 	
 
 	# define lapse second covariant derivative
@@ -198,7 +230,7 @@ def ADM(K11,K12,K13,K21,K22,K23,K31,K32,K33,K,a,b1,b2,b3,G11,G12,G13,G21,G22,G23
 
 
 	# written only for the 6 independent terms
-	return [R + K**2 - K11*k_11 - K12*k_12 - K13*k_13 - K21*k_21 - K22*k_22 - K23*k_23 - K31*k_31 - K32*k_32 - K33*k_33 - 16*np.pi*rho,
+	return [R + K**2 - K11*K_11 - K12*K_12 - K13*K_13 - K21*K_21 - K22*K_22 - K23*K_23 - K31*K_31 - K32*K_32 - K33*K_33 - 16*np.pi*rho,
 	D1kder_11 + D2kder_12 + D3kder_13 - 8*np.pi*S1,
 	D1kder_21 + D2kder_22 + D3kder_23 - 8*np.pi*S2,
 	D1kder_31 + D2kder_32 + D3kder_33 - 8*np.pi*S3,
@@ -233,7 +265,7 @@ X_MIN, X_MAX = -1.0, 1.0
 Y_MIN, Y_MAX = -1.0, 1.0
 Z_MIN, Z_MAX = -1.0, 1.0
 T_MIN, T_MAX = 0.0, 12.0
-
+M = 30
 
 # specify the initial conditions
 # ~init_vals = [IVP(t_0=0.0, x_0=0.0),#K11 
@@ -297,8 +329,7 @@ FirstOrderInitialCondition(u0=lambda x,y,z: 1./(1 - (2*M)/x) * x**2 * torch.sin(
 fcnn = FCNN(
     n_input_units=4,
     n_output_units=23,
-    n_hidden_units=64,
-    n_hidden_layers=2,
+    hidden_units=(64,64,64),
     actv=nn.Tanh
 )
 
