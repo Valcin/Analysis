@@ -14,6 +14,8 @@ from neurodiffeq.temporal import MonitorMinimal, generator_1dspatial
 ########################################################################
 ########################################################################
 #For TESTS
+
+
 ########################################################################
 ########################################################################
 #-----------------------------------------------------------------------
@@ -293,28 +295,28 @@ M = 30
 # ~IVP(t_0=0.0, x_0=lambda x: 1./(1 - (2*M)/x) * x**2 * torch.sin(y)**2), #G33
 # ~]
 
-init_vals = [FirstOrderInitialCondition(u0=lambda x,y,z:0.0),#K11 
-FirstOrderInitialCondition(u0=lambda x,y,z:0.0),  #K12
-FirstOrderInitialCondition(u0=lambda x,y,z:0.0), #K13
-FirstOrderInitialCondition(u0=lambda x,y,z:0.0), #K21
-FirstOrderInitialCondition(u0=lambda x,y,z:0.0), #K22
-FirstOrderInitialCondition(u0=lambda x,y,z:0.0), #K23
-FirstOrderInitialCondition(u0=lambda x,y,z:0.0), #K31
-FirstOrderInitialCondition(u0=lambda x,y,z:0.0), #K32
-FirstOrderInitialCondition(u0=lambda x,y,z:0.0), #K33
-FirstOrderInitialCondition(u0=lambda x,y,z:0.0), #K
+init_vals = [FirstOrderInitialCondition(u0=lambda x,y,z:torch.zeros_like(x)),#K11 
+FirstOrderInitialCondition(u0=lambda x,y,z:torch.zeros_like(x)),  #K12
+FirstOrderInitialCondition(u0=lambda x,y,z:torch.zeros_like(x)), #K13
+FirstOrderInitialCondition(u0=lambda x,y,z:torch.zeros_like(x)), #K21
+FirstOrderInitialCondition(u0=lambda x,y,z:torch.zeros_like(x)), #K22
+FirstOrderInitialCondition(u0=lambda x,y,z:torch.zeros_like(x)), #K23
+FirstOrderInitialCondition(u0=lambda x,y,z:torch.zeros_like(x)), #K31
+FirstOrderInitialCondition(u0=lambda x,y,z:torch.zeros_like(x)), #K32
+FirstOrderInitialCondition(u0=lambda x,y,z:torch.zeros_like(x)), #K33
+FirstOrderInitialCondition(u0=lambda x,y,z:torch.zeros_like(x)), #K
 FirstOrderInitialCondition(u0=lambda x,y,z: torch.sqrt(1 - 2*M/x)), #a
-FirstOrderInitialCondition(u0=lambda x,y,z:0.0), #b1
-FirstOrderInitialCondition(u0=lambda x,y,z:0.0), #b2
-FirstOrderInitialCondition(u0=lambda x,y,z:0.0), #b3
+FirstOrderInitialCondition(u0=lambda x,y,z:torch.zeros_like(x)), #b1
+FirstOrderInitialCondition(u0=lambda x,y,z:torch.zeros_like(x)), #b2
+FirstOrderInitialCondition(u0=lambda x,y,z:torch.zeros_like(x)), #b3
 FirstOrderInitialCondition(u0=lambda x,y,z: 1./(1 - (2*M)/x)), #G11
-FirstOrderInitialCondition(u0=lambda x,y,z:0.0), #G12
-FirstOrderInitialCondition(u0=lambda x,y,z:0.0), #G13
-FirstOrderInitialCondition(u0=lambda x,y,z:0.0), #G21
+FirstOrderInitialCondition(u0=lambda x,y,z:torch.zeros_like(x)), #G12
+FirstOrderInitialCondition(u0=lambda x,y,z:torch.zeros_like(x)), #G13
+FirstOrderInitialCondition(u0=lambda x,y,z:torch.zeros_like(x)), #G21
 FirstOrderInitialCondition(u0=lambda x,y,z: 1./(1 - (2*M)/x) * x**2), #G22
-FirstOrderInitialCondition(u0=lambda x,y,z:0.0), #G23
-FirstOrderInitialCondition(u0=lambda x,y,z:0.0), #G31
-FirstOrderInitialCondition(u0=lambda x,y,z:0.0), #G32
+FirstOrderInitialCondition(u0=lambda x,y,z:torch.zeros_like(x)), #G23
+FirstOrderInitialCondition(u0=lambda x,y,z:torch.zeros_like(x)), #G31
+FirstOrderInitialCondition(u0=lambda x,y,z:torch.zeros_like(x)), #G32
 FirstOrderInitialCondition(u0=lambda x,y,z: 1./(1 - (2*M)/x) * x**2 * torch.sin(y)**2), #G33
 ]
 # ~init_vals = FirstOrderInitialCondition(u0=lambda x,y,z:0.0)#K11
@@ -329,7 +331,7 @@ FirstOrderInitialCondition(u0=lambda x,y,z: 1./(1 - (2*M)/x) * x**2 * torch.sin(
 fcnn = FCNN(
     n_input_units=4,
     n_output_units=23,
-    hidden_units=(64,64,64),
+    hidden_units=(64),
     actv=nn.Tanh
 )
 
@@ -358,7 +360,6 @@ adm_solution, _ = _solve_3dspatial_temporal(
     batch_size=512,
     max_epochs=5000,
     shuffle=True,
-    metrics={},
-    monitor=MonitorMinimal(check_every=10)
+    metrics={}
 )
 

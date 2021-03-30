@@ -63,7 +63,8 @@ class SingleNetworkApproximator3DSpatialTemporalSystem(Approximator):
         self.pde = pde
         # ~self.u0 = initial_condition.u0
         # ~self.u0dot = initial_condition.u0dot if hasattr(initial_condition, 'u0dot') else None
-        self.initial_condition = (ic.u0 for ic in initial_condition)
+        # ~self.initial_condition = (ic.u0 for ic in initial_condition)
+        self.initial_condition = initial_condition
         self.boundary_conditions = boundary_conditions
         self.boundary_strictness = boundary_strictness
 
@@ -76,8 +77,11 @@ class SingleNetworkApproximator3DSpatialTemporalSystem(Approximator):
         # uu_raw = self.single_network(xyzt)
 
         # ~if self.u0dot is None:
-        if not hasattr(self.initial_condition, 'u0dot'): #check if udot is defined 
-            uu = torch.exp(-tt) * self.initial_condition(xx, yy, zz) + (1 - torch.exp(-tt)) * self.single_network(xyzt)
+        if not hasattr(self.initial_condition, 'u0dot'): #check if udot is defined
+            list_ic = [ic.u0(xx, yy, zz) for ic in self.initial_condition]
+            list_ic = torch.stack(list_ic, dim=1)
+            list_ic = torch.squeeze(list_ic, dim=2)
+            uu = torch.exp(-tt) * list_ic + (1 - torch.exp(-tt)) * self.single_network(xyzt)
 
         else:
             # not sure about this line
