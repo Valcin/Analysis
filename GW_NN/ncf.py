@@ -74,15 +74,13 @@ class SingleNetworkApproximator3DSpatialTemporalSystem(Approximator):
         zz = torch.unsqueeze(zz, dim=1)
         tt = torch.unsqueeze(tt, dim=1)
         xyzt = torch.cat((xx, yy, zz, tt), dim=1)
-        # uu_raw = self.single_network(xyzt)
+        uu_raw = self.single_network(xyzt)
 
         # ~if self.u0dot is None:
         if not hasattr(self.initial_condition, 'u0dot'): #check if udot is defined
             list_ic = [ic.u0(xx, yy, zz) for ic in self.initial_condition]
-            list_ic = torch.stack(list_ic, dim=1)
-            list_ic = torch.squeeze(list_ic, dim=2)
+            list_ic = torch.cat(list_ic, dim=1)
             uu = torch.exp(-tt) * list_ic + (1 - torch.exp(-tt)) * self.single_network(xyzt)
-
         else:
             # not sure about this line
             uu = (1 - (1 - torch.exp(-tt))**2) * self.u0(xx, yy,zz) \
@@ -95,13 +93,14 @@ class SingleNetworkApproximator3DSpatialTemporalSystem(Approximator):
 
     def calculate_loss(self, xx, yy, zz, tt, x, y, z, t):
         uu = self.__call__(xx, yy, zz, tt)
-
+        # ~print(uu)
         equation_mse = sum(
             torch.mean(eq**2)
             for eq in self.pde(*uu, xx, yy, zz, tt)
         )
 
         boundary_mse = self.boundary_strictness * sum(self._boundary_mse(t, bc) for bc in self.boundary_conditions)
+        # ~print(equation_mse, boundary_mse, equation_mse + boundary_mse)
         return equation_mse + boundary_mse
 
     def _boundary_mse(self, t, bc):

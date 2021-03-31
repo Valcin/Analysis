@@ -15,7 +15,6 @@ from neurodiffeq.temporal import MonitorMinimal, generator_1dspatial
 ########################################################################
 #For TESTS
 
-
 ########################################################################
 ########################################################################
 #-----------------------------------------------------------------------
@@ -263,7 +262,7 @@ def ADM(K11,K12,K13,K21,K22,K23,K31,K32,K33,K,a,b1,b2,b3,G11,G12,G13,G21,G22,G23
 ### configure the solver ####
 #-----------------------------------------------------------------------
 # define cst and boundary values
-X_MIN, X_MAX = -1.0, 1.0
+X_MIN, X_MAX = 60, 500.0
 Y_MIN, Y_MAX = -1.0, 1.0
 Z_MIN, Z_MAX = -1.0, 1.0
 T_MIN, T_MAX = 0.0, 12.0
@@ -331,7 +330,7 @@ FirstOrderInitialCondition(u0=lambda x,y,z: 1./(1 - (2*M)/x) * x**2 * torch.sin(
 fcnn = FCNN(
     n_input_units=4,
     n_output_units=23,
-    hidden_units=(64),
+    hidden_units=(32,64,32),
     actv=nn.Tanh
 )
 
@@ -360,6 +359,7 @@ adm_solution, _ = _solve_3dspatial_temporal(
     batch_size=512,
     max_epochs=5000,
     shuffle=True,
-    metrics={}
+    metrics={},
+    monitor=MonitorMinimal(check_every=10)
 )
 
