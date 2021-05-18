@@ -159,6 +159,7 @@ def _train_3dspatial_temporal(train_generator_spatial, train_generator_temporal,
 
         batch_start += batch_size
         batch_end += batch_size
+        
 
     # TODO: this can give us the real loss after an epoch, but can be very memory intensive
     epoch_loss = approximator.calculate_loss(xx, yy, zz, tt, x, y, z, t).item()
@@ -166,7 +167,7 @@ def _train_3dspatial_temporal(train_generator_spatial, train_generator_temporal,
     epoch_metrics = approximator.calculate_metrics(xx, yy, zz, tt, x, y, z, t, metrics)
     for k, v in epoch_metrics.items():
         epoch_metrics[k] = v.item()
-
+    print(epoch_loss, epoch_metrics)
     return epoch_loss, epoch_metrics
 
 
