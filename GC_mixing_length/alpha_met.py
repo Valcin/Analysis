@@ -29,30 +29,30 @@ def cut2(h):
 ### compute z - Fe/H conversion ####
 #-----------------------------------------------------------------------
 
-# ~Zsun = 0.0142
+Zsun = 0.0142
 
-# ~Z = 0.000142
+Z = 0.000142
 # ~Z = np.array([0.000142, 0.00025251567, 0.00045])
-# ~Y = 0.24 + 2*Z
-# ~# Y = 0.2305
-# ~Y1 = 0.245 + 1.5*Z
-# ~Y2 = 0.249 + 1.5*Z
-# ~X = 1.0 - Y -Z
-# ~X1 = 1.0 - Y1 -Z
-# ~X2 = 1.0 - Y2 -Z
+Y = 0.24 + 2*Z
+# Y = 0.2305
+Y1 = 0.245 + 1.5*Z
+Y2 = 0.249 + 1.5*Z
+X = 1.0 - Y -Z
+X1 = 1.0 - Y1 -Z
+X2 = 1.0 - Y2 -Z
 
 # ~print(X1,Y1)
-# ~Fe_H = np.log10(Z/Zsun)
-# ~XZ_GS98 = np.log10(0.02288)
-# ~XZ_ASO9 = np.log10(0.0178)
-# ~fe_mesa = np.log10(Z/X) - XZ_ASO9
-# ~fe_dsed = np.log10(Z/X1) - XZ_GS98
-# ~fe_mist = np.log10(Z/X2) - XZ_ASO9
+Fe_H = np.log10(Z/Zsun)
+XZ_GS98 = np.log10(0.02288)
+XZ_ASO9 = np.log10(0.0178)
+fe_mesa = np.log10(Z/X) - XZ_ASO9
+fe_dsed = np.log10(Z/X1) - XZ_GS98
+fe_mist = np.log10(Z/X2) - XZ_ASO9
 
-# ~print(fe_mesa, fe_dsed, fe_mist, Fe_H, Z)
+print(fe_mesa, fe_dsed, fe_mist, Fe_H, Z)
 # ~print(fe_mesa, Fe_H, Z)
 
-# ~kill
+kill
 
 
 ########################################################################

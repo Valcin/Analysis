@@ -128,7 +128,7 @@ def cluster(nb):
 	distance = 10**(np.float32(dist_mod)/5. +1)
 	distplus = 10**((np.float32(dist_mod)+0.2)/5. +1)
 	distmoins = 10**((np.float32(dist_mod)-0.2)/5. +1)
-	print(dist_mod)
+	# ~print(dist_mod)
 	Age = float(round(Age,3))
 	metal = float(round(float(metal),3))
 	distance = float(round(distance,3))
@@ -141,7 +141,40 @@ def cluster(nb):
 		ind = extgc.index(glc)
 		Abs = 3.1*extdutra[ind]
 
-	return clus_nb, Age, metal, distance, Abs, afe_init, distplus, distmoins
+
+	clus_name2 = ['Arp_2','IC_4499','Lynga_7','NGC_104','NGC_288','NGC_362','NGC_1261','NGC_1851','NGC_2298','NGC_2808','NGC_3201','NGC_4147','NGC_4590','NGC_4833','NGC_5024','NGC_5053','NGC_5139','NGC_5272','NGC_5286','NGC_5466','NGC_5904','NGC_5927','NGC_5986','NGC_6093','NGC_6101','NGC_6121','NGC_6144','NGC_6171','NGC_6205','NGC_6218','NGC_6254','NGC_6304','NGC_6341','NGC_6352','NGC_6362','NGC_6366','NGC_6388','NGC_6397','NGC_6426','NGC_6441','NGC_6496','NGC_6535','NGC_6541','NGC_6584','NGC_6624','NGC_6637','NGC_6652','NGC_6656','NGC_6681','NGC_6715','NGC_6717','NGC_6723','NGC_6752','NGC_6779','NGC_6809','NGC_6838','NGC_6934','NGC_6981','NGC_7006','NGC_7078','NGC_7089','NGC_7099','Pal_1','Pal_12','Pal_15','Pyxis','Rup_106','Ter_7','Ter_8']
+
+
+
+	with open('Baumgardt.txt',"r") as f:
+		lines=f.readlines()[2:]
+	f.close()
+	baum_clus=[]
+	for x in lines:
+		baum_clus.append(x.split(' ')[0])
+	
+	# find acs initial values in different caltalogs
+	# ~index1 = harris_clus.index(clus_nb)
+
+	# ~distance = np.zeros(len(clus_name2))
+	# ~errdist = np.zeros(len(clus_name2))
+
+	# ~for nb in range(len(clus_name2)):
+	clus_nb2 = clus_name2[nb]
+
+	index2 = baum_clus.index(clus_nb2)
+	with open('Baumgardt.txt',"r") as f:
+		lines=f.readlines()[2:]
+	f.close()
+	dist_baum=[]
+	errdist_baum=[]
+	for x in lines:
+		dist_baum.append(x.split(' ')[5])
+		errdist_baum.append(x.split(' ')[6])
+	distance = dist_baum[index2]
+	errdist = errdist_baum[index2]
+
+	return clus_nb, Age, metal, float(distance)*1000., Abs, afe_init, float(errdist)*1000.
 #~ @profile
 def photometry():
         
@@ -1053,7 +1086,7 @@ def lnprior(theta):
 		abs_mu = Abs
 		A1_mu = A1
 		#~ abs_sigma = 1/3. * A1 #mag
-		abs_sigma = 0.09 #mag
+		abs_sigma = 0.06 #mag
 		lnl_abs = np.log(1.0/(np.sqrt(2*np.pi)*abs_sigma))-0.5*(A1_mu-abs_mu)**2/abs_sigma**2
 		###gaussian prior on distance modulus
 		dm_mu = (np.log10(distance) -1)*5
@@ -1081,29 +1114,34 @@ def lnprior(theta):
 		A1_mu = A1
 		# ~abs_sigma = 1/3. * A1 #mag
 		abs_sigma = 0.06 #mag
-		lnl_abs = np.log(1.0/(np.sqrt(2*np.pi)*abs_sigma))-0.5*(A1_mu-abs_mu)**2/abs_sigma**2
-		###gaussian prior on distance modulus
-		dm_mu = (np.log10(distance) -1)*5
-		dist_mu = (np.log10(dist) -1)*5
-		dm_sigma = 0.5 #mag
-		lnl_dm = np.log(1.0/(np.sqrt(2*np.pi)*dm_sigma))-0.5*(dist_mu-dm_mu)**2/dm_sigma**2
+		# ~lnl_abs = np.log(1.0/(np.sqrt(2*np.pi)*abs_sigma))-0.5*(A1_mu-abs_mu)**2/abs_sigma**2
+		lnl_abs = -0.5*(A1_mu-abs_mu)**2/abs_sigma**2
+		###gaussian prior on distance
+		# ~dm_mu = (np.log10(distance) -1)*5
+		# ~dist_mu = (np.log10(dist) -1)*5
+		# ~dm_sigma = 0.5 #mag	
+		dm_mu = distance
+		dist_mu = dist
+		dm_sigma = errdist #mag
+		# ~lnl_dm = np.log(1.0/(np.sqrt(2*np.pi)*dm_sigma))-0.5*(dist_mu-dm_mu)**2/dm_sigma**2
+		lnl_dm = -0.5*(dist_mu-dm_mu)**2/dm_sigma**2
 		###gaussian prior on metallicity
 		fe_mu = metal
 		me_mu = float(FeH)
 		me_sigma = 0.2 #mag
-		lnl_me = (math.log(1.0/(math.sqrt(2*math.pi)*me_sigma))-0.5*(me_mu-fe_mu)**2/me_sigma**2)
+		# ~lnl_me = (math.log(1.0/(math.sqrt(2*math.pi)*me_sigma))-0.5*(me_mu-fe_mu)**2/me_sigma**2)
+		lnl_me = -0.5*(me_mu-fe_mu)**2/me_sigma**2
 		###gaussian prior on abundance
 		afe_mu = afe_init
 		abu_mu = afe
 		abu_sigma = 0.2
-		lnl_abu = (math.log(1.0/(math.sqrt(2*math.pi)*abu_sigma))-0.5*(abu_mu-afe_mu)**2/abu_sigma**2)
+		# ~lnl_abu = (math.log(1.0/(math.sqrt(2*math.pi)*abu_sigma))-0.5*(abu_mu-afe_mu)**2/abu_sigma**2)
+		lnl_abu = -0.5*(abu_mu-afe_mu)**2/abu_sigma**2
 			#~ #flat priors on age, FeH, Av
 		if 9 < age < 10.175 and -2.5 < FeH < 0  and 0.0 < dist and 0 < A1 < 3.0 and -0.2 <= afe <= 0.8:
 			# ~return 0.0
-			return lnl_me + lnl_dm + lnl_abs + lnl_abu
-		return -np.inf
-		#if 9 < age < 10.30  and -4 < FeH < 0.5 and 0.0 < dist and 0 < A1 < 3.0:
-		#	return lnl_me
+			print('met: '+str(lnl_me),'dist: '+str(lnl_dm),'abs: '+str(lnl_abs),'afe: '+str(lnl_abu), 'TOTAL = '+str(lnl_me + lnl_dm + lnl_abs + lnl_abu))
+			return lnl_me + lnl_dm + lnl_abs
 		return -np.inf
 		
 #~ @profile
@@ -1574,9 +1612,10 @@ glc = int(input("what is your cluster number? "))
 # glc = int(os.environ["SLURM_ARRAY_TASK_ID"]) # aganice
 #~ glc = int(os.environ["PBS_ARRAYID"])  # hipatia
 print("the chosen cluster is {}".format(glc))
-clus_nb, Age, metal, distance, Abs, afe_init, distplus, distmoins  = cluster(glc)
-print(clus_nb, Age, metal, distance, Abs, afe_init, distplus, distmoins)
+clus_nb, Age, metal, distance, Abs, afe_init, errdist  = cluster(glc)
+print(clus_nb, Age, metal, distance, Abs, afe_init, errdist)
 photo_v, err_v, photo_i, color, err_color, nmv, nmi, longueur = photometry()
+# ~kill
 
 # ~print(np.mean(err_color))
 # ~kill
@@ -1602,7 +1641,7 @@ T0 = 1
 T1 = 1000
 posnum = 1
 ite = 10000
-nwalkers = 100
+nwalkers = 20
 # ~model = 'mist'
 model = 'dar'
 #~ #----------------
@@ -2269,18 +2308,18 @@ errcenterv_rgb = np.delete(errcenterv,base)
 #~ f6062 = ff2[:,14] + 5*np.log10(distance) - 5
 #~ f8142 = ff2[:,19] + 5*np.log10(distance) - 5
 #~ coliso2 = f6062-f8142
-print(errcenter_rgb)
+# ~print(errcenter_rgb)
 
 plt.figure()
 plt.scatter(color,photo_v, marker='.', s=10, color='grey', label='stars', alpha=0.8)
 # ~plt.scatter(gauss_mean,bincenter, marker='o', s=30, color='r', label=r'$C_i^{data}$')
 # ~plt.errorbar(gauss_mean,bincenter, xerr=gauss_disp, c='k', linewidth=2, fmt='none', label=r'$\sigma_i^{data}$')
 #~ plt.scatter(colbis[dr2],magvbis[dr2], marker='.',s=10, color='r', label='stars in the upper branch')
-#~ plt.scatter(colbis,magvbis, marker='.',s=10, color='r', label='stars in the upper branch')
+plt.scatter(colbis,magvbis, marker='.',s=10, color='r', label='stars in the upper branch')
 #~ plt.errorbar(colbis,magvbis, xerr=errcolbis, c='k', fmt='none')
 # ~plt.scatter(ccenter,vcenter, marker='x',s=30, color='k')
 # ~plt.errorbar(ccenter, vcenter, xerr=errcenter, capsize= 2, linewidth=2,fmt = 'none', c='k')
-# ~plt.scatter(ccenter_rgb, vcenter_rgb , marker='o', s=30, color='r', label='selected points')
+plt.scatter(ccenter_rgb, vcenter_rgb , marker='o', s=30, color='r', label='selected points')
 # ~for x,y,z in zip(ccenter, vcenter, np.arange(len(ccenter))):
 	# ~plt.text(x,y, str(z), color='b', label='selected points')
 #~ if model == 'mist':
@@ -2405,7 +2444,7 @@ with Pool() as pool:
 
 	for i, (results) in enumerate(zip(sampler.sample(pos, iterations=ite))):
 		print(i)
-		if (i+1) % 200 == 0:
+		if (i+1) % 100 == 0:
 			ind = int((i+1)/1)
 	# 		with open('test2_'+str(clus_nb)+'_'+str(model)+'.txt', 'a+') as fid_file:
 			print("first phase is at {0:.1f}%\n".format(100 * float(i) /ite))

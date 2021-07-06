@@ -357,7 +357,7 @@ if version == '13':
 if version == '0': 
 	nwalkers = 300	
 	version1 = '10' 
-	model1 = 'mist'
+	# ~model1 = 'mist'
 	# ~version2 = '9' 
 	version2 = '15' 
 	model2 = 'dar'
@@ -479,26 +479,26 @@ dage = np.diff(binage)[0]
 sd2, sh2 = error_compute(dage, p2,bincenter)
 
 
-print('for -1.5 the age is ' + str(maxi))
-print('error max is +'+str(sh-maxi))
-print('error min is -'+str(maxi-sd))
+# ~print('for -1.5 the age is ' + str(maxi))
+# ~print('error max is +'+str(sh-maxi))
+# ~print('error min is -'+str(maxi-sd))
 
-print('for -2 the age is ' + str(maxi2))
-print('error max is +'+str(sh2-maxi2))
-print('error min is -'+str(maxi2-sd2))
+# ~print('for -2 the age is ' + str(maxi2))
+# ~print('error max is +'+str(sh2-maxi2))
+# ~print('error min is -'+str(maxi2-sd2))
 
-plt.figure()
-plt.plot(bincenter, ptot/np.max(ptot), label='All GC',c='r', linewidth=4)
-plt.plot(bincenter, p1/np.max(p1), label ='[Fe/H] < -1.5',c='b', linewidth=4)
-plt.plot(bincenter, p2/np.max(p2), label ='[Fe/H] < -2',c='g', linewidth=4)
-plt.xlim(11.5,14.5)
-#~ plt.ylim(0,0.025)
-plt.ylabel('P/Pmax', fontsize=24)
-plt.xlabel('Age [Gyr]', fontsize=24)
-plt.legend(loc ='upper left', fontsize=24)
-plt.tick_params(labelsize=16)
+# ~plt.figure()
+# ~plt.plot(bincenter, ptot/np.max(ptot), label='All GC',c='r', linewidth=4)
+# ~plt.plot(bincenter, p1/np.max(p1), label ='[Fe/H] < -1.5',c='b', linewidth=4)
+# ~plt.plot(bincenter, p2/np.max(p2), label ='[Fe/H] < -2',c='g', linewidth=4)
+# ~plt.xlim(11.5,14.5)
+# ~#~ plt.ylim(0,0.025)
+# ~plt.ylabel('P/Pmax', fontsize=24)
+# ~plt.xlabel('Age [Gyr]', fontsize=24)
+# ~plt.legend(loc ='upper left', fontsize=24)
+# ~plt.tick_params(labelsize=16)
 # ~plt.show()
-plt.close()
+# ~plt.close()
 # ~kill
 
 
@@ -617,42 +617,42 @@ Pconv = signal.convolve(P1,Pdt,'same')
 
 #---------------------------------------------
 #MIST 8
-Age_mean_mist = np.loadtxt('/home/david/codes/Analysis/GC/plots/data_'+ version1 +'_'+str(model1)+'.txt', usecols=(2,))
-Age_high_mist = np.loadtxt('/home/david/codes/Analysis/GC/plots/data_'+ version1 +'_'+str(model1)+'.txt', usecols=(3,))
-Age_low_mist = np.loadtxt('/home/david/codes/Analysis/GC/plots/data_'+ version1 +'_'+str(model1)+'.txt', usecols=(1,))
-metal_fin_mist = np.loadtxt('/home/david/codes/Analysis/GC/plots/data_'+ version1 +'_'+str(model1)+'.txt', usecols=(5,))
-metal_low_mist = np.loadtxt('/home/david/codes/Analysis/GC/plots/data_'+ version1 +'_'+str(model1)+'.txt', usecols=(4,))
-metal_high_mist = np.loadtxt('/home/david/codes/Analysis/GC/plots/data_'+ version1 +'_'+str(model1)+'.txt', usecols=(6,))
-distance_low_mist = np.loadtxt('/home/david/codes/Analysis/GC/plots/data_'+ version1 +'_'+str(model1)+'.txt', usecols=(7,))
-distance_fin_mist = np.loadtxt('/home/david/codes/Analysis/GC/plots/data_'+ version1 +'_'+str(model1)+'.txt', usecols=(8,))
-distance_high_mist = np.loadtxt('/home/david/codes/Analysis/GC/plots/data_'+ version1 +'_'+str(model1)+'.txt', usecols=(9,))
-AAbs_low_mist = np.loadtxt('/home/david/codes/Analysis/GC/plots/data_'+ version1 +'_'+str(model1)+'.txt', usecols=(10,))
-AAbs_fin_mist = np.loadtxt('/home/david/codes/Analysis/GC/plots/data_'+ version1 +'_'+str(model1)+'.txt', usecols=(11,))
-AAbs_high_mist = np.loadtxt('/home/david/codes/Analysis/GC/plots/data_'+ version1 +'_'+str(model1)+'.txt', usecols=(12,))
-elem_fin_mist = np.arange(len(Age_mean_mist))
+# ~Age_mean_mist = np.loadtxt('/home/david/codes/Analysis/GC/plots/data_'+ version1 +'_'+str(model1)+'.txt', usecols=(2,))
+# ~Age_high_mist = np.loadtxt('/home/david/codes/Analysis/GC/plots/data_'+ version1 +'_'+str(model1)+'.txt', usecols=(3,))
+# ~Age_low_mist = np.loadtxt('/home/david/codes/Analysis/GC/plots/data_'+ version1 +'_'+str(model1)+'.txt', usecols=(1,))
+# ~metal_fin_mist = np.loadtxt('/home/david/codes/Analysis/GC/plots/data_'+ version1 +'_'+str(model1)+'.txt', usecols=(5,))
+# ~metal_low_mist = np.loadtxt('/home/david/codes/Analysis/GC/plots/data_'+ version1 +'_'+str(model1)+'.txt', usecols=(4,))
+# ~metal_high_mist = np.loadtxt('/home/david/codes/Analysis/GC/plots/data_'+ version1 +'_'+str(model1)+'.txt', usecols=(6,))
+# ~distance_low_mist = np.loadtxt('/home/david/codes/Analysis/GC/plots/data_'+ version1 +'_'+str(model1)+'.txt', usecols=(7,))
+# ~distance_fin_mist = np.loadtxt('/home/david/codes/Analysis/GC/plots/data_'+ version1 +'_'+str(model1)+'.txt', usecols=(8,))
+# ~distance_high_mist = np.loadtxt('/home/david/codes/Analysis/GC/plots/data_'+ version1 +'_'+str(model1)+'.txt', usecols=(9,))
+# ~AAbs_low_mist = np.loadtxt('/home/david/codes/Analysis/GC/plots/data_'+ version1 +'_'+str(model1)+'.txt', usecols=(10,))
+# ~AAbs_fin_mist = np.loadtxt('/home/david/codes/Analysis/GC/plots/data_'+ version1 +'_'+str(model1)+'.txt', usecols=(11,))
+# ~AAbs_high_mist = np.loadtxt('/home/david/codes/Analysis/GC/plots/data_'+ version1 +'_'+str(model1)+'.txt', usecols=(12,))
+# ~elem_fin_mist = np.arange(len(Age_mean_mist))
 
 
 ### compute the inverse variance weighted mean
-err_min_mist = Age_mean_mist - Age_low_mist
-err_max_mist = Age_high_mist - Age_mean_mist
-err_mean_mist = (err_min_mist + err_max_mist)/2.
-### all clusters
-ivwa_tot_mist = np.sum((Age_mean_mist)/(err_mean_mist)**2) / np.sum(1/(err_mean_mist)**2)
-ivwv_tot_mist = 1/ np.sum(1/(err_mean_mist)**2)
-mu_tot_mist = ivwa_tot_mist 
-sigma_tot_mist = np.sqrt(ivwv_tot_mist)
-### clusters with fe/h < -1.5
-gc1_mist = np.where(metal_fin_mist < -1.5)[0]
-ivwa_1_mist = np.sum((Age_mean_mist[gc1_mist])/(err_mean_mist[gc1_mist])**2) / np.sum(1/(err_mean_mist[gc1_mist])**2)
-ivwv_1_mist = 1/ np.sum(1/(err_mean_mist[gc1_mist])**2)
-mu_1_mist = ivwa_1_mist 
-sigma_1_mist = np.sqrt(ivwv_1_mist)
-### clusters with fe/h < -2.0
-gc2_mist = np.where(metal_fin_mist < -2.0)[0]
-ivwa_2_mist = np.sum((Age_mean_mist[gc2_mist])/(err_mean_mist[gc2_mist])**2) / np.sum(1/(err_mean_mist[gc2_mist])**2)
-ivwv_2_mist = 1/ np.sum(1/(err_mean_mist[gc2_mist])**2)
-mu_2_mist = ivwa_2_mist 
-sigma_2_mist = np.sqrt(ivwv_2_mist)
+# ~err_min_mist = Age_mean_mist - Age_low_mist
+# ~err_max_mist = Age_high_mist - Age_mean_mist
+# ~err_mean_mist = (err_min_mist + err_max_mist)/2.
+# ~### all clusters
+# ~ivwa_tot_mist = np.sum((Age_mean_mist)/(err_mean_mist)**2) / np.sum(1/(err_mean_mist)**2)
+# ~ivwv_tot_mist = 1/ np.sum(1/(err_mean_mist)**2)
+# ~mu_tot_mist = ivwa_tot_mist 
+# ~sigma_tot_mist = np.sqrt(ivwv_tot_mist)
+# ~### clusters with fe/h < -1.5
+# ~gc1_mist = np.where(metal_fin_mist < -1.5)[0]
+# ~ivwa_1_mist = np.sum((Age_mean_mist[gc1_mist])/(err_mean_mist[gc1_mist])**2) / np.sum(1/(err_mean_mist[gc1_mist])**2)
+# ~ivwv_1_mist = 1/ np.sum(1/(err_mean_mist[gc1_mist])**2)
+# ~mu_1_mist = ivwa_1_mist 
+# ~sigma_1_mist = np.sqrt(ivwv_1_mist)
+# ~### clusters with fe/h < -2.0
+# ~gc2_mist = np.where(metal_fin_mist < -2.0)[0]
+# ~ivwa_2_mist = np.sum((Age_mean_mist[gc2_mist])/(err_mean_mist[gc2_mist])**2) / np.sum(1/(err_mean_mist[gc2_mist])**2)
+# ~ivwv_2_mist = 1/ np.sum(1/(err_mean_mist[gc2_mist])**2)
+# ~mu_2_mist = ivwa_2_mist 
+# ~sigma_2_mist = np.sqrt(ivwv_2_mist)
 
 #~ #--------------------------------------------------------------------------
 #DAR 12
@@ -985,7 +985,7 @@ ax3.set_ylabel(r' Distance/kpc' "\n" r' (This work)', fontsize=12)
 ax3.tick_params(labelsize=14)
 plt.savefig('/home/david/codes/Analysis/GC/plots/analysis/param_comparison.png', orientation='portrait', dpi=250)
 plt.subplots_adjust(hspace=1.8, wspace=1.0, top=0.95)
-# ~plt.show()
+plt.show()
 plt.close()
 
 
@@ -1044,13 +1044,13 @@ plt.close()
 
 #~ #-----------------------------------------------------------------------
 
-Age_mean_mist = Age_mean_mist[Age_mean_mist != 0]
-Age_high_mist = Age_high_mist[Age_high_mist != 0]
-Age_low_mist = Age_low_mist[Age_low_mist != 0]
-metal_fin_mist = metal_fin_mist[metal_fin_mist != 0]
-distance_fin_mist = distance_fin_mist[distance_fin_mist != 0]
-AAbs_fin_mist = AAbs_fin_mist[AAbs_fin_mist != 0]
-elem_fin_mist = elem_fin_mist[elem_fin_mist != 0]
+# ~Age_mean_mist = Age_mean_mist[Age_mean_mist != 0]
+# ~Age_high_mist = Age_high_mist[Age_high_mist != 0]
+# ~Age_low_mist = Age_low_mist[Age_low_mist != 0]
+# ~metal_fin_mist = metal_fin_mist[metal_fin_mist != 0]
+# ~distance_fin_mist = distance_fin_mist[distance_fin_mist != 0]
+# ~AAbs_fin_mist = AAbs_fin_mist[AAbs_fin_mist != 0]
+# ~elem_fin_mist = elem_fin_mist[elem_fin_mist != 0]
 
 Age_mean_dar = Age_mean_dar[Age_mean_dar != 0]
 Age_high_dar = Age_high_dar[Age_high_dar != 0]
@@ -1090,9 +1090,9 @@ print(len(gc2_dar))
 print(gc2_dar)
 
 
-print(mu_tot_mist, sigma_tot_mist)
-print(mu_1_mist, sigma_1_mist)
-print(mu_2_mist, sigma_2_mist)
+# ~print(mu_tot_mist, sigma_tot_mist)
+# ~print(mu_1_mist, sigma_1_mist)
+# ~print(mu_2_mist, sigma_2_mist)
 print(mu_tot_dar, sigma_tot_dar)
 print(mu_1_dar, sigma_1_dar)
 print(mu_2_dar, sigma_2_dar)

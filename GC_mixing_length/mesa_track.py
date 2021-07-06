@@ -451,51 +451,11 @@ msun = 1.989e+33 #g
 Age = np.log10(13.32e9)
 distance = 0
 Abs = 0
-afe_init = 0.
-helium_y = ''
-model='dar'
-# ~model='mist'
-print(Age)
+# ~met1 = -1.95
+met1 = -2.0
+met2 = -1.75
+met3 = -1.5
 
-from isochrones.mist import MIST_Isochrone
-mist = MIST_Isochrone()
-
-from isochrones.dartmouth import Dartmouth_FastIsochrone
-darm2 = Dartmouth_FastIsochrone(afe='afem2', y=helium_y)
-darp0 = Dartmouth_FastIsochrone(afe='afep0', y=helium_y)
-darp2 = Dartmouth_FastIsochrone(afe='afep2', y=helium_y)
-darp4 = Dartmouth_FastIsochrone(afe='afep4', y=helium_y)
-darp6 = Dartmouth_FastIsochrone(afe='afep6', y=helium_y)
-darp8 = Dartmouth_FastIsochrone(afe='afep8', y=helium_y)
-
-# ~binc = 200
-# ~niso = int((-200 -(-236))/2)
-# ~magtest= np.linspace(-5,5,binc)
-# ~col = np.zeros((binc,niso))
-# ~mag = np.zeros((binc,niso))
-# ~import cmasher as cmr
-# ~cm = cmr.ember
-# ~norm = colors.Normalize(vmin=-2.5,vmax=-0.5)
-# ~s_m = matplotlib.cm.ScalarMappable(cmap=cm, norm=norm)
-# ~s_m.set_array([])
-# ~import matplotlib.gridspec as gridspec
-# ~gs_in = gridspec.GridSpec(2, 2,hspace=0.5,height_ratios=[10,1],
-# ~width_ratios=[8,4],wspace=0.,left=0.10,right=0.9,bottom=0.1,top=0.9)
-# ~for ind,a in enumerate(range(-236, -200, 2)):
-	# ~met= a/100. 
-
-	# ~print(met)
-	# ~mag_v, mag_i, Color_iso, eep_first = iso_mag(Age, met, distance, Abs, afe_init)
-	# ~fmag_ini = interpolate.interp1d(mag_v, Color_iso, 'nearest',fill_value="extrapolate")
-	# ~# mag_vref, mag_iref, Color_isoref, eep_firstref = iso_mag(Age , -2.48, distance, Abs, afe_init)
-	# ~# mag_vref, mag_iref, Color_isoref, eep_firstref = iso_mag(Age , -0.5, distance, Abs, afe_init)
-	# ~# fmag_iniref = interpolate.interp1d(mag_vref, Color_isoref, 'nearest',fill_value="extrapolate")
-
-	# ~col[:,ind]= fmag_ini(magtest)
-	# ~mag[:,ind]= magtest
-	# ~plt.plot(Color_iso,mag_v, color=s_m.to_rgba(met))
-	#ax1.plot(fmag_iniref(magtest)/fmag_ini(magtest),magtest, color=s_m.to_rgba(met),lw=2)
-	
 string_mass = 'M075'
 string_met = 'scatter_test'
 htest1 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_a1938.data')
@@ -508,27 +468,251 @@ htest3 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+str
 coltest3,magtest3, mptest3 = cut2(htest3)
 htest4 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_m080.data')
 coltest4,magtest4, mptest4 = cut2(htest4)
-htest5 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_a1888.data')
-coltest5,magtest5, mptest5 = cut2(htest5)
-htest6 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_a1988.data')
-coltest6,magtest6, mptest6 = cut2(htest6)
-htest7 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_a1838.data')
-coltest7,magtest7, mptest7 = cut2(htest7)
-htest8 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_a2038.data')
-coltest8,magtest8, mptest8 = cut2(htest8)
+# ~htest5 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_a1888.data')
+# ~coltest5,magtest5, mptest5 = cut2(htest5)
+# ~htest6 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_a1988.data')
+# ~coltest6,magtest6, mptest6 = cut2(htest6)
+# ~htest7 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_a1838.data')
+# ~coltest7,magtest7, mptest7 = cut2(htest7)
+# ~htest8 = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_a2038.data')
+# ~coltest8,magtest8, mptest8 = cut2(htest8)
 
 
-met1 = -1.95
-met2 = -1.75
-met3 = -1.5
-
-mag_v1, mag_i1, Color_iso1, eep_first1 = iso_mag(Age, met1, distance, Abs, afe_init)
-mag_v2, mag_i2, Color_iso2, eep_first2 = iso_mag(Age, met2, distance, Abs, afe_init)
-mag_v3, mag_i3, Color_iso3, eep_first3 = iso_mag(Age, met3, distance, Abs, afe_init)
+model = 'mist'
+# ~model = 'dar'
 
 
-# ~plt.plot(htest1.log_Teff, htest1.log_L)
-# ~plt.plot(htest1bis.log_Teff, htest1bis.log_L, linestyle=':')
+#------------------------------------------------------------------------
+if model == 'mist':
+	print(Age)
+
+	from isochrones.mist import MIST_Isochrone
+	mist = MIST_Isochrone()
+
+
+	mag_v1, mag_i1, Color_iso1, eep_first1 = iso_mag(Age, met1, distance, Abs)
+	# ~mag_v2, mag_i2, Color_iso2, eep_first2 = iso_mag(Age, met2, distance, Abs)
+	# ~mag_v3, mag_i3, Color_iso3, eep_first3 = iso_mag(Age, met3, distance, Abs)
+	ct1 = [605-int(eep_first1)]
+	# ~ct2 = [605-int(eep_first2)]
+	# ~ct3 = [605-int(eep_first3)]
+
+	# ~ct = [605]
+	# ~aa = np.loadtxt('0007500M.track.eep200.cmd')
+	# ~bb = np.loadtxt('0007500M.track.eep175.cmd')
+	# ~cc = np.loadtxt('0007500M.track.eep150.cmd')
+	# ~va = aa[:,10]
+	# ~ia = aa[:,15]
+	# ~vb = bb[:,10]
+	# ~ib = bb[:,15]
+	# ~vc = cc[:,10]
+	# ~ic = cc[:,15]
+
+	# ~plt.plot(va[:ct[0]-1]-ia[:ct[0]-1],va[:ct[0]-1],label='toto', c='c',linestyle=':')
+	# ~plt.plot(vb[:ct[0]-1]-ib[:ct[0]-1],vb[:ct[0]-1],label='titi', c='k',linestyle=':')
+	# ~plt.plot(vc[:ct[0]-1]-ic[:ct[0]-1],vc[:ct[0]-1],label='tutu', c='r',linestyle=':')
+
+	# ~plt.plot(Color_iso2[:ct2[0]-1],mag_v2[:ct2[0]-1], c='k',linestyle=':', label=r'DSED Isochrone')
+	# ~plt.plot(Color_iso3[:ct3[0]-1],mag_v3[:ct3[0]-1], c='r',linestyle=':')
+	# ~plt.plot(Color_iso1[:ct1[0]-1],mag_v1[:ct1[0]-1], c='r',linestyle=':')
+
+	#read tracks from software
+	track_75m15 = np.loadtxt('tracks/0007500M15.track.eep.cmd')
+	t1_m15 = track_75m15[:604,1]
+	l1_m15 = track_75m15[:604,3]
+	track_80m15 = np.loadtxt('tracks/0008000M15.track.eep.cmd')
+	t2_m15 = track_80m15[:604,1]
+	l2_m15 = track_80m15[:604,3]
+	track_75m20 = np.loadtxt('tracks/0007500M20.track.eep.cmd')
+	t1_m20 = track_75m20[:604,1]
+	l1_m20 = track_75m20[:604,3]
+	track_80m20 = np.loadtxt('tracks/0008000M20.track.eep.cmd')
+	t2_m20 = track_80m20[:604,1]
+	l2_m20 = track_80m20[:604,3]
+	# ~track_75m20 = np.loadtxt('tracks/0007500M20.track.eep.cmd')
+	# ~t1_m20 = track_75m20[:604,10]
+	# ~l1_m20 = track_75m20[:604,15]
+	# ~track_80m20 = np.loadtxt('tracks/0008000M20.track.eep.cmd')
+	# ~t2_m20 = track_80m20[:604,10]
+	# ~l2_m20 = track_80m20[:604,15]
+
+	#read isochrones from software
+	iso15 = np.loadtxt('tracks/MIST_iso_60c8b28fe9a2d.iso.cmd')
+	t15 = iso15[:604-254,4] # 604-254 to stop at tip of red giant branch
+	l15 = iso15[:604-254,6]
+	iso20 = np.loadtxt('tracks/MIST_iso_60c8b2a6c272d.iso.cmd')
+	t20 = iso20[:604-254,4]
+	l20 = iso20[:604-254,6]
+
+	# ~iso15 = np.loadtxt('tracks/MIST_iso_60c8b28fe9a2d.iso.cmd')
+	# ~t15 = iso15[:604-254,14] # 604-254 to stop at tip of red giant branch
+	# ~l15 = iso15[:604-254,19]
+	# ~iso20 = np.loadtxt('tracks/MIST_iso_60c8b2a6c272d.iso.cmd')
+	# ~iso20 = np.loadtxt('tracks/MIST_iso_60e3160b266d4.iso.cmd')
+	# ~t20 = iso20[:,14]
+	# ~l20 = iso20[:,19]
+
+
+	# ~plt.plot(t15,l15,label='MIST isochrones', c='c')
+	# ~plt.plot(t20,l20, c='c')
+	# ~plt.plot(t1_m15,l1_m15,label=r'MESA tracks with $M = 0.75 M_{\odot}$', c='r',linestyle=':')
+	# ~plt.plot(t2_m15,l2_m15,label=r'MESA tracks with $M = 0.80 M_{\odot}$', c='r',linestyle='--')
+	# ~plt.plot(t1_m20,l1_m20, c='r',linestyle=':')
+	# ~plt.plot(t2_m20,l2_m20, c='r',linestyle='--')
+
+	# ~plt.text(3.70,3,r'[Fe/H] = -2.0',va='center',fontsize=12,alpha=1.)
+	# ~plt.text(3.65,2.3,r'[Fe/H] = -1.5',va='center',fontsize=12,alpha=1.)
+	# ~plt.xlim(3.6,3.85)
+	# ~plt.ylim(-0.5,3.5)
+	# ~plt.xlabel(r'Log $\rm T_{eff}$', fontsize=16)
+	# ~plt.ylabel(r'Log L/$\rm L_{\odot}$', fontsize=16)
+	# ~plt.gca().invert_xaxis()
+	# ~plt.legend(loc='best')
+	# ~plt.axhline(0.18, linestyle ='--', label=r'$\rm Magnitude \: cut \: \mathcal{M}_1$', c='k')
+	# ~plt.show()
+	# ~plt.close()
+	# ~kill
+
+	#read mesa history files (a = 1.82)
+	# ~ht = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_mist_fid.data')
+	ht = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_mist_fid.data')
+	coltest,magtest, mptest = cut2(ht)
+	# ~h5 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a177.data')
+	# ~h6 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a187.data')
+	# ~h7 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a172.data')
+	# ~h8 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a192.data')
+
+	plt.plot(ht.log_Teff, ht.log_L)
+	# ~plt.plot(h5.log_Teff, h5.log_L, label=r'$\rm \Delta_{\alpha} = 0.05$', c='c')
+	# ~plt.plot(h6.log_Teff, h6.log_L, c='c', linestyle='--')
+	# ~plt.plot(h7.log_Teff, h7.log_L, label=r'$\rm \Delta_{\alpha} = 0.1$', c='m')
+	# ~plt.plot(h8.log_Teff, h8.log_L, c='c')
+
+	# ~plt.plot(t20,l20, c='k')
+	plt.plot(t1_m20,l1_m20, c='r',linestyle=':')
+	# ~plt.plot(t2_m20,l2_m20, c='r',linestyle='--')
+	# ~plt.plot(t20-l20,t20, c='k')
+	# ~plt.plot(t1_m20-l1_m20,t1_m20, c='r',linestyle=':')
+	# ~plt.plot(t2_m20-l2_m20,t2_m20, c='r',linestyle='--')
+
+	plt.xlim(3.6,3.85)
+	plt.ylim(-0.5,3.5)
+	plt.xlabel(r'Log $\rm T_{eff}$', fontsize=16)
+	plt.ylabel(r'Log L/$\rm L_{\odot}$', fontsize=16)
+	# ~plt.axhline(0.18, linestyle ='--', label=r'$\rm Magnitude \: cut \: \mathcal{M}_1$', c='k')
+	# ~plt.gca().invert_yaxis()
+	plt.gca().invert_xaxis()
+	plt.legend(loc='best')
+	plt.show()
+	plt.close()
+	kill
+
+#-----------------------------------------------------------------------
+if model == 'dar':
+	afe_init = 0.
+	helium_y = ''
+	print(Age)
+
+	from isochrones.dartmouth import Dartmouth_FastIsochrone
+	darm2 = Dartmouth_FastIsochrone(afe='afem2', y=helium_y)
+	darp0 = Dartmouth_FastIsochrone(afe='afep0', y=helium_y)
+	darp2 = Dartmouth_FastIsochrone(afe='afep2', y=helium_y)
+	darp4 = Dartmouth_FastIsochrone(afe='afep4', y=helium_y)
+	darp6 = Dartmouth_FastIsochrone(afe='afep6', y=helium_y)
+	darp8 = Dartmouth_FastIsochrone(afe='afep8', y=helium_y)
+
+	# ~binc = 200
+	# ~niso = int((-200 -(-236))/2)
+	# ~magtest= np.linspace(-5,5,binc)
+	# ~col = np.zeros((binc,niso))
+	# ~mag = np.zeros((binc,niso))
+	# ~import cmasher as cmr
+	# ~cm = cmr.ember
+	# ~norm = colors.Normalize(vmin=-2.5,vmax=-0.5)
+	# ~s_m = matplotlib.cm.ScalarMappable(cmap=cm, norm=norm)
+	# ~s_m.set_array([])
+	# ~import matplotlib.gridspec as gridspec
+	# ~gs_in = gridspec.GridSpec(2, 2,hspace=0.5,height_ratios=[10,1],
+	# ~width_ratios=[8,4],wspace=0.,left=0.10,right=0.9,bottom=0.1,top=0.9)
+	# ~for ind,a in enumerate(range(-236, -200, 2)):
+		# ~met= a/100. 
+
+		# ~print(met)
+		# ~mag_v, mag_i, Color_iso, eep_first = iso_mag(Age, met, distance, Abs, afe_init)
+		# ~fmag_ini = interpolate.interp1d(mag_v, Color_iso, 'nearest',fill_value="extrapolate")
+		# ~# mag_vref, mag_iref, Color_isoref, eep_firstref = iso_mag(Age , -2.48, distance, Abs, afe_init)
+		# ~# mag_vref, mag_iref, Color_isoref, eep_firstref = iso_mag(Age , -0.5, distance, Abs, afe_init)
+		# ~# fmag_iniref = interpolate.interp1d(mag_vref, Color_isoref, 'nearest',fill_value="extrapolate")
+
+		# ~col[:,ind]= fmag_ini(magtest)
+		# ~mag[:,ind]= magtest
+		# ~plt.plot(Color_iso,mag_v, color=s_m.to_rgba(met))
+		#ax1.plot(fmag_iniref(magtest)/fmag_ini(magtest),magtest, color=s_m.to_rgba(met),lw=2)
+
+
+	mag_v1, mag_i1, Color_iso1, eep_first1 = iso_mag(Age, met1, distance, Abs, afe_init)
+	mag_v2, mag_i2, Color_iso2, eep_first2 = iso_mag(Age, met2, distance, Abs, afe_init)
+	mag_v3, mag_i3, Color_iso3, eep_first3 = iso_mag(Age, met3, distance, Abs, afe_init)
+
+	#read tracks from software
+	track_75m15 = np.loadtxt('tracks/m075fehm15afep0.hst_acs')
+	t1_m15 = track_75m15[:,1]
+	l1_m15 = track_75m15[:,3]
+	track_80m15 = np.loadtxt('tracks/m080fehm15afep0.hst_acs')
+	t2_m15 = track_80m15[:,1]
+	l2_m15 = track_80m15[:,3]
+	track_75m20 = np.loadtxt('tracks/m075fehm20afep0.hst_acs')
+	t1_m20 = track_75m20[:,1]
+	l1_m20 = track_75m20[:,3]
+	track_80m20 = np.loadtxt('tracks/m080fehm20afep0.hst_acs')
+	t2_m20 = track_80m20[:,1]
+	l2_m20 = track_80m20[:,3]
+
+	#read isochrones from software
+	iso15 = np.loadtxt('tracks/tmp1623689984.iso')
+	t15 = iso15[:,2]
+	l15 = iso15[:,4]
+	iso20 = np.loadtxt('tracks/tmp1623763928.iso')
+	t20 = iso20[:,2]
+	l20 = iso20[:,4]
+	# ~iso20 = np.loadtxt('tracks/tmp1623763928.iso')
+	# ~t20 = iso20[:,10]
+	# ~l20 = iso20[:,15]
+
+
+	# ~plt.plot(t15,l15,label='DSED isochrones', c='c')
+	plt.plot(t20,l20, c='c')
+	# ~plt.plot(t20 - l20,t20, c='r')
+
+	# ~plt.plot(t1_m15,l1_m15,label=r'DSEP tracks with $M = 0.75 M_{\odot}$', c='r',linestyle=':')
+	# ~plt.plot(t2_m15,l2_m15,label=r'DSEP tracks with $M = 0.80 M_{\odot}$', c='r',linestyle='--')
+	# ~plt.plot(t1_m20,l1_m20, c='r',linestyle=':')
+	# ~plt.plot(t2_m20,l2_m20, c='r',linestyle='--')
+
+
+	# ~plt.plot(Color_iso2,mag_v2, c='k',linestyle=':', label=r'DSED Isochrone')
+	# ~plt.plot(Color_iso3,mag_v3, c='r',linestyle=':')
+	plt.plot(Color_iso1,mag_v1, c='c',linestyle=':')
+	plt.xlim(3.6,3.85)
+	plt.ylim(-0.5,3.5)
+	plt.xlabel(r'Log $\rm T_{eff}$', fontsize=16)
+	plt.ylabel(r'Log L/$\rm L_{\odot}$', fontsize=16)
+	plt.text(3.70,3,r'[Fe/H] = -2.0',va='center',fontsize=12,alpha=1.)
+	plt.text(3.65,2.3,r'[Fe/H] = -1.5',va='center',fontsize=12,alpha=1.)
+	plt.axhline(0.18, linestyle ='--', label=r'$\rm Magnitude \: cut \: \mathcal{M}_1$', c='k')
+	plt.gca().invert_xaxis()
+	plt.legend(loc='best')
+	plt.show()
+	plt.close()
+	kill
+
+#----------------------------------------------------------------------
+#plt.plot(htest1.log_Teff, htest1.log_L)
+#plt.plot(htest1bis.log_Teff, htest1bis.log_L, linestyle=':')
+# ~plt.xlim(3.6,3.85)
+# ~plt.ylim(-0.5,3.5)
+# ~plt.xlabel(r'Log $\rm T_{eff}$', fontsize=16)
+# ~plt.ylabel(r'Log L/$\rm L_{\odot}$', fontsize=16)
 # ~plt.gca().invert_xaxis()
 # ~plt.legend(loc='best')
 # ~plt.show()
@@ -536,18 +720,15 @@ mag_v3, mag_i3, Color_iso3, eep_first3 = iso_mag(Age, met3, distance, Abs, afe_i
 # ~kill
 
 
-
 # ~plt.plot(coltest1 , magtest1, c='k', label=r'MESA track')
-# ~plt.plot(Color_iso2,mag_v2, c='k',linestyle=':', label=r'DSED Isochrone')
 # ~plt.axhline(0.18, linestyle ='--', label=r'$\rm Magnitude \: cut \: \mathcal{M}_1$', c='k')
 # ~plt.plot(coltest2 , magtest2, c='r', label=r'[Fe/H] = -1.5')
 # ~plt.plot(coltest1 , magtest1, c='k', label=r'[Fe/H] = -1.75')
 # ~plt.plot(coltest3 , magtest3, c='c', label=r'[Fe/H] = -2.0')
-# ~plt.plot(Color_iso3,mag_v3, c='r',linestyle=':')
-# ~plt.plot(Color_iso1,mag_v1, c='c',linestyle=':')
 # ~plt.xlim(0.6,1.15)
-# ~# plt.ylim(6,-5)
 # ~plt.ylim(0.5,-4)
+# ~plt.xlim(0.,2.0)
+# ~plt.ylim(6,-5)
 # ~plt.tick_params(labelsize=16)
 # ~plt.subplots_adjust(bottom=0.15, top=0.89)
 # ~lgnd = plt.legend(loc='upper left', fontsize = 12)

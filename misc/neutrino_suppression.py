@@ -138,12 +138,12 @@ karray /= h
 
 
 plt.figure()
-plt.plot(karray, (Plin_1 - Plin)/Plin, label ='0.06')
-plt.plot(karray, (Plin_2 - Plin)/Plin, label ='0.12')
-plt.plot(karray, (Plin_3 - Plin)/Plin, label ='0.18')
-plt.legend(loc='upper right')
-plt.xlabel('k [h/Mpc] ')
-plt.ylabel(r'Pk $[h^3/ Mpc^{-3}]$')
+plt.plot(karray, (Plin_1 - Plin)/Plin, label =r'$\Sigma_{m_{\nu}} = 0.06 \:eV$', c='r')
+plt.plot(karray, (Plin_2 - Plin)/Plin, label =r'$\Sigma_{m_{\nu}} = 0.12 \:eV$', c='b')
+plt.plot(karray, (Plin_3 - Plin)/Plin, label =r'$\Sigma_{m_{\nu}} = 0.18 \:eV$',c='c')
+plt.legend(loc='best', fontsize = 16)
+plt.xlabel('k [h/Mpc] ', fontsize = 14)
+plt.ylabel(r' $(P_{m_{\nu}} - P_{m_{\nu}= 0} )/P_{m_{\nu}= 0} \:[h^3/ Mpc^{-3}]$', fontsize = 14)
 plt.xscale('log')
 # ~plt.yscale('log')
 plt.show()

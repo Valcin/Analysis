@@ -405,6 +405,14 @@ if version == '15':
 	garr = [3,4,8,12,14,15,17,19,20,24,28,32,34,42,43,46,48,51,52,54,59,61]
 	model = 'dar'
 	#~ garr =
+if version == '16':
+	ndim = 5
+	nwalkers = 100
+	ntemps = 1
+	print(ntemps)
+	garr = [3,4,8,12,14,15,17,19,20,24,28,32,34,42,43,46,48,51,52,54,59,61]
+	model = 'dar'
+	#~ garr =
 if version == '0':
 	ndim = 4 
 	nwalkers = 300	
@@ -425,7 +433,7 @@ if version == '0':
 tot_age = []
 tot_met = []
 
-for cn in range(8,9):
+for cn in [0,1,2,3,22,27,53]:
 # ~for cn in list(range(27))+ list(range(28,69)):
 #~ for cn in garr: # 
 	glc = cn
@@ -465,8 +473,8 @@ for cn in range(8,9):
 		#~ D = np.genfromtxt('/home/david/codes/GC/plots/test/data_'+str(t)+'_'+clus_nb+'_'+ version +'_'+str(model)+'.txt', usecols=(j+nwalkers*2,), max_rows=2000)
 		#~ AA = np.genfromtxt('/home/david/codes/GC/plots/test/data_'+str(t)+'_'+clus_nb+'_'+ version +'_'+str(model)+'.txt', usecols=(j+nwalkers*3,), max_rows=2000)
 
-	steps = 500
-	if version in ['9','10','15']:
+	steps = 50000
+	if version in ['9','10','15','16']:
 		files = np.loadtxt('/home/david/codes/data/GC_data/'+str(model)+'/data_1'+'_'+clus_nb+'_'+ version +'_'+str(model)+'.txt')
 	else:
 		files = np.loadtxt('/home/david/codes/Analysis/GC/plots/test/data_'+str(t)+'_'+clus_nb+'_'+ version +'_'+str(model)+'.txt')
@@ -502,7 +510,6 @@ for cn in range(8,9):
 	#~ Distance = files[:,2]
 	#~ AAbs = files[:,3]
 
-	print(len(Age)/nwalkers)
 	#~ print(len(Age))
 	#~ plt.suptitle('numero '+str(glc)+', '+clus_nb)
 	#~ ax1 = plt.subplot(221)
@@ -658,7 +665,8 @@ for cn in range(8,9):
 		#~ data3[i, 2] = Distance3[i] 
 		#~ data3[i, 3] = AAbs3[i] 
 #--------------------------------------------------------------------
-	print(glc)
+	print('cluster numero '+ str(glc))
+	print('number of steps = '+ str(len(Age)/nwalkers))
 
 	binage = np.linspace(5,15,200)
 	h1, bh1 = np.histogram(10**Age / 1.e9, bins=binage)
@@ -827,32 +835,32 @@ for cn in range(8,9):
 		
 	#~ kill
 
-	# ~if model == 'dar':
-		# ~fig = corner.corner(data, range=[(np.min(data[:,0]),15.), (np.min(data[:,1]),np.max(data[:,1])),
-		# ~(np.min(data[:,2]),np.max(data[:,2])),(np.min(data[:,3]),np.max(data[:,3])),(np.min(data[:,4]),np.max(data[:,4]))],
-		# ~labels=["$Age$ [Gyr]", "$metallicity$", "$distance$ [kpc]", "$Absorption$", r"[$\alpha$/fe]"]
-		# ~, hist_kwargs={'fill':'True',"edgecolor":'k',"linewidth":"2"},
-		# ~plot_contours=True, label_kwargs={"fontsize":22}, color ='b', plot_datapoints=False,
-		# ~levels=(1-np.exp(-0.5),0.6321,0.7769))
-		# ~plt.subplots_adjust(hspace=0.2, wspace=0.2, top = 0.95, left = 0.1, right=0.95)
-		# ~for ax in fig.get_axes():
-			# ~ax.tick_params(axis='both', labelsize=14)
+	if model == 'dar':
+		fig = corner.corner(data,bins=50, range=[(np.min(data[:,0]),15.), (np.min(data[:,1]),np.max(data[:,1])),
+		(np.min(data[:,2]),np.max(data[:,2])),(np.min(data[:,3]),np.max(data[:,3])),(np.min(data[:,4]),np.max(data[:,4]))],
+		labels=["$Age$ [Gyr]", "$metallicity$", "$distance$ [kpc]", "$Absorption$", r"[$\alpha$/fe]"]
+		, hist_kwargs={'fill':'True',"edgecolor":'k',"linewidth":"1.2"},
+		plot_contours=True, label_kwargs={"fontsize":10}, color ='c', plot_datapoints=False,
+		levels=(1-np.exp(-0.5),0.6321,0.7769))
+		plt.subplots_adjust(hspace=0.2, wspace=0.2, top = 0.95, left = 0.1, right=0.95)
+		for ax in fig.get_axes():
+			ax.tick_params(axis='both', labelsize=10)
 		# ~plt.savefig('/home/david/codes/Analysis/GC/plots/analysis/corner'+'_'+clus_nb+'_'+ version +'_'+str(model)+'.png')
-		# ~#plt.show()
-		# ~plt.close()
-	# ~else:
-		# ~fig = corner.corner(data, range=[(np.min(data[:,0]),15.), (np.min(data[:,1]),np.max(data[:,1])),
-		# ~(np.min(data[:,2]),np.max(data[:,2])),(np.min(data[:,3]),np.max(data[:,3]))],
-		# ~labels=["$Age$ [Gyr]", "$metallicity$", "$distance$ [kpc]", "$Absorption$"]
-		# ~, hist_kwargs={'fill':'True',"edgecolor":'k',"linewidth":"2"}, labelpad = 50,
-		# ~plot_contours=True, label_kwargs={"fontsize":16}, color ='b', plot_datapoints=False,
-		# ~levels=(1-np.exp(-0.5),0.6321,0.7769))
-		# ~plt.subplots_adjust(hspace=0.2, wspace=0.2, top = 0.95, left = 0.1, right=0.95)
-		# ~for ax in fig.get_axes():
-			# ~ax.tick_params(axis='both', labelsize=12)
-		# ~plt.savefig('/home/david/codes/Analysis/GC/plots/analysis/corner'+'_'+clus_nb+'_'+ version +'_'+str(model)+'.png')
-		# ~plt.show()
-		# ~plt.close()
+		plt.show()
+		plt.close()
+	else:
+		fig = corner.corner(data, range=[(np.min(data[:,0]),15.), (np.min(data[:,1]),np.max(data[:,1])),
+		(np.min(data[:,2]),np.max(data[:,2])),(np.min(data[:,3]),np.max(data[:,3]))],
+		labels=["$Age$ [Gyr]", "$metallicity$", "$distance$ [kpc]", "$Absorption$"]
+		, hist_kwargs={'fill':'True',"edgecolor":'k',"linewidth":"2"}, labelpad = 50,
+		plot_contours=True, label_kwargs={"fontsize":16}, color ='b', plot_datapoints=False,
+		levels=(1-np.exp(-0.5),0.6321,0.7769))
+		plt.subplots_adjust(hspace=0.2, wspace=0.2, top = 0.95, left = 0.1, right=0.95)
+		for ax in fig.get_axes():
+			ax.tick_params(axis='both', labelsize=12)
+		plt.savefig('/home/david/codes/Analysis/GC/plots/analysis/corner'+'_'+clus_nb+'_'+ version +'_'+str(model)+'.png')
+		plt.show()
+		plt.close()
 
 	# ~kill
 	#~ print(Age_low, Age_mean, Age_high, Metal_low, Metal_mean, Metal_high, Distance_low, Distance_mean, Distance_high, AAbs_low,
@@ -906,11 +914,11 @@ for cn in range(8,9):
 
 	afe_max = afe_values[np.searchsorted(afe_values, Afe_mean)]
 	afe_min = afe_values[np.searchsorted(afe_values, Afe_mean)-1]
-	print(afe_min)
-	print(afe_max)
+	# ~print(afe_min)
+	# ~print(afe_max)
 
-	print(np.log10(Age_mean*1.e9), Metal_mean, Distance_mean, AAbs_mean, afe_min)
-	print(np.log10(Age_mean*1.e9), Metal_mean, Distance_mean, AAbs_mean, afe_max)
+	print(Age_mean, Metal_mean, Distance_mean, AAbs_mean, Afe_mean)
+	# ~print(np.log10(Age_mean*1.e9), Metal_mean, Distance_mean, AAbs_mean, afe_max)
 
 	mag_v1_min , mag_i1_min, Color_iso1_min, eep_first = iso_mag(np.log10(Age_mean*1.e9), Metal_mean, Distance_mean, AAbs_mean, afe_min)
 	mag_v1_max , mag_i1_max, Color_iso1_max, eep_first = iso_mag(np.log10(Age_mean*1.e9), Metal_mean, Distance_mean, AAbs_mean, afe_max)
@@ -948,10 +956,11 @@ for cn in range(8,9):
 	# ~plt.ylabel('F606W', fontsize = 16)
 	plt.tick_params(labelsize=16)
 	# ~plt.title(clus_nb, fontsize = 16)
+	plt.title(clus_nb+' age = '+str(Age_mean))
 	# ~plt.title('IC4499', fontsize = 16)
 	# ~plt.subplots_adjust(bottom=0.13)
 	# ~plt.savefig('/home/david/codes/Analysis/GC/plots/analysis/fit_'+clus_nb+'.png')
 	plt.show()
 	plt.close()
-	kill
+	# ~kill
  
