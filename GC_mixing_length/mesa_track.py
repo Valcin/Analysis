@@ -174,25 +174,28 @@ def col_teff(V, I):
 
 
 def cut(p):
-	V, R = p[:,9], p[:,10]
-	const = np.min(V-R)
-	min_pts = np.where(V-R == const)[0]
+	# ~V, R = p[:,9], p[:,10]
+	# ~const = np.min(V-R)
+	# ~min_pts = np.where(V-R == const)[0]
+	t,l = p[:,1], p[:,3]
+	const = np.min(l)
+	min_pts = np.where(l == const)[0]
 	return min_pts[0]
 
 	
 def cut2(h):
-	V = h.abs_mag_F606W
-	R = h.abs_mag_F814W
-	const = np.max(V)
-	min_pts = np.where(V == const)[0]
-	mag = V[min_pts[0]:]
-	col = V[min_pts[0]:] - R[min_pts[0]:]
-	# ~V = h.log_L
-	# ~R = h.log_Teff
-	# ~const = np.min(V)
+	# ~V = h.abs_mag_F606W
+	# ~R = h.abs_mag_F814W
+	# ~const = np.max(V)
 	# ~min_pts = np.where(V == const)[0]
 	# ~mag = V[min_pts[0]:]
-	# ~col = R[min_pts[0]:]
+	# ~col = V[min_pts[0]:] - R[min_pts[0]:]
+	V = h.log_L
+	R = h.log_Teff
+	const = np.min(V)
+	min_pts = np.where(V == const)[0]
+	mag = V[min_pts[0]:]
+	col = R[min_pts[0]:]
 	return col, mag, min_pts[0]
 
 def error_compute(dbins, histo, bhisto):
@@ -483,6 +486,7 @@ model = 'mist'
 
 
 #------------------------------------------------------------------------
+#------------------------------------------------------------------------
 if model == 'mist':
 	print(Age)
 
@@ -518,23 +522,24 @@ if model == 'mist':
 
 	#read tracks from software
 	track_75m15 = np.loadtxt('tracks/0007500M15.track.eep.cmd')
-	t1_m15 = track_75m15[:604,1]
-	l1_m15 = track_75m15[:604,3]
+	mp_75m15 = cut(track_75m15)
+	t1_m15 = track_75m15[mp_75m15:604,1]
+	l1_m15 = track_75m15[mp_75m15:604,3]
 	track_80m15 = np.loadtxt('tracks/0008000M15.track.eep.cmd')
-	t2_m15 = track_80m15[:604,1]
-	l2_m15 = track_80m15[:604,3]
+	mp_80m15 = cut(track_80m15)
+	t2_m15 = track_80m15[mp_80m15:604,1]
+	l2_m15 = track_80m15[mp_80m15:604,3]
 	track_75m20 = np.loadtxt('tracks/0007500M20.track.eep.cmd')
-	t1_m20 = track_75m20[:604,1]
-	l1_m20 = track_75m20[:604,3]
+	mp_75m20 = cut(track_75m20)
+	t1_m20 = track_75m20[mp_75m20:604,1]
+	l1_m20 = track_75m20[mp_75m20:604,3]
 	track_80m20 = np.loadtxt('tracks/0008000M20.track.eep.cmd')
-	t2_m20 = track_80m20[:604,1]
-	l2_m20 = track_80m20[:604,3]
-	# ~track_75m20 = np.loadtxt('tracks/0007500M20.track.eep.cmd')
-	# ~t1_m20 = track_75m20[:604,10]
-	# ~l1_m20 = track_75m20[:604,15]
-	# ~track_80m20 = np.loadtxt('tracks/0008000M20.track.eep.cmd')
-	# ~t2_m20 = track_80m20[:604,10]
-	# ~l2_m20 = track_80m20[:604,15]
+	mp_80m20 = cut(track_80m20)
+	t2_m20 = track_80m20[mp_80m20:604,1]
+	l2_m20 = track_80m20[mp_80m20:604,3]
+
+
+
 
 	#read isochrones from software
 	iso15 = np.loadtxt('tracks/MIST_iso_60c8b28fe9a2d.iso.cmd')
@@ -544,31 +549,24 @@ if model == 'mist':
 	t20 = iso20[:604-254,4]
 	l20 = iso20[:604-254,6]
 
-	# ~iso15 = np.loadtxt('tracks/MIST_iso_60c8b28fe9a2d.iso.cmd')
-	# ~t15 = iso15[:604-254,14] # 604-254 to stop at tip of red giant branch
-	# ~l15 = iso15[:604-254,19]
-	# ~iso20 = np.loadtxt('tracks/MIST_iso_60c8b2a6c272d.iso.cmd')
-	# ~iso20 = np.loadtxt('tracks/MIST_iso_60e3160b266d4.iso.cmd')
-	# ~t20 = iso20[:,14]
-	# ~l20 = iso20[:,19]
 
+	# ~plt.plot(t15,l15, c='c')
+	# ~plt.plot(t20,l20, c='k',label=r'MIST isochrones')
+	# ~plt.plot(t1_m15,l1_m15, c='c',linestyle=':')
+	# ~# plt.plot(t2_m15,l2_m15, c='c',linestyle='--')
+	# ~plt.plot(t1_m20,l1_m20, c='k',linestyle=':',label=r'MESA tracks')
+	# ~# plt.plot(t2_m20,l2_m20, c='k',linestyle='--',label=r'MESA tracks with $M = 0.80 M_{\odot}$')
 
-	# ~plt.plot(t15,l15,label='MIST isochrones', c='c')
-	# ~plt.plot(t20,l20, c='c')
-	# ~plt.plot(t1_m15,l1_m15,label=r'MESA tracks with $M = 0.75 M_{\odot}$', c='r',linestyle=':')
-	# ~plt.plot(t2_m15,l2_m15,label=r'MESA tracks with $M = 0.80 M_{\odot}$', c='r',linestyle='--')
-	# ~plt.plot(t1_m20,l1_m20, c='r',linestyle=':')
-	# ~plt.plot(t2_m20,l2_m20, c='r',linestyle='--')
-
-	# ~plt.text(3.70,3,r'[Fe/H] = -2.0',va='center',fontsize=12,alpha=1.)
-	# ~plt.text(3.65,2.3,r'[Fe/H] = -1.5',va='center',fontsize=12,alpha=1.)
+	# ~plt.text(3.70,3,r'[Fe/H] = -2.0',va='center',fontsize=24,alpha=1.)
+	# ~plt.text(3.65,2.3,r'[Fe/H] = -1.5',va='center',fontsize=24,alpha=1.,c='c')
 	# ~plt.xlim(3.6,3.85)
 	# ~plt.ylim(-0.5,3.5)
-	# ~plt.xlabel(r'Log $\rm T_{eff}$', fontsize=16)
-	# ~plt.ylabel(r'Log L/$\rm L_{\odot}$', fontsize=16)
+	# ~plt.xlabel(r'Log $\rm T_{eff}$', fontsize=22)
+	# ~plt.ylabel(r'Log L/$\rm L_{\odot}$', fontsize=22)
 	# ~plt.gca().invert_xaxis()
-	# ~plt.legend(loc='best')
-	# ~plt.axhline(0.18, linestyle ='--', label=r'$\rm Magnitude \: cut \: \mathcal{M}_1$', c='k')
+	# ~plt.legend(loc='best', fontsize=22)
+	# ~# plt.axhline(0.18, linestyle ='--', label=r'$\rm Magnitude \: cut \: \mathcal{M}_1$', c='k')
+	# ~plt.tick_params(labelsize=20)
 	# ~plt.show()
 	# ~plt.close()
 	# ~kill
@@ -576,37 +574,40 @@ if model == 'mist':
 	#read mesa history files (a = 1.82)
 	# ~ht = mr.MesaData('/home/david/codes/Analysis/GC_mixing_length/catalogs/'+string_mass+'/'+string_met+'/history_mist_fid.data')
 	ht = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_mist_fid.data')
-	coltest,magtest, mptest = cut2(ht)
-	# ~h5 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a177.data')
-	# ~h6 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a187.data')
-	# ~h7 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a172.data')
-	# ~h8 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a192.data')
+	h5 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a177.data')
+	h6 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a187.data')
+	h7 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a172.data')
+	h8 = mr.MesaData('/home/david/codes/data/GC_mixing_length/initial_mesa_dir/LOGS/history_a192.data')
+	ct,mt, mpt = cut2(ht)
+	c5,m5, mp5 = cut2(h5)
+	c6,m6, mp6 = cut2(h6)
+	c7,m7, mp7 = cut2(h7)
+	c8,m8, mp8 = cut2(h8)
 
-	plt.plot(ht.log_Teff, ht.log_L)
-	# ~plt.plot(h5.log_Teff, h5.log_L, label=r'$\rm \Delta_{\alpha} = 0.05$', c='c')
-	# ~plt.plot(h6.log_Teff, h6.log_L, c='c', linestyle='--')
-	# ~plt.plot(h7.log_Teff, h7.log_L, label=r'$\rm \Delta_{\alpha} = 0.1$', c='m')
-	# ~plt.plot(h8.log_Teff, h8.log_L, c='c')
-
-	# ~plt.plot(t20,l20, c='k')
-	plt.plot(t1_m20,l1_m20, c='r',linestyle=':')
+	plt.plot(t20,l20,label=r'MIST isochrones', c='k')
+	# ~plt.plot(t1_m20,l1_m20,label=r'MESA tracks with $M = 0.75 M_{\odot}$', c='r',linestyle=':')
 	# ~plt.plot(t2_m20,l2_m20, c='r',linestyle='--')
-	# ~plt.plot(t20-l20,t20, c='k')
-	# ~plt.plot(t1_m20-l1_m20,t1_m20, c='r',linestyle=':')
-	# ~plt.plot(t2_m20-l2_m20,t2_m20, c='r',linestyle='--')
 
-	plt.xlim(3.6,3.85)
-	plt.ylim(-0.5,3.5)
-	plt.xlabel(r'Log $\rm T_{eff}$', fontsize=16)
-	plt.ylabel(r'Log L/$\rm L_{\odot}$', fontsize=16)
+	plt.plot(ct, mt,label=r'MESA tracks', c='k',linestyle=':')
+	plt.plot(c5, m5, label=r'$\rm \Delta_{\alpha} = 0.05$', c='r')
+	plt.plot(c6, m6, c='r')
+	plt.plot(c7, m7, label=r'$\rm \Delta_{\alpha} = 0.1$', c='c')
+	plt.plot(c8, m8, c='c')
+	# ~plt.xlim(3.6,3.85)
+	# ~plt.ylim(-0.5,3.5)
+	plt.xlim(3.62,3.72)
+	plt.ylim(1.8,3.5)
+	plt.xlabel(r'Log $\rm T_{eff}$', fontsize=24)
+	plt.ylabel(r'Log L/$\rm L_{\odot}$', fontsize=24)
 	# ~plt.axhline(0.18, linestyle ='--', label=r'$\rm Magnitude \: cut \: \mathcal{M}_1$', c='k')
-	# ~plt.gca().invert_yaxis()
 	plt.gca().invert_xaxis()
-	plt.legend(loc='best')
+	plt.tick_params(labelsize=20)
+	plt.legend(loc='best', fontsize=22)
 	plt.show()
 	plt.close()
 	kill
 
+#-----------------------------------------------------------------------
 #-----------------------------------------------------------------------
 if model == 'dar':
 	afe_init = 0.
@@ -656,17 +657,21 @@ if model == 'dar':
 
 	#read tracks from software
 	track_75m15 = np.loadtxt('tracks/m075fehm15afep0.hst_acs')
-	t1_m15 = track_75m15[:,1]
-	l1_m15 = track_75m15[:,3]
+	mp_75m15 = cut(track_75m15)
+	t1_m15 = track_75m15[mp_75m15:,1]
+	l1_m15 = track_75m15[mp_75m15:,3]
 	track_80m15 = np.loadtxt('tracks/m080fehm15afep0.hst_acs')
-	t2_m15 = track_80m15[:,1]
-	l2_m15 = track_80m15[:,3]
+	mp_80m15 = cut(track_80m15)
+	t2_m15 = track_80m15[mp_80m15:,1]
+	l2_m15 = track_80m15[mp_80m15:,3]
 	track_75m20 = np.loadtxt('tracks/m075fehm20afep0.hst_acs')
-	t1_m20 = track_75m20[:,1]
-	l1_m20 = track_75m20[:,3]
+	mp_75m20 = cut(track_75m20)
+	t1_m20 = track_75m20[mp_75m20:,1]
+	l1_m20 = track_75m20[mp_75m20:,3]
 	track_80m20 = np.loadtxt('tracks/m080fehm20afep0.hst_acs')
-	t2_m20 = track_80m20[:,1]
-	l2_m20 = track_80m20[:,3]
+	mp_80m20 = cut(track_80m20)
+	t2_m20 = track_80m20[mp_80m20:,1]
+	l2_m20 = track_80m20[mp_80m20:,3]
 
 	#read isochrones from software
 	iso15 = np.loadtxt('tracks/tmp1623689984.iso')
@@ -680,28 +685,29 @@ if model == 'dar':
 	# ~l20 = iso20[:,15]
 
 
-	# ~plt.plot(t15,l15,label='DSED isochrones', c='c')
-	plt.plot(t20,l20, c='c')
+	plt.plot(t15,l15, c='c')
+	plt.plot(t20,l20, c='k',label=r'DSED isochrones')
 	# ~plt.plot(t20 - l20,t20, c='r')
 
-	# ~plt.plot(t1_m15,l1_m15,label=r'DSEP tracks with $M = 0.75 M_{\odot}$', c='r',linestyle=':')
-	# ~plt.plot(t2_m15,l2_m15,label=r'DSEP tracks with $M = 0.80 M_{\odot}$', c='r',linestyle='--')
-	# ~plt.plot(t1_m20,l1_m20, c='r',linestyle=':')
-	# ~plt.plot(t2_m20,l2_m20, c='r',linestyle='--')
+	plt.plot(t1_m15,l1_m15, c='c',linestyle=':')
+	# ~plt.plot(t2_m15,l2_m15, c='c',linestyle='--')
+	plt.plot(t1_m20,l1_m20, c='k',linestyle=':',label=r'DSEP tracks')
+	# ~plt.plot(t2_m20,l2_m20, c='k',linestyle='--',label=r'DSEP tracks with $M = 0.80 M_{\odot}$')
 
 
 	# ~plt.plot(Color_iso2,mag_v2, c='k',linestyle=':', label=r'DSED Isochrone')
 	# ~plt.plot(Color_iso3,mag_v3, c='r',linestyle=':')
-	plt.plot(Color_iso1,mag_v1, c='c',linestyle=':')
+	# ~plt.plot(Color_iso1,mag_v1, c='c',linestyle=':')
 	plt.xlim(3.6,3.85)
 	plt.ylim(-0.5,3.5)
-	plt.xlabel(r'Log $\rm T_{eff}$', fontsize=16)
-	plt.ylabel(r'Log L/$\rm L_{\odot}$', fontsize=16)
-	plt.text(3.70,3,r'[Fe/H] = -2.0',va='center',fontsize=12,alpha=1.)
-	plt.text(3.65,2.3,r'[Fe/H] = -1.5',va='center',fontsize=12,alpha=1.)
-	plt.axhline(0.18, linestyle ='--', label=r'$\rm Magnitude \: cut \: \mathcal{M}_1$', c='k')
+	plt.xlabel(r'Log $\rm T_{eff}$', fontsize=24)
+	plt.ylabel(r'Log L/$\rm L_{\odot}$', fontsize=24)
+	plt.text(3.70,3,r'[Fe/H] = -2.0',va='center',fontsize=22,alpha=1.)
+	plt.text(3.65,2.3,r'[Fe/H] = -1.5',va='center',fontsize=22,alpha=1., c='c')
+	# ~plt.axhline(0.18, linestyle ='--', label=r'$\rm Magnitude \: cut \: \mathcal{M}_1$', c='k')
 	plt.gca().invert_xaxis()
-	plt.legend(loc='best')
+	plt.legend(loc='best', fontsize=22)
+	plt.tick_params(labelsize=20)
 	plt.show()
 	plt.close()
 	kill
