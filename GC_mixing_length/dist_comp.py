@@ -114,16 +114,16 @@ omalley = np.loadtxt('omalley.txt')
 
 
 n= len(distbaum)
-# ~x = np.linspace(1,25,20)
-# ~plt.errorbar(distbaum[(omalley[:,5]).astype(int)], distance_fin_dar[(omalley[:,5]).astype(int)] /1000., yerr =[distance_fin_dar[(omalley[:,5]).astype(int)] /1000. - distance_low_dar[(omalley[:,5]).astype(int)] /1000.,
-# ~distance_high_dar[(omalley[:,5]).astype(int)] /1000. - distance_fin_dar[(omalley[:,5]).astype(int)] /1000.], xerr = distbaumerr[(omalley[:,5]).astype(int)],color='r', fmt='o', ecolor='k', markersize=5, label='Distance/kpc')
-x = np.linspace(1,50,20)
-plt.errorbar(distbaum, distance_fin_dar /1000., yerr =[distance_fin_dar /1000. - distance_low_dar /1000.,
-distance_high_dar /1000. - distance_fin_dar /1000.], xerr = distbaumerr,color='r', fmt='o', ecolor='k', markersize=5, label='Distance/kpc')
+x = np.linspace(1,25,20)
+plt.errorbar(distbaum[(omalley[:,5]).astype(int)], distance_fin_dar[(omalley[:,5]).astype(int)] /1000., yerr =[distance_fin_dar[(omalley[:,5]).astype(int)] /1000. - distance_low_dar[(omalley[:,5]).astype(int)] /1000.,
+distance_high_dar[(omalley[:,5]).astype(int)] /1000. - distance_fin_dar[(omalley[:,5]).astype(int)] /1000.], xerr = distbaumerr[(omalley[:,5]).astype(int)],color='r', fmt='o', ecolor='k', markersize=5, label='Distance/kpc')
+# ~x = np.linspace(1,50,20)
+# ~plt.errorbar(distbaum, distance_fin_dar /1000., yerr =[distance_fin_dar /1000. - distance_low_dar /1000.,
+# ~distance_high_dar /1000. - distance_fin_dar /1000.], xerr = distbaumerr,color='r', fmt='o', ecolor='k', markersize=5, label='Distance/kpc')
 plt.plot(x,x, c='b', label='x = y')
-plt.xlabel(' Distance [kpc] (Baumgardt et al. 2021)', fontsize=18)
-plt.ylabel(r' Distance [kpc]' "\n" r' (Valcin et al. 2020)', fontsize=18)
-plt.tick_params(labelsize=16)
+plt.xlabel(' Distance [kpc] (Baumgardt et al. 2021)', fontsize=24)
+plt.ylabel(r' Distance [kpc]' "\n" r' (Valcin et al. 2020)', fontsize=24)
+plt.tick_params(labelsize=20)
 plt.savefig('/home/david/codes/Analysis/GC/plots/analysis/param_comparison.png', orientation='portrait', dpi=250)
 plt.subplots_adjust(hspace=1.8, wspace=1.0, top=0.95)
 plt.show()

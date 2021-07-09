@@ -523,35 +523,58 @@ if model == 'mist':
 	#read tracks from software
 	track_75m15 = np.loadtxt('tracks/0007500M15.track.eep.cmd')
 	mp_75m15 = cut(track_75m15)
-	t1_m15 = track_75m15[mp_75m15:604,1]
-	l1_m15 = track_75m15[mp_75m15:604,3]
+	t1_m15 = track_75m15[mp_75m15:606,1]
+	l1_m15 = track_75m15[mp_75m15:606,3]
 	track_80m15 = np.loadtxt('tracks/0008000M15.track.eep.cmd')
 	mp_80m15 = cut(track_80m15)
-	t2_m15 = track_80m15[mp_80m15:604,1]
-	l2_m15 = track_80m15[mp_80m15:604,3]
+	t2_m15 = track_80m15[mp_80m15:606,1]
+	l2_m15 = track_80m15[mp_80m15:606,3]
 	track_75m20 = np.loadtxt('tracks/0007500M20.track.eep.cmd')
 	mp_75m20 = cut(track_75m20)
-	t1_m20 = track_75m20[mp_75m20:604,1]
-	l1_m20 = track_75m20[mp_75m20:604,3]
+	t1_m20 = track_75m20[mp_75m20:606,1]
+	l1_m20 = track_75m20[mp_75m20:606,3]
 	track_80m20 = np.loadtxt('tracks/0008000M20.track.eep.cmd')
 	mp_80m20 = cut(track_80m20)
-	t2_m20 = track_80m20[mp_80m20:604,1]
-	l2_m20 = track_80m20[mp_80m20:604,3]
+	t2_m20 = track_80m20[mp_80m20:606,1]
+	l2_m20 = track_80m20[mp_80m20:606,3]
 
 
 
 
 	#read isochrones from software
 	iso15 = np.loadtxt('tracks/MIST_iso_60c8b28fe9a2d.iso.cmd')
-	t15 = iso15[:604-254,4] # 604-254 to stop at tip of red giant branch
-	l15 = iso15[:604-254,6]
+	t15 = iso15[:606-254,4] # eep 254 is first eep and 605 is trgb
+	l15 = iso15[:606-254,6]
 	iso20 = np.loadtxt('tracks/MIST_iso_60c8b2a6c272d.iso.cmd')
-	t20 = iso20[:604-254,4]
-	l20 = iso20[:604-254,6]
+	t20 = iso20[:606-254,4]
+	l20 = iso20[:606-254,6]
 
+
+	# ~ap1 = iso20[353-254,1]
+	# ~ap2 = iso20[454-254,1]
+	# ~ap3 = iso20[605-254,1]
+	# ~ap1_15 = track_75m15[202,0]
+	# ~ap2_15 = track_75m15[454,0]
+	# ~ap3_15 = track_75m15[605,0]
+	ap1_20 = track_75m20[202,0]
+	ap2_20 = track_75m20[454,0]
+	ap3_20 = track_75m20[605,0]
+
+	mp1 = iso20[254-254,2]
+	mp2 = iso20[454-254,2]
+	mp3 = iso20[605-254,2]
+
+	print(ap1_15, ap2_15, ap3_15)
+	print(ap1_20, ap2_20, ap3_20)
+	print(mp1, mp2, mp3)
+
+	kill
 
 	# ~plt.plot(t15,l15, c='c')
 	# ~plt.plot(t20,l20, c='k',label=r'MIST isochrones')
+	# ~plt.scatter(iso20[353-254,4],iso20[353-254,6],marker='o', c='k')
+	# ~plt.scatter(iso20[454-254,4],iso20[454-254,6],marker='x', c='k')
+	# ~plt.scatter(iso20[605-254,4],iso20[605-254,6],marker='D', c='k')
 	# ~plt.plot(t1_m15,l1_m15, c='c',linestyle=':')
 	# ~# plt.plot(t2_m15,l2_m15, c='c',linestyle='--')
 	# ~plt.plot(t1_m20,l1_m20, c='k',linestyle=':',label=r'MESA tracks')
@@ -593,10 +616,10 @@ if model == 'mist':
 	plt.plot(c6, m6, c='r')
 	plt.plot(c7, m7, label=r'$\rm \Delta_{\alpha} = 0.1$', c='c')
 	plt.plot(c8, m8, c='c')
-	# ~plt.xlim(3.6,3.85)
-	# ~plt.ylim(-0.5,3.5)
-	plt.xlim(3.62,3.72)
-	plt.ylim(1.8,3.5)
+	plt.xlim(3.6,3.85)
+	plt.ylim(-0.5,3.5)
+	# ~plt.xlim(3.62,3.72)
+	# ~plt.ylim(1.8,3.5)
 	plt.xlabel(r'Log $\rm T_{eff}$', fontsize=24)
 	plt.ylabel(r'Log L/$\rm L_{\odot}$', fontsize=24)
 	# ~plt.axhline(0.18, linestyle ='--', label=r'$\rm Magnitude \: cut \: \mathcal{M}_1$', c='k')
