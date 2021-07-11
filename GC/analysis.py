@@ -109,134 +109,155 @@ def cluster(nb):
 		age = age_roediger[index2]
 	else:
 		age = 12.0
-		
 
+
+	if clus_nb in dotter_clus :
+		index2 = dotter_clus.index(clus_nb)
+		with open('/home/david/codes/Analysis/GC/dotter2010.dat',"r") as f:
+			lines=f.readlines()[3:]
+		f.close()
+		afe_dotter=[]
+		for x in lines:
+			afe_dotter.append(x.split(' ')[2])
+		afe_init = afe_dotter[index2]
+	else:
+		afe_init = 0.0
+		
 	### convert in isochrones units
 	Age = np.log10(np.float32(age)*1e9)
 	distance = 10**(np.float32(dist_mod)/5. +1)
 	distplus = 10**((np.float32(dist_mod)+0.2)/5. +1)
 	distmoins = 10**((np.float32(dist_mod)-0.2)/5. +1)
-	
+	# ~print(dist_mod)
 	Age = float(round(Age,3))
 	metal = float(round(float(metal),3))
 	distance = float(round(distance,3))
 	Abs = float(round(Abs,3))
+	afe_init = float(afe_init)
 
-	return clus_nb, Age, metal, distance, Abs, distplus, distmoins
+	extdutra = [0.22,0.03,0.03,0.01,0.22,0.06,0.14,0.21,0.10,0.37,0.41,0.52,0.07,0.23,0.41,0.11,0.11,0.063,0.25,0.08]
+	extgc = [1,3,5,6,8,12,16,23,24,25,26,31,34,40,41,46,48,51,53,58]
+	if glc in extgc:
+		ind = extgc.index(glc)
+		Abs = 3.1*extdutra[ind]
+
+
+	clus_name2 = ['Arp_2','IC_4499','Lynga_7','NGC_104','NGC_288','NGC_362','NGC_1261','NGC_1851','NGC_2298','NGC_2808','NGC_3201','NGC_4147','NGC_4590','NGC_4833','NGC_5024','NGC_5053','NGC_5139','NGC_5272','NGC_5286','NGC_5466','NGC_5904','NGC_5927','NGC_5986','NGC_6093','NGC_6101','NGC_6121','NGC_6144','NGC_6171','NGC_6205','NGC_6218','NGC_6254','NGC_6304','NGC_6341','NGC_6352','NGC_6362','NGC_6366','NGC_6388','NGC_6397','NGC_6426','NGC_6441','NGC_6496','NGC_6535','NGC_6541','NGC_6584','NGC_6624','NGC_6637','NGC_6652','NGC_6656','NGC_6681','NGC_6715','NGC_6717','NGC_6723','NGC_6752','NGC_6779','NGC_6809','NGC_6838','NGC_6934','NGC_6981','NGC_7006','NGC_7078','NGC_7089','NGC_7099','Pal_1','Pal_12','Pal_15','Pyxis','Rup_106','Ter_7','Ter_8']
+
+
+
+	with open('Baumgardt.txt',"r") as f:
+		lines=f.readlines()[2:]
+	f.close()
+	baum_clus=[]
+	for x in lines:
+		baum_clus.append(x.split(' ')[0])
+	
+	# find acs initial values in different caltalogs
+	# ~index1 = harris_clus.index(clus_nb)
+
+	# ~distance = np.zeros(len(clus_name2))
+	# ~errdist = np.zeros(len(clus_name2))
+
+	# ~for nb in range(len(clus_name2)):
+	clus_nb2 = clus_name2[nb]
+
+	index2 = baum_clus.index(clus_nb2)
+	with open('Baumgardt.txt',"r") as f:
+		lines=f.readlines()[2:]
+	f.close()
+	dist_baum=[]
+	errdist_baum=[]
+	for x in lines:
+		dist_baum.append(x.split(' ')[5])
+		errdist_baum.append(x.split(' ')[6])
+	distance = dist_baum[index2]
+	errdist = errdist_baum[index2]
+
+	return clus_nb, Age, metal, float(distance)*1000., Abs, afe_init, float(errdist)*1000.
 
 def photometry():
         
 	files = np.loadtxt('/home/david/codes/data/GC_data/data_HST/hlsp_acsggct_hst_acs-wfc_'+clus_nb+'_r.rdviq.cal.adj.zpt', skiprows = 3)
 	longueur = len(files)
 	
-	#----------------------------------------------------------------------
-	#----------------------------------------------------------------------
-	# filter the photmetric error -----------------------------------------
-
-	lim606_left = np.percentile(files[:,4], 5)
-	lim606_right = np.percentile(files[:,4], 95)
-	lim814_left = np.percentile(files[:,8], 5)
-	lim814_right = np.percentile(files[:,8], 95)
-	filter_photo = np.where((files[:,4] < lim606_right) & (files[:,4] > lim606_left) & (files[:,8] < lim814_right) 
-	& (files[:,8] > lim814_left))[0]
-
-	#----------------------------------------------------------------------
-	#----------------------------------------------------------------------
-	# filter the pixel frame -----------------------------------------------
-
-	lim_x = np.percentile(files[:,15], 97.5)
-	lim_y = np.percentile(files[:,16], 97.5)
-
-	lim_x_left = np.percentile(files[:,15], 2.5)
-	# since both lim left is 0, i only used lim right
-	filter_xy = np.where((files[:,15] < lim_x)&(files[:,16] < lim_y))[0]
-
-	#----------------------------------------------------------------------
-	#----------------------------------------------------------------------
-	# compute the turn-off point by selecting a band around the main sequence fit and analyse the drop
-	nono = np.where((files[:,3] < 23) & (files[:,3] > 16) & (files[:,5] < 2) & (files[:,5] > 0))[0]
-
-	slope, intercept, r_value, p_value, std_err = stats.linregress(files[nono,5],files[nono,3])
-	x = np.linspace(0,2,200)
-	f = slope*x + intercept
-
-	titi = np.where((files[:,3] > (slope*files[:,5] + intercept) - 0.05*(slope*files[:,5] + intercept)) \
-	 & (files[:,3] < (slope*files[:,5] + intercept) + 0.05*(slope*files[:,5] + intercept)))[0]
-	hi, bind = np.histogram(files[titi,5], bins = 100)
-	tp_x = np.argmax(np.diff(hi)) - 1
-
-	#define the turn-off point coordinates given the drop
-	top_x = bind[tp_x]
-	top_y = slope*bind[tp_x] + intercept
-
-	# select random data above and below the turn-off point (top)--------------
-	### HERE I DON'T USE THE LEFT LIMIT BECAUSE IT REMOVES ALL THE BRIGHT STAR ABOVE THE TURN-OFF
-	#~ filter_top = np.where((files[:,4] < lim606_right) & (files[:,4] > lim606_left) & (files[:,8] < lim814_right) 
-	#~ & (files[:,8] > lim814_left) & (files[:,15] < lim_x) & (files[:,16] < lim_y) & (files[:,3] < top_y))[0]
-	#~ filter_top = np.where((files[:,4] < lim606_right) &  (files[:,8] < lim814_right) 
-	#~ & (files[:,15] < lim_x) & (files[:,16] < lim_y) & (files[:,3] < top_y))[0]
-
-	min_mag = np.min(files[:,3])
+	### magnitude cut --------------------------------------------------
 	min_mag = np.min(files[:,3])
 	mag_min = min_mag
-	mag_max = 28
-
-	#~ filter_bottom = np.where((files[:,4] < lim606_right) & (files[:,4] > lim606_left) & (files[:,8] < lim814_right) 
-	#~ & (files[:,8] > lim814_left) & (files[:,15] < lim_x) & (files[:,16] < lim_y) & (files[:,3] < mag_max))[0]
-	filter_bottom = np.where((files[:,4] < lim606_right)  & (files[:,8] < lim814_right) 
-	 & (files[:,15] < lim_x) & (files[:,16] < lim_y) & (files[:,3] < mag_max))[0]
-
-	#~ ltop = (len(filter_top))
-
-	### bright stars have good photometry and the error is 0. collapse later when divided by 0 so they are removed here
-	#~ too_good_t = np.where(files[filter_top,4] != 0.0)[0]
-	too_good_b = np.where(files[filter_bottom,4] != 0.0)[0]
-
-
-	#~ if ltop > 1500:
-		#~ sel_top = np.random.choice(filter_top[too_good_t], 1500)
-		#~ sel_bottom = np.random.choice(filter_bottom[too_good_b], 1500)
-	#~ else:
-		#~ sel_top = np.random.choice(filter_top[too_good_t], ltop)
-		#~ sel_bottom = np.random.choice(filter_bottom[too_good_b], ltop)
-
-	#~ ###----------------
-	#~ sel_total = np.concatenate((sel_bottom,sel_top))
-	#~ l_total = len(sel_total)
-	###----------------
+	mag_max = 26
 	
-	### define the total filter
-	mg_cut = filter_bottom[too_good_b]
-	sample = mg_cut.size
+	#~ mg_cut = np.where(files[:,3] <= mag_max)[0]
+	mg_cut = np.where(files[:,3] <50)[0]
 
-	### get the photmetry of the selected stars in both filters
-	photo_v = files[mg_cut,3]
-	lv = len(photo_v)
-	err_v = files[mg_cut,4]
-	range_v = np.max(files[mg_cut,3]) - np.min(files[mg_cut,3])
+	### limit on photmetric error ------------------------------------
 
-	photo_i = files[mg_cut,7]
-	li = len(photo_i)
-	err_i = files[mg_cut,8]
-	range_i = np.max(files[mg_cut,7]) - np.min(files[mg_cut,7])
+	pv = np.zeros(len(files[mg_cut,4]))
+	for i in range(len(files[mg_cut,4])):
+		if files[i,11] == 1:
+			pv[i] = files[i,4] * 3.5
+		elif files[i,11] == 2:
+			pv[i] = files[i,4] / 2.
+		else:
+			pv[i] = files[i,4]
 
-	#~ Pfield = 1/(range_v * range_i)
-	xpos = files[mg_cut,0]
-	ypos = files[mg_cut,2]
-	rpos = np.sqrt(xpos**2 + ypos**2)
-	Color = files[mg_cut,5]
-	err_Color = files[mg_cut,6]
-	err_V = files[mg_cut,4]
-	nmv = files[mg_cut,11]
-	nmi = files[mg_cut,12]
+	pr = np.zeros(len(files[mg_cut,8]))
+	for i in range(len(files[mg_cut,8])):
+		if files[i,12] == 1:
+			pr[i] = files[i,8] * 3.5
+		elif files[i,12] == 2:
+			pr[i] = files[i,8] / 2.
+		else:
+			pr[i] = files[i,8]
+
+	pcolor = np.sqrt(pr**2 + pv**2)
+	#~ print(np.min(pcolor))
+	#~ print(np.max(pcolor))
+
+	lim606_right = np.percentile(pv, 95)
+	lim814_right = np.percentile(pr, 95)
+	
+
+	### limit on pixel frame -----------------------------------------
+
+	xstars = files[mg_cut,15]
+	ystars = files[mg_cut,16]
+	lim_x = np.percentile(xstars, 97.5)
+	lim_y = np.percentile(ystars, 97.5)
+
+	### filter the sample. bright stars have good photometry and the error is 0.
+	### collapse later when divided by 0 so they are removed here
+	filter_all = np.where((pv <= lim606_right)  & (pr <= lim814_right) 
+	 & (xstars <= lim_x) & (ystars <= lim_y)  & (pcolor != 0.0))[0]
+
+
+	#~ ### get the photmetry of the selected stars in both filters
+	photo_v = files[mg_cut, 3][filter_all]
+	photo_i = files[mg_cut, 7][filter_all]
+	
+	# ~print(np.min(photo_v), np.min(photo_i))
+	# ~print(np.max(photo_v), np.max(photo_i))
+
+	Color = files[mg_cut, 5][filter_all]
+	err_Color = pcolor[filter_all]
+	err_v = pv[filter_all]
+	nmv = files[mg_cut,11][filter_all]
+	nmi = files[mg_cut,12][filter_all]
+	#~ photo_v = files[mg_cut, 3]
+	#~ photo_i = files[mg_cut, 7]
+
+	#~ Color = files[mg_cut, 5]
+	#~ err_Color = pcolor
+	#~ err_v = pv
+	#~ nmv = files[mg_cut,11]
+	#~ nmi = files[mg_cut,12]
+
+
 	del files
 	gc.collect()
-	
-	
+
+	return photo_v, err_v, photo_i, Color, err_Color, nmv, nmi, longueur
 
 	
-	return photo_v, err_v, photo_i, Color, err_Color, sample, top_x, top_y, nmv, nmi, longueur
-
 def iso_mag(Age, metal, distance, A, afe_val = None):
 
 
@@ -401,7 +422,7 @@ if version == '15':
 	ndim = 5
 	nwalkers = 100
 	ntemps = 1
-	print(ntemps)
+	# ~print(ntemps)
 	garr = [3,4,8,12,14,15,17,19,20,24,28,32,34,42,43,46,48,51,52,54,59,61]
 	model = 'dar'
 	#~ garr =
@@ -437,8 +458,9 @@ for cn in [0,1,2,3,22,27,53]:
 # ~for cn in list(range(27))+ list(range(28,69)):
 #~ for cn in garr: # 
 	glc = cn
-	clus_nb, Age0, metal0, distance0, Abs0, distplus0, distmoins0  = cluster(glc)
-	photo_v, err_v, photo_i, color, err_color, sample, top_x, top_y, nmv, nmi, longueur = photometry()
+	clus_nb, Age, metal, distance, Abs, afe_init, errdist  = cluster(glc)
+	print(clus_nb, Age, metal, distance, Abs, afe_init, errdist)
+	photo_v, err_v, photo_i, color, err_color, nmv, nmi, longueur = photometry()
 	
 	#~ if glc==33 or glc ==36:
 		#~ print('popo')
@@ -473,7 +495,7 @@ for cn in [0,1,2,3,22,27,53]:
 		#~ D = np.genfromtxt('/home/david/codes/GC/plots/test/data_'+str(t)+'_'+clus_nb+'_'+ version +'_'+str(model)+'.txt', usecols=(j+nwalkers*2,), max_rows=2000)
 		#~ AA = np.genfromtxt('/home/david/codes/GC/plots/test/data_'+str(t)+'_'+clus_nb+'_'+ version +'_'+str(model)+'.txt', usecols=(j+nwalkers*3,), max_rows=2000)
 
-	steps = 50000
+	steps = 500
 	if version in ['9','10','15','16']:
 		files = np.loadtxt('/home/david/codes/data/GC_data/'+str(model)+'/data_1'+'_'+clus_nb+'_'+ version +'_'+str(model)+'.txt')
 	else:
@@ -481,22 +503,28 @@ for cn in [0,1,2,3,22,27,53]:
 
 
 	#~ print(np.mean(files[:,3]), np.median(files[:,3]))
-	#~ prior = np.where((files[steps*nwalkers:,4] > 0)&(files[steps*nwalkers:,4] < 0.4)&
+	prior = np.where((files[steps*nwalkers:,2] > distance - errdist)&(files[steps*nwalkers:,2] < distance + errdist))[0]
 	#~ files[steps*nwalkers:,1] < metal0 +0.2)&(files[steps*nwalkers:,2] > metal0 -0.2))[0]
+	# ~print(distance, errdist)
+	# ~print(distance - errdist, distance + errdist)
+	# ~print((files[steps*nwalkers:,2]))
+	# ~print(len(files[steps*nwalkers:,2])/100.)
+	# ~print(len(files[steps*nwalkers:,2][prior])/100.)
+
+	# ~kill
 
 
-
-	Age = files[steps*nwalkers:,0]
-	Metal = files[steps*nwalkers:,1]
-	Distance = files[steps*nwalkers:,2]
-	AAbs = files[steps*nwalkers:,3]
-	#~ Age = files[steps*nwalkers:,0][prior]
-	#~ Metal = files[steps*nwalkers:,1][prior]
-	#~ Distance = files[steps*nwalkers:,2][prior]
-	#~ AAbs = files[steps*nwalkers:,3][prior]
+	# ~Age = files[steps*nwalkers:,0]
+	# ~Metal = files[steps*nwalkers:,1]
+	# ~Distance = files[steps*nwalkers:,2]
+	# ~AAbs = files[steps*nwalkers:,3]
+	Age = files[steps*nwalkers:,0][prior]
+	Metal = files[steps*nwalkers:,1][prior]
+	Distance = files[steps*nwalkers:,2][prior]
+	AAbs = files[steps*nwalkers:,3][prior]
 	if model == 'dar':
-		Afe = files[steps*nwalkers:,4]
-		#~ Afe = files[steps*nwalkers:,4][prior]
+		# ~Afe = files[steps*nwalkers:,4]
+		Afe = files[steps*nwalkers:,4][prior]
 
 		
 		

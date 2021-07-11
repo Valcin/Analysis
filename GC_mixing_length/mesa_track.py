@@ -481,8 +481,8 @@ coltest4,magtest4, mptest4 = cut2(htest4)
 # ~coltest8,magtest8, mptest8 = cut2(htest8)
 
 
-model = 'mist'
-# ~model = 'dar'
+# ~model = 'mist'
+model = 'dar'
 
 
 #------------------------------------------------------------------------
@@ -564,9 +564,13 @@ if model == 'mist':
 	mp2 = iso20[454-254,2]
 	mp3 = iso20[605-254,2]
 
-	print(ap1_15, ap2_15, ap3_15)
+	print('age ms = '+str((ap2_20 - ap1_20)/1.e9))
+	print('age rbg = '+str((ap3_20 - ap2_20)/1.e9))
 	print(ap1_20, ap2_20, ap3_20)
+	print('mass ms = '+str((mp2 - mp1)))
+	print('mass rbg = '+str((mp3 - mp2)))
 	print(mp1, mp2, mp3)
+
 
 	kill
 

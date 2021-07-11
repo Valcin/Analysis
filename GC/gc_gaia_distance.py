@@ -234,8 +234,8 @@ def photometry():
 	photo_v = files[mg_cut, 3][filter_all]
 	photo_i = files[mg_cut, 7][filter_all]
 	
-	print(np.min(photo_v), np.min(photo_i))
-	print(np.max(photo_v), np.max(photo_i))
+	# ~print(np.min(photo_v), np.min(photo_i))
+	# ~print(np.max(photo_v), np.max(photo_i))
 
 	Color = files[mg_cut, 5][filter_all]
 	err_Color = pcolor[filter_all]
@@ -1140,7 +1140,7 @@ def lnprior(theta):
 			#~ #flat priors on age, FeH, Av
 		if 9 < age < 10.175 and -2.5 < FeH < 0  and 0.0 < dist and 0 < A1 < 3.0 and -0.2 <= afe <= 0.8:
 			# ~return 0.0
-			print('met: '+str(lnl_me),'dist: '+str(lnl_dm),'abs: '+str(lnl_abs),'afe: '+str(lnl_abu), 'TOTAL = '+str(lnl_me + lnl_dm + lnl_abs + lnl_abu))
+			# ~print('met: '+str(lnl_me),'dist: '+str(lnl_dm),'abs: '+str(lnl_abs),'afe: '+str(lnl_abu), 'TOTAL = '+str(lnl_me + lnl_dm + lnl_abs + lnl_abu))
 			return lnl_me + lnl_dm + lnl_abs
 		return -np.inf
 		
@@ -1221,7 +1221,7 @@ def rem_outliers(photo_v, err_v, color, err_color):
 	#~ print()
 	bp = np.where((np.array(photo_v)< 24) & (np.array(photo_v) > 24-0.05))[0]
 	bps = np.median(np.array(color)[bp])
-	print(bps)
+	# ~print(bps)
 	
 	from numpy import ones,vstack
 	from numpy.linalg import lstsq
@@ -1244,7 +1244,7 @@ def rem_outliers(photo_v, err_v, color, err_color):
 	x2 = (bined1[np.argmax(np.abs(np.diff(hist1)))+1]- c)/m
 	err_xcut = x2-x1
 	err_ycut = bined1[np.argmax(np.abs(np.diff(hist1)))+2] - bined1[np.argmax(np.abs(np.diff(hist1)))]
-	print(x_cut, y_cut, err_ycut, err_xcut)
+	# ~print(x_cut, y_cut, err_ycut, err_xcut)
 	#~ stragglers=np.where(color < c_cut)[0]
 	#~ nono = np.where(photo_v[inside] < m_cut)[0]
 	
@@ -1397,6 +1397,7 @@ def way(vgood, cgood, errgood, errgoodv, step = None):
 	errcenterv = np.zeros(len(centergood))
 	size_bin = np.zeros(len(centergood))
 
+
 	#~ print(bingood)
 	#~ print(centergood)
 
@@ -1404,20 +1405,36 @@ def way(vgood, cgood, errgood, errgoodv, step = None):
 		inbin = np.digitize(vgood, bingood)
 		ici = np.where(inbin == c+1)[0]
 		#~ print(np.min(np.array(cgood)[ici]), np.max(np.array(cgood)[ici]))
-		
+
+		apmstop = np.where(np.array(cgood)[ici] > top_x-0.05)[0]
+
 		threshold = 3
-		z = np.abs(stats.zscore(np.array(cgood)[ici]))
+		z = np.abs(stats.zscore(np.array(cgood)[ici][apmstop]))
 		out = (np.where(z > threshold)[0])
-		zcol =  np.delete(np.array(cgood)[ici], out)
-		zmagv =  np.delete(np.array(vgood)[ici], out)
+		zcol =  np.delete(np.array(cgood)[ici][apmstop], out)
+		zmagv =  np.delete(np.array(vgood)[ici[apmstop]], out)
+
+		times = 0
+		while times < 5:
+			z = np.abs(stats.zscore(zcol))
+			out = (np.where(z > threshold)[0])
+			zcol =  np.delete(zcol, out)
+			zmagv =  np.delete(zmagv, out)
+			times = times + 1
+
+			
+		# ~z = np.abs(stats.zscore(zcol))
+		# ~out = (np.where(z > threshold)[0])
+		# ~zcol =  np.delete(zcol, out)
+		# ~zmagv =  np.delete(zmagv, out)
 		
-		z = np.abs(stats.zscore(zcol))
-		out = (np.where(z > threshold)[0])
-		zcol =  np.delete(zcol, out)
-		zmagv =  np.delete(zmagv, out)
+		# ~z = np.abs(stats.zscore(zcol))
+		# ~out = (np.where(z > threshold)[0])
+		# ~zcol =  np.delete(zcol, out)
+		# ~zmagv =  np.delete(zmagv, out)
 		
-		#~ zcol =  np.array(cgood)[ici]
-		#~ zmagv =  np.array(vgood)[ici]
+		# ~#~ zcol =  np.array(cgood)[ici]
+		# ~#~ zmagv =  np.array(vgood)[ici]
 
 
 		if len(ici) == 1:
@@ -2123,7 +2140,7 @@ if len(magvuno) > 0:
 	errcoluno = np.array(errcol1)
 else:
 	print("List is empty")
-	
+
 bincenter, gauss_mean, gauss_disp, starnum, bingood, errcenterv = way(magvuno, coluno, errcoluno, errvuno)
 
 
@@ -2315,10 +2332,10 @@ plt.scatter(color,photo_v, marker='.', s=10, color='grey', label='stars', alpha=
 # ~plt.scatter(gauss_mean,bincenter, marker='o', s=30, color='r', label=r'$C_i^{data}$')
 # ~plt.errorbar(gauss_mean,bincenter, xerr=gauss_disp, c='k', linewidth=2, fmt='none', label=r'$\sigma_i^{data}$')
 #~ plt.scatter(colbis[dr2],magvbis[dr2], marker='.',s=10, color='r', label='stars in the upper branch')
-plt.scatter(colbis,magvbis, marker='.',s=10, color='r', label='stars in the upper branch')
+# ~plt.scatter(colbis,magvbis, marker='.',s=10, color='r', label='stars in the upper branch')
 #~ plt.errorbar(colbis,magvbis, xerr=errcolbis, c='k', fmt='none')
-# ~plt.scatter(ccenter,vcenter, marker='x',s=30, color='k')
-# ~plt.errorbar(ccenter, vcenter, xerr=errcenter, capsize= 2, linewidth=2,fmt = 'none', c='k')
+plt.scatter(ccenter,vcenter, marker='x',s=30, color='k')
+plt.errorbar(ccenter, vcenter, xerr=errcenter, capsize= 2, linewidth=2,fmt = 'none', c='k')
 plt.scatter(ccenter_rgb, vcenter_rgb , marker='o', s=30, color='r', label='selected points')
 # ~for x,y,z in zip(ccenter, vcenter, np.arange(len(ccenter))):
 	# ~plt.text(x,y, str(z), color='b', label='selected points')
@@ -2338,6 +2355,7 @@ plt.scatter(ccenter_rgb, vcenter_rgb , marker='o', s=30, color='r', label='selec
 		#~ plt.fill_between(np.linspace(-0.5,3), bingood[nempty][ii], bingood[nempty][ii+1], color='darkblue', label='masked bins', alpha=0.4)
 	#~ else:
 		#~ plt.fill_between(np.linspace(-0.5,3), bingood[nempty][ii], bingood[nempty][ii+1], color='darkblue', alpha=0.4)
+plt.axvline(top_x-0.05)
 plt.xlim(-0.5,3)
 plt.ylim(27,10)
 plt.tick_params(labelsize=16)
@@ -2678,9 +2696,10 @@ with Pool() as pool:
 ########################################################################
 ########################################################################
 
+#not used anymore
+########################################################################
+########################################################################
 
-# if __name__ == '__main__':
-# 	main()
 
-#~ samp
+
 
