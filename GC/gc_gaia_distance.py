@@ -926,7 +926,7 @@ def lnlike(theta):
 	if glc == 62:
 		return (lnl+lnl2)
 	else:
-		# ~return lnl
+		# ~return lnl2
 		# ~return (lnl/len(Color_new)+lnl2/len(Color_new2))
 		return (lnl+lnl2)
 		
@@ -1141,7 +1141,8 @@ def lnprior(theta):
 		if 9 < age < 10.175 and -2.5 < FeH < 0  and 0.0 < dist and 0 < A1 < 3.0 and -0.2 <= afe <= 0.8:
 			# ~return 0.0
 			# ~print('met: '+str(lnl_me),'dist: '+str(lnl_dm),'abs: '+str(lnl_abs),'afe: '+str(lnl_abu), 'TOTAL = '+str(lnl_me + lnl_dm + lnl_abs + lnl_abu))
-			return lnl_me + lnl_dm + lnl_abs
+			return lnl_me + lnl_dm + lnl_abs + lnl_abu
+			# ~return lnl_dm + lnl_abs + lnl_abu
 		return -np.inf
 		
 #~ @profile
@@ -1408,33 +1409,41 @@ def way(vgood, cgood, errgood, errgoodv, step = None):
 
 		apmstop = np.where(np.array(cgood)[ici] > top_x-0.05)[0]
 
+		# ~threshold = 3
+		# ~z = np.abs(stats.zscore(np.array(cgood)[ici][apmstop]))
+		# ~out = (np.where(z > threshold)[0])
+		# ~zcol =  np.delete(np.array(cgood)[ici][apmstop], out)
+		# ~zmagv =  np.delete(np.array(vgood)[ici[apmstop]], out)
+
+		# ~times = 0
+		# ~while times < 5:
+			# ~z = np.abs(stats.zscore(zcol))
+			# ~out = (np.where(z > threshold)[0])
+			# ~zcol =  np.delete(zcol, out)
+			# ~zmagv =  np.delete(zmagv, out)
+			# ~times = times + 1
+
 		threshold = 3
-		z = np.abs(stats.zscore(np.array(cgood)[ici][apmstop]))
+		med = np.median(np.array(cgood)[ici][apmstop])
+		diff_med = np.abs(np.array(cgood)[ici][apmstop] - med)
+		errmed = np.median(diff_med) # multiply by 1.486 for notmal distribution
+		scoremad = errmed* 1.4826 # multiply by 1.4826 for notmal distribution
+		z = diff_med / scoremad
 		out = (np.where(z > threshold)[0])
 		zcol =  np.delete(np.array(cgood)[ici][apmstop], out)
 		zmagv =  np.delete(np.array(vgood)[ici[apmstop]], out)
-
-		times = 0
-		while times < 5:
-			z = np.abs(stats.zscore(zcol))
-			out = (np.where(z > threshold)[0])
-			zcol =  np.delete(zcol, out)
-			zmagv =  np.delete(zmagv, out)
-			times = times + 1
-
-			
-		# ~z = np.abs(stats.zscore(zcol))
+		# ~threshold = 3
+		# ~med = np.median(np.array(cgood)[ici])
+		# ~diff_med = np.abs(np.array(cgood)[ici] - med)
+		# ~errmed = np.median(diff_med) # multiply by 1.486 for notmal distribution
+		# ~scoremad = errmed* 1.4826 # multiply by 1.4826 for notmal distribution
+		# ~z = diff_med / scoremad
 		# ~out = (np.where(z > threshold)[0])
-		# ~zcol =  np.delete(zcol, out)
-		# ~zmagv =  np.delete(zmagv, out)
+		# ~zcol =  np.delete(np.array(cgood)[ici], out)
+		# ~zmagv =  np.delete(np.array(vgood)[ici], out)
 		
-		# ~z = np.abs(stats.zscore(zcol))
-		# ~out = (np.where(z > threshold)[0])
-		# ~zcol =  np.delete(zcol, out)
-		# ~zmagv =  np.delete(zmagv, out)
-		
-		# ~#~ zcol =  np.array(cgood)[ici]
-		# ~#~ zmagv =  np.array(vgood)[ici]
+		#~ zcol =  np.array(cgood)[ici]
+		#~ zmagv =  np.array(vgood)[ici]
 
 
 		if len(ici) == 1:
@@ -1458,8 +1467,8 @@ def way(vgood, cgood, errgood, errgoodv, step = None):
 				errcenter[c] =np.mean(np.array(errgood)[ici])
 				print('std nul')
 			else:
-				errcenter[c] =1.2533*np.std(zcol)
-				# ~errcenter[c] =1.2533*np.std(zcol)/np.sqrt(len(ici))
+				# ~errcenter[c] =1.2533*np.std(zcol)
+				errcenter[c] = scoremad
 				errcenterv[c] =1.2533*np.std(zmagv)
 				#~ q1 = np.percentile(zcol, 25)
 				#~ q3 = np.percentile(zcol, 75)
@@ -1473,7 +1482,7 @@ def way(vgood, cgood, errgood, errgoodv, step = None):
 
 	return vcenter, ccenter, errcenter, size_bin, bingood, errcenterv
 	
-def way2(vgood, cgood, errgood, errgoodv):
+def way2(vgood, cgood, errgood, errgoodv, step = None):
 
 	#remove duplicate
 	for i, j in zip(vgood, cgood):
@@ -1482,15 +1491,30 @@ def way2(vgood, cgood, errgood, errgoodv):
 			vgood = np.delete(np.array(vgood), dup[1:])
 			cgood = np.delete(np.array(cgood), dup[1:])
 
+	#~ print(bingood)
+	#~ bingood = np.linspace(np.min(vgood), np.max(vgood), nsplit+1)
 
-	binsize = 0.02
-	rangebinv = np.max(vgood) - np.min(vgood)
-	rangebin = np.max(cgood) - np.min(cgood)
-	nbins = int(round(rangebin /binsize))
+	#~ bingood = np.array(binning_GB(np.min(vgood), np.max(vgood), ep_mag2, ep_col2))
+	#~ print(np.min(vgood), np.max(vgood))
+	#~ print(np.min(ep_mag2), np.max(ep_mag2))
+
+	
+	#~ nbins = 20
+	rangebin = np.max(vgood) - np.min(vgood)
+	if step is not None:
+		nbins = int(round(rangebin/step))
+	else:
+		nbins = int(round(rangebin/0.2))
 	#~ print(rangebin)
 	#~ kill
 
-	bingood = np.linspace(np.min(cgood), np.max(cgood),nbins)
+	#~ spacegood = np.geomspace(1, rangebin+1,nbins)
+	#~ bingood = np.max(vgood) - (spacegood-1)
+	#~ bingood = np.flipud(bingood) 
+	#~ bingood = np.geomspace(np.min(vgood), np.max(vgood),nbins) 
+	bingood = np.linspace(np.min(vgood), np.max(vgood),nbins)
+	#~ bingood = np.array(binning_GB(np.min(vgood), np.max(vgood), np.array(vgood), np.array(cgood)))
+	#~ bingood = np.append(bingood, mag_lim2)
 	centergood = (bingood[:-1] + bingood[1:]) / 2 
 	
 	vcenter = np.zeros(len(centergood))
@@ -1500,61 +1524,88 @@ def way2(vgood, cgood, errgood, errgoodv):
 	size_bin = np.zeros(len(centergood))
 
 
+	#~ print(bingood)
+	#~ print(centergood)
+
 	for c in range(0,len(centergood)):
-		inbin = np.digitize(cgood, bingood)
+		inbin = np.digitize(vgood, bingood)
 		ici = np.where(inbin == c+1)[0]
+		#~ print(np.min(np.array(cgood)[ici]), np.max(np.array(cgood)[ici]))
+
+		apmstop = np.where(np.array(cgood)[ici] > top_x-0.05)[0]
+
+		threshold = 3
+		z = np.abs(stats.zscore(np.array(cgood)[ici]))
+		out = (np.where(z > threshold)[0])
+		zcol =  np.delete(np.array(cgood)[ici], out)
+		zmagv =  np.delete(np.array(vgood)[ici], out)
+
+		# ~times = 0
+		# ~while times < 5:
+			# ~z = np.abs(stats.zscore(zcol))
+			# ~out = (np.where(z > threshold)[0])
+			# ~zcol =  np.delete(zcol, out)
+			# ~zmagv =  np.delete(zmagv, out)
+			# ~times = times + 1
+
+		# ~threshold = 3
+		# ~med = np.median(np.array(cgood)[ici][apmstop])
+		# ~diff_med = np.abs(np.array(cgood)[ici][apmstop] - med)
+		# ~errmed = np.median(diff_med) # multiply by 1.486 for notmal distribution
+		# ~scoremad = errmed* 1.4826 # multiply by 1.4826 for notmal distribution
+		# ~z = diff_med / scoremad
+		# ~out = (np.where(z > threshold)[0])
+		# ~zcol =  np.delete(np.array(cgood)[ici][apmstop], out)
+		# ~zmagv =  np.delete(np.array(vgood)[ici[apmstop]], out)
+		# ~threshold = 3
+		# ~med = np.median(np.array(cgood)[ici])
+		# ~diff_med = np.abs(np.array(cgood)[ici] - med)
+		# ~errmed = np.median(diff_med) # multiply by 1.486 for notmal distribution
+		# ~scoremad = errmed* 1.4826 # multiply by 1.4826 for notmal distribution
+		# ~z = diff_med / scoremad
+		# ~out = (np.where(z > threshold)[0])
+		# ~zcol =  np.delete(np.array(cgood)[ici], out)
+		# ~zmagv =  np.delete(np.array(vgood)[ici], out)
+		
+		#~ zcol =  np.array(cgood)[ici]
+		#~ zmagv =  np.array(vgood)[ici]
+
 
 		if len(ici) == 1:
-			#~ ccenter[c] =np.mean(np.array(cgood)[ici])
-			ccenter[c] =centergood[c]
-			#~ errcenter[c] =np.array(errgood)[ici]
-			errcenter[c] =binsize
+			ccenter[c] =np.median(zcol)
+			errcenter[c] =np.array(errgood)[ici]
 			errcenterv[c] =np.array(errgoodv)[ici]
-			vcenter[c] =np.median(np.array(vgood)[ici])
-			#~ vcenter[c] =np.mean(np.array(vgood)[ici])
+			vcenter[c] =centergood[c]
+			#~ vcenter[c] =np.array(vgood)[ici]
 			size_bin[c] = len(ici)
 		elif len(ici) == 2:
-			#~ ccenter[c] =np.mean(np.array(cgood)[ici])
-			ccenter[c] =centergood[c]
-			#~ errcenter[c] = np.std(np.array(cgood)[ici])
-			errcenter[c] = binsize
-			errcenterv[c] = np.std(np.array(vgood)[ici])
-			vcenter[c] =np.median(np.array(vgood)[ici])
-			#~ vcenter[c] =np.mean(np.array(vgood)[ici])
+			ccenter[c] =np.median(zcol)
+			errcenter[c] = np.std(zcol)
+			errcenterv[c] = np.std(zmagv)
+			vcenter[c] =centergood[c]
+			#~ vcenter[c] =np.median(zmagv)
 			size_bin[c] = len(ici)
 		elif len(ici) >2:
-			#~ ccenter[c] =np.median(np.array(cgood)[ici])
-			if np.std(np.array(cgood)[ici]) == 0:
+			# ~ccenter[c] =np.median(zcol)
+			ccenter[c] =np.mean(zcol)
+			if np.std(zcol) == 0:
 				errcenter[c] =np.mean(np.array(errgood)[ici])
 				print('std nul')
 			else:
-				errcenter[c] =1.2533*np.std(np.array(cgood)[ici])/np.sqrt(len(ici))
-				#~ errcenter[c] =1.2533*np.std(np.array(cgood)[ici])
-				#~ errcenter[c] =binsize
-				errcenterv[c] = 1.2533*np.std(np.array(vgood)[ici])/np.sqrt(len(ici))
-				#~ q1 = np.percentile(np.array(cgood)[ici], 25)
-				#~ q3 = np.percentile(np.array(cgood)[ici], 75)
+				errcenter[c] =np.std(zcol)
+				# ~errcenter[c] = scoremad
+				errcenterv[c] =np.std(zmagv)
+				#~ q1 = np.percentile(zcol, 25)
+				#~ q3 = np.percentile(zcol, 75)
 				#~ errcenter[c] = (q3-q1)/np.sqrt(len(ici))
 				#~ errcenter[c] = (q3-q1)
-			ccenter[c] =centergood[c]
-			#~ ccenter[c] =np.mean(np.array(cgood)[ici])
-			vcenter[c] =np.median(np.array(vgood)[ici])
-			#~ vcenter[c] =np.mean(np.array(vgood)[ici])
+			vcenter[c] =centergood[c]
+			#~ vcenter[c] =np.median(zmagv)
 			size_bin[c] = len(ici)
-			
-			#~ z = staez)
-			#~ kill
-			
-			#~ print(np.mean(np.array(cgood)[ici]), np.median(np.array(cgood)[ici]), np.min(np.array(cgood)[ici])
-			#~ , np.max(np.array(cgood)[ici]), np.std(np.array(cgood)[ici]), stt.median_absolute_deviation(np.array(cgood)[ici]))
+		
+		#~ print(centergood[c], ccenter[c])	
 
-		#~ # compute the perpendicular distance
-		#~ rgood = ((slope*np.array(cgood)[ici] - np.array(vgood)[ici] + intercept)) / (math.sqrt(slope**2 + 1)) 
-		#~ abscisse =  (np.median(rgood)*(math.sqrt(slope**2 + 1)) + centergood[c] - intercept)/slope
-		#~ rgood = np.sqrt((np.array(vgood)[ici] - centergood[c])**2 + (np.array(cgood)[ici] - ep_col_center[c])**2)
-		#~ rerr = np.sqrt(np.array(errgood)[ici]**2+ np.array(errgoodv)[ici]**2)
-	
-	return vcenter, ccenter, errcenter, size_bin, bingood, rangebinv, errcenterv
+	return vcenter, ccenter, errcenter, size_bin, bingood, errcenterv
 
 #~ @profile
 def default_beta_ladder(ndim, ntemps=None, Tmax=None):
@@ -2141,7 +2192,7 @@ if len(magvuno) > 0:
 else:
 	print("List is empty")
 
-bincenter, gauss_mean, gauss_disp, starnum, bingood, errcenterv = way(magvuno, coluno, errcoluno, errvuno)
+bincenter, gauss_mean, gauss_disp, starnum, bingood, errcenterv = way2(magvuno, coluno, errcoluno, errvuno)
 
 
 
@@ -2329,8 +2380,8 @@ errcenterv_rgb = np.delete(errcenterv,base)
 
 plt.figure()
 plt.scatter(color,photo_v, marker='.', s=10, color='grey', label='stars', alpha=0.8)
-# ~plt.scatter(gauss_mean,bincenter, marker='o', s=30, color='r', label=r'$C_i^{data}$')
-# ~plt.errorbar(gauss_mean,bincenter, xerr=gauss_disp, c='k', linewidth=2, fmt='none', label=r'$\sigma_i^{data}$')
+plt.scatter(gauss_mean,bincenter, marker='o', s=30, color='r', label=r'$C_i^{data}$')
+plt.errorbar(gauss_mean,bincenter, xerr=gauss_disp, c='k', linewidth=2, fmt='none', label=r'$\sigma_i^{data}$')
 #~ plt.scatter(colbis[dr2],magvbis[dr2], marker='.',s=10, color='r', label='stars in the upper branch')
 # ~plt.scatter(colbis,magvbis, marker='.',s=10, color='r', label='stars in the upper branch')
 #~ plt.errorbar(colbis,magvbis, xerr=errcolbis, c='k', fmt='none')

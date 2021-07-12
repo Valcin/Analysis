@@ -505,26 +505,19 @@ for cn in [0,1,2,3,22,27,53]:
 	#~ print(np.mean(files[:,3]), np.median(files[:,3]))
 	prior = np.where((files[steps*nwalkers:,2] > distance - errdist)&(files[steps*nwalkers:,2] < distance + errdist))[0]
 	#~ files[steps*nwalkers:,1] < metal0 +0.2)&(files[steps*nwalkers:,2] > metal0 -0.2))[0]
-	# ~print(distance, errdist)
-	# ~print(distance - errdist, distance + errdist)
-	# ~print((files[steps*nwalkers:,2]))
-	# ~print(len(files[steps*nwalkers:,2])/100.)
-	# ~print(len(files[steps*nwalkers:,2][prior])/100.)
-
-	# ~kill
 
 
-	# ~Age = files[steps*nwalkers:,0]
-	# ~Metal = files[steps*nwalkers:,1]
-	# ~Distance = files[steps*nwalkers:,2]
-	# ~AAbs = files[steps*nwalkers:,3]
-	Age = files[steps*nwalkers:,0][prior]
-	Metal = files[steps*nwalkers:,1][prior]
-	Distance = files[steps*nwalkers:,2][prior]
-	AAbs = files[steps*nwalkers:,3][prior]
+	Age = files[steps*nwalkers:,0]
+	Metal = files[steps*nwalkers:,1]
+	Distance = files[steps*nwalkers:,2]
+	AAbs = files[steps*nwalkers:,3]
+	# ~Age = files[steps*nwalkers:,0][prior]
+	# ~Metal = files[steps*nwalkers:,1][prior]
+	# ~Distance = files[steps*nwalkers:,2][prior]
+	# ~AAbs = files[steps*nwalkers:,3][prior]
 	if model == 'dar':
-		# ~Afe = files[steps*nwalkers:,4]
-		Afe = files[steps*nwalkers:,4][prior]
+		Afe = files[steps*nwalkers:,4]
+		# ~Afe = files[steps*nwalkers:,4][prior]
 
 		
 		
@@ -864,7 +857,7 @@ for cn in [0,1,2,3,22,27,53]:
 	#~ kill
 
 	if model == 'dar':
-		fig = corner.corner(data,bins=50, range=[(np.min(data[:,0]),15.), (np.min(data[:,1]),np.max(data[:,1])),
+		fig = corner.corner(data,bins=20, range=[(np.min(data[:,0]),15.), (np.min(data[:,1]),np.max(data[:,1])),
 		(np.min(data[:,2]),np.max(data[:,2])),(np.min(data[:,3]),np.max(data[:,3])),(np.min(data[:,4]),np.max(data[:,4]))],
 		labels=["$Age$ [Gyr]", "$metallicity$", "$distance$ [kpc]", "$Absorption$", r"[$\alpha$/fe]"]
 		, hist_kwargs={'fill':'True',"edgecolor":'k',"linewidth":"1.2"},
