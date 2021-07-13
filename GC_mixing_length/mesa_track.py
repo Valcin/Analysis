@@ -695,7 +695,8 @@ if model == 'dar':
 	mp_75m20 = cut(track_75m20)
 	t1_m20 = track_75m20[mp_75m20:,1]
 	l1_m20 = track_75m20[mp_75m20:,3]
-	track_80m20 = np.loadtxt('tracks/m080fehm20afep0.hst_acs')
+	# ~track_80m20 = np.loadtxt('tracks/m080fehm20afep0.hst_acs')
+	track_80m20 = np.loadtxt('/home/david/Téléchargements/hb_tracks/hst_acs/fehm20afep0/hb075fehm20afep0.hst_acs')
 	mp_80m20 = cut(track_80m20)
 	t2_m20 = track_80m20[mp_80m20:,1]
 	l2_m20 = track_80m20[mp_80m20:,3]
@@ -712,21 +713,21 @@ if model == 'dar':
 	# ~l20 = iso20[:,15]
 
 
-	plt.plot(t15,l15, c='c')
-	plt.plot(t20,l20, c='k',label=r'DSED isochrones')
+	# ~plt.plot(t15,l15, c='c')
+	# ~plt.plot(t20,l20, c='k',label=r'DSED isochrones')
 	# ~plt.plot(t20 - l20,t20, c='r')
 
-	plt.plot(t1_m15,l1_m15, c='c',linestyle=':')
+	# ~plt.plot(t1_m15,l1_m15, c='c',linestyle=':')
 	# ~plt.plot(t2_m15,l2_m15, c='c',linestyle='--')
 	plt.plot(t1_m20,l1_m20, c='k',linestyle=':',label=r'DSEP tracks')
-	# ~plt.plot(t2_m20,l2_m20, c='k',linestyle='--',label=r'DSEP tracks with $M = 0.80 M_{\odot}$')
+	plt.plot(t2_m20,l2_m20, c='k',linestyle='--',label=r'DSEP tracks with $M = 0.80 M_{\odot}$')
 
 
 	# ~plt.plot(Color_iso2,mag_v2, c='k',linestyle=':', label=r'DSED Isochrone')
 	# ~plt.plot(Color_iso3,mag_v3, c='r',linestyle=':')
 	# ~plt.plot(Color_iso1,mag_v1, c='c',linestyle=':')
-	plt.xlim(3.6,3.85)
-	plt.ylim(-0.5,3.5)
+	# ~plt.xlim(3.6,3.85)
+	# ~plt.ylim(-0.5,3.5)
 	plt.xlabel(r'Log $\rm T_{eff}$', fontsize=24)
 	plt.ylabel(r'Log L/$\rm L_{\odot}$', fontsize=24)
 	plt.text(3.70,3,r'[Fe/H] = -2.0',va='center',fontsize=22,alpha=1.)

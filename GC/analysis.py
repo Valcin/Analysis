@@ -857,7 +857,7 @@ for cn in [0,1,2,3,22,27,53]:
 	#~ kill
 
 	if model == 'dar':
-		fig = corner.corner(data,bins=20, range=[(np.min(data[:,0]),15.), (np.min(data[:,1]),np.max(data[:,1])),
+		fig = corner.corner(data,bins=25, range=[(np.min(data[:,0]),14.996), (np.min(data[:,1]),np.max(data[:,1])),
 		(np.min(data[:,2]),np.max(data[:,2])),(np.min(data[:,3]),np.max(data[:,3])),(np.min(data[:,4]),np.max(data[:,4]))],
 		labels=["$Age$ [Gyr]", "$metallicity$", "$distance$ [kpc]", "$Absorption$", r"[$\alpha$/fe]"]
 		, hist_kwargs={'fill':'True',"edgecolor":'k',"linewidth":"1.2"},

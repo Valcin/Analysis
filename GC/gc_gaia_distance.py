@@ -1113,7 +1113,7 @@ def lnprior(theta):
 		abs_mu = Abs
 		A1_mu = A1
 		# ~abs_sigma = 1/3. * A1 #mag
-		abs_sigma = 0.06 #mag
+		abs_sigma = 0.1 #mag
 		# ~lnl_abs = np.log(1.0/(np.sqrt(2*np.pi)*abs_sigma))-0.5*(A1_mu-abs_mu)**2/abs_sigma**2
 		lnl_abs = -0.5*(A1_mu-abs_mu)**2/abs_sigma**2
 		###gaussian prior on distance
@@ -1140,9 +1140,10 @@ def lnprior(theta):
 			#~ #flat priors on age, FeH, Av
 		if 9 < age < 10.175 and -2.5 < FeH < 0  and 0.0 < dist and 0 < A1 < 3.0 and -0.2 <= afe <= 0.8:
 			# ~return 0.0
-			# ~print('met: '+str(lnl_me),'dist: '+str(lnl_dm),'abs: '+str(lnl_abs),'afe: '+str(lnl_abu), 'TOTAL = '+str(lnl_me + lnl_dm + lnl_abs + lnl_abu))
+			print('met: '+str(lnl_me),'dist: '+str(lnl_dm),'abs: '+str(lnl_abs),'afe: '+str(lnl_abu), 'TOTAL = '+str(lnl_me + lnl_dm + lnl_abs + lnl_abu))
 			return lnl_me + lnl_dm + lnl_abs + lnl_abu
-			# ~return lnl_dm + lnl_abs + lnl_abu
+			# ~print('met: '+str(lnl_me),'dist: '+str(lnl_dm),'afe: '+str(lnl_abu), 'TOTAL = '+str(lnl_me + lnl_dm + lnl_abu))
+			# ~return lnl_me + lnl_dm + lnl_abu
 		return -np.inf
 		
 #~ @profile
@@ -1409,11 +1410,18 @@ def way(vgood, cgood, errgood, errgoodv, step = None):
 
 		apmstop = np.where(np.array(cgood)[ici] > top_x-0.05)[0]
 
-		# ~threshold = 3
+		print('bin = '+str(c))
+		print(len(np.array(cgood)[ici]))
+
+		
+		# ~threshold = 1
 		# ~z = np.abs(stats.zscore(np.array(cgood)[ici][apmstop]))
 		# ~out = (np.where(z > threshold)[0])
 		# ~zcol =  np.delete(np.array(cgood)[ici][apmstop], out)
 		# ~zmagv =  np.delete(np.array(vgood)[ici[apmstop]], out)
+		# ~scoremad = np.std(zcol)
+		# ~print('first ite')
+		# ~print(len(zcol))
 
 		# ~times = 0
 		# ~while times < 5:
@@ -1422,16 +1430,48 @@ def way(vgood, cgood, errgood, errgoodv, step = None):
 			# ~zcol =  np.delete(zcol, out)
 			# ~zmagv =  np.delete(zmagv, out)
 			# ~times = times + 1
+			# ~print(len(zcol))
 
-		threshold = 3
-		med = np.median(np.array(cgood)[ici][apmstop])
-		diff_med = np.abs(np.array(cgood)[ici][apmstop] - med)
+		# ~threshold = 2
+		# ~med = np.median(np.array(cgood)[ici][apmstop])
+		# ~diff_med = np.abs(np.array(cgood)[ici][apmstop] - med)
+		# ~errmed = np.median(diff_med) # multiply by 1.486 for notmal distribution
+		# ~scoremad = errmed* 1.4826 # multiply by 1.4826 for notmal distribution
+		# ~z = diff_med / scoremad
+		# ~out = (np.where(z > threshold)[0])
+		# ~zcol =  np.delete(np.array(cgood)[ici][apmstop], out)
+		# ~zmagv =  np.delete(np.array(vgood)[ici][apmstop], out)
+		# ~deb_length = len(zcol)
+		# ~print('first ite')
+		# ~print(len(zcol), med)
+		threshold = 1
+		med = np.median(np.array(cgood)[ici])
+		diff_med = np.abs(np.array(cgood)[ici] - med)
 		errmed = np.median(diff_med) # multiply by 1.486 for notmal distribution
 		scoremad = errmed* 1.4826 # multiply by 1.4826 for notmal distribution
 		z = diff_med / scoremad
 		out = (np.where(z > threshold)[0])
-		zcol =  np.delete(np.array(cgood)[ici][apmstop], out)
-		zmagv =  np.delete(np.array(vgood)[ici[apmstop]], out)
+		zcol =  np.delete(np.array(cgood)[ici], out)
+		zmagv =  np.delete(np.array(vgood)[ici], out)
+		deb_length = len(zcol)
+		print('first ite')
+		print(len(zcol), med)
+
+		times=0
+		threshold = 3
+		while times < 5:
+			med = np.median(zcol)
+			diff_med = np.abs(zcol - med)
+			errmed = np.median(diff_med) # multiply by 1.486 for notmal distribution
+			scoremad = errmed* 1.4826 # multiply by 1.4826 for notmal distribution
+			z = diff_med / scoremad
+			out = (np.where(z > threshold)[0])
+			zcol =  np.delete(zcol, out)
+			zmagv =  np.delete(zmagv, out)
+			times=times+1
+			print(len(zcol),med)
+
+			
 		# ~threshold = 3
 		# ~med = np.median(np.array(cgood)[ici])
 		# ~diff_med = np.abs(np.array(cgood)[ici] - med)
@@ -1462,12 +1502,12 @@ def way(vgood, cgood, errgood, errgoodv, step = None):
 			size_bin[c] = len(ici)
 		elif len(ici) >2:
 			ccenter[c] =np.median(zcol)
-			#~ ccenter[c] =np.mean(zcol)
+			# ~ccenter[c] =np.mean(zcol)
 			if np.std(zcol) == 0:
 				errcenter[c] =np.mean(np.array(errgood)[ici])
 				print('std nul')
 			else:
-				# ~errcenter[c] =1.2533*np.std(zcol)
+				# ~errcenter[c] =np.std(zcol)
 				errcenter[c] = scoremad
 				errcenterv[c] =1.2533*np.std(zmagv)
 				#~ q1 = np.percentile(zcol, 25)
@@ -1534,11 +1574,12 @@ def way2(vgood, cgood, errgood, errgoodv, step = None):
 
 		apmstop = np.where(np.array(cgood)[ici] > top_x-0.05)[0]
 
-		threshold = 3
-		z = np.abs(stats.zscore(np.array(cgood)[ici]))
-		out = (np.where(z > threshold)[0])
-		zcol =  np.delete(np.array(cgood)[ici], out)
-		zmagv =  np.delete(np.array(vgood)[ici], out)
+		# ~threshold = 1
+		# ~z = np.abs(stats.zscore(np.array(cgood)[ici][apmstop]))
+		# ~out = (np.where(z > threshold)[0])
+		# ~zcol =  np.delete(np.array(cgood)[ici][apmstop], out)
+		# ~zmagv =  np.delete(np.array(vgood)[ici[apmstop]], out)
+		# ~scoremad = np.std(zcol)
 
 		# ~times = 0
 		# ~while times < 5:
@@ -1548,24 +1589,29 @@ def way2(vgood, cgood, errgood, errgoodv, step = None):
 			# ~zmagv =  np.delete(zmagv, out)
 			# ~times = times + 1
 
-		# ~threshold = 3
-		# ~med = np.median(np.array(cgood)[ici][apmstop])
-		# ~diff_med = np.abs(np.array(cgood)[ici][apmstop] - med)
-		# ~errmed = np.median(diff_med) # multiply by 1.486 for notmal distribution
-		# ~scoremad = errmed* 1.4826 # multiply by 1.4826 for notmal distribution
-		# ~z = diff_med / scoremad
-		# ~out = (np.where(z > threshold)[0])
-		# ~zcol =  np.delete(np.array(cgood)[ici][apmstop], out)
-		# ~zmagv =  np.delete(np.array(vgood)[ici[apmstop]], out)
-		# ~threshold = 3
-		# ~med = np.median(np.array(cgood)[ici])
-		# ~diff_med = np.abs(np.array(cgood)[ici] - med)
-		# ~errmed = np.median(diff_med) # multiply by 1.486 for notmal distribution
-		# ~scoremad = errmed* 1.4826 # multiply by 1.4826 for notmal distribution
-		# ~z = diff_med / scoremad
-		# ~out = (np.where(z > threshold)[0])
-		# ~zcol =  np.delete(np.array(cgood)[ici], out)
-		# ~zmagv =  np.delete(np.array(vgood)[ici], out)
+		threshold = 3
+		med = np.median(np.array(cgood)[ici])
+		diff_med = np.abs(np.array(cgood)[ici] - med)
+		errmed = np.median(diff_med) # multiply by 1.486 for notmal distribution
+		scoremad = errmed* 1.4826 # multiply by 1.4826 for notmal distribution
+		z = diff_med / scoremad
+		out = (np.where(z > threshold)[0])
+		zcol =  np.delete(np.array(cgood)[ici], out)
+		zmagv =  np.delete(np.array(vgood)[ici], out)
+
+
+		times = 0
+		while times < 5:
+			med = np.median(zcol)
+			diff_med = np.abs(zcol - med)
+			errmed = np.median(diff_med) # multiply by 1.486 for notmal distribution
+			scoremad = errmed* 1.4826 # multiply by 1.4826 for notmal distribution
+			z = diff_med / scoremad
+			out = (np.where(z > threshold)[0])
+			zcol =  np.delete(zcol, out)
+			zmagv =  np.delete(zmagv, out)
+			times = times + 1
+
 		
 		#~ zcol =  np.array(cgood)[ici]
 		#~ zmagv =  np.array(vgood)[ici]
@@ -1594,7 +1640,7 @@ def way2(vgood, cgood, errgood, errgoodv, step = None):
 			else:
 				errcenter[c] =np.std(zcol)
 				# ~errcenter[c] = scoremad
-				errcenterv[c] =np.std(zmagv)
+				errcenterv[c] =1.2533*np.std(zmagv)
 				#~ q1 = np.percentile(zcol, 25)
 				#~ q3 = np.percentile(zcol, 75)
 				#~ errcenter[c] = (q3-q1)/np.sqrt(len(ici))
@@ -1606,6 +1652,7 @@ def way2(vgood, cgood, errgood, errgoodv, step = None):
 		#~ print(centergood[c], ccenter[c])	
 
 	return vcenter, ccenter, errcenter, size_bin, bingood, errcenterv
+	
 
 #~ @profile
 def default_beta_ladder(ndim, ntemps=None, Tmax=None):
@@ -2088,30 +2135,21 @@ elif model == 'dar':
 	#~ kill
 
 
-	#~ if Abs-0.01>0 and distance-100 >0:
-		#~ pos = np.random.uniform(low=[Age -0.01, metal-0.01, distance-100, Abs-0.01, afe_init], high=[Age +0.01, metal+0.01, distance+100, Abs+0.01, afe_init+0.01],
-		#~ size=(nwalkers, ndim))
-	#~ elif Abs-0.01 < 0 and distance-100 >0:
-		#~ pos = np.random.uniform(low=[Age -0.01, metal-0.01, distance-100, 0.001, afe_init], high=[Age +0.01, metal+0.01, distance+100, Abs+0.01,  afe_init+0.01],
-		#~ size=(nwalkers, ndim))
-	#~ elif Abs-0.01>0 and distance-100 < 0:
-		#~ pos = np.random.uniform(low=[Age -0.01, metal-0.01, 0.001, Abs-0.01, afe_init], high=[Age +0.01, metal+0.01, distance+100, Abs+0.01,  afe_init+0.01],
-		#~ size=(nwalkers, ndim))
-	#~ else:
-		#~ pos = np.random.uniform(low=[Age -0.01, metal-0.01, 0, 0.001, afe_init], high=[Age +0.01, metal+0.01, distance+100, Abs+0.01,  afe_init+0.01],
-		#~ size=(nwalkers, ndim))
-	if Abs-0.1>0 and distance-2000 >0:
-		pos = np.random.uniform(low=[Age -0.1, metal-0.1, distance-2000, Abs-0.1, afe_init-0.1], high=[Age +0.1, metal+0.1, distance+2000, Abs+0.1, afe_init+0.1],
-		size=(nwalkers, ndim))
-	elif Abs-0.1 < 0 and distance-2000 >0:
-		pos = np.random.uniform(low=[Age -0.1, metal-0.1, distance-2000, 0.001, afe_init-0.1], high=[Age +0.1, metal+0.1, distance+2000, Abs+0.1,  afe_init+0.1],
-		size=(nwalkers, ndim))
-	elif Abs-0.1>0 and distance-2000 < 0:
-		pos = np.random.uniform(low=[Age -0.1, metal-0.1, 0.001, Abs-0.1,afe_init-0.1], high=[Age +0.1, metal+0.1, distance+2000, Abs+0.1, afe_init+0.1],
-		size=(nwalkers, ndim))
-	else:
-		pos = np.random.uniform(low=[Age -0.1, metal-0.1, 0, 0.001, afe_init-0.1], high=[Age +0.1, metal+0.1, distance+2000, Abs+0.1,  afe_init+0.1],
-		size=(nwalkers, ndim))
+	pos = np.random.uniform(low=[Age -0.01, -2.4, distance-1000, 0.01, 0.01], high=[Age +0.01, 0.1, distance+1000, 2.99, 0.78],
+	size=(nwalkers, ndim))
+	# ~if Abs-0.1>0 and distance-2000 >0:
+		# ~pos = np.random.uniform(low=[Age -0.1, metal-0.1, distance-2000, Abs-0.1, afe_init-0.1], high=[Age +0.1, metal+0.1, distance+2000, Abs+0.1, afe_init+0.1],
+		# ~pos = np.random.uniform(low=[Age -0.1, metal-0.1, distance-2000, Abs-0.1, afe_init-0.1], high=[Age +0.1, metal+0.1, distance+2000, Abs+0.1, afe_init+0.1],
+		# ~size=(nwalkers, ndim))
+	# ~elif Abs-0.1 < 0 and distance-2000 >0:
+		# ~pos = np.random.uniform(low=[Age -0.1, metal-0.1, distance-2000, 0.001, afe_init-0.1], high=[Age +0.1, metal+0.1, distance+2000, Abs+0.1,  afe_init+0.1],
+		# ~size=(nwalkers, ndim))
+	# ~elif Abs-0.1>0 and distance-2000 < 0:
+		# ~pos = np.random.uniform(low=[Age -0.1, metal-0.1, 0.001, Abs-0.1,afe_init-0.1], high=[Age +0.1, metal+0.1, distance+2000, Abs+0.1, afe_init+0.1],
+		# ~size=(nwalkers, ndim))
+	# ~else:
+		# ~pos = np.random.uniform(low=[Age -0.1, metal-0.1, 0, 0.001, afe_init-0.1], high=[Age +0.1, metal+0.1, distance+2000, Abs+0.1,  afe_init+0.1],
+		# ~size=(nwalkers, ndim))
 
 
 # ~kill
@@ -2167,6 +2205,7 @@ rgb_lim = np.min(photo_v)
 #~ rgb_lim = 16.5
 mag_lim2 = chunkbot[glc]
 mag_lim3 = min(chunkbot[glc] + lim_model, 26)
+# ~mag_lim3 = 26
 
 #~ above = np.where(photo_v < mag_lim3)[0]
 #~ with open('/home/david/codes/GC/plots/table_number_'+ version +'_'+str(model)+'.txt', 'a+') as fid_file:
@@ -2192,7 +2231,7 @@ if len(magvuno) > 0:
 else:
 	print("List is empty")
 
-bincenter, gauss_mean, gauss_disp, starnum, bingood, errcenterv = way2(magvuno, coluno, errcoluno, errvuno)
+bincenter, gauss_mean, gauss_disp, starnum, bingood, errcenterv = way(magvuno, coluno, errcoluno, errvuno)
 
 
 
@@ -2407,8 +2446,10 @@ plt.scatter(ccenter_rgb, vcenter_rgb , marker='o', s=30, color='r', label='selec
 	#~ else:
 		#~ plt.fill_between(np.linspace(-0.5,3), bingood[nempty][ii], bingood[nempty][ii+1], color='darkblue', alpha=0.4)
 plt.axvline(top_x-0.05)
-plt.xlim(-0.5,3)
-plt.ylim(27,10)
+# ~plt.xlim(-0.5,3)
+# ~plt.ylim(27,10)
+plt.xlim(0.4,1.2)
+plt.ylim(22,16)
 plt.tick_params(labelsize=16)
 # ~lgnd = plt.legend(loc='upper right', fontsize = 24)
 # ~lgnd.legendHandles[0]._sizes = [286]
