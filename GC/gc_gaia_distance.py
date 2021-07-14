@@ -1140,7 +1140,7 @@ def lnprior(theta):
 			#~ #flat priors on age, FeH, Av
 		if 9 < age < 10.175 and -2.5 < FeH < 0  and 0.0 < dist and 0 < A1 < 3.0 and -0.2 <= afe <= 0.8:
 			# ~return 0.0
-			print('met: '+str(lnl_me),'dist: '+str(lnl_dm),'abs: '+str(lnl_abs),'afe: '+str(lnl_abu), 'TOTAL = '+str(lnl_me + lnl_dm + lnl_abs + lnl_abu))
+			# ~print('met: '+str(lnl_me),'dist: '+str(lnl_dm),'abs: '+str(lnl_abs),'afe: '+str(lnl_abu), 'TOTAL = '+str(lnl_me + lnl_dm + lnl_abs + lnl_abu))
 			return lnl_me + lnl_dm + lnl_abs + lnl_abu
 			# ~print('met: '+str(lnl_me),'dist: '+str(lnl_dm),'afe: '+str(lnl_abu), 'TOTAL = '+str(lnl_me + lnl_dm + lnl_abu))
 			# ~return lnl_me + lnl_dm + lnl_abu
@@ -1410,8 +1410,8 @@ def way(vgood, cgood, errgood, errgoodv, step = None):
 
 		apmstop = np.where(np.array(cgood)[ici] > top_x-0.05)[0]
 
-		print('bin = '+str(c))
-		print(len(np.array(cgood)[ici]))
+		# ~print('bin = '+str(c))
+		# ~print(len(np.array(cgood)[ici]))
 
 		
 		# ~threshold = 1
@@ -1454,8 +1454,8 @@ def way(vgood, cgood, errgood, errgoodv, step = None):
 		zcol =  np.delete(np.array(cgood)[ici], out)
 		zmagv =  np.delete(np.array(vgood)[ici], out)
 		deb_length = len(zcol)
-		print('first ite')
-		print(len(zcol), med)
+		# ~print('first ite')
+		# ~print(len(zcol), med)
 
 		times=0
 		threshold = 3
@@ -1469,7 +1469,7 @@ def way(vgood, cgood, errgood, errgoodv, step = None):
 			zcol =  np.delete(zcol, out)
 			zmagv =  np.delete(zmagv, out)
 			times=times+1
-			print(len(zcol),med)
+			# ~print(len(zcol),med)
 
 			
 		# ~threshold = 3
@@ -1756,7 +1756,7 @@ T0 = 1
 T1 = 1000
 posnum = 1
 ite = 10000
-nwalkers = 20
+nwalkers = 300
 # ~model = 'mist'
 model = 'dar'
 #~ #----------------
@@ -2135,21 +2135,20 @@ elif model == 'dar':
 	#~ kill
 
 
-	pos = np.random.uniform(low=[Age -0.01, -2.4, distance-1000, 0.01, 0.01], high=[Age +0.01, 0.1, distance+1000, 2.99, 0.78],
-	size=(nwalkers, ndim))
-	# ~if Abs-0.1>0 and distance-2000 >0:
-		# ~pos = np.random.uniform(low=[Age -0.1, metal-0.1, distance-2000, Abs-0.1, afe_init-0.1], high=[Age +0.1, metal+0.1, distance+2000, Abs+0.1, afe_init+0.1],
-		# ~pos = np.random.uniform(low=[Age -0.1, metal-0.1, distance-2000, Abs-0.1, afe_init-0.1], high=[Age +0.1, metal+0.1, distance+2000, Abs+0.1, afe_init+0.1],
-		# ~size=(nwalkers, ndim))
-	# ~elif Abs-0.1 < 0 and distance-2000 >0:
-		# ~pos = np.random.uniform(low=[Age -0.1, metal-0.1, distance-2000, 0.001, afe_init-0.1], high=[Age +0.1, metal+0.1, distance+2000, Abs+0.1,  afe_init+0.1],
-		# ~size=(nwalkers, ndim))
-	# ~elif Abs-0.1>0 and distance-2000 < 0:
-		# ~pos = np.random.uniform(low=[Age -0.1, metal-0.1, 0.001, Abs-0.1,afe_init-0.1], high=[Age +0.1, metal+0.1, distance+2000, Abs+0.1, afe_init+0.1],
-		# ~size=(nwalkers, ndim))
-	# ~else:
-		# ~pos = np.random.uniform(low=[Age -0.1, metal-0.1, 0, 0.001, afe_init-0.1], high=[Age +0.1, metal+0.1, distance+2000, Abs+0.1,  afe_init+0.1],
-		# ~size=(nwalkers, ndim))
+	# ~pos = np.random.uniform(low=[Age -0.01, -2.4, distance-1000, 0.01, 0.01], high=[Age +0.01, 0.1, distance+1000, 2.99, 0.78],
+	# ~size=(nwalkers, ndim))
+	if Abs-0.1>0 and distance-2000 >0:
+		pos = np.random.uniform(low=[Age -0.1, metal-0.1, distance-2000, Abs-0.1, afe_init-0.1], high=[Age +0.1, metal+0.1, distance+2000, Abs+0.1, afe_init+0.1],
+		size=(nwalkers, ndim))
+	elif Abs-0.1 < 0 and distance-2000 >0:
+		pos = np.random.uniform(low=[Age -0.1, metal-0.1, distance-2000, 0.001, afe_init-0.1], high=[Age +0.1, metal+0.1, distance+2000, Abs+0.1,  afe_init+0.1],
+		size=(nwalkers, ndim))
+	elif Abs-0.1>0 and distance-2000 < 0:
+		pos = np.random.uniform(low=[Age -0.1, metal-0.1, 0.001, Abs-0.1,afe_init-0.1], high=[Age +0.1, metal+0.1, distance+2000, Abs+0.1, afe_init+0.1],
+		size=(nwalkers, ndim))
+	else:
+		pos = np.random.uniform(low=[Age -0.1, metal-0.1, 0, 0.001, afe_init-0.1], high=[Age +0.1, metal+0.1, distance+2000, Abs+0.1,  afe_init+0.1],
+		size=(nwalkers, ndim))
 
 
 # ~kill
@@ -2446,10 +2445,10 @@ plt.scatter(ccenter_rgb, vcenter_rgb , marker='o', s=30, color='r', label='selec
 	#~ else:
 		#~ plt.fill_between(np.linspace(-0.5,3), bingood[nempty][ii], bingood[nempty][ii+1], color='darkblue', alpha=0.4)
 plt.axvline(top_x-0.05)
-# ~plt.xlim(-0.5,3)
-# ~plt.ylim(27,10)
-plt.xlim(0.4,1.2)
-plt.ylim(22,16)
+plt.xlim(-0.5,3)
+plt.ylim(27,10)
+# ~plt.xlim(0.4,1.2)
+# ~plt.ylim(22,16)
 plt.tick_params(labelsize=16)
 # ~lgnd = plt.legend(loc='upper right', fontsize = 24)
 # ~lgnd.legendHandles[0]._sizes = [286]
@@ -2554,7 +2553,7 @@ with Pool() as pool:
 
 	for i, (results) in enumerate(zip(sampler.sample(pos, iterations=ite))):
 		print(i)
-		if (i+1) % 100 == 0:
+		if (i+1) % 200 == 0:
 			ind = int((i+1)/1)
 	# 		with open('test2_'+str(clus_nb)+'_'+str(model)+'.txt', 'a+') as fid_file:
 			print("first phase is at {0:.1f}%\n".format(100 * float(i) /ite))

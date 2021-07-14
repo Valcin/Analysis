@@ -434,6 +434,14 @@ if version == '16':
 	garr = [3,4,8,12,14,15,17,19,20,24,28,32,34,42,43,46,48,51,52,54,59,61]
 	model = 'dar'
 	#~ garr =
+if version == '17':
+	ndim = 5
+	nwalkers = 300
+	ntemps = 1
+	print(ntemps)
+	garr = [3,4,8,12,14,15,17,19,20,24,28,32,34,42,43,46,48,51,52,54,59,61]
+	model = 'dar'
+	#~ garr =
 if version == '0':
 	ndim = 4 
 	nwalkers = 300	
@@ -980,7 +988,7 @@ for cn in [0,1,2,3,22,27,53]:
 	plt.title(clus_nb+' age = '+str(Age_mean))
 	# ~plt.title('IC4499', fontsize = 16)
 	# ~plt.subplots_adjust(bottom=0.13)
-	# ~plt.savefig('/home/david/codes/Analysis/GC/plots/analysis/fit_'+clus_nb+'.png')
+	# ~plt.savefig('/home/david/codes/Analysis/GC/plots/analysis/fit_'+clus_nb+'_'+ version +'.png')
 	plt.show()
 	plt.close()
 	# ~kill
