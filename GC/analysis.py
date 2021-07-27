@@ -462,7 +462,7 @@ if version == '0':
 tot_age = []
 tot_met = []
 
-for cn in [0,1,2,3,22,27,53]:
+for cn in [0,1,22,53]:
 # ~for cn in list(range(27))+ list(range(28,69)):
 #~ for cn in garr: # 
 	glc = cn
@@ -504,7 +504,7 @@ for cn in [0,1,2,3,22,27,53]:
 		#~ AA = np.genfromtxt('/home/david/codes/GC/plots/test/data_'+str(t)+'_'+clus_nb+'_'+ version +'_'+str(model)+'.txt', usecols=(j+nwalkers*3,), max_rows=2000)
 
 	steps = 500
-	if version in ['9','10','15','16']:
+	if version in ['9','10','15','16','17']:
 		files = np.loadtxt('/home/david/codes/data/GC_data/'+str(model)+'/data_1'+'_'+clus_nb+'_'+ version +'_'+str(model)+'.txt')
 	else:
 		files = np.loadtxt('/home/david/codes/Analysis/GC/plots/test/data_'+str(t)+'_'+clus_nb+'_'+ version +'_'+str(model)+'.txt')
@@ -869,7 +869,7 @@ for cn in [0,1,2,3,22,27,53]:
 		(np.min(data[:,2]),np.max(data[:,2])),(np.min(data[:,3]),np.max(data[:,3])),(np.min(data[:,4]),np.max(data[:,4]))],
 		labels=["$Age$ [Gyr]", "$metallicity$", "$distance$ [kpc]", "$Absorption$", r"[$\alpha$/fe]"]
 		, hist_kwargs={'fill':'True',"edgecolor":'k',"linewidth":"1.2"},
-		plot_contours=True, label_kwargs={"fontsize":10}, color ='c', plot_datapoints=False,
+		plot_contours=True, label_kwargs={"fontsize":10}, color ='lightblue', plot_datapoints=False,
 		levels=(1-np.exp(-0.5),0.6321,0.7769))
 		plt.subplots_adjust(hspace=0.2, wspace=0.2, top = 0.95, left = 0.1, right=0.95)
 		for ax in fig.get_axes():
@@ -887,8 +887,8 @@ for cn in [0,1,2,3,22,27,53]:
 		plt.subplots_adjust(hspace=0.2, wspace=0.2, top = 0.95, left = 0.1, right=0.95)
 		for ax in fig.get_axes():
 			ax.tick_params(axis='both', labelsize=12)
-		plt.savefig('/home/david/codes/Analysis/GC/plots/analysis/corner'+'_'+clus_nb+'_'+ version +'_'+str(model)+'.png')
-		plt.show()
+		# ~plt.savefig('/home/david/codes/Analysis/GC/plots/analysis/corner'+'_'+clus_nb+'_'+ version +'_'+str(model)+'.png')
+		# ~plt.show()
 		plt.close()
 
 	# ~kill

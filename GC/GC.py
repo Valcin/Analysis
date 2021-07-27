@@ -2273,14 +2273,14 @@ print(errcenter_rgb)
 
 plt.figure()
 plt.scatter(color,photo_v, marker='.', s=10, color='grey', label='stars', alpha=0.8)
-# ~plt.scatter(gauss_mean,bincenter, marker='o', s=30, color='r', label=r'$C_i^{data}$')
-# ~plt.errorbar(gauss_mean,bincenter, xerr=gauss_disp, c='k', linewidth=2, fmt='none', label=r'$\sigma_i^{data}$')
-#~ plt.scatter(colbis[dr2],magvbis[dr2], marker='.',s=10, color='r', label='stars in the upper branch')
-#~ plt.scatter(colbis,magvbis, marker='.',s=10, color='r', label='stars in the upper branch')
-#~ plt.errorbar(colbis,magvbis, xerr=errcolbis, c='k', fmt='none')
-# ~plt.scatter(ccenter,vcenter, marker='x',s=30, color='k')
-# ~plt.errorbar(ccenter, vcenter, xerr=errcenter, capsize= 2, linewidth=2,fmt = 'none', c='k')
-# ~plt.scatter(ccenter_rgb, vcenter_rgb , marker='o', s=30, color='r', label='selected points')
+plt.scatter(gauss_mean,bincenter, marker='o', s=30, color='r', label=r'$C_i^{data}$')
+plt.errorbar(gauss_mean,bincenter, xerr=gauss_disp, c='k', linewidth=2, fmt='none', label=r'$\sigma_i^{data}$')
+# ~#~ plt.scatter(colbis[dr2],magvbis[dr2], marker='.',s=10, color='r', label='stars in the upper branch')
+# ~#~ plt.scatter(colbis,magvbis, marker='.',s=10, color='r', label='stars in the upper branch')
+# ~#~ plt.errorbar(colbis,magvbis, xerr=errcolbis, c='k', fmt='none')
+plt.scatter(ccenter,vcenter, marker='x',s=30, color='k')
+plt.errorbar(ccenter, vcenter, xerr=errcenter, capsize= 2, linewidth=2,fmt = 'none', c='k')
+plt.scatter(ccenter_rgb, vcenter_rgb , marker='o', s=30, color='r', label='selected points')
 # ~for x,y,z in zip(ccenter, vcenter, np.arange(len(ccenter))):
 	# ~plt.text(x,y, str(z), color='b', label='selected points')
 #~ if model == 'mist':
@@ -2311,9 +2311,9 @@ plt.xlabel('F606W - F814W', fontsize = 16)
 plt.ylabel('F606W', fontsize = 16)
 # ~plt.title(clus_nb+' '+str(glc)+' '+ model, fontsize = 16)
 # ~plt.title('IC4499', fontsize = 24)
-# ~plt.show() 
+plt.show() 
 plt.close()
-# ~kill
+kill
 #~ #----------------------------------------------
 #----------------------------------------------
 
