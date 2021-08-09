@@ -462,7 +462,7 @@ if version == '0':
 tot_age = []
 tot_met = []
 
-for cn in [0,1,22,53]:
+for cn in [0,1,2,27,53]:
 # ~for cn in list(range(27))+ list(range(28,69)):
 #~ for cn in garr: # 
 	glc = cn

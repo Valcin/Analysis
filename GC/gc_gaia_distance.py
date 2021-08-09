@@ -1123,8 +1123,8 @@ def lnprior(theta):
 		# ~dm_sigma = 0.5 #mag	
 		dm_mu = distance
 		dist_mu = dist
-		# ~dm_sigma = errdist #mag
-		dm_sigma = 500 #mag
+		dm_sigma = errdist #mag
+		# ~dm_sigma = 500 #mag
 		# ~lnl_dm = np.log(1.0/(np.sqrt(2*np.pi)*dm_sigma))-0.5*(dist_mu-dm_mu)**2/dm_sigma**2
 		lnl_dm = -0.5*(dist_mu-dm_mu)**2/dm_sigma**2
 		###gaussian prior on metallicity
@@ -1653,7 +1653,7 @@ def way2(vgood, cgood, errgood, errgoodv, step = None):
 	#~ print(np.min(vgood), np.max(vgood))
 	#~ print(np.min(ep_mag2), np.max(ep_mag2))
 
-	
+	step = 0.2
 	#~ nbins = 20
 	rangebin = np.max(vgood) - np.min(vgood)
 	if step is not None:
@@ -1679,31 +1679,20 @@ def way2(vgood, cgood, errgood, errgoodv, step = None):
 	size_bin = np.zeros(len(centergood))
 
 
+
+
 	#~ print(bingood)
 	#~ print(centergood)
 
 	for c in range(0,len(centergood)):
 		inbin = np.digitize(vgood, bingood)
 		ici = np.where(inbin == c+1)[0]
-		#~ print(np.min(np.array(cgood)[ici]), np.max(np.array(cgood)[ici]))
 
-		apmstop = np.where(np.array(cgood)[ici] > top_x-0.05)[0]
+		# ~print(errgood[ici])
+		
+		# ~apmstop = np.where(np.array(cgood)[ici] > top_x-0.05)[0]
 
-		# ~threshold = 1
-		# ~z = np.abs(stats.zscore(np.array(cgood)[ici][apmstop]))
-		# ~out = (np.where(z > threshold)[0])
-		# ~zcol =  np.delete(np.array(cgood)[ici][apmstop], out)
-		# ~zmagv =  np.delete(np.array(vgood)[ici[apmstop]], out)
-		# ~scoremad = np.std(zcol)
-
-		# ~times = 0
-		# ~while times < 5:
-			# ~z = np.abs(stats.zscore(zcol))
-			# ~out = (np.where(z > threshold)[0])
-			# ~zcol =  np.delete(zcol, out)
-			# ~zmagv =  np.delete(zmagv, out)
-			# ~times = times + 1
-
+		# ~# wrt median
 		threshold = 3
 		med = np.median(np.array(cgood)[ici])
 		diff_med = np.abs(np.array(cgood)[ici] - med)
@@ -1713,61 +1702,220 @@ def way2(vgood, cgood, errgood, errgoodv, step = None):
 		out = (np.where(z > threshold)[0])
 		zcol =  np.delete(np.array(cgood)[ici], out)
 		zmagv =  np.delete(np.array(vgood)[ici], out)
+		ecol =  np.delete(np.array(errgood)[ici], out)
+		ecolv =  np.delete(np.array(errgoodv)[ici], out)
 
-
-		times = 0
+		times=0
 		while times < 5:
 			med = np.median(zcol)
 			diff_med = np.abs(zcol - med)
 			errmed = np.median(diff_med) # multiply by 1.486 for notmal distribution
 			scoremad = errmed* 1.4826 # multiply by 1.4826 for notmal distribution
 			z = diff_med / scoremad
-			out = (np.where(z > threshold)[0])
-			zcol =  np.delete(zcol, out)
-			zmagv =  np.delete(zmagv, out)
-			times = times + 1
+			out2 = (np.where(z > threshold)[0])
+			zcol =  np.delete(zcol, out2)
+			zmagv =  np.delete(zmagv, out2)
+			ecol =  np.delete(ecol, out2)
+			ecolv =  np.delete(ecolv, out2)
+			times=times+1
 
-		
-		#~ zcol =  np.array(cgood)[ici]
-		#~ zmagv =  np.array(vgood)[ici]
+		#wrt mean
+		# ~threshold = 3
+		# ~z = np.abs(stats.zscore(np.array(cgood)[ici]))
+		# ~out = (np.where(z > threshold)[0])
+		# ~zcol =  np.delete(np.array(cgood)[ici], out)
+		# ~zmagv =  np.delete(np.array(vgood)[ici], out)
 
+		# ~times = 0
+		# ~while times < 1:
+			# ~z = np.abs(stats.zscore(zcol))
+			# ~out = (np.where(z > threshold)[0])
+			# ~zcol =  np.delete(zcol, out)
+			# ~zmagv =  np.delete(zmagv, out)
+			# ~times = times + 1
+			# ~scoremad = np.std(zcol)
+
+		if len(ici) > 1:
+			tp = np.where((zmagv >= np.min(zmagv)) & (zmagv <= np.min(zmagv)+step/4.))[0]
+			tps = np.median(zcol[tp])
+			bp = np.where((zmagv <= np.max(zmagv)) & (zmagv >= np.max(zmagv)-step/4.))[0]
+			bps = np.median(zcol[bp])
+			
+			x_axis_real_length = 21.7 #cm
+			x_axis_lim = 3.5 #mag 
+			y_axis_real_length = 11 #cm
+			y_axis_lim = 16 #mg
+
+			# ~#get the cm equivalent to 1 mag in x or y
+			norm_x = x_axis_real_length/x_axis_lim
+			norm_y = y_axis_real_length/y_axis_lim
+
+			lat = step * norm_y
+			lon = (bps - tps) * norm_x
+			# ~lat = step
+			# ~lon = (bps - tps)
+			dist = np.sqrt((lat)**2 + (lon)**2)
+			cos = lat/dist
+			angle = np.degrees(math.acos(cos))
+			# ~print(c,len(ici), cos, angle)
+		else:
+			pass
+
+
+		# ~plt.figure()
+		# ~plt.scatter(color,photo_v, marker='.',s=10, color='grey', label='data')
+		# ~plt.scatter(np.array(cgood)[ici],np.array(vgood)[ici], marker='.',s=10, color='b', label='data')
+		# ~plt.scatter(zcol,zmagv, marker='.',s=10, color='r', label='data')
+		# ~plt.axvline(np.median(np.array(cgood)[ici]),c='r')
+		# ~plt.axvline(np.mean(np.array(cgood)[ici]),c='c')
+		# ~plt.xlim(-0.5,3)
+		# ~plt.ylim(26,10)
+		# ~plt.legend(loc='upper right', fontsize = 16)
+		# ~plt.xlabel('F606W - F814W', fontsize = 16)
+		# ~plt.ylabel('F606W', fontsize = 16)
+		# ~plt.title(clus_nb, fontsize = 16)
+		# ~plt.show()
+		# ~plt.close()
+		# ~kill
 
 		if len(ici) == 1:
 			ccenter[c] =np.median(zcol)
+			# ~vcenter[c] =centergood[c]
+			# ~ccenter[c] =np.mean(zcol)
 			errcenter[c] =np.array(errgood)[ici]
 			errcenterv[c] =np.array(errgoodv)[ici]
-			vcenter[c] =centergood[c]
-			#~ vcenter[c] =np.array(vgood)[ici]
+			vcenter[c] =np.median(zmagv)
 			size_bin[c] = len(ici)
 		elif len(ici) == 2:
 			ccenter[c] =np.median(zcol)
-			errcenter[c] = np.std(zcol)
+			# ~errcenter[c] = np.std(zcol)
+			errcenter[c] = scoremad*cos
+			# ~vcenter[c] =centergood[c]
+			# ~errcenter[c] =1.2533*np.std(zcol)*cos
+			# ~ccenter[c] =np.mean(zcol)
+			# ~errcenter[c] = np.std(zcol)*cos
 			errcenterv[c] = np.std(zmagv)
-			vcenter[c] =centergood[c]
-			#~ vcenter[c] =np.median(zmagv)
+			vcenter[c] =np.median(zmagv)
 			size_bin[c] = len(ici)
-		elif len(ici) >2:
+		elif len(ici) > 2 and len(ici) < 50:
 			ccenter[c] =np.median(zcol)
+			# ~errcenter[c] =1.2533*np.std(zcol)*cos
+			# ~errcenter[c] = scoremad*cos
+			# ~vcenter[c] =centergood[c]
 			# ~ccenter[c] =np.mean(zcol)
 			if np.std(zcol) == 0:
 				errcenter[c] =np.mean(np.array(errgood)[ici])
 				print('std nul')
 			else:
-				errcenter[c] =np.std(zcol)
-				# ~errcenter[c] = scoremad
+				# ~errcenter[c] =np.std(zcol)*cos
+				errcenter[c] = scoremad * cos
 				errcenterv[c] =1.2533*np.std(zmagv)
-				#~ q1 = np.percentile(zcol, 25)
-				#~ q3 = np.percentile(zcol, 75)
-				#~ errcenter[c] = (q3-q1)/np.sqrt(len(ici))
-				#~ errcenter[c] = (q3-q1)
-			vcenter[c] =centergood[c]
-			#~ vcenter[c] =np.median(zmagv)
+			vcenter[c] =np.median(zmagv)
 			size_bin[c] = len(ici)
-		
-		#~ print(centergood[c], ccenter[c])	
+			# ~ccenter[c] =np.mean(zcol)
+			# ~errcenter[c] = np.std(zcol)
+			# ~vcenter[c] =np.median(zmagv)
+			# ~vcenter[c] =np.median(zmagv)
+								
+		elif len(ici) >= 50:
+			# ~plt.scatter(cgood[ici], vgood[ici], label='stars', c='grey')
+			# ~plt.scatter(zcol, zmagv, label='stars', c='lightblue')
+			# ~plt.plot([tps,bps], [np.min(zmagv), np.max(zmagv)], c='r', label='orientation', lw=2)
+			# ~plt.scatter(np.mean(zcol), np.mean(zmagv), c='b', marker='o')
+			# ~plt.xlabel('F606W - F814W', fontsize = 24)
+			# ~plt.ylabel('F606W', fontsize = 24)
+			# ~plt.title('IC4499', fontsize = 24)
+			# ~plt.axhline(bingood[c], label='bin edge', alpha=0.5)
+			# ~plt.axhline(bingood[c+1], alpha=0.5)
+			# ~plt.ylim(bingood[c+1]+0.02,bingood[c]-0.02)
+			# ~plt.tick_params(labelsize=16)
+			# ~plt.show()
+			# ~plt.close()
+
+			
+			ccenter[c] =np.median(zcol)
+			# ~errcenter[c] = np.std(zcol)
+			# ~errcenter[c] = scoremad * cos
+			# ~vcenter[c] =np.median(zmagv)
+			# ~errcenter[c] = scoremad*cos
+			# ~errcenter[c] =1.2533*np.std(zcol)*cos
+			# ~vcenter[c] =centergood[c]
+			# ~vcenter[c] =np.median(zmagv)
+			# ~errcenter[c] =1.2533*np.std(zcol)	
+			# ~ccenter[c] =np.mean(zcol)
+			if np.std(zcol) == 0:
+				errcenter[c] =np.mean(np.array(errgood)[ici])
+				print('std nul')
+			else:
+				# ~errcenter[c] =np.std(zcol)*cos
+				errcenter[c] = scoremad*cos
+				errcenterv[c] =1.2533*np.std(zmagv)
+			vcenter[c] =np.mean(zmagv)
+			size_bin[c] = len(ici)
+
+						
+
+			# ~from scipy.stats import skewnorm
+			# ~amp2, moy2, dev2 = skewnorm.fit(zcol, 1, loc=0.5, scale=0.05)
+			# ~amp2, moy2, dev2 = skewnorm.fit(zcol, 10, loc=0.5, scale=0.05)
+			# ~print(amp2, moy2, dev2)		
+
+			# ~x = np.linspace(np.min(zcol), np.max(zcol), 50)
+			# ~p = stats.skewnorm.pdf(x,amp2, moy2, dev2)#.rvs(100)
+			# ~mean_skew = stats.skewnorm.mean(amp2, moy2, dev2)#.rvs(100)
+			# ~median_skew = stats.skewnorm.median(amp2, moy2, dev2)#.rvs(100)
+			# ~err_skew = stats.skewnorm.std(amp2, moy2, dev2)#.rvs(100)
+			# ~ccenter[c] = moy2
+
+			# ~med = np.median(zcol)
+			# ~diff_med = np.abs(zcol - med)
+			# ~errmed = np.median(diff_med) # multiply by 1.486 for notmal distribution
+			# ~scoremad = errmed* 1.4826 # multiply by 1.4826 for notmal distribution
+			# ~z = diff_med / scoremad
+			# ~out2 = (np.where(z > threshold)[0])
+			# ~zcol =  np.delete(zcol, out2)
+			# ~zmagv =  np.delete(zmagv, out2)
+			# ~times=times+1
+
+
+			# ~plt.figure()
+			# ~plt.hist(zcol, bins=50, density=True,color='grey')
+			# ~plt.plot(x, p, 'k', linewidth=2)
+			# ~plt.axvline(moy2, c='y')
+			# ~plt.axvline(mean_skew, c='k')
+			# ~plt.axvline(median_skew, c='b', linestyle='--')
+			# ~plt.axvline(np.median(np.array(cgood)[ici]),c='r')
+			# ~plt.axvline(np.mean(np.array(cgood)[ici]),c='c')
+			# ~plt.show()
+			# ~plt.close()
+			# ~kill
+
+
+			# ~print(len(np.where(zcol < med)[0]))
+			# ~print(len(np.where(zcol > med)[0]))
+
+			# ~plt.figure()
+			# ~plt.scatter(color,photo_v, marker='.',s=10, color='grey', label='data')
+			# ~plt.scatter(np.array(cgood)[ici],np.array(vgood)[ici], marker='.',s=10, color='b', label='data')
+			# ~plt.scatter(zcol,zmagv, marker='.',s=10, color='r', label='data')
+			# ~plt.scatter(zcol[np.where(zcol < med)[0]],zmagv[np.where(zcol < med)[0]], marker='.',s=10, color='c', label='data')
+			# ~plt.axvline(mean_skew, c='k')
+			# ~plt.axvline(median_skew, c='b', linestyle='--')
+			# ~plt.axvline(med, c='b')
+			# ~plt.axvline(np.median(np.array(cgood)[ici]),c='r')
+			# ~plt.axvline(np.mean(np.array(cgood)[ici]),c='c')
+			# ~plt.xlim(-0.5,3)
+			# ~plt.ylim(26,10)
+			# ~plt.legend(loc='upper right', fontsize = 16)
+			# ~plt.xlabel('F606W - F814W', fontsize = 16)
+			# ~plt.ylabel('F606W', fontsize = 16)
+			# ~plt.title(clus_nb, fontsize = 16)
+			# ~plt.show()
+			# ~plt.close()
+			# ~kill
 
 	return vcenter, ccenter, errcenter, size_bin, bingood, errcenterv
-
+	
 def angle_correction(vcenter, ccenter, errcenter, size_bin):
 
 
@@ -2437,7 +2585,7 @@ if len(magvuno) > 0:
 else:
 	print("List is empty")
 
-bincenter, gauss_mean, gauss_disp, starnum, bingood, errcenterv = way(magvuno, coluno, errcoluno, errvuno)
+bincenter, gauss_mean, gauss_disp, starnum, bingood, errcenterv = way2(magvuno, coluno, errcoluno, errvuno)
 
 # ~bincenter, gauss_mean, gauss_disp, starnum = angle_correction(bincenter, gauss_mean, gauss_disp, starnum)
 
@@ -2532,7 +2680,7 @@ if glc == 2:
 else:
 	# ~vcenter, ccenter, errcenter, sbin, bingood, errcenterv = way(magvbis, colbis, errcolbis, errvbis)
 	vcenter, ccenter, errcenter, sbin, bingood, errcenterv = way(magvbis[dr], colbis[dr], errcolbis[dr], errvbis[dr])
-#~ vcenter, ccenter, errcenter, sbin, bingood, rangebinv, errcenterv = way2(magvbis, colbis, errcolbis, errvbis)
+#~ vcenter, ccenter, errcenter, sbin, bingood, rangebinv, errcenterv = way(magvbis, colbis, errcolbis, errvbis)
 
 # ~vcenter, ccenter, errcenter, sbin = angle_correction(vcenter, ccenter, errcenter, sbin)
 
@@ -2607,9 +2755,7 @@ errcenterv_rgb = errcenterv
 base = []
 base.extend(np.arange(int(rescale[glc,6]),int(rescale[glc,7])+1))
 lg = len(np.where(rescale[glc,:] < 100)[0])
-#~ print(lg)
-# ~for ind in range(8,lg):
-for ind in range(6,lg):
+for ind in range(8,lg):
 	base.append(int(rescale[glc,ind]))
 #~ vcenter_rgb = vcenter[base]
 #~ ccenter_rgb = ccenter[base]
