@@ -2797,7 +2797,7 @@ plt.errorbar(ccenter, vcenter, xerr=errcenter, capsize= 2, linewidth=2,fmt = 'no
 plt.errorbar(ccenter_rgb, vcenter_rgb, xerr=errcenter_rgb,fmt = '.', c='c', ecolor='k', alpha=0.5)
 plt.scatter(ccenter_rgb, vcenter_rgb , marker='o', s=10, color='c', label='selected points')
 for x,y,z in zip(ccenter, vcenter, np.arange(len(ccenter))):
-	plt.text(x+0.2,y, str(z), color='b', label='selected points', ha='left', va='center', fontsize=8)
+	plt.text(x+0.2,y, str(z), color='b', label='selected points', ha='left', va='center', fontsize=9)
 #~ if model == 'mist':
 	#~ plt.scatter(Color_iso[:ct[0]-1],mag_v[:ct[0]-1], marker='.', s=10, color='b')
 #~ elif model == 'dar':
