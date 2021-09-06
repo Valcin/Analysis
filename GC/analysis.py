@@ -442,6 +442,14 @@ if version == '17':
 	garr = [3,4,8,12,14,15,17,19,20,24,28,32,34,42,43,46,48,51,52,54,59,61]
 	model = 'dar'
 	#~ garr =
+if version == '18':
+	ndim = 5
+	nwalkers = 100
+	ntemps = 1
+	print(ntemps)
+	garr = [3,4,8,12,14,15,17,19,20,24,28,32,34,42,43,46,48,51,52,54,59,61]
+	model = 'dar'
+	#~ garr =
 if version == '0':
 	ndim = 4 
 	nwalkers = 300	
@@ -462,7 +470,8 @@ if version == '0':
 tot_age = []
 tot_met = []
 
-for cn in [0,1,2,27,53]:
+# ~for cn in [0,1,2,27,53]:
+for cn in [0,1,2,3,4,5]:
 # ~for cn in list(range(27))+ list(range(28,69)):
 #~ for cn in garr: # 
 	glc = cn
@@ -504,7 +513,7 @@ for cn in [0,1,2,27,53]:
 		#~ AA = np.genfromtxt('/home/david/codes/GC/plots/test/data_'+str(t)+'_'+clus_nb+'_'+ version +'_'+str(model)+'.txt', usecols=(j+nwalkers*3,), max_rows=2000)
 
 	steps = 500
-	if version in ['9','10','15','16','17']:
+	if version in ['9','10','15','16','17','18']:
 		files = np.loadtxt('/home/david/codes/data/GC_data/'+str(model)+'/data_1'+'_'+clus_nb+'_'+ version +'_'+str(model)+'.txt')
 	else:
 		files = np.loadtxt('/home/david/codes/Analysis/GC/plots/test/data_'+str(t)+'_'+clus_nb+'_'+ version +'_'+str(model)+'.txt')
