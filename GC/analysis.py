@@ -471,7 +471,7 @@ tot_age = []
 tot_met = []
 
 # ~for cn in [0,1,2,27,53]:
-for cn in [0,1,2,3,4,5]:
+for cn in [0,1,2,3,53]:
 # ~for cn in list(range(27))+ list(range(28,69)):
 #~ for cn in garr: # 
 	glc = cn
@@ -514,7 +514,7 @@ for cn in [0,1,2,3,4,5]:
 
 	steps = 500
 	if version in ['9','10','15','16','17','18']:
-		files = np.loadtxt('/home/david/codes/data/GC_data/'+str(model)+'/data_1'+'_'+clus_nb+'_'+ version +'_'+str(model)+'.txt')
+		files = np.loadtxt('/home/david/codes/data/GC_data/'+str(model)+'/test/data_1'+'_'+clus_nb+'_'+ version +'_'+str(model)+'.txt')
 	else:
 		files = np.loadtxt('/home/david/codes/Analysis/GC/plots/test/data_'+str(t)+'_'+clus_nb+'_'+ version +'_'+str(model)+'.txt')
 

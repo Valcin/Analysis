@@ -2727,7 +2727,7 @@ if len(magvbis) > 0:
 else:
 	print("List is empty")
 	
-col_dr = top_x-0.1
+col_dr = top_x
 dr = np.where(colbis > col_dr)[0]
 if glc == 2:
 	vcenter, ccenter, errcenter, sbin, bingood, errcenterv = way(magvbis[dr], colbis[dr], errcolbis[dr], errvbis[dr])
@@ -2809,30 +2809,39 @@ errcenter_rgb = errcenter
 errcenterv_rgb = errcenterv
 sbin_rgb = sbin
 
+
+
 # ~maybe=np.array([9,10,11,12])
 # ~vcenter_rgb = np.delete(vcenter,maybe)
 # ~ccenter_rgb = np.delete(ccenter,maybe)
 # ~errcenter_rgb = np.delete(errcenter,maybe)
 # ~errcenterv_rgb = np.delete(errcenterv,maybe)
 
-
-
-base = []
-# base.extend(np.where((vcenter > mag_lim2 -2)&(vcenter < mag_lim2 -1))[0])
-base.extend(np.arange(int(rescale[glc,6]),int(rescale[glc,7])+1))
-lg = len(np.where(rescale[glc,:] < 100)[0])
-for ind in range(8,lg):
-	base.append(int(rescale[glc,ind]))
-#~ vcenter_rgb = vcenter[base]
-#~ ccenter_rgb = ccenter[base]
-#~ errcenter_rgb = errcenter[base]
-#~ errcenterv_rgb = errcenterv[base]
-#~ sbin_rgb = sbin[base]
+ecart = np.abs(ccenter - fmag_ini(vcenter))/errcenter
+print(ecart)
+base = np.where((ecart>1)|(vcenter < np.min(mag_v)))[0]
 vcenter_rgb = np.delete(vcenter,base)
 ccenter_rgb = np.delete(ccenter,base)
 errcenter_rgb = np.delete(errcenter,base)
 errcenterv_rgb = np.delete(errcenterv,base)
 sbin_rgb = np.delete(sbin,base)
+
+# ~base = []
+# ~# base.extend(np.where((vcenter > mag_lim2 -2)&(vcenter < mag_lim2 -1))[0])
+# ~base.extend(np.arange(int(rescale[glc,6]),int(rescale[glc,7])+1))
+# ~lg = len(np.where(rescale[glc,:] < 100)[0])
+# ~for ind in range(8,lg):
+	# ~base.append(int(rescale[glc,ind]))
+# ~#~ vcenter_rgb = vcenter[base]
+# ~#~ ccenter_rgb = ccenter[base]
+# ~#~ errcenter_rgb = errcenter[base]
+# ~#~ errcenterv_rgb = errcenterv[base]
+# ~#~ sbin_rgb = sbin[base]
+# ~vcenter_rgb = np.delete(vcenter,base)
+# ~ccenter_rgb = np.delete(ccenter,base)
+# ~errcenter_rgb = np.delete(errcenter,base)
+# ~errcenterv_rgb = np.delete(errcenterv,base)
+# ~sbin_rgb = np.delete(sbin,base)
 
 
 
