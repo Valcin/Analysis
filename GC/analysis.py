@@ -450,6 +450,14 @@ if version == '18':
 	garr = [3,4,8,12,14,15,17,19,20,24,28,32,34,42,43,46,48,51,52,54,59,61]
 	model = 'dar'
 	#~ garr =
+if version == '21':
+	ndim = 5
+	nwalkers = 100
+	ntemps = 1
+	print(ntemps)
+	garr = [3,4,8,12,14,15,17,19,20,24,28,32,34,42,43,46,48,51,52,54,59,61]
+	model = 'dar'
+	#~ garr =
 if version == '0':
 	ndim = 4 
 	nwalkers = 300	
@@ -471,7 +479,7 @@ tot_age = []
 tot_met = []
 
 # ~for cn in [0,1,2,27,53]:
-for cn in [0,1,2,3,53]:
+for cn in [0,1,2,3,4,5]:
 # ~for cn in list(range(27))+ list(range(28,69)):
 #~ for cn in garr: # 
 	glc = cn
@@ -512,9 +520,9 @@ for cn in [0,1,2,3,53]:
 		#~ D = np.genfromtxt('/home/david/codes/GC/plots/test/data_'+str(t)+'_'+clus_nb+'_'+ version +'_'+str(model)+'.txt', usecols=(j+nwalkers*2,), max_rows=2000)
 		#~ AA = np.genfromtxt('/home/david/codes/GC/plots/test/data_'+str(t)+'_'+clus_nb+'_'+ version +'_'+str(model)+'.txt', usecols=(j+nwalkers*3,), max_rows=2000)
 
-	steps = 500
-	if version in ['9','10','15','16','17','18']:
-		files = np.loadtxt('/home/david/codes/data/GC_data/'+str(model)+'/test/data_1'+'_'+clus_nb+'_'+ version +'_'+str(model)+'.txt')
+	steps = 10000
+	if version in ['9','10','15','16','17','18','21']:
+		files = np.loadtxt('/home/david/codes/data/GC_data/'+str(model)+'/data_1'+'_'+clus_nb+'_'+ version +'_'+str(model)+'.txt')
 	else:
 		files = np.loadtxt('/home/david/codes/Analysis/GC/plots/test/data_'+str(t)+'_'+clus_nb+'_'+ version +'_'+str(model)+'.txt')
 
@@ -980,9 +988,9 @@ for cn in [0,1,2,3,53]:
 
 
 	plt.figure()
-	plt.scatter(color,photo_v, marker='.',s=30, color='grey', alpha=0.5,label='stars')
+	plt.scatter(color,photo_v, marker='.',s=10, color='grey', alpha=0.5,label='stars')
 	# sc =plt.scatter(Color_iso2,mag_v2, marker='.',s=10,c='r',  label='best fit')
-	sc =plt.scatter(Color_iso1,mag_v1, marker='.',s=30,c='r',  label='best fit')
+	sc =plt.scatter(Color_iso1,mag_v1, marker='.',s=10,c='r',  label='best fit')
 	# sc =plt.scatter(Color_iso1 + noise,mag_v1, marker='.',s=30,c='b',  label='best fit')
 	# sc =plt.scatter(xinterp+noise, interv, marker='.',s=30,c='b',  label='best fit')
 	plt.xlim(-0.5,3)

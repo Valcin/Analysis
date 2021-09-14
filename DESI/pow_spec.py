@@ -188,37 +188,8 @@ if rank == 0:
 	plt.close()
 
 	
-	# pair count completeness
-	# ~plt.figure()
-	# ~for j in range(Ntiles):
-		# ~if j == 0:
-			# ~plt.plot(rval2, pair_rdn[:,j]/(rval2**2 * delta_r), c=col, label=galtype, alpha=0.5)
-		# ~else:
-			# ~plt.plot(rval2, pair_rdn[:,j]/(rval2**2 * delta_r), c=col, alpha=0.5)
-	# ~plt.xlabel(r"$r$ $[h^{-1} \mathrm{Mpc}]$", fontsize = 16)
-	# ~plt.ylabel(r"$ R1.R2/r^2\Delta_r $", fontsize = 16)
-	# ~plt.title('Redshift '+str(ZMIN)+' < z < '+str(ZMAX), fontsize=16)
-	# ~plt.legend(loc='best', fontsize=16)
-	# ~plt.tick_params(labelsize=16)
-	# ~plt.xlim(0,200)
-	# ~plt.ylim(-120,120)
-	# ~plt.show()
-	# ~plt.close()
 
-	# cross corr
-	# ~plt.figure()
-	# ~plt.plot(rval, np.mean(corrval_elg_lrg,axis=1)*rval**2, c='b', label=gal_type[1]+' vs '+gal_type[2])
-	# ~plt.plot(rval, np.mean(corrval_elg_qso,axis=1)*rval**2, c='r', label=gal_type[1]+' vs '+gal_type[3])
-	# ~plt.plot(rval, np.mean(corrval_lrg_qso,axis=1)*rval**2, c='k', label=gal_type[2]+' vs '+gal_type[3])
-	# ~plt.errorbar(rval, np.mean(corrval_elg_lrg,axis=1)*rval**2, yerr=np.std(corrval_elg_lrg,axis=1)*rval**2,fmt = '.', c='b', ecolor='b', alpha=0.5)
-	# ~plt.errorbar(rval, np.mean(corrval_elg_qso,axis=1)*rval**2, yerr=np.std(corrval_elg_qso,axis=1)*rval**2,fmt = '.', c='r', ecolor='r', alpha=0.5)
-	# ~plt.errorbar(rval, np.mean(corrval_lrg_qso,axis=1)*rval**2, yerr=np.std(corrval_lrg_qso,axis=1)*rval**2,fmt = '.', c='k', ecolor='k', alpha=0.5)
-	# ~plt.xlabel(r"$r$ $[h^{-1} \mathrm{Mpc}]$")
-	# ~plt.ylabel(r"$r^2 \xi \ [h^{-2} \mathrm{Mpc}^2]$")
-	# ~plt.title('Redshift '+str(ZMIN)+' < z < '+str(ZMAX))
-	# ~plt.legend(loc='best')
-	# ~plt.show()
-	# ~plt.close()
+	
 
 
 

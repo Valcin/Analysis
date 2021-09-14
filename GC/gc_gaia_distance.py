@@ -1567,7 +1567,6 @@ def way(vgood, cgood, errgood, errgoodv, step = None):
 			# ~plt.show()
 			# ~plt.close()
 
-			
 			ccenter[c] =np.median(zcol)
 			# ~errcenter[c] = np.std(zcol)
 			# ~errcenter[c] = scoremad * cos
@@ -2140,7 +2139,7 @@ T0 = 1
 T1 = 1000
 posnum = 1
 ite = 10000
-nwalkers = 30
+nwalkers = 10
 # ~model = 'mist'
 model = 'dar'
 #~ #----------------
@@ -2727,11 +2726,15 @@ if len(magvbis) > 0:
 else:
 	print("List is empty")
 	
-col_dr = top_x
-dr = np.where(colbis > col_dr)[0]
+
+
 if glc == 2:
+	col_dr = top_x
+	dr = np.where(colbis > col_dr)[0]
 	vcenter, ccenter, errcenter, sbin, bingood, errcenterv = way(magvbis[dr], colbis[dr], errcolbis[dr], errvbis[dr])
 else:
+	col_dr = top_x - 0.05
+	dr = np.where(colbis > col_dr)[0]
 	# ~vcenter, ccenter, errcenter, sbin, bingood, errcenterv = way(magvbis, colbis, errcolbis, errvbis)
 	vcenter, ccenter, errcenter, sbin, bingood, errcenterv = way(magvbis[dr], colbis[dr], errcolbis[dr], errvbis[dr])
 #~ vcenter, ccenter, errcenter, sbin, bingood, rangebinv, errcenterv = way(magvbis, colbis, errcolbis, errvbis)
@@ -2817,31 +2820,27 @@ sbin_rgb = sbin
 # ~errcenter_rgb = np.delete(errcenter,maybe)
 # ~errcenterv_rgb = np.delete(errcenterv,maybe)
 
-ecart = np.abs(ccenter - fmag_ini(vcenter))/errcenter
-print(ecart)
-base = np.where((ecart>1)|(vcenter < np.min(mag_v)))[0]
+# ~ecart = np.abs(ccenter - fmag_ini(vcenter))/errcenter
+# ~print(ecart)
+# ~base = np.where((ecart>15)|(vcenter < np.min(mag_v)))[0]
+base = []
+# ~# base.extend(np.where((vcenter > mag_lim2 -2)&(vcenter < mag_lim2 -1))[0])
+base.append(np.arange(int(rescale[glc,6]),int(rescale[glc,7])+1))
+# ~base = np.append(base,np.arange(int(rescale[glc,6]),int(rescale[glc,7])+1))
+lg = len(np.where(rescale[glc,:] < 100)[0])
+for ind in range(8,lg):
+	# ~base.append(int(rescale[glc,ind]))
+	base = np.append(base,int(rescale[glc,ind]))
+# ~#~ vcenter_rgb = vcenter[base]
+#~ ccenter_rgb = ccenter[base]
+#~ errcenter_rgb = errcenter[base]
+#~ errcenterv_rgb = errcenterv[base]
+#~ sbin_rgb = sbin[base]
 vcenter_rgb = np.delete(vcenter,base)
 ccenter_rgb = np.delete(ccenter,base)
 errcenter_rgb = np.delete(errcenter,base)
 errcenterv_rgb = np.delete(errcenterv,base)
 sbin_rgb = np.delete(sbin,base)
-
-# ~base = []
-# ~# base.extend(np.where((vcenter > mag_lim2 -2)&(vcenter < mag_lim2 -1))[0])
-# ~base.extend(np.arange(int(rescale[glc,6]),int(rescale[glc,7])+1))
-# ~lg = len(np.where(rescale[glc,:] < 100)[0])
-# ~for ind in range(8,lg):
-	# ~base.append(int(rescale[glc,ind]))
-# ~#~ vcenter_rgb = vcenter[base]
-# ~#~ ccenter_rgb = ccenter[base]
-# ~#~ errcenter_rgb = errcenter[base]
-# ~#~ errcenterv_rgb = errcenterv[base]
-# ~#~ sbin_rgb = sbin[base]
-# ~vcenter_rgb = np.delete(vcenter,base)
-# ~ccenter_rgb = np.delete(ccenter,base)
-# ~errcenter_rgb = np.delete(errcenter,base)
-# ~errcenterv_rgb = np.delete(errcenterv,base)
-# ~sbin_rgb = np.delete(sbin,base)
 
 
 
@@ -2864,7 +2863,7 @@ sbin_rgb = np.delete(sbin,base)
 
 plt.figure()
 plt.clf()
-plt.plot(Color_iso, mag_v,c='y', alpha=0.5)
+# ~plt.plot(Color_iso, mag_v,c='y', alpha=0.5)
 # ~plt.plot(Color_isoy, mag_vy,c='m', alpha=0.5)
 # ~plt.plot(Color_isoz, mag_vz,c='c', alpha=0.5)
 plt.scatter(color,photo_v, marker='.',s=10, color='grey', label='stars')
@@ -2899,7 +2898,8 @@ plt.tick_params(labelsize=16)
 
 plt.axvline(col_dr, c='r')
 plt.xlim(-0.5,3)
-plt.ylim(26,10)
+# ~plt.ylim(26,10)
+plt.ylim(mag_lim3,np.min(vcenter-0.2))
 plt.legend(loc='upper right', fontsize = 16)
 plt.xlabel('F606W - F814W', fontsize = 16)
 plt.ylabel('F606W', fontsize = 16)
