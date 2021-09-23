@@ -1387,21 +1387,21 @@ def way(vgood, cgood, errgood, errgoodv, part=None):
 			cgood = np.delete(np.array(cgood), dup[1:])
 
 	if part == 'p1':
-		split = np.min(vgood) + 2
+		split = np.min(vgood) + 1
 		rangebin1 = split - np.min(vgood)
 		rangebin2 = np.max(vgood) - split
-		nbins1 = int(round(rangebin1/0.15))
-		nbins2 = int(round(rangebin2/0.25))
+		nbins1 = int(round(rangebin1/0.2))
+		nbins2 = int(round(rangebin2/0.2))
 		bingood1 = np.linspace(np.min(vgood),split,nbins1)
 		bingood2 = np.linspace(split, np.max(vgood),nbins2)
 		bingood = np.concatenate((bingood1[:-1],bingood2))
 		
 	elif part == 'p2':
-		split = np.max(vgood) - 2
+		split = np.max(vgood) - 1
 		rangebin1 = split - np.min(vgood)
 		rangebin2 = np.max(vgood) - split
-		nbins1 = int(round(rangebin1/0.25))
-		nbins2 = int(round(rangebin2/0.15))
+		nbins1 = int(round(rangebin1/0.2))
+		nbins2 = int(round(rangebin2/0.2))
 		bingood1 = np.linspace(np.min(vgood), split,nbins1)
 		bingood2 = np.linspace(split, np.max(vgood),nbins2)
 		bingood = np.concatenate((bingood1[:-1],bingood2))
@@ -1432,7 +1432,8 @@ def way(vgood, cgood, errgood, errgoodv, part=None):
 		med = np.median(np.array(cgood)[ici])
 		diff_med = np.abs(np.array(cgood)[ici] - med)
 		errmed = np.median(diff_med) # multiply by 1.486 for notmal distribution
-		scoremad = errmed* 1.4826 # multiply by 1.4826 for notmal distribution
+		# ~scoremad = errmed* 1.4826 # multiply by 1.4826 for notmal distribution
+		scoremad = errmed # multiply by 1.4826 for notmal distribution
 		z = diff_med / scoremad
 		out = (np.where(z > threshold)[0])
 		zcol =  np.delete(np.array(cgood)[ici], out)
@@ -1447,7 +1448,8 @@ def way(vgood, cgood, errgood, errgoodv, part=None):
 			med = np.median(zcol)
 			diff_med = np.abs(zcol - med)
 			errmed = np.median(diff_med) # multiply by 1.486 for notmal distribution
-			scoremad = errmed* 1.4826 # multiply by 1.4826 for notmal distribution
+			# ~scoremad = errmed* 1.4826 # multiply by 1.4826 for notmal distribution
+			scoremad = errmed # multiply by 1.4826 for notmal distribution
 			# ~print(scoremad)
 			z = diff_med / scoremad
 			out2 = (np.where(z > threshold)[0])
@@ -2125,8 +2127,8 @@ photo_v, err_v, photo_i, color, err_color, nmv, nmi, longueur = photometry()
 
 ### read file with all the coeefficients
 file_coeff = np.loadtxt('coeff_gcpy.txt', skiprows=1)
-# ~rescale = np.loadtxt('rescale_ig.csv',delimiter=',')
-rescale = np.loadtxt('rescale_ig_v3.csv',delimiter=',')
+rescale = np.loadtxt('rescale_ig.csv',delimiter=',')
+# ~rescale = np.loadtxt('rescale_ig_v3.csv',delimiter=',')
 maskbin = np.loadtxt('maskbin.csv',delimiter=',')
 
 #--------------------------------------------------------------
@@ -3008,7 +3010,7 @@ with Pool() as pool:
 
 	for i, (results) in enumerate(zip(sampler.sample(pos, iterations=ite))):
 		print(i)
-		if (i+1) % 1000 == 0:
+		if (i+1) % 200 == 0:
 			ind = int((i+1)/1)
 	# 		with open('test2_'+str(clus_nb)+'_'+str(model)+'.txt', 'a+') as fid_file:
 			print("first phase is at {0:.1f}%\n".format(100 * float(i) /ite))
