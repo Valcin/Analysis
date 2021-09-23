@@ -436,7 +436,7 @@ if version == '16':
 	#~ garr =
 if version == '17':
 	ndim = 5
-	nwalkers = 300
+	nwalkers = 100
 	ntemps = 1
 	print(ntemps)
 	garr = [3,4,8,12,14,15,17,19,20,24,28,32,34,42,43,46,48,51,52,54,59,61]
@@ -450,7 +450,7 @@ if version == '18':
 	garr = [3,4,8,12,14,15,17,19,20,24,28,32,34,42,43,46,48,51,52,54,59,61]
 	model = 'dar'
 	#~ garr =
-if version == '21':
+if version == '27':
 	ndim = 5
 	nwalkers = 100
 	ntemps = 1
@@ -478,13 +478,13 @@ if version == '0':
 tot_age = []
 tot_met = []
 
-# ~for cn in [0,1,2,27,53]:
-for cn in [0,1,2,3,4,5]:
+# ~for cn in [1,4,6,9,10]:
+for cn in range(6,10):
 # ~for cn in list(range(27))+ list(range(28,69)):
 #~ for cn in garr: # 
 	glc = cn
-	clus_nb, Age, metal, distance, Abs, afe_init, errdist  = cluster(glc)
-	print(clus_nb, Age, metal, distance, Abs, afe_init, errdist)
+	clus_nb, Age0, metal0, distance0, Abs0, afe_init0, errdist  = cluster(glc)
+	print(clus_nb, Age0, metal0, distance0, Abs0, afe_init0, errdist)
 	photo_v, err_v, photo_i, color, err_color, nmv, nmi, longueur = photometry()
 	
 	#~ if glc==33 or glc ==36:
@@ -520,15 +520,15 @@ for cn in [0,1,2,3,4,5]:
 		#~ D = np.genfromtxt('/home/david/codes/GC/plots/test/data_'+str(t)+'_'+clus_nb+'_'+ version +'_'+str(model)+'.txt', usecols=(j+nwalkers*2,), max_rows=2000)
 		#~ AA = np.genfromtxt('/home/david/codes/GC/plots/test/data_'+str(t)+'_'+clus_nb+'_'+ version +'_'+str(model)+'.txt', usecols=(j+nwalkers*3,), max_rows=2000)
 
-	steps = 10000
-	if version in ['9','10','15','16','17','18','21']:
+	steps = 100
+	if version in ['9','10','15','16','17','18','27']:
 		files = np.loadtxt('/home/david/codes/data/GC_data/'+str(model)+'/data_1'+'_'+clus_nb+'_'+ version +'_'+str(model)+'.txt')
 	else:
 		files = np.loadtxt('/home/david/codes/Analysis/GC/plots/test/data_'+str(t)+'_'+clus_nb+'_'+ version +'_'+str(model)+'.txt')
 
 
 	#~ print(np.mean(files[:,3]), np.median(files[:,3]))
-	prior = np.where((files[steps*nwalkers:,2] > distance - errdist)&(files[steps*nwalkers:,2] < distance + errdist))[0]
+	prior = np.where((files[steps*nwalkers:,2] > distance0 - errdist)&(files[steps*nwalkers:,2] < distance0 + errdist))[0]
 	#~ files[steps*nwalkers:,1] < metal0 +0.2)&(files[steps*nwalkers:,2] > metal0 -0.2))[0]
 
 
@@ -556,39 +556,47 @@ for cn in [0,1,2,3,4,5]:
 	#~ Distance = files[:,2]
 	#~ AAbs = files[:,3]
 
-	#~ print(len(Age))
-	#~ plt.suptitle('numero '+str(glc)+', '+clus_nb)
-	#~ ax1 = plt.subplot(221)
-	#~ ax1.set_title('Age')
-	#~ for i in range(0,len(Age)/nwalkers):
-		#~ ax1.plot(np.full(nwalkers, i), Age[i*nwalkers:(i+1)*nwalkers], c='k')
-	#~ ax1.axhline(Age0, color='r', linestyle='--')
-	#~ ax1.axhline(10.176, color='c')
-	#~ ax1.grid()
-	#~ ax2 = plt.subplot(222)
-	#~ ax2.set_title('metal')
-	#~ for i in range(0,len(Age)/nwalkers):
-		#~ ax2.plot(np.full(nwalkers, i), Metal[i*nwalkers:(i+1)*nwalkers], c='k')
-	#~ ax2.axhline(metal0, color='r', linestyle='--')
+	print(len(Age))
+	plt.suptitle('numero '+str(glc)+', '+clus_nb)
+	ax1 = plt.subplot(231)
+	ax1.set_title('Age')
+	for i in range(0,int(len(Age)/nwalkers)):
+		ax1.plot(np.full(nwalkers, i), Age[i*nwalkers:(i+1)*nwalkers], c='k')
+	ax1.axhline(Age0, color='r', linestyle='--')
+	ax1.axhline(10.176, color='c')
+	ax1.grid()
+	ax2 = plt.subplot(232)
+	ax2.set_title('metal')
+	for i in range(0,int(len(Age)/nwalkers)):
+		ax2.plot(np.full(nwalkers, i), Metal[i*nwalkers:(i+1)*nwalkers], c='k')
+	ax2.axhline(metal0, color='r', linestyle='--')
 	#ax2.set_ylim(-1.6, -1.2)
-	#~ ax2.grid()
-	#~ ax3 = plt.subplot(223)
-	#~ ax3.set_title('distance')
-	#~ for i in range(0,len(Age)/nwalkers):
-		#~ ax3.plot(np.full(nwalkers, i), Distance[i*nwalkers:(i+1)*nwalkers], c='k')
-	#~ ax3.axhline(distance0, color='r', linestyle='--')
+	ax2.grid()
+	ax3 = plt.subplot(233)
+	ax3.set_title('distance')
+	for i in range(0,int(len(Age)/nwalkers)):
+		ax3.plot(np.full(nwalkers, i), Distance[i*nwalkers:(i+1)*nwalkers], c='k')
+	ax3.axhline(distance0, color='r', linestyle='--')
 	#ax3.set_ylim(32500, 35000)
-	#~ ax3.grid()
-	#~ ax4 = plt.subplot(224)
-	#~ ax4.set_title('A1')
-	#~ for i in range(0,len(Age)/nwalkers):
-		#~ ax4.plot(np.full(nwalkers, i), AAbs[i*nwalkers:(i+1)*nwalkers], c='k')
-	#~ ax4.axhline(Abs0, color='r', linestyle='--')
-	#~ #ax4.set_ylim(0.30, 0.36)
-	#~ ax4.grid()
+	ax3.grid()
+	ax4 = plt.subplot(234)
+	ax4.set_title('A1')
+	for i in range(0,int(len(Age)/nwalkers)):
+		ax4.plot(np.full(nwalkers, i), AAbs[i*nwalkers:(i+1)*nwalkers], c='k')
+	ax4.axhline(Abs0, color='r', linestyle='--')
+	#ax4.set_ylim(0.30, 0.36)
+	ax4.grid()
 	#plt.savefig('/home/david/codes/Analysis/GC/plots/analysis/chains'+'_'+clus_nb+'_'+ version +'_'+str(model)+'.png')
-	#~ plt.show()
-	#~ plt.close()
+	ax5 = plt.subplot(235)
+	ax5.set_title('A1')
+	for i in range(0,int(len(Age)/nwalkers)):
+		ax5.plot(np.full(nwalkers, i), Afe[i*nwalkers:(i+1)*nwalkers], c='k')
+	ax5.axhline(afe_init0, color='r', linestyle='--')
+	#ax5.set_ylim(0.30, 0.36)
+	ax5.grid()
+	#plt.savefig('/home/david/codes/Analysis/GC/plots/analysis/chains'+'_'+clus_nb+'_'+ version +'_'+str(model)+'.png')
+	plt.show()
+	plt.close()
 
 	#~ step_min = 20
 	#~ if len(age) > step_min:

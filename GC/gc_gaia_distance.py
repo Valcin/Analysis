@@ -939,15 +939,14 @@ def lnlike(theta):
 	#~ plt.title(clus_nb+' '+str(glc), fontsize = 16)
 	#~ plt.show() 
 	#~ plt.close()
-	
+	gc.collect()	
 	
 	if glc == 62:
 		return (lnl+lnl2)
 	else:
-		# ~return lnl
+		# ~return lnl2
 		# ~return (lnl/len(Color_new)+lnl2/len(Color_new2))
 		# ~print(lnl,lnl2,lnl+lnl2)
-		gc.collect()
 		return (lnl+lnl2)
 		
 def lnlike2(theta):
@@ -1121,7 +1120,7 @@ def lnprior(theta):
 		lnl_me = (math.log(1.0/(math.sqrt(2*math.pi)*me_sigma))-0.5*(me_mu-fe_mu)**2/me_sigma**2)
 			#~ #flat priors on age, FeH, Av
 		if 9 < age < 10.176 and -2.5 < FeH < 0.5  and 0.0 < dist and 0 < A1 < 3 and -0.2 <= falpha <= 0.8:
-			return lnl_me +lnl_dm + lnl_abs + lnl_abu
+			return lnl_me +lnl_dm + lnl_abs 
 			#~ return lnl_abs
 		return -np.inf
 		#if 9 < age < 10.30  and -4 < FeH < 0.5 and 0.0 < dist and 0 < A1 < 3.0:
@@ -1378,7 +1377,7 @@ def logli1(ep_mag2, ep_col2):
 		return ln
 		
 #~ @profile		
-def way(vgood, cgood, errgood, errgoodv, step = None):
+def way(vgood, cgood, errgood, errgoodv, part=None):
 
 	#remove duplicate
 	for i, j in zip(vgood, cgood):
@@ -1387,32 +1386,27 @@ def way(vgood, cgood, errgood, errgoodv, step = None):
 			vgood = np.delete(np.array(vgood), dup[1:])
 			cgood = np.delete(np.array(cgood), dup[1:])
 
-	#~ print(bingood)
-	#~ bingood = np.linspace(np.min(vgood), np.max(vgood), nsplit+1)
+	if part == 'p1':
+		split = np.min(vgood) + 2
+		rangebin1 = split - np.min(vgood)
+		rangebin2 = np.max(vgood) - split
+		nbins1 = int(round(rangebin1/0.15))
+		nbins2 = int(round(rangebin2/0.25))
+		bingood1 = np.linspace(np.min(vgood),split,nbins1)
+		bingood2 = np.linspace(split, np.max(vgood),nbins2)
+		bingood = np.concatenate((bingood1[:-1],bingood2))
+		
+	elif part == 'p2':
+		split = np.max(vgood) - 2
+		rangebin1 = split - np.min(vgood)
+		rangebin2 = np.max(vgood) - split
+		nbins1 = int(round(rangebin1/0.25))
+		nbins2 = int(round(rangebin2/0.15))
+		bingood1 = np.linspace(np.min(vgood), split,nbins1)
+		bingood2 = np.linspace(split, np.max(vgood),nbins2)
+		bingood = np.concatenate((bingood1[:-1],bingood2))
 
-	#~ bingood = np.array(binning_GB(np.min(vgood), np.max(vgood), ep_mag2, ep_col2))
-	#~ print(np.min(vgood), np.max(vgood))
-	#~ print(np.min(ep_mag2), np.max(ep_mag2))
-
-	step = 0.15
-	#~ nbins = 20
-	rangebin = np.max(vgood) - np.min(vgood)
-	if step is not None:
-		nbins = int(round(rangebin/step))
-	else:
-		nbins = int(round(rangebin/0.2))
-	#~ print(rangebin)
-	#~ kill
-
-	#~ spacegood = np.geomspace(1, rangebin+1,nbins)
-	#~ bingood = np.max(vgood) - (spacegood-1)
-	#~ bingood = np.flipud(bingood) 
-	#~ bingood = np.geomspace(np.min(vgood), np.max(vgood),nbins) 
-	bingood = np.linspace(np.min(vgood), np.max(vgood),nbins)
-	#~ bingood = np.array(binning_GB(np.min(vgood), np.max(vgood), np.array(vgood), np.array(cgood)))
-	#~ bingood = np.append(bingood, mag_lim2)
 	centergood = (bingood[:-1] + bingood[1:]) / 2 
-	
 	vcenter = np.zeros(len(centergood))
 	ccenter = np.zeros(len(centergood))
 	errcenter = np.zeros(len(centergood))
@@ -1520,7 +1514,8 @@ def way(vgood, cgood, errgood, errgoodv, step = None):
 			# ~ccenter[c] =np.mean(zcol)
 			errcenter[c] =np.array(errgood)[ici]
 			errcenterv[c] =np.array(errgoodv)[ici]
-			vcenter[c] =np.median(zmagv)
+			# ~vcenter[c] =np.median(zmagv)
+			vcenter[c] =centergood[c]
 			size_bin[c] = len(ici)
 		elif len(ici) == 2:
 			ccenter[c] =np.median(zcol)
@@ -1531,7 +1526,8 @@ def way(vgood, cgood, errgood, errgoodv, step = None):
 			# ~ccenter[c] =np.mean(zcol)
 			errcenter[c] = np.std(zcol)*cos_ver
 			errcenterv[c] = np.std(zmagv)*cos_hor
-			vcenter[c] =np.median(zmagv)
+			# ~vcenter[c] =np.median(zmagv)
+			vcenter[c] =centergood[c]
 			size_bin[c] = len(ici)
 		elif len(ici) > 2 and len(ici) < 50:
 			ccenter[c] =np.median(zcol)
@@ -1546,7 +1542,8 @@ def way(vgood, cgood, errgood, errgoodv, step = None):
 				# ~errcenter[c] =np.std(zcol)*cos_ver
 				errcenter[c] = scoremad * cos_ver
 				errcenterv[c] =np.std(zmagv)*cos_hor
-			vcenter[c] =np.median(zmagv)
+			# ~vcenter[c] =np.median(zmagv)
+			vcenter[c] =centergood[c]
 			size_bin[c] = len(ici)
 			# ~ccenter[c] =np.mean(zcol)
 			# ~errcenter[c] = np.std(zcol)
@@ -1584,7 +1581,8 @@ def way(vgood, cgood, errgood, errgoodv, step = None):
 				# ~errcenter[c] =np.std(zcol)*cos_ver
 				errcenter[c] = scoremad*cos_ver
 				errcenterv[c] =np.std(zmagv)*cos_hor
-			vcenter[c] =np.median(zmagv)
+			# ~vcenter[c] =np.median(zmagv)
+			vcenter[c] =centergood[c]
 			size_bin[c] = len(ici)
 
 		# ~plt.figure()
@@ -2341,8 +2339,11 @@ elif model == 'dar':
 		lpp = (min(len(mag_v1_min), len(mag_v1_max))) # get minimum length to interpolate
 		mag_v = (mag_v1_min[:lpp]*(afe_max - bf[glc-1,4]) + mag_v1_max[:lpp]*(bf[glc-1,4] - afe_min)) / (afe_max - afe_min)
 		Color_iso = (Color_iso1_min[:lpp]*(afe_max - bf[glc-1,4]) + Color_iso1_max[:lpp]*(bf[glc-1,4] - afe_min)) / (afe_max - afe_min)
-	mag_vy, mag_iy, Color_isoy, eep_firsty = iso_mag(np.log10((bf[glc-1,0])*1e9), bf[glc-1,1]-0.1, bf[glc-1,2], bf[glc-1,3], 0.2)
-	mag_vz, mag_iz, Color_isoz, eep_firstz = iso_mag(np.log10((bf[glc-1,0])*1e9), bf[glc-1,1]+0.1, bf[glc-1,2], bf[glc-1,3], 0.2)
+
+		
+	mag_vy, mag_iy, Color_isoy, eep_firsty = iso_mag(10.113, -1.53, 18790, 0.623, 0.2)
+	mag_vz, mag_iz, Color_isoz, eep_firstz = iso_mag(10.113, -1.53, 18790, 0.623, 0.0)
+	# ~mag_vz, mag_iz, Color_isoz, eep_firstz = iso_mag(np.log10((bf[glc-1,0])*1e9), bf[glc-1,1]+0.1, bf[glc-1,2], bf[glc-1,3], 0.2)
 
 	# ~print(afe_min, afe_max, bf[glc,4])
 	# ~plt.figure()
@@ -2541,17 +2542,17 @@ elif model == 'dar':
 
 	# ~pos = np.random.uniform(low=[Age -0.01, -2.4, distance-1000, 0.01, 0.01], high=[Age +0.01, 0.1, distance+1000, 2.99, 0.78],
 	# ~size=(nwalkers, ndim))
-	if Abs-0.05>0 and distance-500 >0:
-		pos = np.random.uniform(low=[Age-0.01, metal-0.05, distance-500, Abs-0.05, afe_init-0.05], high=[Age+0.01, metal+0.05, distance+500, Abs+0.05, afe_init+0.05],
+	if Abs-0.1>0 and distance-2000 >0:
+		pos = np.random.uniform(low=[Age-0.05, metal-0.1, distance-2000, Abs-0.1, -0.2], high=[Age+0.05, metal+0.1, distance+2000, Abs+0.1, 0.8],
 		size=(nwalkers, ndim))
-	elif Abs-0.05 < 0 and distance-500 >0:
-		pos = np.random.uniform(low=[Age-0.01, metal-0.05, distance-500, 0.001, afe_init-0.05], high=[Age+0.01, metal+0.05, distance+500, Abs+0.05,  afe_init+0.05],
+	elif Abs-0.1 < 0 and distance-2000 >0:
+		pos = np.random.uniform(low=[Age-0.05, metal-0.1, distance-2000, 0.001, -0.2], high=[Age+0.05, metal+0.1, distance+2000, Abs+0.1,  0.8],
 		size=(nwalkers, ndim))
-	elif Abs-0.05>0 and distance-500 < 0:
-		pos = np.random.uniform(low=[Age-0.01, metal-0.05, 0.001, Abs-0.05,afe_init-0.05], high=[Age+0.01, metal+0.05, distance+500, Abs+0.05, afe_init+0.05],
+	elif Abs-0.1>0 and distance-2000 < 0:
+		pos = np.random.uniform(low=[Age-0.05, metal-0.1, 0.001, Abs-0.1,-0.2], high=[Age+0.05, metal+0.1, distance+2000, Abs+0.1, 0.8],
 		size=(nwalkers, ndim))
 	else:
-		pos = np.random.uniform(low=[Age-0.01, metal-0.05, 0, 0.001, afe_init-0.05], high=[Age+0.01, metal+0.05, distance+500, Abs+0.05,  afe_init+0.05],
+		pos = np.random.uniform(low=[Age-0.05, metal-0.1, 0, 0.001, -0.2], high=[Age+0.05, metal+0.1, distance+2000, Abs+0.1,  0.8],
 		size=(nwalkers, ndim))
 
 
@@ -2636,7 +2637,7 @@ if len(magvuno) > 0:
 else:
 	print("List is empty")
 
-bincenter, gauss_mean, gauss_disp, starnum, bingood, errcenterv_gauss = way(magvuno, coluno, errcoluno, errvuno)
+bincenter, gauss_mean, gauss_disp, starnum, bingood, errcenterv_gauss = way(magvuno, coluno, errcoluno, errvuno, part='p1')
 
 # ~bincenter, gauss_mean, gauss_disp, starnum = angle_correction(bincenter, gauss_mean, gauss_disp, starnum)
 
@@ -2731,12 +2732,12 @@ else:
 if glc == 2:
 	col_dr = top_x
 	dr = np.where(colbis > col_dr)[0]
-	vcenter, ccenter, errcenter, sbin, bingood, errcenterv = way(magvbis[dr], colbis[dr], errcolbis[dr], errvbis[dr])
+	vcenter, ccenter, errcenter, sbin, bingood, errcenterv = way(magvbis[dr], colbis[dr], errcolbis[dr], errvbis[dr], part='p2')
 else:
 	col_dr = top_x - 0.05
 	dr = np.where(colbis > col_dr)[0]
 	# ~vcenter, ccenter, errcenter, sbin, bingood, errcenterv = way(magvbis, colbis, errcolbis, errvbis)
-	vcenter, ccenter, errcenter, sbin, bingood, errcenterv = way(magvbis[dr], colbis[dr], errcolbis[dr], errvbis[dr])
+	vcenter, ccenter, errcenter, sbin, bingood, errcenterv = way(magvbis[dr], colbis[dr], errcolbis[dr], errvbis[dr], part='p2')
 #~ vcenter, ccenter, errcenter, sbin, bingood, rangebinv, errcenterv = way(magvbis, colbis, errcolbis, errvbis)
 
 # ~vcenter, ccenter, errcenter, sbin = angle_correction(vcenter, ccenter, errcenter, sbin)
@@ -2748,13 +2749,14 @@ else:
 # ~print(out)
 # ~nempty = np.where((sbin > 1)&(errcenter > 0)&(z < threshold))[0]
 
-nempty = np.where((sbin > 0)&(errcenter > 0))[0]
+nempty = np.where((sbin > 1)&(errcenter > 0))[0]
 vcenter = vcenter[nempty]
 ccenter = ccenter[nempty]
 errcenter = errcenter[nempty]
 errcenterv = errcenterv[nempty]
 sbin = sbin[nempty]
 
+print(gauss_disp)
 print(errcenter)
 
 # ~if model == 'dar':
@@ -2823,14 +2825,17 @@ sbin_rgb = sbin
 # ~ecart = np.abs(ccenter - fmag_ini(vcenter))/errcenter
 # ~print(ecart)
 # ~base = np.where((ecart>15)|(vcenter < np.min(mag_v)))[0]
-base = []
-# ~# base.extend(np.where((vcenter > mag_lim2 -2)&(vcenter < mag_lim2 -1))[0])
-base.append(np.arange(int(rescale[glc,6]),int(rescale[glc,7])+1))
-# ~base = np.append(base,np.arange(int(rescale[glc,6]),int(rescale[glc,7])+1))
+
+# ~base = []
+# ~base.append(np.arange(int(rescale[glc,6]),int(rescale[glc,7])+1))
+# ~for ind in range(10,lg):
+	# ~base.append(int(rescale[glc,ind]))
+base = np.where((vcenter < np.min(mag_v)))[0]
+base = np.append(base,np.arange(int(rescale[glc,6]),int(rescale[glc,7])+1))
 lg = len(np.where(rescale[glc,:] < 100)[0])
 for ind in range(8,lg):
-	# ~base.append(int(rescale[glc,ind]))
 	base = np.append(base,int(rescale[glc,ind]))
+# ~base = np.append(base,np.arange(int(rescale[glc,8]),int(rescale[glc,9])+1))
 # ~#~ vcenter_rgb = vcenter[base]
 #~ ccenter_rgb = ccenter[base]
 #~ errcenter_rgb = errcenter[base]
@@ -2899,7 +2904,7 @@ plt.tick_params(labelsize=16)
 plt.axvline(col_dr, c='r')
 plt.xlim(-0.5,3)
 # ~plt.ylim(26,10)
-plt.ylim(mag_lim3,np.min(vcenter-0.2))
+plt.ylim(mag_lim3,np.min(vcenter-0.5))
 plt.legend(loc='upper right', fontsize = 16)
 plt.xlabel('F606W - F814W', fontsize = 16)
 plt.ylabel('F606W', fontsize = 16)
@@ -3003,7 +3008,7 @@ with Pool() as pool:
 
 	for i, (results) in enumerate(zip(sampler.sample(pos, iterations=ite))):
 		print(i)
-		if (i+1) % 200 == 0:
+		if (i+1) % 1000 == 0:
 			ind = int((i+1)/1)
 	# 		with open('test2_'+str(clus_nb)+'_'+str(model)+'.txt', 'a+') as fid_file:
 			print("first phase is at {0:.1f}%\n".format(100 * float(i) /ite))
