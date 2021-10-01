@@ -1390,7 +1390,7 @@ def way(vgood, cgood, errgood, errgoodv, part=None):
 		split = np.min(vgood) + 1
 		rangebin1 = split - np.min(vgood)
 		rangebin2 = np.max(vgood) - split
-		nbins1 = int(round(rangebin1/0.2))
+		nbins1 = int(round(rangebin1/0.15))
 		nbins2 = int(round(rangebin2/0.2))
 		bingood1 = np.linspace(np.min(vgood),split,nbins1)
 		bingood2 = np.linspace(split, np.max(vgood),nbins2)
@@ -1401,7 +1401,7 @@ def way(vgood, cgood, errgood, errgoodv, part=None):
 		rangebin1 = split - np.min(vgood)
 		rangebin2 = np.max(vgood) - split
 		nbins1 = int(round(rangebin1/0.2))
-		nbins2 = int(round(rangebin2/0.2))
+		nbins2 = int(round(rangebin2/0.15))
 		bingood1 = np.linspace(np.min(vgood), split,nbins1)
 		bingood2 = np.linspace(split, np.max(vgood),nbins2)
 		bingood = np.concatenate((bingood1[:-1],bingood2))
@@ -1427,59 +1427,57 @@ def way(vgood, cgood, errgood, errgoodv, part=None):
 		
 		# ~apmstop = np.where(np.array(cgood)[ici] > top_x-0.05)[0]
 
-		# ~# wrt median
-		threshold = 3
-		med = np.median(np.array(cgood)[ici])
-		diff_med = np.abs(np.array(cgood)[ici] - med)
-		errmed = np.median(diff_med) # multiply by 1.486 for notmal distribution
-		# ~scoremad = errmed* 1.4826 # multiply by 1.4826 for notmal distribution
-		scoremad = errmed # multiply by 1.4826 for notmal distribution
-		z = diff_med / scoremad
-		out = (np.where(z > threshold)[0])
-		zcol =  np.delete(np.array(cgood)[ici], out)
-		zmagv =  np.delete(np.array(vgood)[ici], out)
-		ecol =  np.delete(np.array(errgood)[ici], out)
-		ecolv =  np.delete(np.array(errgoodv)[ici], out)
-		# ~print(scoremad)
+		if len(ici) == 1:
+			ccenter[c] =np.median(np.array(cgood)[ici])
+			errcenter[c] =np.array(errgood)[ici]
+			errcenterv[c] =np.array(errgoodv)[ici]
+			vcenter[c] =np.median(np.array(vgood)[ici])
+			# ~vcenter[c] =centergood[c]
+			size_bin[c] = len(ici)
+		elif len(ici) == 2:
+			ccenter[c] =np.median(np.array(cgood)[ici])
+			errcenter[c] = np.std(np.array(cgood)[ici])
+			errcenterv[c] = np.std(np.array(vgood)[ici])
+			vcenter[c] =np.median(np.array(vgood)[ici])
+			# ~vcenter[c] =centergood[c]
+			size_bin[c] = len(ici)
 
-		times=0
-		while times < 5:
+		elif len(ici) > 2:
+
+			# ~# wrt median
 			threshold = 3
-			med = np.median(zcol)
-			diff_med = np.abs(zcol - med)
+			med = np.median(np.array(cgood)[ici])
+			diff_med = np.abs(np.array(cgood)[ici] - med)
 			errmed = np.median(diff_med) # multiply by 1.486 for notmal distribution
 			# ~scoremad = errmed* 1.4826 # multiply by 1.4826 for notmal distribution
 			scoremad = errmed # multiply by 1.4826 for notmal distribution
 			# ~print(scoremad)
 			z = diff_med / scoremad
-			out2 = (np.where(z > threshold)[0])
-			zcol =  np.delete(zcol, out2)
-			zmagv =  np.delete(zmagv, out2)
-			ecol =  np.delete(ecol, out2)
-			ecolv =  np.delete(ecolv, out2)
-			times=times+1
-
-
-		#wrt mean
-		# ~threshold = 3
-		# ~z = np.abs(stats.zscore(np.array(cgood)[ici]))
-		# ~out = (np.where(z > threshold)[0])
-		# ~zcol =  np.delete(np.array(cgood)[ici], out)
-		# ~zmagv =  np.delete(np.array(vgood)[ici], out)
-
-		# ~times = 0
-		# ~while times < 5:
-			# ~z = np.abs(stats.zscore(zcol))
-			# ~out = (np.where(z > threshold)[0])
-			# ~zcol =  np.delete(zcol, out)
-			# ~zmagv =  np.delete(zmagv, out)
-			# ~ecol =  np.delete(ecol, out)
-			# ~ecolv =  np.delete(ecolv, out)
-			# ~times = times + 1
-			# ~scoremad = np.std(zcol)
+			out = (np.where(z > threshold)[0])
+			zcol =  np.delete(np.array(cgood)[ici], out)
+			zmagv =  np.delete(np.array(vgood)[ici], out)
+			ecol =  np.delete(np.array(errgood)[ici], out)
+			ecolv =  np.delete(np.array(errgoodv)[ici], out)
 			# ~print(scoremad)
 
-		if len(ici) > 2:
+			times=0
+			while times < 5:
+				threshold = 3
+				med = np.median(zcol)
+				diff_med = np.abs(zcol - med)
+				errmed = np.median(diff_med) # multiply by 1.486 for notmal distribution
+				# ~scoremad = errmed* 1.4826 # multiply by 1.4826 for notmal distribution
+				scoremad = errmed # multiply by 1.4826 for notmal distribution
+				# ~print(scoremad)
+				z = diff_med / scoremad
+				out2 = (np.where(z > threshold)[0])
+				zcol =  np.delete(zcol, out2)
+				zmagv =  np.delete(zmagv, out2)
+				ecol =  np.delete(ecol, out2)
+				ecolv =  np.delete(ecolv, out2)
+				times=times+1
+
+			
 			tp = np.where((zmagv >= np.min(zmagv)) & (zmagv <= np.min(zmagv)+step/4.))[0]
 			tps = np.median(zcol[tp])
 			bp = np.where((zmagv <= np.max(zmagv)) & (zmagv >= np.max(zmagv)-step/4.))[0]
@@ -1494,98 +1492,71 @@ def way(vgood, cgood, errgood, errgoodv, part=None):
 			norm_x = x_axis_real_length/x_axis_lim
 			norm_y = y_axis_real_length/y_axis_lim
 
-			lat = step * norm_y
-			lon = (bps - tps) * norm_x
-			# ~lat = step
-			# ~lon = (bps - tps)
+			# ~lat = step * norm_y
+			# ~lon = (bps - tps) * norm_x
+			lat = step
+			lon = (bps - tps)
 			dist = np.sqrt((lat)**2 + (lon)**2)
 			cos_ver = lat/dist
 			cos_hor = lon/dist
 			# ~angle = np.degrees(math.acos(cos))
 			# ~print(c,len(ici), cos, angle)
-		else:
-			cos_ver = 1.
-			cos_hor = 1.
 
-
-
-
-		if len(ici) == 1:
-			ccenter[c] =np.median(zcol)
-			# ~vcenter[c] =centergood[c]
-			# ~ccenter[c] =np.mean(zcol)
-			errcenter[c] =np.array(errgood)[ici]
-			errcenterv[c] =np.array(errgoodv)[ici]
-			# ~vcenter[c] =np.median(zmagv)
-			vcenter[c] =centergood[c]
-			size_bin[c] = len(ici)
-		elif len(ici) == 2:
-			ccenter[c] =np.median(zcol)
-			# ~errcenter[c] = np.std(zcol)
-			# ~errcenter[c] = scoremad*cos_ver
-			# ~vcenter[c] =centergood[c]
-			# ~errcenter[c] =1.2533*np.std(zcol)*cos
-			# ~ccenter[c] =np.mean(zcol)
-			errcenter[c] = np.std(zcol)*cos_ver
-			errcenterv[c] = np.std(zmagv)*cos_hor
-			# ~vcenter[c] =np.median(zmagv)
-			vcenter[c] =centergood[c]
-			size_bin[c] = len(ici)
-		elif len(ici) > 2 and len(ici) < 50:
-			ccenter[c] =np.median(zcol)
-			# ~errcenter[c] =1.2533*np.std(zcol)*cos
-			errcenter[c] = scoremad*cos_ver
-			# ~vcenter[c] =centergood[c]
-			# ~ccenter[c] =np.mean(zcol)
-			if np.std(zcol) == 0:
-				errcenter[c] =np.mean(np.array(errgood)[ici])
-				print('std nul')
-			else:
-				# ~errcenter[c] =np.std(zcol)*cos_ver
-				errcenter[c] = scoremad * cos_ver
-				errcenterv[c] =np.std(zmagv)*cos_hor
-			# ~vcenter[c] =np.median(zmagv)
-			vcenter[c] =centergood[c]
-			size_bin[c] = len(ici)
-			# ~ccenter[c] =np.mean(zcol)
-			# ~errcenter[c] = np.std(zcol)
-			# ~vcenter[c] =np.median(zmagv)
-			# ~vcenter[c] =np.median(zmagv)		
-		elif len(ici) >= 50:
-			# ~plt.scatter(cgood[ici], vgood[ici], label='stars', c='grey')
-			# ~plt.scatter(zcol, zmagv, label='stars', c='lightblue')
-			# ~plt.plot([tps,bps], [np.min(zmagv), np.max(zmagv)], c='r', label='orientation', lw=2)
-			# ~plt.scatter(np.mean(zcol), np.mean(zmagv), c='b', marker='o')
-			# ~plt.xlabel('F606W - F814W', fontsize = 24)
-			# ~plt.ylabel('F606W', fontsize = 24)
-			# ~plt.title('IC4499', fontsize = 24)
-			# ~plt.axhline(bingood[c], label='bin edge', alpha=0.5)
-			# ~plt.axhline(bingood[c+1], alpha=0.5)
-			# ~plt.ylim(bingood[c+1]+0.02,bingood[c]-0.02)
-			# ~plt.tick_params(labelsize=16)
-			# ~plt.show()
-			# ~plt.close()
-
-			ccenter[c] =np.median(zcol)
-			# ~errcenter[c] = np.std(zcol)
-			# ~errcenter[c] = scoremad * cos
-			# ~vcenter[c] =np.median(zmagv)
-			# ~errcenter[c] = scoremad*cos
-			# ~errcenter[c] =1.2533*np.std(zcol)*cos
-			# ~vcenter[c] =centergood[c]
-			# ~vcenter[c] =np.median(zmagv)
-			# ~errcenter[c] =1.2533*np.std(zcol)	
-			# ~ccenter[c] =np.mean(zcol)
-			if np.std(zcol) == 0:
-				errcenter[c] =np.mean(np.array(errgood)[ici])
-				print('std nul')
-			else:
-				# ~errcenter[c] =np.std(zcol)*cos_ver
+			if len(ici) < 50:
+				ccenter[c] =np.median(zcol)
+				# ~errcenter[c] =1.2533*np.std(zcol)*cos
 				errcenter[c] = scoremad*cos_ver
-				errcenterv[c] =np.std(zmagv)*cos_hor
-			# ~vcenter[c] =np.median(zmagv)
-			vcenter[c] =centergood[c]
-			size_bin[c] = len(ici)
+				# ~vcenter[c] =centergood[c]
+				# ~ccenter[c] =np.mean(zcol)
+				if np.std(zcol) == 0:
+					errcenter[c] =np.mean(np.array(errgood)[ici])
+					print('std nul')
+				else:
+					# ~errcenter[c] =np.std(zcol)*cos_ver
+					errcenter[c] = scoremad * cos_ver
+					errcenterv[c] =np.std(zmagv)*cos_hor
+				vcenter[c] =np.median(zmagv)
+				# ~vcenter[c] =centergood[c]
+				size_bin[c] = len(ici)
+				# ~ccenter[c] =np.mean(zcol)
+				# ~errcenter[c] = np.std(zcol)
+				# ~vcenter[c] =np.median(zmagv)
+				# ~vcenter[c] =np.median(zmagv)		
+			elif len(ici) >= 50:
+				# ~plt.scatter(cgood[ici], vgood[ici], label='stars', c='grey')
+				# ~plt.scatter(zcol, zmagv, label='stars', c='lightblue')
+				# ~plt.plot([tps,bps], [np.min(zmagv), np.max(zmagv)], c='r', label='orientation', lw=2)
+				# ~plt.scatter(np.mean(zcol), np.mean(zmagv), c='b', marker='o')
+				# ~plt.xlabel('F606W - F814W', fontsize = 24)
+				# ~plt.ylabel('F606W', fontsize = 24)
+				# ~plt.title('IC4499', fontsize = 24)
+				# ~plt.axhline(bingood[c], label='bin edge', alpha=0.5)
+				# ~plt.axhline(bingood[c+1], alpha=0.5)
+				# ~plt.ylim(bingood[c+1]+0.02,bingood[c]-0.02)
+				# ~plt.tick_params(labelsize=16)
+				# ~plt.show()
+				# ~plt.close()
+
+				ccenter[c] =np.median(zcol)
+				# ~errcenter[c] = np.std(zcol)
+				# ~errcenter[c] = scoremad * cos
+				# ~vcenter[c] =np.median(zmagv)
+				# ~errcenter[c] = scoremad*cos
+				# ~errcenter[c] =1.2533*np.std(zcol)*cos
+				# ~vcenter[c] =centergood[c]
+				# ~vcenter[c] =np.median(zmagv)
+				# ~errcenter[c] =1.2533*np.std(zcol)	
+				# ~ccenter[c] =np.mean(zcol)
+				if np.std(zcol) == 0:
+					errcenter[c] =np.mean(np.array(errgood)[ici])
+					print('std nul')
+				else:
+					# ~errcenter[c] =np.std(zcol)*cos_ver
+					errcenter[c] = scoremad*cos_ver
+					errcenterv[c] =np.std(zmagv)*cos_hor
+				vcenter[c] =np.median(zmagv)
+				# ~vcenter[c] =centergood[c]
+				size_bin[c] = len(ici)
 
 		# ~plt.figure()
 		# ~plt.scatter(color,photo_v, marker='.',s=10, color='grey', label='data')
@@ -2343,8 +2314,8 @@ elif model == 'dar':
 		Color_iso = (Color_iso1_min[:lpp]*(afe_max - bf[glc-1,4]) + Color_iso1_max[:lpp]*(bf[glc-1,4] - afe_min)) / (afe_max - afe_min)
 
 		
-	mag_vy, mag_iy, Color_isoy, eep_firsty = iso_mag(10.113, -1.53, 18790, 0.623, 0.2)
-	mag_vz, mag_iz, Color_isoz, eep_firstz = iso_mag(10.113, -1.53, 18790, 0.623, 0.0)
+	mag_vy, mag_iy, Color_isoy, eep_firsty = iso_mag(np.log10(13.379e9), -1.455, 19406, 0.64, 0)
+	mag_vz, mag_iz, Color_isoz, eep_firstz = iso_mag(np.log10(13.388e9), -1.412, 19436, 0.598, 0)
 	# ~mag_vz, mag_iz, Color_isoz, eep_firstz = iso_mag(np.log10((bf[glc-1,0])*1e9), bf[glc-1,1]+0.1, bf[glc-1,2], bf[glc-1,3], 0.2)
 
 	# ~print(afe_min, afe_max, bf[glc,4])
@@ -2832,7 +2803,10 @@ sbin_rgb = sbin
 # ~base.append(np.arange(int(rescale[glc,6]),int(rescale[glc,7])+1))
 # ~for ind in range(10,lg):
 	# ~base.append(int(rescale[glc,ind]))
-base = np.where((vcenter < np.min(mag_v)))[0]
+if glc == 27:
+	base = np.where((vcenter < np.min(mag_v -15)))[0]
+else:
+	base = np.where((vcenter < np.min(mag_v)))[0]
 base = np.append(base,np.arange(int(rescale[glc,6]),int(rescale[glc,7])+1))
 lg = len(np.where(rescale[glc,:] < 100)[0])
 for ind in range(8,lg):
@@ -2912,8 +2886,8 @@ plt.xlabel('F606W - F814W', fontsize = 16)
 plt.ylabel('F606W', fontsize = 16)
 plt.title(clus_nb, fontsize = 16)
 plt.show()
-# ~plt.close()
-# ~kill
+plt.close()
+kill
 # ~plt.close()
 
 print('coucou')
@@ -3005,17 +2979,21 @@ gc.collect()
 # ~with get_context("spawn").Pool() as pool:
 # ~sampler = emcee.EnsembleSampler(nwalkers, ndim, lnprob, threads=6, moves=[(emcee.moves.DEMove(), 0.8), (emcee.moves.DESnookerMove(), 0.2),],)
 with Pool() as pool:
-	sampler = emcee.EnsembleSampler(nwalkers, ndim, lnprob, pool=pool)
+	# ~sampler = emcee.EnsembleSampler(nwalkers, ndim, lnprob, pool=pool)
+	sampler = emcee.EnsembleSampler(nwalkers, ndim, lnprob,moves=[(emcee.moves.KDEMove()),
+    ], pool=pool)
 # ~sampler = emcee.EnsembleSampler(nwalkers, ndim, lnprob)
 
 	for i, (results) in enumerate(zip(sampler.sample(pos, iterations=ite))):
 		print(i)
+		# ~print(results[0])
 		if (i+1) % 200 == 0:
 			ind = int((i+1)/1)
 	# 		with open('test2_'+str(clus_nb)+'_'+str(model)+'.txt', 'a+') as fid_file:
 			print("first phase is at {0:.1f}%\n".format(100 * float(i) /ite))
 	# 		fid_file.close()
 
+			# ~print("Autocorrelation time: {0:.2f} steps".format(sampler.get_autocorr_time()[0]))
 			
 			print(sampler.acceptance_fraction)
 			print(np.mean(sampler.acceptance_fraction))
@@ -3118,132 +3096,139 @@ with Pool() as pool:
 				# ~plt.hist(10**sampler.chain[:,:i,0].flatten() / 1.e9, bins=np.linspace(7.5,15,100),histtype='step')
 				# ~plt.show()
 				# ~plt.close()
-				
+				sw = 10
 				ax1 = plt.subplot(231)
 				ax1.set_title('Age')
-				for ii in range(0,nwalkers):
-					ax1.plot(np.arange(i), sampler.chain[ii,:i,0], c='k')
+				# ~for ii in range(0,nwalkers):
+					# ~ax1.plot(np.arange(i), sampler.chain[ii,:i,0], c='k')
+				for j in range(0,i,sw):
+					ax1.scatter(j, np.median(sampler.chain[:,j,0],axis=0), c='k')
 					#ax1.plot(np.arange(i), sampler2.chain[ii,:i,0], c='r')
 				ax1.axhline(Age, color='r', linestyle='--')
 				ax1.grid()
 				ax1.axhline(10.176, color='c')
 				ax2 = plt.subplot(232)
 				ax2.set_title('metal')
-				for ii in range(0,nwalkers):
-					ax2.plot(np.arange(i), sampler.chain[ii,:i,1], c='k')
+				for j in range(0,i,sw):
+					ax2.scatter(j, np.median(sampler.chain[:,j,1],axis=0), c='k')
 					#ax2.plot(np.arange(i), sampler2.chain[ii,:i,1], c='r')
 				ax2.axhline(metal, color='r', linestyle='--')
 				ax2.grid()
 				#ax2.axhline(b2_ml, color='k')
 				ax3 = plt.subplot(233)
 				ax3.set_title('distance')
-				for ii in range(0,nwalkers):
-					ax3.plot(np.arange(i), sampler.chain[ii,:i,2], c='k')
+				for j in range(0,i,sw):
+					ax3.scatter(j, np.median(sampler.chain[:,j,2],axis=0), c='k')
 					#ax3.plot(np.arange(i), sampler2.chain[ii,:i,2], c='r')
 				ax3.axhline(distance, color='r', linestyle='--')
 				ax3.grid()
 				#ax3.axhline(b3_ml, color='k')
 				ax4 = plt.subplot(234)
 				ax4.set_title('A1')
-				for ii in range(0,nwalkers):
-					ax4.plot(np.arange(i), sampler.chain[ii,:i,3], c='k')
+				for j in range(0,i,sw):
+					ax4.scatter(j, np.median(sampler.chain[:,j,3],axis=0), c='k')
 					#ax4.plot(np.arange(i), sampler2.chain[ii,:i,3], c='r')
 				ax4.axhline(Abs, color='r', linestyle='--')
 				ax4.grid()
 				ax5 = plt.subplot(235)
 				ax5.set_title(r'$\alpha$')
-				for ii in range(0,nwalkers):
-					ax5.plot(np.arange(i), sampler.chain[ii,:i,4], c='k')
+				for j in range(0,i,sw):
+					ax5.scatter(j, np.median(sampler.chain[:,j,4],axis=0), c='k')
 					#ax5.plot(np.arange(i), sampler2.chain[ii,:i,4], c='r')
 				ax5.axhline(afe_init, color='r', linestyle='--')
 				ax5.grid()
 				plt.show()
 				plt.close()
 
-				import corner
-				fig = corner.corner(sampler.chain[:,:i, :].reshape((-1, ndim)),bins=100,range=[(np.min(sampler.chain[:,:i, 0]),10.176), (np.min(sampler.chain[:,:i, 1]),np.max(sampler.chain[:,:i, 1])),
-		(np.min(sampler.chain[:,:i, 2]),np.max(sampler.chain[:,:i, 2])),(np.min(sampler.chain[:,:i, 3]),np.max(sampler.chain[:,:i, 3])),(np.min(sampler.chain[:,:i, 4]),np.max(sampler.chain[:,:i, 4]))], labels=["$log10(Age)$", "$metallicity$", "$distance$", "$A1$", "$afe$"], 
-		truths=[Age, metal,distance,Abs, afe_init], title_fmt='.3f', plot_contours=False, show_titles=True, title_args={"fontsize":8}, color='k')
-				#~ corner.corner(sampler2.chain[:,:i, :2].reshape((-1, 2)), labels=["$log10(Age)$", "$metallicity$"], 
-		#~ truths=[Age, metal], title_fmt='.3f', plot_contours=False, show_titles=True, title_args={"fontsize":12}, fig=fig, color='r')
-				#~ fig.suptitle('numero '+str(glc)+', '+clus_nb)
-				fig.subplots_adjust(top=0.911,bottom=0.14,left=0.085,right=0.966,hspace=0.05,wspace=0.05)
-				plt.show()
-				plt.close()
+				steps = int(input("What is the convergence step ? "))
+				if steps == 0:
+					pass
+				else:
 
-				samples = sampler.chain[:,:i, :].reshape((-1, ndim))
-				#~ samples2 = sampler2.chain[:,:, :].reshape((-1, ndim))
-				#~ samples3 = sampler3.chain[:,:, :].reshape((-1, ndim))
+					import corner
+					fig = corner.corner(sampler.chain[:,steps:i, :].reshape((-1, ndim)),bins=100,range=[(np.min(sampler.chain[:,steps:i, 0]),10.176), (np.min(sampler.chain[:,steps:i, 1]),np.max(sampler.chain[:,steps:i, 1])),
+			(np.min(sampler.chain[:,steps:i, 2]),np.max(sampler.chain[:,steps:i, 2])),(np.min(sampler.chain[:,steps:i, 3]),np.max(sampler.chain[:,steps:i, 3])),(np.min(sampler.chain[:,steps:i, 4]),np.max(sampler.chain[:,steps:i, 4]))], labels=["$log10(Age)$", "$metallicity$", "$distance$", "$A1$", "$afe$"], 
+			truths=[Age, metal,distance,Abs, afe_init], title_fmt='.3f', plot_contours=False, show_titles=True, title_args={"fontsize":8}, color='k')
+					#~ corner.corner(sampler2.chain[:,steps:i, :2].reshape((-1, 2)), labels=["$log10(Age)$", "$metallicity$"], 
+			#~ truths=[Age, metal], title_fmt='.3f', plot_contours=False, show_titles=True, title_args={"fontsize":12}, fig=fig, color='r')
+					#~ fig.suptitle('numero '+str(glc)+', '+clus_nb)
+					fig.subplots_adjust(top=0.911,bottom=0.14,left=0.085,right=0.966,hspace=0.05,wspace=0.05)
+					plt.show()
+					plt.close()
 
-				b1_mcmc, b2_mcmc, b3_mcmc, b4_mcmc, b5_mcmc = map(lambda v: (v[1], v[2]-v[1], v[1]-v[0]),
-				zip(*np.percentile(samples, [16, 50, 84], axis=0)))
-				#~ b1_mcmc2, b2_mcmc2, b3_mcmc2, b4_mcmc2, b5_mcmc2 = map(lambda v: (v[1], v[2]-v[1], v[1]-v[0]),
-				#~ zip(*np.percentile(samples2, [16, 50, 84], axis=0)))
-				
+					samples = sampler.chain[:,steps:i, :].reshape((-1, ndim))
+					#~ samples2 = sampler2.chain[:,:, :].reshape((-1, ndim))
+					#~ samples3 = sampler3.chain[:,:, :].reshape((-1, ndim))
 
-				afe_values=[-0.2, 0.0 , 0.2, 0.4, 0.6, 0.8]
-				#~ afe_values=[-0.2, 0.0 , 0.2, 0.6, 0.8]  
+					b1_mcmc, b2_mcmc, b3_mcmc, b4_mcmc, b5_mcmc = map(lambda v: (v[1], v[2]-v[1], v[1]-v[0]),
+					zip(*np.percentile(samples, [16, 50, 84], axis=0)))
+					#~ b1_mcmc2, b2_mcmc2, b3_mcmc2, b4_mcmc2, b5_mcmc2 = map(lambda v: (v[1], v[2]-v[1], v[1]-v[0]),
+					#~ zip(*np.percentile(samples2, [16, 50, 84], axis=0)))
+					
 
-
-				afe_max = afe_values[np.searchsorted(afe_values, b5_mcmc[0])]
-				afe_min = afe_values[np.searchsorted(afe_values, b5_mcmc[0])-1]
-				#~ afe_maxbis = afe_values[np.searchsorted(afe_values, b5_mcmc2[0])]
-				#~ afe_minbis = afe_values[np.searchsorted(afe_values, b5_mcmc2[0])-1]
-				print(b1_mcmc[0], b2_mcmc[0], b3_mcmc[0], b4_mcmc[0], afe_min)
-				
-
-				mag_v1_min , mag_i1_min, Color_iso1_min, eep_first = iso_mag(b1_mcmc[0], b2_mcmc[0], b3_mcmc[0], b4_mcmc[0], afe_min)
-				mag_v1_max , mag_i1_max, Color_iso1_max, eep_first = iso_mag(b1_mcmc[0], b2_mcmc[0], b3_mcmc[0], b4_mcmc[0], afe_max)
-				lpp = (min(len(mag_v1_min), len(mag_v1_max))) # get minimum length to interpolate
-				#~ mag_v1_minbis , mag_i1_minbis, Color_iso1_minbis, eep_firstbis = iso_mag(b1_mcmc2[0], b2_mcmc2[0], b3_mcmc2[0], b4_mcmc2[0], afe_minbis)
-				#~ mag_v1_maxbis , mag_i1_maxbis, Color_iso1_maxbis, eep_firstbis = iso_mag(b1_mcmc2[0], b2_mcmc2[0], b3_mcmc2[0], b4_mcmc2[0], afe_maxbis)
-				#~ lppbis = (min(len(mag_v1_minbis), len(mag_v1_maxbis))) # get minimum length to interpolate
-				#~ mag_v1_minter , mag_i1_minter, Color_iso1_minter, eep_firstter = iso_mag(b1_mcmc3[0], b2_mcmc3[0], b3_mcmc3[0], b4_mcmc3[0], afe_minter)
-				#~ mag_v1_maxter , mag_i1_maxter, Color_iso1_maxter, eep_firstter = iso_mag(b1_mcmc3[0], b2_mcmc3[0], b3_mcmc3[0], b4_mcmc3[0], afe_maxter)
-				#~ lppter = (min(len(mag_v1_minter), len(mag_v1_maxter))) # get minimum length to interpolate
-				
-				mag_v3 = (mag_v1_min[:lpp]*(afe_max - b5_mcmc[0]) + mag_v1_max[:lpp]*(b5_mcmc[0] - afe_min)) / (afe_max - afe_min)
-				Color_iso3 = (Color_iso1_min[:lpp]*(afe_max - b5_mcmc[0]) + Color_iso1_max[:lpp]*(b5_mcmc[0] - afe_min)) / (afe_max - afe_min)
-				#~ mag_v3ter = (mag_v1_minter[:lppter]*(afe_maxter - b5_mcmc3[0]) + mag_v1_maxter[:lppter]*(b5_mcmc3[0] - afe_minter)) / (afe_maxter - afe_minter)
-				#~ Color_iso3ter = (Color_iso1_minter[:lppter]*(afe_maxter - b5_mcmc3[0]) + Color_iso1_maxter[:lppter]*(b5_mcmc3[0] - afe_minter)) / (afe_maxter - afe_minter)
-				#~ mag_v3bis = (mag_v1_minbis[:lppbis]*(afe_maxbis - b5_mcmc2[0]) + mag_v1_maxbis[:lppbis]*(b5_mcmc2[0] - afe_minbis)) / (afe_maxbis - afe_minbis)
-				#~ Color_iso3bis = (Color_iso1_minbis[:lppbis]*(afe_maxbis - b5_mcmc2[0]) + Color_iso1_maxbis[:lppbis]*(b5_mcmc2[0] - afe_minbis)) / (afe_maxbis - afe_minbis)
+					afe_values=[-0.2, 0.0 , 0.2, 0.4, 0.6, 0.8]
+					#~ afe_values=[-0.2, 0.0 , 0.2, 0.6, 0.8]  
 
 
+					afe_max = afe_values[np.searchsorted(afe_values, b5_mcmc[0])]
+					afe_min = afe_values[np.searchsorted(afe_values, b5_mcmc[0])-1]
+					#~ afe_maxbis = afe_values[np.searchsorted(afe_values, b5_mcmc2[0])]
+					#~ afe_minbis = afe_values[np.searchsorted(afe_values, b5_mcmc2[0])-1]
+					print(b1_mcmc[0], b2_mcmc[0], b3_mcmc[0], b4_mcmc[0], afe_min)
+					
 
-				plt.figure()
-				plt.scatter(color,photo_v, marker='.',s=10, color='grey', label='data')
-				plt.scatter(gauss_mean,bincenter, marker='o', s=30, color='r', label='fit at bin center')
-				plt.errorbar(gauss_mean,bincenter, xerr=gauss_disp, yerr=errcenterv_gauss, c='k', fmt='none')
-				plt.errorbar(ccenter_rgb, vcenter_rgb, xerr=errcenter_rgb, yerr=errcenterv_rgb,fmt = 'none', c='k')
-				plt.scatter(ccenter_rgb, vcenter_rgb , marker='o', s=30, color='c', label='selected points')
-				# ~plt.errorbar(ccenter_sgb, vcenter_sgb, yerr=errcenterv_sgb,fmt = 'none', c='k')
-				# ~plt.scatter(ccenter_sgb, vcenter_sgb , marker='o', s=30, color='b', label='selected points')
-				plt.plot(Color_iso3,mag_v3, c='b',  label='main sequence')
-				#~ plt.plot(Color_iso3bis,mag_v3bis, c='r',  label='RGB')
-				#~ plt.plot(Color_iso3ter,mag_v3ter, c='c',  label='total')
-				plt.xlim(-0.5,3)
-				plt.ylim(26,10)
-				plt.legend(loc='upper right', fontsize = 16)
-				plt.xlabel('F606W - F814W', fontsize = 16)
-				plt.ylabel('F606W', fontsize = 16)
-				plt.title(clus_nb, fontsize = 16)
-				plt.show()
-				plt.close()
-				
-				plt.figure()
-				plt.scatter(color,photo_v, marker='.',s=10, color='grey', label='data')
-				plt.plot(Color_iso3,mag_v3, c='b',  label='main sequence')
-				#~ plt.plot(Color_iso3bis,mag_v3bis, c='r',  label='RGB')
-				#~ plt.plot(Color_iso3ter,mag_v3ter, c='c',  label='total')
-				plt.xlim(-0.5,3)
-				plt.ylim(26,10)
-				plt.legend(loc='upper right', fontsize = 16)
-				plt.xlabel('F606W - F814W', fontsize = 16)
-				plt.ylabel('F606W', fontsize = 16)
-				plt.title(clus_nb, fontsize = 16)
-				plt.show()
-				plt.close()
+					mag_v1_min , mag_i1_min, Color_iso1_min, eep_first = iso_mag(b1_mcmc[0], b2_mcmc[0], b3_mcmc[0], b4_mcmc[0], afe_min)
+					mag_v1_max , mag_i1_max, Color_iso1_max, eep_first = iso_mag(b1_mcmc[0], b2_mcmc[0], b3_mcmc[0], b4_mcmc[0], afe_max)
+					lpp = (min(len(mag_v1_min), len(mag_v1_max))) # get minimum length to interpolate
+					#~ mag_v1_minbis , mag_i1_minbis, Color_iso1_minbis, eep_firstbis = iso_mag(b1_mcmc2[0], b2_mcmc2[0], b3_mcmc2[0], b4_mcmc2[0], afe_minbis)
+					#~ mag_v1_maxbis , mag_i1_maxbis, Color_iso1_maxbis, eep_firstbis = iso_mag(b1_mcmc2[0], b2_mcmc2[0], b3_mcmc2[0], b4_mcmc2[0], afe_maxbis)
+					#~ lppbis = (min(len(mag_v1_minbis), len(mag_v1_maxbis))) # get minimum length to interpolate
+					#~ mag_v1_minter , mag_i1_minter, Color_iso1_minter, eep_firstter = iso_mag(b1_mcmc3[0], b2_mcmc3[0], b3_mcmc3[0], b4_mcmc3[0], afe_minter)
+					#~ mag_v1_maxter , mag_i1_maxter, Color_iso1_maxter, eep_firstter = iso_mag(b1_mcmc3[0], b2_mcmc3[0], b3_mcmc3[0], b4_mcmc3[0], afe_maxter)
+					#~ lppter = (min(len(mag_v1_minter), len(mag_v1_maxter))) # get minimum length to interpolate
+					
+					mag_v3 = (mag_v1_min[:lpp]*(afe_max - b5_mcmc[0]) + mag_v1_max[:lpp]*(b5_mcmc[0] - afe_min)) / (afe_max - afe_min)
+					Color_iso3 = (Color_iso1_min[:lpp]*(afe_max - b5_mcmc[0]) + Color_iso1_max[:lpp]*(b5_mcmc[0] - afe_min)) / (afe_max - afe_min)
+					#~ mag_v3ter = (mag_v1_minter[:lppter]*(afe_maxter - b5_mcmc3[0]) + mag_v1_maxter[:lppter]*(b5_mcmc3[0] - afe_minter)) / (afe_maxter - afe_minter)
+					#~ Color_iso3ter = (Color_iso1_minter[:lppter]*(afe_maxter - b5_mcmc3[0]) + Color_iso1_maxter[:lppter]*(b5_mcmc3[0] - afe_minter)) / (afe_maxter - afe_minter)
+					#~ mag_v3bis = (mag_v1_minbis[:lppbis]*(afe_maxbis - b5_mcmc2[0]) + mag_v1_maxbis[:lppbis]*(b5_mcmc2[0] - afe_minbis)) / (afe_maxbis - afe_minbis)
+					#~ Color_iso3bis = (Color_iso1_minbis[:lppbis]*(afe_maxbis - b5_mcmc2[0]) + Color_iso1_maxbis[:lppbis]*(b5_mcmc2[0] - afe_minbis)) / (afe_maxbis - afe_minbis)
+
+
+
+					plt.figure()
+					plt.scatter(color,photo_v, marker='.',s=10, color='grey', label='data')
+					plt.scatter(gauss_mean,bincenter, marker='o', s=30, color='r', label='fit at bin center')
+					plt.errorbar(gauss_mean,bincenter, xerr=gauss_disp, yerr=errcenterv_gauss, c='k', fmt='none')
+					plt.errorbar(ccenter_rgb, vcenter_rgb, xerr=errcenter_rgb, yerr=errcenterv_rgb,fmt = 'none', c='k')
+					plt.scatter(ccenter_rgb, vcenter_rgb , marker='o', s=30, color='c', label='selected points')
+					# ~plt.errorbar(ccenter_sgb, vcenter_sgb, yerr=errcenterv_sgb,fmt = 'none', c='k')
+					# ~plt.scatter(ccenter_sgb, vcenter_sgb , marker='o', s=30, color='b', label='selected points')
+					plt.plot(Color_iso3,mag_v3, c='b',  label='main sequence')
+					#~ plt.plot(Color_iso3bis,mag_v3bis, c='r',  label='RGB')
+					#~ plt.plot(Color_iso3ter,mag_v3ter, c='c',  label='total')
+					plt.xlim(-0.5,3)
+					plt.ylim(26,10)
+					plt.legend(loc='upper right', fontsize = 16)
+					plt.xlabel('F606W - F814W', fontsize = 16)
+					plt.ylabel('F606W', fontsize = 16)
+					plt.title(clus_nb, fontsize = 16)
+					plt.show()
+					plt.close()
+					
+					plt.figure()
+					plt.scatter(color,photo_v, marker='.',s=10, color='grey', label='data')
+					plt.plot(Color_iso3,mag_v3, c='b',  label='main sequence')
+					#~ plt.plot(Color_iso3bis,mag_v3bis, c='r',  label='RGB')
+					#~ plt.plot(Color_iso3ter,mag_v3ter, c='c',  label='total')
+					plt.xlim(-0.5,3)
+					plt.ylim(26,10)
+					plt.legend(loc='upper right', fontsize = 16)
+					plt.xlabel('F606W - F814W', fontsize = 16)
+					plt.ylabel('F606W', fontsize = 16)
+					plt.title(clus_nb, fontsize = 16)
+					plt.show()
+					plt.close()
 
 		pass
 

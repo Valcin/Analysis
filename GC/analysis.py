@@ -450,7 +450,7 @@ if version == '18':
 	garr = [3,4,8,12,14,15,17,19,20,24,28,32,34,42,43,46,48,51,52,54,59,61]
 	model = 'dar'
 	#~ garr =
-if version == '21':
+if version == '110':
 	ndim = 5
 	nwalkers = 100
 	ntemps = 1
@@ -467,12 +467,8 @@ if version == '0':
 	model2 = 'dar'
 
 
-###################################################################################################
-###################################################################################################
 
-
-
-################################################################################################
+################################################################################################ Plot the evolution of the chains as a function of the steps
 ################################################################################################
 
 tot_age = []
@@ -520,8 +516,8 @@ for cn in range(6):
 		#~ D = np.genfromtxt('/home/david/codes/GC/plots/test/data_'+str(t)+'_'+clus_nb+'_'+ version +'_'+str(model)+'.txt', usecols=(j+nwalkers*2,), max_rows=2000)
 		#~ AA = np.genfromtxt('/home/david/codes/GC/plots/test/data_'+str(t)+'_'+clus_nb+'_'+ version +'_'+str(model)+'.txt', usecols=(j+nwalkers*3,), max_rows=2000)
 
-	steps = 100
-	if version in ['9','10','15','16','17','18','21']:
+	steps = 0
+	if version in ['9','10','15','16','17','18','110']:
 		files = np.loadtxt('/home/david/codes/data/GC_data/'+str(model)+'/data_1'+'_'+clus_nb+'_'+ version +'_'+str(model)+'.txt')
 	else:
 		files = np.loadtxt('/home/david/codes/Analysis/GC/plots/test/data_'+str(t)+'_'+clus_nb+'_'+ version +'_'+str(model)+'.txt')
@@ -538,7 +534,15 @@ for cn in range(6):
 		Afe = files[steps*nwalkers:,4]
 		# ~Afe = files[steps*nwalkers:,4][prior]
 
-		
+		helium_y = ''
+		from isochrones.dartmouth import Dartmouth_FastIsochrone
+		darm2 = Dartmouth_FastIsochrone(afe='afem2', y=helium_y)
+		darp0 = Dartmouth_FastIsochrone(afe='afep0', y=helium_y)
+		darp2 = Dartmouth_FastIsochrone(afe='afep2', y=helium_y)
+		darp4 = Dartmouth_FastIsochrone(afe='afep4', y=helium_y)
+		darp6 = Dartmouth_FastIsochrone(afe='afep6', y=helium_y)
+		darp8 = Dartmouth_FastIsochrone(afe='afep8', y=helium_y)
+
 		
 	#~ files2 = np.loadtxt('/home/david/codes/Analysis/GC/plots/test/'+str(model)+'/data_2'+'_'+clus_nb+'_'+ version +'_'+str(model)+'.txt')
 	#~ Age2 = files2[steps*nwalkers:,0]
@@ -551,7 +555,7 @@ for cn in range(6):
 	#~ AAbs = files[:,3]
 
 	# ~print(len(Age))
-	step_walk = 500
+	step_walk = 100
 	plt.suptitle('numero '+str(glc)+', '+clus_nb)
 	ax1 = plt.subplot(231)
 	ax1.set_title('Age')
@@ -639,402 +643,439 @@ for cn in range(6):
 	#~ Distance3 = files[steps*nwalkers:,2]
 	#~ AAbs3 = files[steps*nwalkers:,3]
 
+################################################################################################### remove the burn in phase for the analysis
+###################################################################################################
 
-	steps = 500
-
-	#~ print(np.mean(files[:,3]), np.median(files[:,3]))
-	prior = np.where((files[steps*nwalkers:,2] > distance0 - errdist)&(files[steps*nwalkers:,2] < distance0 + errdist))[0]
-	#~ files[steps*nwalkers:,1] < metal0 +0.2)&(files[steps*nwalkers:,2] > metal0 -0.2))[0]
-
-
-	Age = files[steps*nwalkers:,0]
-	Metal = files[steps*nwalkers:,1]
-	Distance = files[steps*nwalkers:,2]
-	AAbs = files[steps*nwalkers:,3]
-	# ~Age = files[steps*nwalkers:,0][prior]
-	# ~Metal = files[steps*nwalkers:,1][prior]
-	# ~Distance = files[steps*nwalkers:,2][prior]
-	# ~AAbs = files[steps*nwalkers:,3][prior]
-	if model == 'dar':
-		Afe = files[steps*nwalkers:,4]
-		# ~Afe = files[steps*nwalkers:,4][prior]
-
-#--------------------------------------------------------------
-### MAIN SEQUENCE
-
-	if model == 'dar':
-		taille = min(len(list((filter(None, Age)))),len(list((filter(None, Metal)))),len(list((filter(None, Distance))))
-		,len(list((filter(None, AAbs)))),len(list((filter(None, Afe)))))
-	else:
-		taille = min(len(list((filter(None, Age)))),len(list((filter(None, Metal)))),len(list((filter(None, Distance))))
-		,len(list((filter(None, AAbs)))))
-		
-		
-	if len(Age) == 0:
-		print('popo')
-		#~ with open('/home/david/codes/Analysis/GC/plots/data_'+ version +'_'+str(model)+'.txt', 'a+') as fid_file:
-			#~ fid_file.write('%s, %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g\n' % (0, 0, 
-			#~ 0, 0, 0, 0,0, 0, 0, 0, 0,
-			#~ 0, 0))
-		#~ fid_file.close()
-		continue
-		
-	
-	data = np.zeros((taille, ndim))
-	for i in range(taille):
-		data[i, 0] = 10**Age[i] /1.e9
-		data[i, 1] = Metal[i] 
-		data[i, 2] = Distance[i] /1000.
-		data[i, 3] = AAbs[i] 
-		if model == 'dar':
-			data[i, 4] = Afe[i] 
-#--------------------------------------------------------------------
-### Red Giant BRANCH
-	#~ taille2 = min(len(filter(None, Age2)),len(filter(None, Metal2)),len(filter(None, Distance2)),len(filter(None, AAbs2)))
-	
-	#~ if len(Age2) == 0:
-		#~ print('popo')
-		#~ with open('/home/david/codes/Analysis/GC/plots/data_'+ version +'_'+str(model)+'.txt', 'a+') as fid_file:
-			#~ fid_file.write('%s, %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g\n' % (0, 0, 
-			#~ 0, 0, 0, 0,0, 0, 0, 0, 0,
-			#~ 0, 0))
-		#~ fid_file.close()
-		#~ continue
-		
-	#~ print(len(Age2)/nwalkers)	
-	
-	#~ data2 = np.zeros((taille2, ndim))
-	#~ for i in range(taille2):
-		#~ data2[i, 0] = Age2[i] 
-		#~ data2[i, 1] = Metal2[i] 
-		#~ data2[i, 2] = Distance2[i] 
-		#~ data2[i, 3] = AAbs2[i] 
-
-#--------------------------------------------------------------------
-### TOTAL
-
-	#~ Age3 = np.concatenate((Age, Age2))
-	#~ Metal3 = np.concatenate((Metal, Metal2))
-	#~ Distance3 = np.concatenate((Distance, Distance2))
-	#~ AAbs3 = np.concatenate((AAbs, AAbs2))
-	
-	#~ taille3 = min(len(filter(None, Age3)),len(filter(None, Metal3)),len(filter(None, Distance3)),len(filter(None, AAbs3)))
-
-	
-	#~ if len(Age3) == 0:
-		#~ print('popo')
-		#~ with open('/home/david/codes/Analysis/GC/plots/data_'+ version +'_'+str(model)+'.txt', 'a+') as fid_file:
-			#~ fid_file.write('%s, %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g\n' % (0, 0, 
-			#~ 0, 0, 0, 0,0, 0, 0, 0, 0,
-			#~ 0, 0))
-		#~ fid_file.close()
-		#~ continue
-		
-	#~ print(len(Age3)/nwalkers)	
-	
-	#~ data3 = np.zeros((taille3, ndim))
-	#~ for i in range(taille3):
-		#~ data3[i, 0] = Age3[i] 
-		#~ data3[i, 1] = Metal3[i] 
-		#~ data3[i, 2] = Distance3[i] 
-		#~ data3[i, 3] = AAbs3[i] 
-#--------------------------------------------------------------------
-	print('cluster numero '+ str(glc))
-	print('number of steps = '+ str(len(Age)/nwalkers))
-
-	binage = np.linspace(5,15,200)
-	h1, bh1 = np.histogram(10**Age / 1.e9, bins=binage)
-	h2, bh2 = np.histogram(10**Age / 1.e9, bins=binage, density=True)
-	binfe = np.linspace(-2.5,0,200)
-	m1, bm1 = np.histogram(Metal, bins=binfe)
-	m2, bm2 = np.histogram(Metal, bins=binfe, density=True)
-	binafe = np.linspace(-0.2,0.8,100)
-	a1, ba1 = np.histogram(Afe, bins=binafe)
-	a2, ba2 = np.histogram(Afe, bins=binafe, density=True)
-	h1 = np.transpose([h1]).T
-	h2 = np.transpose([h2]).T
-	a1 = np.transpose([a1]).T
-	a2 = np.transpose([a2]).T
-	m1 = np.transpose([m1]).T
-	m2 = np.transpose([m2]).T
-	
-	Metal_mean = (bm1[np.argmax(m1)] + bm1[np.argmax(m1)+1])/2.
-	
-	# ~with open('/home/david/codes/Analysis/GC/plots/w_tot', 'ab+') as fid_file:
-		# ~np.savetxt(fid_file, h1)
-	# ~fid_file.close()	
-	# ~with open('/home/david/codes/Analysis/GC/plots/renom_tot', 'ab+') as fid_file:
-		# ~np.savetxt(fid_file, h2)
-	# ~fid_file.close()
-	# ~with open('/home/david/codes/Analysis/GC/plots/a_tot', 'ab+') as fid_file:
-		# ~np.savetxt(fid_file, a1)
-	# ~fid_file.close()	
-	# ~with open('/home/david/codes/Analysis/GC/plots/a_renom', 'ab+') as fid_file:
-		# ~np.savetxt(fid_file, a2)
-	# ~fid_file.close()
-	# ~with open('/home/david/codes/Analysis/GC/plots/m_tot', 'ab+') as fid_file:
-		# ~np.savetxt(fid_file, m1)
-	# ~fid_file.close()	
-	# ~with open('/home/david/codes/Analysis/GC/plots/m_renom', 'ab+') as fid_file:
-		# ~np.savetxt(fid_file, m2)
-	# ~fid_file.close()
-	
-	
-	# ~if Metal_mean <= -1.5:
-		# ~with open('/home/david/codes/Analysis/GC/plots/w_1', 'ab+') as fid_file:
-			# ~np.savetxt(fid_file, h1)
-		# ~fid_file.close()	
-		# ~with open('/home/david/codes/Analysis/GC/plots/renom_1', 'ab+') as fid_file:
-			# ~np.savetxt(fid_file, h2)
-		# ~fid_file.close()
-		# ~with open('/home/david/codes/Analysis/GC_mixing_length/ind_met15.txt', 'a+') as fid_file:
-			# ~fid_file.write(str(glc)+"\n")
-		# ~fid_file.close()
-		
-	# ~if Metal_mean <= -2:
-		# ~with open('/home/david/codes/Analysis/GC/plots/w_2', 'ab+') as fid_file:
-			# ~np.savetxt(fid_file, h1)
-		# ~fid_file.close()	
-		# ~with open('/home/david/codes/Analysis/GC/plots/renom_2', 'ab+') as fid_file:
-			# ~np.savetxt(fid_file, h2)
-		# ~fid_file.close()	
-		# ~with open('/home/david/codes/Analysis/GC_mixing_length/int_met20.txt', 'a+') as fid_file:
-			# ~fid_file.write(str(glc)+"\n")
-		# ~fid_file.close()	
-		
-
-	nbins = 50
-
-	binage = np.linspace(np.min(10**Age / 1.e9),np.max(10**Age / 1.e9),nbins)
-	dage = np.diff(binage)[0]
-	bincenter = (binage[:-1] + binage[1:]) / 2
-	h1, bh1 = np.histogram(10**Age / 1.e9, bins=binage)
-
-
-	binfe = np.linspace(np.min(Metal),np.max(Metal),nbins)
-	dfe = np.diff(binfe)[0]
-	bfcenter = (binfe[:-1] + binfe[1:]) / 2
-	m1, bm1 = np.histogram(Metal, bins=binfe)
-
-	bindis = np.linspace(np.min(Distance),np.max(Distance),nbins)
-	ddis = np.diff(bindis)[0]
-	bdcenter = (bindis[:-1] + bindis[1:]) / 2
-	d1, bd1 = np.histogram(Distance, bins=bindis)
-
-	
-	binabs = np.linspace(np.min(AAbs),np.max(AAbs),nbins)
-	dabs = np.diff(binabs)[0]
-	bacenter = (binabs[:-1] + binabs[1:]) / 2
-	ab1, bab1 = np.histogram(AAbs, bins=binabs)
-
-
-	binafe = np.linspace(np.min(Afe),np.max(Afe),nbins)
-	dafe = np.diff(binafe)[0]
-	bcenter = (binafe[:-1] + binafe[1:]) / 2
-	a1, ba1 = np.histogram(Afe, bins=binafe)
-	
-	
-	def error_compute(dbins, histo, bhisto):
-		amp = 1.0
-		while amp > 0.0:
-			integ = np.sum(dbins*histo)
-			above = np.where(histo > amp*np.max(histo))[0]
-			#~ print(above)
-			tinteg = np.sum(dbins*histo[above])
-			s = tinteg/integ
-			#~ print('integral percentage is '+str(s))
-			if s > 0.68:
-				#~ print([np.min(above)])
-				#~ print([np.max(above)])
-				return bhisto[np.min(above)], bhisto[np.max(above)]
-				break
-			amp -= 0.01
-			#~ print('percentage of the amplitude is '+str(amp))
-	
-	
-	Age_low, Age_high = error_compute(dage, h1,bincenter)
-	Metal_low, Metal_high = error_compute(dfe, m1,bfcenter)
-	Distance_low, Distance_high = error_compute(ddis, d1,bdcenter)
-	AAbs_low, AAbs_high = error_compute(dabs, ab1,bacenter)
-	Afe_low, Afe_high = error_compute(dafe, a1,bcenter)
-
-
-	Age_mean = (bh1[np.argmax(h1)] + bh1[np.argmax(h1)+1])/2.
-	Metal_mean = (bm1[np.argmax(m1)] + bm1[np.argmax(m1)+1])/2.
-	Distance_mean = (bd1[np.argmax(d1)] + bd1[np.argmax(d1)+1])/2.
-	AAbs_mean = (bab1[np.argmax(ab1)] + bab1[np.argmax(ab1)+1])/2.
-	Afe_mean = (ba1[np.argmax(a1)] + ba1[np.argmax(a1)+1])/2.
-
-	
-	#~ plt.hist(10**Age / 1.e9, bins=binage)
-	#~ plt.axvline(Age_low, c='r')
-	#~ plt.axvline(Age_high,c='g')
-	#~ plt.axvline(Age_mean,c='k')
-	#~ plt.axvline(10**np.percentile(Age,50)/1.e9,c='k', linestyle='--')
-	#~ plt.show()
-	#~ plt.close()
-	#~ plt.hist(Metal, bins=binfe)
-	#~ plt.axvline(Metal_low, c='r')
-	#~ plt.axvline(Metal_high,c='g')
-	#~ plt.axvline(Metal_mean,c='k')
-	#~ plt.axvline(metal0,c='b')
-	#~ plt.axvline(np.percentile(Metal,50),c='k', linestyle='--')
-	#~ plt.show()
-	#~ plt.close()
-	#~ plt.hist(Distance, bins=bindis)
-	#~ plt.axvline(Distance_low, c='r')
-	#~ plt.axvline(Distance_high,c='g')
-	#~ plt.axvline(Distance_mean,c='k')
-	#~ plt.axvline(np.percentile(Distance,50),c='k', linestyle='--')
-	#~ plt.xlim(np.min(Distance), np.max(Distance))
-	#~ plt.show()
-	#~ plt.close()
-	#~ plt.hist(AAbs, bins=binabs)
-	#~ plt.axvline(AAbs_low, c='r')
-	#~ plt.axvline(AAbs_high,c='g')
-	#~ plt.axvline(AAbs_mean,c='k')
-	#~ plt.axvline(np.percentile(AAbs,50),c='k', linestyle='--')
-	#~ plt.xlim(np.min(AAbs), np.max(AAbs))
-	#~ plt.show()
-	#~ plt.close()
-	#~ plt.hist(Afe, bins=binafe)
-	#~ plt.axvline(Afe_low, c='r')
-	#~ plt.axvline(Afe_high,c='g')
-	#~ plt.axvline(Afe_mean,c='k')
-	#~ plt.axvline(np.percentile(Afe,50),c='k', linestyle='--')
-	#~ plt.show()
-	#~ plt.close()
-	
-
-		
-	#~ kill
-
-	if model == 'dar':
-		fig = corner.corner(data,bins=25, range=[(np.min(data[:,0]),14.996), (np.min(data[:,1]),np.max(data[:,1])),
-		(np.min(data[:,2]),np.max(data[:,2])),(np.min(data[:,3]),np.max(data[:,3])),(np.min(data[:,4]),np.max(data[:,4]))],
-		labels=["$Age$ [Gyr]", "$metallicity$", "$distance$ [kpc]", "$Absorption$", r"[$\alpha$/fe]"]
-		, hist_kwargs={'fill':'True',"edgecolor":'k',"linewidth":"1.2"},
-		plot_contours=True, label_kwargs={"fontsize":10}, color ='lightblue', plot_datapoints=False,
-		levels=(1-np.exp(-0.5),0.6321,0.7769))
-		plt.subplots_adjust(hspace=0.2, wspace=0.2, top = 0.95, left = 0.1, right=0.95)
-		for ax in fig.get_axes():
-			ax.tick_params(axis='both', labelsize=10)
-		# ~plt.savefig('/home/david/codes/Analysis/GC/plots/analysis/corner'+'_'+clus_nb+'_'+ version +'_'+str(model)+'.png')
-		plt.show()
-		plt.close()
-	else:
-		fig = corner.corner(data, range=[(np.min(data[:,0]),15.), (np.min(data[:,1]),np.max(data[:,1])),
-		(np.min(data[:,2]),np.max(data[:,2])),(np.min(data[:,3]),np.max(data[:,3]))],
-		labels=["$Age$ [Gyr]", "$metallicity$", "$distance$ [kpc]", "$Absorption$"]
-		, hist_kwargs={'fill':'True',"edgecolor":'k',"linewidth":"2"}, labelpad = 50,
-		plot_contours=True, label_kwargs={"fontsize":16}, color ='b', plot_datapoints=False,
-		levels=(1-np.exp(-0.5),0.6321,0.7769))
-		plt.subplots_adjust(hspace=0.2, wspace=0.2, top = 0.95, left = 0.1, right=0.95)
-		for ax in fig.get_axes():
-			ax.tick_params(axis='both', labelsize=12)
-		# ~plt.savefig('/home/david/codes/Analysis/GC/plots/analysis/corner'+'_'+clus_nb+'_'+ version +'_'+str(model)+'.png')
-		# ~plt.show()
-		plt.close()
-
-	# ~kill
-	#~ print(Age_low, Age_mean, Age_high, Metal_low, Metal_mean, Metal_high, Distance_low, Distance_mean, Distance_high, AAbs_low,
-			#~ AAbs_mean, AAbs_high, Afe_low, Afe_mean, Afe_high)
-
-
-	# ~if model == 'dar':
-		# ~with open('/home/david/codes/Analysis/GC/plots/data_'+ version +'_'+str(model)+'.txt', 'a+') as fid_file:
-			# ~fid_file.write('%s %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g\n' % (clus_nb, Age_low, 
-			# ~Age_mean, Age_high, Metal_low, Metal_mean, Metal_high, Distance_low, Distance_mean, Distance_high, AAbs_low,
-			# ~AAbs_mean, AAbs_high, Afe_low, Afe_mean, Afe_high))
-		# ~fid_file.close()
-		# ~with open('/home/david/codes/Analysis/GC/plots/table_'+ version +'_'+str(model)+'.txt', 'a+') as fid_file:
-			# ~fid_file.write('%s & $%.2f^{+%.2f}_{%.2f}$ & $%.2f^{+%.2f}_{%.2f}$ & $%.2f^{+%.2f}_{%.2f}$ & $%.2f^{+%.2f}_{%.2f}$ & $%.2f^{+%.2f}_{%.2f}$\n' % (clus_nb, 
-			# ~Age_mean, (Age_high-Age_mean), (Age_low-Age_mean), Metal_mean, Metal_high-Metal_mean,
-			# ~Metal_low-Metal_mean,  Distance_mean/ 1000., (Distance_high-Distance_mean)/1000., (Distance_low-Distance_mean)/1000., 
-			# ~AAbs_mean, AAbs_high-AAbs_mean, AAbs_low-AAbs_mean, Afe_mean, Afe_high-Afe_mean, Afe_low-Afe_mean))
-		# ~fid_file.close()
+	# ~steps = int(input("What is the convergence step ? "))
+	# ~if steps == 0:
+		# ~pass
 	# ~else:
-		# ~with open('/home/david/codes/Analysis/GC/plots/data_'+ version +'_'+str(model)+'.txt', 'a+') as fid_file:
-			# ~fid_file.write('%s %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g\n' % (clus_nb, Age_low, 
-			# ~Age_mean, Age_high, Metal_low, Metal_mean, Metal_high, Distance_low, Distance_mean, Distance_high, AAbs_low,
-			# ~AAbs_mean, AAbs_high))
-		# ~fid_file.close()
+	steps = 2000
+	if steps < 2000:
+		pass
+	else:
+		#~ print(np.mean(files[:,3]), np.median(files[:,3]))
+		prior = np.where((files[steps*nwalkers:,2] > distance0 - errdist)&(files[steps*nwalkers:,2] < distance0 + errdist))[0]
+		#~ files[steps*nwalkers:,1] < metal0 +0.2)&(files[steps*nwalkers:,2] > metal0 -0.2))[0]
+
+
+		Age = files[steps*nwalkers:,0]
+		Metal = files[steps*nwalkers:,1]
+		Distance = files[steps*nwalkers:,2]
+		AAbs = files[steps*nwalkers:,3]
+		# ~Age = files[steps*nwalkers:,0][prior]
+		# ~Metal = files[steps*nwalkers:,1][prior]
+		# ~Distance = files[steps*nwalkers:,2][prior]
+		# ~AAbs = files[steps*nwalkers:,3][prior]
+		if model == 'dar':
+			Afe = files[steps*nwalkers:,4]
+			# ~Afe = files[steps*nwalkers:,4][prior]
+
+	#--------------------------------------------------------------
+	### MAIN SEQUENCE
+
+		if model == 'dar':
+			taille = min(len(list((filter(None, Age)))),len(list((filter(None, Metal)))),len(list((filter(None, Distance))))
+			,len(list((filter(None, AAbs)))),len(list((filter(None, Afe)))))
+		else:
+			taille = min(len(list((filter(None, Age)))),len(list((filter(None, Metal)))),len(list((filter(None, Distance))))
+			,len(list((filter(None, AAbs)))))
+			
+			
+		if len(Age) == 0:
+			print('popo')
+			#~ with open('/home/david/codes/Analysis/GC/plots/data_'+ version +'_'+str(model)+'.txt', 'a+') as fid_file:
+				#~ fid_file.write('%s, %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g\n' % (0, 0, 
+				#~ 0, 0, 0, 0,0, 0, 0, 0, 0,
+				#~ 0, 0))
+			#~ fid_file.close()
+			continue
+			
+		
+		data = np.zeros((taille, ndim))
+		for i in range(taille):
+			data[i, 0] = 10**Age[i] /1.e9
+			data[i, 1] = Metal[i] 
+			data[i, 2] = Distance[i] /1000.
+			data[i, 3] = AAbs[i] 
+			if model == 'dar':
+				data[i, 4] = Afe[i]
+
+		# ~b1_mcmc, b2_mcmc, b3_mcmc, b4_mcmc, b5_mcmc = map(lambda v: (v[1], v[2]-v[1], v[1]-v[0]),zip(*np.percentile(data, [16, 50, 84], axis=0)))
+		# ~print(b1_mcmc, b2_mcmc, b3_mcmc, b4_mcmc, b5_mcmc)
 	
 
-		#~ age_fin[cn] = Age_mean
-		#~ pluserr_fin[cn] = Age_high
-		#~ minuserr_fin[cn] = Age_high
-		#~ metal_fin[cn] = Metal_mean
-		#~ distance_fin[cn] = Distance_mean
-		#~ Abs_fin[cn] = AAbs_mean
-		#~ elem_fin = np.arange(len(age_fin))
+		# ~afe_values=[-0.2, 0.0 , 0.2, 0.4, 0.6, 0.8]
 
+		# ~afe_max = afe_values[np.searchsorted(afe_values, b5_mcmc[0])]
+		# ~afe_min = afe_values[np.searchsorted(afe_values, b5_mcmc[0])-1]
+		
 
-		#~ def hide_current_axis(*args, **kwds):
-			#~ plt.gca().set_visible(False)
+		# ~mag_v1_min , mag_i1_min, Color_iso1_min, eep_first = iso_mag(np.log10(b1_mcmc[0]*1e9), b2_mcmc[0], b3_mcmc[0]*1000.0, b4_mcmc[0], afe_min)
+		# ~mag_v1_max , mag_i1_max, Color_iso1_max, eep_first = iso_mag(np.log10(b1_mcmc[0]*1e9), b2_mcmc[0], b3_mcmc[0]*1000.0, b4_mcmc[0], afe_max)
+		# ~lpp = (min(len(mag_v1_min), len(mag_v1_max))) # get minimum length to interpolate
+
+		# ~mag_v3 = (mag_v1_min[:lpp]*(afe_max - b5_mcmc[0]) + mag_v1_max[:lpp]*(b5_mcmc[0] - afe_min)) / (afe_max - afe_min)
+		# ~Color_iso3 = (Color_iso1_min[:lpp]*(afe_max - b5_mcmc[0]) + Color_iso1_max[:lpp]*(b5_mcmc[0] - afe_min)) / (afe_max - afe_min)
+
+		# ~plt.figure()
+		# ~plt.scatter(color,photo_v, marker='.',s=10, color='grey', label='data')
+		# ~plt.plot(Color_iso3,mag_v3, c='b',  label='main sequence')
+		# ~plt.xlim(-0.5,3)
+		# ~plt.ylim(26,10)
+		# ~plt.legend(loc='upper right', fontsize = 16)
+		# ~plt.xlabel('F606W - F814W', fontsize = 16)
+		# ~plt.ylabel('F606W', fontsize = 16)
+		# ~plt.title(clus_nb, fontsize = 16)
+		# ~plt.show()
+		# ~plt.close()
+	#--------------------------------------------------------------------
+	### Red Giant BRANCH
+		#~ taille2 = min(len(filter(None, Age2)),len(filter(None, Metal2)),len(filter(None, Distance2)),len(filter(None, AAbs2)))
+		
+		#~ if len(Age2) == 0:
+			#~ print('popo')
+			#~ with open('/home/david/codes/Analysis/GC/plots/data_'+ version +'_'+str(model)+'.txt', 'a+') as fid_file:
+				#~ fid_file.write('%s, %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g\n' % (0, 0, 
+				#~ 0, 0, 0, 0,0, 0, 0, 0, 0,
+				#~ 0, 0))
+			#~ fid_file.close()
+			#~ continue
+			
+		#~ print(len(Age2)/nwalkers)	
+		
+		#~ data2 = np.zeros((taille2, ndim))
+		#~ for i in range(taille2):
+			#~ data2[i, 0] = Age2[i] 
+			#~ data2[i, 1] = Metal2[i] 
+			#~ data2[i, 2] = Distance2[i] 
+			#~ data2[i, 3] = AAbs2[i] 
+
+	#--------------------------------------------------------------------
+	### TOTAL
+
+		#~ Age3 = np.concatenate((Age, Age2))
+		#~ Metal3 = np.concatenate((Metal, Metal2))
+		#~ Distance3 = np.concatenate((Distance, Distance2))
+		#~ AAbs3 = np.concatenate((AAbs, AAbs2))
+		
+		#~ taille3 = min(len(filter(None, Age3)),len(filter(None, Metal3)),len(filter(None, Distance3)),len(filter(None, AAbs3)))
+
+		
+		#~ if len(Age3) == 0:
+			#~ print('popo')
+			#~ with open('/home/david/codes/Analysis/GC/plots/data_'+ version +'_'+str(model)+'.txt', 'a+') as fid_file:
+				#~ fid_file.write('%s, %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g\n' % (0, 0, 
+				#~ 0, 0, 0, 0,0, 0, 0, 0, 0,
+				#~ 0, 0))
+			#~ fid_file.close()
+			#~ continue
+			
+		#~ print(len(Age3)/nwalkers)	
+		
+		#~ data3 = np.zeros((taille3, ndim))
+		#~ for i in range(taille3):
+			#~ data3[i, 0] = Age3[i] 
+			#~ data3[i, 1] = Metal3[i] 
+			#~ data3[i, 2] = Distance3[i] 
+			#~ data3[i, 3] = AAbs3[i] 
+	#--------------------------------------------------------------------
+		print('cluster numero '+ str(glc))
+		print('number of steps = '+ str(len(Age)/nwalkers))
+
+		binage = np.linspace(5,15,200)
+		h1, bh1 = np.histogram(10**Age / 1.e9, bins=binage)
+		h2, bh2 = np.histogram(10**Age / 1.e9, bins=binage, density=True)
+		binfe = np.linspace(-2.5,0,200)
+		m1, bm1 = np.histogram(Metal, bins=binfe)
+		m2, bm2 = np.histogram(Metal, bins=binfe, density=True)
+		binafe = np.linspace(-0.2,0.8,100)
+		a1, ba1 = np.histogram(Afe, bins=binafe)
+		a2, ba2 = np.histogram(Afe, bins=binafe, density=True)
+		h1 = np.transpose([h1]).T
+		h2 = np.transpose([h2]).T
+		a1 = np.transpose([a1]).T
+		a2 = np.transpose([a2]).T
+		m1 = np.transpose([m1]).T
+		m2 = np.transpose([m2]).T
+		
+		Metal_mean = (bm1[np.argmax(m1)] + bm1[np.argmax(m1)+1])/2.
+		
+		# ~with open('/home/david/codes/Analysis/GC/plots/w_tot', 'ab+') as fid_file:
+			# ~np.savetxt(fid_file, h1)
+		# ~fid_file.close()	
+		# ~with open('/home/david/codes/Analysis/GC/plots/renom_tot', 'ab+') as fid_file:
+			# ~np.savetxt(fid_file, h2)
+		# ~fid_file.close()
+		# ~with open('/home/david/codes/Analysis/GC/plots/a_tot', 'ab+') as fid_file:
+			# ~np.savetxt(fid_file, a1)
+		# ~fid_file.close()	
+		# ~with open('/home/david/codes/Analysis/GC/plots/a_renom', 'ab+') as fid_file:
+			# ~np.savetxt(fid_file, a2)
+		# ~fid_file.close()
+		# ~with open('/home/david/codes/Analysis/GC/plots/m_tot', 'ab+') as fid_file:
+			# ~np.savetxt(fid_file, m1)
+		# ~fid_file.close()	
+		# ~with open('/home/david/codes/Analysis/GC/plots/m_renom', 'ab+') as fid_file:
+			# ~np.savetxt(fid_file, m2)
+		# ~fid_file.close()
+		
+		
+		# ~if Metal_mean <= -1.5:
+			# ~with open('/home/david/codes/Analysis/GC/plots/w_1', 'ab+') as fid_file:
+				# ~np.savetxt(fid_file, h1)
+			# ~fid_file.close()	
+			# ~with open('/home/david/codes/Analysis/GC/plots/renom_1', 'ab+') as fid_file:
+				# ~np.savetxt(fid_file, h2)
+			# ~fid_file.close()
+			# ~with open('/home/david/codes/Analysis/GC_mixing_length/ind_met15.txt', 'a+') as fid_file:
+				# ~fid_file.write(str(glc)+"\n")
+			# ~fid_file.close()
+			
+		# ~if Metal_mean <= -2:
+			# ~with open('/home/david/codes/Analysis/GC/plots/w_2', 'ab+') as fid_file:
+				# ~np.savetxt(fid_file, h1)
+			# ~fid_file.close()	
+			# ~with open('/home/david/codes/Analysis/GC/plots/renom_2', 'ab+') as fid_file:
+				# ~np.savetxt(fid_file, h2)
+			# ~fid_file.close()	
+			# ~with open('/home/david/codes/Analysis/GC_mixing_length/int_met20.txt', 'a+') as fid_file:
+				# ~fid_file.write(str(glc)+"\n")
+			# ~fid_file.close()	
 			
 
+		nbins = 50
 
-	helium_y = ''
-	from isochrones.dartmouth import Dartmouth_FastIsochrone
-	darm2 = Dartmouth_FastIsochrone(afe='afem2', y=helium_y)
-	darp0 = Dartmouth_FastIsochrone(afe='afep0', y=helium_y)
-	darp2 = Dartmouth_FastIsochrone(afe='afep2', y=helium_y)
-	darp4 = Dartmouth_FastIsochrone(afe='afep4', y=helium_y)
-	darp6 = Dartmouth_FastIsochrone(afe='afep6', y=helium_y)
-	darp8 = Dartmouth_FastIsochrone(afe='afep8', y=helium_y)
-	### create a sample from best fit
-	afe_values=[-0.2, 0.0 , 0.2, 0.4, 0.6, 0.8] 
-
-	afe_max = afe_values[np.searchsorted(afe_values, Afe_mean)]
-	afe_min = afe_values[np.searchsorted(afe_values, Afe_mean)-1]
-	# ~print(afe_min)
-	# ~print(afe_max)
-
-	print(Age_mean, Metal_mean, Distance_mean, AAbs_mean, Afe_mean)
-	# ~print(np.log10(Age_mean*1.e9), Metal_mean, Distance_mean, AAbs_mean, afe_max)
-
-	mag_v1_min , mag_i1_min, Color_iso1_min, eep_first = iso_mag(np.log10(Age_mean*1.e9), Metal_mean, Distance_mean, AAbs_mean, afe_min)
-	mag_v1_max , mag_i1_max, Color_iso1_max, eep_first = iso_mag(np.log10(Age_mean*1.e9), Metal_mean, Distance_mean, AAbs_mean, afe_max)
-	#mag_v1_min , mag_i1_min, Color_iso1_min = iso_mag2(mass,np.log10(Age_mean*1.e9), Metal_mean, Distance_mean, AAbs_mean, afe_min)
-	#mag_v1_max , mag_i1_max, Color_iso1_max = iso_mag2(mass,np.log10(Age_mean*1.e9), Metal_mean, Distance_mean, AAbs_mean, afe_max)
-	lpp = (min(len(mag_v1_min), len(mag_v1_max))) # get minimum length to interpolate
-	
-	mag_v1 = (mag_v1_min[:lpp]*(afe_max - Afe_mean) + mag_v1_max[:lpp]*(Afe_mean - afe_min)) / (afe_max - afe_min)
-	Color_iso1 = (Color_iso1_min[:lpp]*(afe_max - Afe_mean) + Color_iso1_max[:lpp]*(Afe_mean - afe_min)) / (afe_max - afe_min)
+		binage = np.linspace(np.min(10**Age / 1.e9),np.max(10**Age / 1.e9),nbins)
+		dage = np.diff(binage)[0]
+		bincenter = (binage[:-1] + binage[1:]) / 2
+		h1, bh1 = np.histogram(10**Age / 1.e9, bins=binage)
 
 
-	#interv = np.linspace(np.min(mag_v1), np.max(photo_v),len(color) )
-	#interv = np.linspace(np.min(mag_v1), np.max(photo_v),2000)
-	#fmag = interpolate.interp1d(mag_v1, Color_iso1, 'nearest',fill_value="extrapolate")
-	#fmag = interpolate.interp1d(mag_v1, Color_iso1, 'cubic')
-	#xinterp = fmag(interv)
+		binfe = np.linspace(np.min(Metal),np.max(Metal),nbins)
+		dfe = np.diff(binfe)[0]
+		bfcenter = (binfe[:-1] + binfe[1:]) / 2
+		m1, bm1 = np.histogram(Metal, bins=binfe)
+
+		bindis = np.linspace(np.min(Distance),np.max(Distance),nbins)
+		ddis = np.diff(bindis)[0]
+		bdcenter = (bindis[:-1] + bindis[1:]) / 2
+		d1, bd1 = np.histogram(Distance, bins=bindis)
+
+		
+		binabs = np.linspace(np.min(AAbs),np.max(AAbs),nbins)
+		dabs = np.diff(binabs)[0]
+		bacenter = (binabs[:-1] + binabs[1:]) / 2
+		ab1, bab1 = np.histogram(AAbs, bins=binabs)
 
 
-	# ~xinterp = np.interp(interv, mag_v1, Color_iso1)
-	# ~print(xinterp)
+		binafe = np.linspace(np.min(Afe),np.max(Afe),nbins)
+		dafe = np.diff(binafe)[0]
+		bcenter = (binafe[:-1] + binafe[1:]) / 2
+		a1, ba1 = np.histogram(Afe, bins=binafe)
+		
+		
+		def error_compute(dbins, histo, bhisto):
+			amp = 1.0
+			while amp > 0.0:
+				integ = np.sum(dbins*histo)
+				above = np.where(histo > amp*np.max(histo))[0]
+				#~ print(above)
+				tinteg = np.sum(dbins*histo[above])
+				s = tinteg/integ
+				#~ print('integral percentage is '+str(s))
+				if s > 0.68:
+					#~ print([np.min(above)])
+					#~ print([np.max(above)])
+					return bhisto[np.min(above)], bhisto[np.max(above)]
+					break
+				amp -= 0.01
+				#~ print('percentage of the amplitude is '+str(amp))
+		
+		
+		Age_low, Age_high = error_compute(dage, h1,bincenter)
+		Metal_low, Metal_high = error_compute(dfe, m1,bfcenter)
+		Distance_low, Distance_high = error_compute(ddis, d1,bdcenter)
+		AAbs_low, AAbs_high = error_compute(dabs, ab1,bacenter)
+		Afe_low, Afe_high = error_compute(dafe, a1,bcenter)
 
 
-	plt.figure()
-	plt.scatter(color,photo_v, marker='.',s=10, color='grey', alpha=0.5,label='stars')
-	# sc =plt.scatter(Color_iso2,mag_v2, marker='.',s=10,c='r',  label='best fit')
-	sc =plt.scatter(Color_iso1,mag_v1, marker='.',s=10,c='r',  label='best fit')
-	# sc =plt.scatter(Color_iso1 + noise,mag_v1, marker='.',s=30,c='b',  label='best fit')
-	# sc =plt.scatter(xinterp+noise, interv, marker='.',s=30,c='b',  label='best fit')
-	plt.xlim(-0.5,3)
-	plt.ylim(25.75,10)
-	# ~lgnd = plt.legend(loc='upper left', fontsize = 16)
-	# ~lgnd.legendHandles[0]._sizes = [286]
-	# ~lgnd.legendHandles[1]._sizes = [286]
-	# ~plt.xlabel('F606W - F814W', fontsize = 16)
-	# ~plt.ylabel('F606W', fontsize = 16)
-	plt.tick_params(labelsize=16)
-	# ~plt.title(clus_nb, fontsize = 16)
-	plt.title(clus_nb+' age = '+str(Age_mean))
-	# ~plt.title('IC4499', fontsize = 16)
-	# ~plt.subplots_adjust(bottom=0.13)
-	# ~plt.savefig('/home/david/codes/Analysis/GC/plots/analysis/fit_'+clus_nb+'_'+ version +'.png')
-	plt.show()
-	plt.close()
-	# ~kill
- 
+		Age_mean = (bh1[np.argmax(h1)] + bh1[np.argmax(h1)+1])/2.
+		Metal_mean = (bm1[np.argmax(m1)] + bm1[np.argmax(m1)+1])/2.
+		Distance_mean = (bd1[np.argmax(d1)] + bd1[np.argmax(d1)+1])/2.
+		AAbs_mean = (bab1[np.argmax(ab1)] + bab1[np.argmax(ab1)+1])/2.
+		Afe_mean = (ba1[np.argmax(a1)] + ba1[np.argmax(a1)+1])/2.
+
+		
+		#~ plt.hist(10**Age / 1.e9, bins=binage)
+		#~ plt.axvline(Age_low, c='r')
+		#~ plt.axvline(Age_high,c='g')
+		#~ plt.axvline(Age_mean,c='k')
+		#~ plt.axvline(10**np.percentile(Age,50)/1.e9,c='k', linestyle='--')
+		#~ plt.show()
+		#~ plt.close()
+		#~ plt.hist(Metal, bins=binfe)
+		#~ plt.axvline(Metal_low, c='r')
+		#~ plt.axvline(Metal_high,c='g')
+		#~ plt.axvline(Metal_mean,c='k')
+		#~ plt.axvline(metal0,c='b')
+		#~ plt.axvline(np.percentile(Metal,50),c='k', linestyle='--')
+		#~ plt.show()
+		#~ plt.close()
+		#~ plt.hist(Distance, bins=bindis)
+		#~ plt.axvline(Distance_low, c='r')
+		#~ plt.axvline(Distance_high,c='g')
+		#~ plt.axvline(Distance_mean,c='k')
+		#~ plt.axvline(np.percentile(Distance,50),c='k', linestyle='--')
+		#~ plt.xlim(np.min(Distance), np.max(Distance))
+		#~ plt.show()
+		#~ plt.close()
+		#~ plt.hist(AAbs, bins=binabs)
+		#~ plt.axvline(AAbs_low, c='r')
+		#~ plt.axvline(AAbs_high,c='g')
+		#~ plt.axvline(AAbs_mean,c='k')
+		#~ plt.axvline(np.percentile(AAbs,50),c='k', linestyle='--')
+		#~ plt.xlim(np.min(AAbs), np.max(AAbs))
+		#~ plt.show()
+		#~ plt.close()
+		#~ plt.hist(Afe, bins=binafe)
+		#~ plt.axvline(Afe_low, c='r')
+		#~ plt.axvline(Afe_high,c='g')
+		#~ plt.axvline(Afe_mean,c='k')
+		#~ plt.axvline(np.percentile(Afe,50),c='k', linestyle='--')
+		#~ plt.show()
+		#~ plt.close()
+		
+
+			
+		#~ kill
+
+		if model == 'dar':
+			fig = corner.corner(data,bins=25, range=[(np.min(data[:,0]),14.996), (np.min(data[:,1]),np.max(data[:,1])),
+			(np.min(data[:,2]),np.max(data[:,2])),(np.min(data[:,3]),np.max(data[:,3])),(np.min(data[:,4]),np.max(data[:,4]))],
+			labels=["$Age$ [Gyr]", "$metallicity$", "$distance$ [kpc]", "$Absorption$", r"[$\alpha$/fe]"]
+			, hist_kwargs={'fill':'True',"edgecolor":'k',"linewidth":"1.2"},
+			plot_contours=True, label_kwargs={"fontsize":10}, color ='lightblue', plot_datapoints=False,
+			levels=(1-np.exp(-0.5),0.6321,0.7769))
+			plt.subplots_adjust(hspace=0.2, wspace=0.2, top = 0.95, left = 0.1, right=0.95)
+			for ax in fig.get_axes():
+				ax.tick_params(axis='both', labelsize=10)
+			# ~plt.savefig('/home/david/codes/Analysis/GC/plots/analysis/corner'+'_'+clus_nb+'_'+ version +'_'+str(model)+'.png')
+			plt.show()
+			plt.close()
+		else:
+			fig = corner.corner(data, range=[(np.min(data[:,0]),15.), (np.min(data[:,1]),np.max(data[:,1])),
+			(np.min(data[:,2]),np.max(data[:,2])),(np.min(data[:,3]),np.max(data[:,3]))],
+			labels=["$Age$ [Gyr]", "$metallicity$", "$distance$ [kpc]", "$Absorption$"]
+			, hist_kwargs={'fill':'True',"edgecolor":'k',"linewidth":"2"}, labelpad = 50,
+			plot_contours=True, label_kwargs={"fontsize":16}, color ='b', plot_datapoints=False,
+			levels=(1-np.exp(-0.5),0.6321,0.7769))
+			plt.subplots_adjust(hspace=0.2, wspace=0.2, top = 0.95, left = 0.1, right=0.95)
+			for ax in fig.get_axes():
+				ax.tick_params(axis='both', labelsize=12)
+			# ~plt.savefig('/home/david/codes/Analysis/GC/plots/analysis/corner'+'_'+clus_nb+'_'+ version +'_'+str(model)+'.png')
+			# ~plt.show()
+			plt.close()
+
+		# ~kill
+		#~ print(Age_low, Age_mean, Age_high, Metal_low, Metal_mean, Metal_high, Distance_low, Distance_mean, Distance_high, AAbs_low,
+				#~ AAbs_mean, AAbs_high, Afe_low, Afe_mean, Afe_high)
+
+
+		# ~if model == 'dar':
+			# ~with open('/home/david/codes/Analysis/GC/plots/data_'+ version +'_'+str(model)+'.txt', 'a+') as fid_file:
+				# ~fid_file.write('%s %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g\n' % (clus_nb, Age_low, 
+				# ~Age_mean, Age_high, Metal_low, Metal_mean, Metal_high, Distance_low, Distance_mean, Distance_high, AAbs_low,
+				# ~AAbs_mean, AAbs_high, Afe_low, Afe_mean, Afe_high))
+			# ~fid_file.close()
+			# ~with open('/home/david/codes/Analysis/GC/plots/table_'+ version +'_'+str(model)+'.txt', 'a+') as fid_file:
+				# ~fid_file.write('%s & $%.2f^{+%.2f}_{%.2f}$ & $%.2f^{+%.2f}_{%.2f}$ & $%.2f^{+%.2f}_{%.2f}$ & $%.2f^{+%.2f}_{%.2f}$ & $%.2f^{+%.2f}_{%.2f}$\n' % (clus_nb, 
+				# ~Age_mean, (Age_high-Age_mean), (Age_low-Age_mean), Metal_mean, Metal_high-Metal_mean,
+				# ~Metal_low-Metal_mean,  Distance_mean/ 1000., (Distance_high-Distance_mean)/1000., (Distance_low-Distance_mean)/1000., 
+				# ~AAbs_mean, AAbs_high-AAbs_mean, AAbs_low-AAbs_mean, Afe_mean, Afe_high-Afe_mean, Afe_low-Afe_mean))
+			# ~fid_file.close()
+		# ~else:
+			# ~with open('/home/david/codes/Analysis/GC/plots/data_'+ version +'_'+str(model)+'.txt', 'a+') as fid_file:
+				# ~fid_file.write('%s %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g\n' % (clus_nb, Age_low, 
+				# ~Age_mean, Age_high, Metal_low, Metal_mean, Metal_high, Distance_low, Distance_mean, Distance_high, AAbs_low,
+				# ~AAbs_mean, AAbs_high))
+			# ~fid_file.close()
+		
+
+			#~ age_fin[cn] = Age_mean
+			#~ pluserr_fin[cn] = Age_high
+			#~ minuserr_fin[cn] = Age_high
+			#~ metal_fin[cn] = Metal_mean
+			#~ distance_fin[cn] = Distance_mean
+			#~ Abs_fin[cn] = AAbs_mean
+			#~ elem_fin = np.arange(len(age_fin))
+
+
+			#~ def hide_current_axis(*args, **kwds):
+				#~ plt.gca().set_visible(False)
+				
+
+
+		# ~helium_y = ''
+		# ~from isochrones.dartmouth import Dartmouth_FastIsochrone
+		# ~darm2 = Dartmouth_FastIsochrone(afe='afem2', y=helium_y)
+		# ~darp0 = Dartmouth_FastIsochrone(afe='afep0', y=helium_y)
+		# ~darp2 = Dartmouth_FastIsochrone(afe='afep2', y=helium_y)
+		# ~darp4 = Dartmouth_FastIsochrone(afe='afep4', y=helium_y)
+		# ~darp6 = Dartmouth_FastIsochrone(afe='afep6', y=helium_y)
+		# ~darp8 = Dartmouth_FastIsochrone(afe='afep8', y=helium_y)
+		### create a sample from best fit
+		afe_values=[-0.2, 0.0 , 0.2, 0.4, 0.6, 0.8] 
+
+		afe_max = afe_values[np.searchsorted(afe_values, Afe_mean)]
+		afe_min = afe_values[np.searchsorted(afe_values, Afe_mean)-1]
+		# ~print(afe_min)
+		# ~print(afe_max)
+
+		print(Age_mean, Metal_mean, Distance_mean, AAbs_mean, Afe_mean)
+		# ~print(np.log10(Age_mean*1.e9), Metal_mean, Distance_mean, AAbs_mean, afe_max)
+
+		mag_v1_min , mag_i1_min, Color_iso1_min, eep_first = iso_mag(np.log10(Age_mean*1.e9), Metal_mean, Distance_mean, AAbs_mean, afe_min)
+		mag_v1_max , mag_i1_max, Color_iso1_max, eep_first = iso_mag(np.log10(Age_mean*1.e9), Metal_mean, Distance_mean, AAbs_mean, afe_max)
+		#mag_v1_min , mag_i1_min, Color_iso1_min = iso_mag2(mass,np.log10(Age_mean*1.e9), Metal_mean, Distance_mean, AAbs_mean, afe_min)
+		#mag_v1_max , mag_i1_max, Color_iso1_max = iso_mag2(mass,np.log10(Age_mean*1.e9), Metal_mean, Distance_mean, AAbs_mean, afe_max)
+		lpp = (min(len(mag_v1_min), len(mag_v1_max))) # get minimum length to interpolate
+		
+		mag_v1 = (mag_v1_min[:lpp]*(afe_max - Afe_mean) + mag_v1_max[:lpp]*(Afe_mean - afe_min)) / (afe_max - afe_min)
+		Color_iso1 = (Color_iso1_min[:lpp]*(afe_max - Afe_mean) + Color_iso1_max[:lpp]*(Afe_mean - afe_min)) / (afe_max - afe_min)
+
+
+		#interv = np.linspace(np.min(mag_v1), np.max(photo_v),len(color) )
+		#interv = np.linspace(np.min(mag_v1), np.max(photo_v),2000)
+		#fmag = interpolate.interp1d(mag_v1, Color_iso1, 'nearest',fill_value="extrapolate")
+		#fmag = interpolate.interp1d(mag_v1, Color_iso1, 'cubic')
+		#xinterp = fmag(interv)
+
+
+		# ~xinterp = np.interp(interv, mag_v1, Color_iso1)
+		# ~print(xinterp)
+
+
+		plt.figure()
+		plt.scatter(color,photo_v, marker='.',s=10, color='grey', alpha=0.5,label='stars')
+		# sc =plt.scatter(Color_iso2,mag_v2, marker='.',s=10,c='r',  label='best fit')
+		sc =plt.scatter(Color_iso1,mag_v1, marker='.',s=10,c='r',  label='best fit')
+		# sc =plt.scatter(Color_iso1 + noise,mag_v1, marker='.',s=30,c='b',  label='best fit')
+		# sc =plt.scatter(xinterp+noise, interv, marker='.',s=30,c='b',  label='best fit')
+		plt.xlim(-0.5,3)
+		plt.ylim(25.75,10)
+		# ~lgnd = plt.legend(loc='upper left', fontsize = 16)
+		# ~lgnd.legendHandles[0]._sizes = [286]
+		# ~lgnd.legendHandles[1]._sizes = [286]
+		# ~plt.xlabel('F606W - F814W', fontsize = 16)
+		# ~plt.ylabel('F606W', fontsize = 16)
+		plt.tick_params(labelsize=16)
+		# ~plt.title(clus_nb, fontsize = 16)
+		plt.title(clus_nb+' age = '+str(Age_mean))
+		# ~plt.title('IC4499', fontsize = 16)
+		# ~plt.subplots_adjust(bottom=0.13)
+		# ~plt.savefig('/home/david/codes/Analysis/GC/plots/analysis/fit_'+clus_nb+'_'+ version +'.png')
+		plt.show()
+		plt.close()
+		# ~kill
+
