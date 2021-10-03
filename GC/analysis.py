@@ -450,7 +450,7 @@ if version == '18':
 	garr = [3,4,8,12,14,15,17,19,20,24,28,32,34,42,43,46,48,51,52,54,59,61]
 	model = 'dar'
 	#~ garr =
-if version == '110':
+if version == '210':
 	ndim = 5
 	nwalkers = 100
 	ntemps = 1
@@ -475,7 +475,7 @@ tot_age = []
 tot_met = []
 
 # ~for cn in [1,4,6,9,10]:
-for cn in range(6):
+for cn in range(0,69):
 # ~for cn in list(range(27))+ list(range(28,69)):
 #~ for cn in garr: # 
 	glc = cn
@@ -517,7 +517,7 @@ for cn in range(6):
 		#~ AA = np.genfromtxt('/home/david/codes/GC/plots/test/data_'+str(t)+'_'+clus_nb+'_'+ version +'_'+str(model)+'.txt', usecols=(j+nwalkers*3,), max_rows=2000)
 
 	steps = 0
-	if version in ['9','10','15','16','17','18','110']:
+	if version in ['9','10','15','16','17','18','210']:
 		files = np.loadtxt('/home/david/codes/data/GC_data/'+str(model)+'/data_1'+'_'+clus_nb+'_'+ version +'_'+str(model)+'.txt')
 	else:
 		files = np.loadtxt('/home/david/codes/Analysis/GC/plots/test/data_'+str(t)+'_'+clus_nb+'_'+ version +'_'+str(model)+'.txt')
@@ -555,37 +555,41 @@ for cn in range(6):
 	#~ AAbs = files[:,3]
 
 	# ~print(len(Age))
-	step_walk = 100
+	step_walk = 50
 	plt.suptitle('numero '+str(glc)+', '+clus_nb)
 	ax1 = plt.subplot(231)
 	ax1.set_title('Age')
 	for i in range(0,int(len(Age)/nwalkers),step_walk):
-		ax1.plot(np.full(nwalkers, i), Age[i*nwalkers:(i+1)*nwalkers], c='k')
-		ax1.scatter(i, np.median(Age[i*nwalkers:(i+1)*nwalkers]), c='r')
+		# ~ax1.plot(np.full(nwalkers, i), Age[i*nwalkers:(i+1)*nwalkers], c='k')
+		ax1.scatter(i, np.median(Age[i*nwalkers:(i+1)*nwalkers]), c='c')
+		ax1.errorbar(i, np.mean(Age[i*nwalkers:(i+1)*nwalkers]), yerr=np.std(Age[i*nwalkers:(i+1)*nwalkers]),fmt = '.', c='r', ecolor='k')
 	ax1.axhline(Age0, color='r', linestyle='--')
 	ax1.axhline(10.176, color='c')
 	ax1.grid()
 	ax2 = plt.subplot(232)
 	ax2.set_title('metal')
 	for i in range(0,int(len(Age)/nwalkers),step_walk):
-		ax2.plot(np.full(nwalkers, i), Metal[i*nwalkers:(i+1)*nwalkers], c='k')
-		ax2.scatter(i, np.median(Metal[i*nwalkers:(i+1)*nwalkers]), c='r')
+		# ~ax2.plot(np.full(nwalkers, i), Metal[i*nwalkers:(i+1)*nwalkers], c='k')
+		ax2.scatter(i, np.median(Metal[i*nwalkers:(i+1)*nwalkers]), c='c')
+		ax2.errorbar(i, np.mean(Metal[i*nwalkers:(i+1)*nwalkers]), yerr=np.std(Metal[i*nwalkers:(i+1)*nwalkers]),fmt = '.', c='r', ecolor='k')
 	ax2.axhline(metal0, color='r', linestyle='--')
 	#ax2.set_ylim(-1.6, -1.2)
 	ax2.grid()
 	ax3 = plt.subplot(233)
 	ax3.set_title('distance')
 	for i in range(0,int(len(Age)/nwalkers),step_walk):
-		ax3.plot(np.full(nwalkers, i), Distance[i*nwalkers:(i+1)*nwalkers], c='k')
-		ax3.scatter(i, np.median(Distance[i*nwalkers:(i+1)*nwalkers]), c='r')
+		# ~ax3.plot(np.full(nwalkers, i), Distance[i*nwalkers:(i+1)*nwalkers], c='k')
+		ax3.scatter(i, np.median(Distance[i*nwalkers:(i+1)*nwalkers]), c='c')
+		ax3.errorbar(i, np.mean(Distance[i*nwalkers:(i+1)*nwalkers]), yerr=np.std(Distance[i*nwalkers:(i+1)*nwalkers]),fmt = '.', c='r', ecolor='k')
 	ax3.axhline(distance0, color='r', linestyle='--')
 	#ax3.set_ylim(32500, 35000)
 	ax3.grid()
 	ax4 = plt.subplot(234)
 	ax4.set_title('A1')
 	for i in range(0,int(len(Age)/nwalkers),step_walk):
-		ax4.plot(np.full(nwalkers, i), AAbs[i*nwalkers:(i+1)*nwalkers], c='k')
-		ax4.scatter(i, np.median(AAbs[i*nwalkers:(i+1)*nwalkers]), c='r')
+		# ~ax4.plot(np.full(nwalkers, i), AAbs[i*nwalkers:(i+1)*nwalkers], c='k')
+		ax4.scatter(i, np.median(AAbs[i*nwalkers:(i+1)*nwalkers]), c='c')
+		ax4.errorbar(i, np.mean(AAbs[i*nwalkers:(i+1)*nwalkers]), yerr=np.std(AAbs[i*nwalkers:(i+1)*nwalkers]),fmt = '.', c='r', ecolor='k')
 	ax4.axhline(Abs0, color='r', linestyle='--')
 	#ax4.set_ylim(0.30, 0.36)
 	ax4.grid()
@@ -593,8 +597,9 @@ for cn in range(6):
 	ax5 = plt.subplot(235)
 	ax5.set_title(r'$\alpha$')
 	for i in range(0,int(len(Age)/nwalkers),step_walk):
-		ax5.plot(np.full(nwalkers, i), Afe[i*nwalkers:(i+1)*nwalkers], c='k')
-		ax5.scatter(i, np.median(Afe[i*nwalkers:(i+1)*nwalkers]), c='r')
+		# ~ax5.plot(np.full(nwalkers, i), Afe[i*nwalkers:(i+1)*nwalkers], c='k')
+		ax5.scatter(i, np.median(Afe[i*nwalkers:(i+1)*nwalkers]), c='c')
+		ax5.errorbar(i, np.mean(Afe[i*nwalkers:(i+1)*nwalkers]), yerr=np.std(Afe[i*nwalkers:(i+1)*nwalkers]),fmt = '.', c='r', ecolor='k')
 	ax5.axhline(afe_init0, color='r', linestyle='--')
 	#ax5.set_ylim(0.30, 0.36)
 	ax5.grid()
@@ -650,8 +655,9 @@ for cn in range(6):
 	# ~if steps == 0:
 		# ~pass
 	# ~else:
-	steps = 2000
-	if steps < 2000:
+	slim = 2000
+	steps = slim
+	if steps < slim:
 		pass
 	else:
 		#~ print(np.mean(files[:,3]), np.median(files[:,3]))
@@ -729,6 +735,9 @@ for cn in range(6):
 		# ~plt.title(clus_nb, fontsize = 16)
 		# ~plt.show()
 		# ~plt.close()
+
+		gc.collect()
+
 	#--------------------------------------------------------------------
 	### Red Giant BRANCH
 		#~ taille2 = min(len(filter(None, Age2)),len(filter(None, Metal2)),len(filter(None, Distance2)),len(filter(None, AAbs2)))
@@ -946,6 +955,7 @@ for cn in range(6):
 		#~ plt.show()
 		#~ plt.close()
 		
+		gc.collect()
 
 			
 		#~ kill
@@ -1079,3 +1089,4 @@ for cn in range(6):
 		plt.close()
 		# ~kill
 
+		gc.collect()

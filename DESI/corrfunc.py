@@ -37,13 +37,13 @@ if rank == 0:
 
 
 	# initialize the catalogs
-	fits_loc = '/home/david/codes/data/DESI/data/'
+	fits_loc = '/home/david/codes/data/DESI/data/everest'
 	gal_type = ['BGS_ANY', 'ELG', 'LRG','QSO']
 	reg = ['','0_', '1_', '2_']
 	file_type = ['clustering.dat.fits','_clustering.ran.fits']
 	const = 'Alltiles_'
 
-	galtype = gal_type[3]
+	galtype = gal_type[1]
 
 	fits_name = fits_loc+galtype+const+reg[0]+file_type[0]
 

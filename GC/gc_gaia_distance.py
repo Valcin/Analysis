@@ -1449,8 +1449,8 @@ def way(vgood, cgood, errgood, errgoodv, part=None):
 			med = np.median(np.array(cgood)[ici])
 			diff_med = np.abs(np.array(cgood)[ici] - med)
 			errmed = np.median(diff_med) # multiply by 1.486 for notmal distribution
-			# ~scoremad = errmed* 1.4826 # multiply by 1.4826 for notmal distribution
-			scoremad = errmed # multiply by 1.4826 for notmal distribution
+			scoremad = errmed* 1.4826 # multiply by 1.4826 for notmal distribution
+			# ~scoremad = errmed # multiply by 1.4826 for notmal distribution
 			# ~print(scoremad)
 			z = diff_med / scoremad
 			out = (np.where(z > threshold)[0])
@@ -1460,22 +1460,22 @@ def way(vgood, cgood, errgood, errgoodv, part=None):
 			ecolv =  np.delete(np.array(errgoodv)[ici], out)
 			# ~print(scoremad)
 
-			times=0
-			while times < 5:
-				threshold = 3
-				med = np.median(zcol)
-				diff_med = np.abs(zcol - med)
-				errmed = np.median(diff_med) # multiply by 1.486 for notmal distribution
+			# ~times=0
+			# ~while times < 5:
+				# ~threshold = 3
+				# ~med = np.median(zcol)
+				# ~diff_med = np.abs(zcol - med)
+				# ~errmed = np.median(diff_med) # multiply by 1.486 for notmal distribution
 				# ~scoremad = errmed* 1.4826 # multiply by 1.4826 for notmal distribution
-				scoremad = errmed # multiply by 1.4826 for notmal distribution
+				#scoremad = errmed # multiply by 1.4826 for notmal distribution
 				# ~print(scoremad)
-				z = diff_med / scoremad
-				out2 = (np.where(z > threshold)[0])
-				zcol =  np.delete(zcol, out2)
-				zmagv =  np.delete(zmagv, out2)
-				ecol =  np.delete(ecol, out2)
-				ecolv =  np.delete(ecolv, out2)
-				times=times+1
+				# ~z = diff_med / scoremad
+				# ~out2 = (np.where(z > threshold)[0])
+				# ~zcol =  np.delete(zcol, out2)
+				# ~zmagv =  np.delete(zmagv, out2)
+				# ~ecol =  np.delete(ecol, out2)
+				# ~ecolv =  np.delete(ecolv, out2)
+				# ~times=times+1
 
 			
 			tp = np.where((zmagv >= np.min(zmagv)) & (zmagv <= np.min(zmagv)+step/4.))[0]
