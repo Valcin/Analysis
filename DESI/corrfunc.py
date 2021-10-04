@@ -37,15 +37,18 @@ if rank == 0:
 
 
 	# initialize the catalogs
-	fits_loc = '/home/david/codes/data/DESI/data/everest'
+	fits_loc1 = '/home/david/codes/data/DESI/data/version1/'
+	fits_loc2 = '/home/david/codes/data/DESI/data/everest/'
 	gal_type = ['BGS_ANY', 'ELG', 'LRG','QSO']
 	reg = ['','0_', '1_', '2_']
 	file_type = ['clustering.dat.fits','_clustering.ran.fits']
-	const = 'Alltiles_'
+	const1 = 'Alltiles_'
+	const2 = '_'
 
 	galtype = gal_type[1]
 
-	fits_name = fits_loc+galtype+const+reg[0]+file_type[0]
+	# ~fits_name = fits_loc1+galtype+const1+reg[0]+file_type[0]
+	fits_name = fits_loc2+galtype+const2+reg[0]+file_type[0]
 
 	# filter redshifts
 	#---------------
@@ -115,7 +118,7 @@ print('loop starts')
 # loop over the catalog
 for i in range(Ncat):
 
-	fits_name = fits_loc+galtype+const+str(i)+file_type[1]
+	fits_name = fits_loc2+galtype+const2+str(i)+file_type[1]
 	print(fits_name)
 
 	rdn_cat = FITSCatalog(fits_name)
