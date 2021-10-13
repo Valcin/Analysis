@@ -450,14 +450,6 @@ if version == '18':
 	garr = [3,4,8,12,14,15,17,19,20,24,28,32,34,42,43,46,48,51,52,54,59,61]
 	model = 'dar'
 	#~ garr =
-if version == '210':
-	ndim = 5
-	nwalkers = 100
-	ntemps = 1
-	print(ntemps)
-	garr = [3,4,8,12,14,15,17,19,20,24,28,32,34,42,43,46,48,51,52,54,59,61]
-	model = 'dar'
-	#~ garr =
 if version == '0':
 	ndim = 4 
 	nwalkers = 300	
@@ -465,6 +457,17 @@ if version == '0':
 	model1 = 'mist'
 	version2 = '9' 
 	model2 = 'dar'
+
+test = '1310'
+	
+if version == test:
+	ndim = 5
+	nwalkers = 100
+	ntemps = 1
+	print(ntemps)
+	garr = [3,4,8,12,14,15,17,19,20,24,28,32,34,42,43,46,48,51,52,54,59,61]
+	model = 'dar'
+	#~ garr =
 
 
 
@@ -474,8 +477,8 @@ if version == '0':
 tot_age = []
 tot_met = []
 
-# ~for cn in [1,4,6,9,10]:
-for cn in range(0,69):
+for cn in [0,1,22,53]:
+# ~for cn in range(22,69):
 # ~for cn in list(range(27))+ list(range(28,69)):
 #~ for cn in garr: # 
 	glc = cn
@@ -517,7 +520,7 @@ for cn in range(0,69):
 		#~ AA = np.genfromtxt('/home/david/codes/GC/plots/test/data_'+str(t)+'_'+clus_nb+'_'+ version +'_'+str(model)+'.txt', usecols=(j+nwalkers*3,), max_rows=2000)
 
 	steps = 0
-	if version in ['9','10','15','16','17','18','210']:
+	if version in ['9','10','15','16','17','18',test]:
 		files = np.loadtxt('/home/david/codes/data/GC_data/'+str(model)+'/data_1'+'_'+clus_nb+'_'+ version +'_'+str(model)+'.txt')
 	else:
 		files = np.loadtxt('/home/david/codes/Analysis/GC/plots/test/data_'+str(t)+'_'+clus_nb+'_'+ version +'_'+str(model)+'.txt')
@@ -555,7 +558,7 @@ for cn in range(0,69):
 	#~ AAbs = files[:,3]
 
 	# ~print(len(Age))
-	step_walk = 50
+	step_walk = 20
 	plt.suptitle('numero '+str(glc)+', '+clus_nb)
 	ax1 = plt.subplot(231)
 	ax1.set_title('Age')
@@ -605,7 +608,7 @@ for cn in range(0,69):
 	ax5.grid()
 	#plt.savefig('/home/david/codes/Analysis/GC/plots/analysis/chains'+'_'+clus_nb+'_'+ version +'_'+str(model)+'.png')
 	plt.show()
-	plt.close()
+	# ~plt.close()
 
 	#~ step_min = 20
 	#~ if len(age) > step_min:
@@ -655,7 +658,7 @@ for cn in range(0,69):
 	# ~if steps == 0:
 		# ~pass
 	# ~else:
-	slim = 2000
+	slim = 5000
 	steps = slim
 	if steps < slim:
 		pass
@@ -961,7 +964,7 @@ for cn in range(0,69):
 		#~ kill
 
 		if model == 'dar':
-			fig = corner.corner(data,bins=25, range=[(np.min(data[:,0]),14.996), (np.min(data[:,1]),np.max(data[:,1])),
+			fig = corner.corner(data,bins=50, range=[(np.min(data[:,0]),15.), (np.min(data[:,1]),np.max(data[:,1])),
 			(np.min(data[:,2]),np.max(data[:,2])),(np.min(data[:,3]),np.max(data[:,3])),(np.min(data[:,4]),np.max(data[:,4]))],
 			labels=["$Age$ [Gyr]", "$metallicity$", "$distance$ [kpc]", "$Absorption$", r"[$\alpha$/fe]"]
 			, hist_kwargs={'fill':'True',"edgecolor":'k',"linewidth":"1.2"},

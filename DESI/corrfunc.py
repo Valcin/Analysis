@@ -13,13 +13,17 @@ cosmo = None
 nbins = None
 Ncat = None
 Nros = None
-fits_loc = None
+fits_loc1 = None
+fits_loc2 = None
 galtype = None
 reg = None
 file_type = None
-const = None
+const1 = None
+const2 = None
 fits_name = None
 delta_r = None
+wgt = None
+Nwgt = None
 
 # broadcast param and allocate array on other ranks:
 if rank == 0:
@@ -62,10 +66,18 @@ if rank == 0:
 		ZMIN = 0.8
 		ZMAX = 2.1
 
+	# types of weights
+	# ~wgt = ['Weight','WEIGHT','BITWEIGHTS','WEIGHT_ZFAIL']
+	wgt = ['Weight','WEIGHT']
+
+
+	#number of Rosettes
+	Nros = 1
 	#number of catalogs
 	Ncat = 1
-	#number of Rosettes
-	Nros = 20
+	#number of weights
+	Nwgt = 1
+
 
 	
 ZMIN = comm.bcast(ZMIN, root=0)
@@ -74,11 +86,15 @@ cosmo = comm.bcast(cosmo, root=0)
 nbins = comm.bcast(nbins, root=0)
 Ncat = comm.bcast(Ncat, root=0)
 Nros = comm.bcast(Nros, root=0)
-fits_loc = comm.bcast(fits_loc, root=0)
+Nwgt = comm.bcast(Nwgt, root=0)
+fits_loc1 = comm.bcast(fits_loc1, root=0)
+fits_loc2 = comm.bcast(fits_loc2, root=0)
 galtype = comm.bcast(galtype, root=0)
+wgt = comm.bcast(wgt, root=0)
 reg = comm.bcast(reg, root=0)
 file_type = comm.bcast(file_type, root=0)
-const = comm.bcast(const, root=0)
+const1 = comm.bcast(const1, root=0)
+const2 = comm.bcast(const2, root=0)
 fits_name = comm.bcast(fits_name, root=0)
 delta_r = comm.bcast(delta_r, root=0)
 
@@ -96,143 +112,183 @@ data_cat = FITSCatalog(fits_name)
 
 # ~z = data_cat.compute(data_cat['Z'])
 # ~print("columns = ", data_cat.columns) # default Weight,Selection also present
-# ~print("columns = ", rdn_cat.columns) # default Weight,Selection also present
 # ~print("total size = ", data_cat.csize)
 # ~kill
-
-# slice the data
-valid = (data_cat['Z'] > ZMIN)&(data_cat['Z'] < ZMAX)&(data_cat['rosette_r'] < 1.5)
-data_cat = data_cat[valid]
-
    
 corrval = np.empty((len(edges)-1,Ncat,Nros))
+pair_data = np.empty((len(edges)-1,Ncat,Nros))
 pair_rdn = np.empty((len(edges)-1,Ncat,Nros))
+pair_cross1 = np.empty((len(edges)-1,Ncat,Nros))
+pair_cross2 = np.empty((len(edges)-1,Ncat,Nros))
+fDD = np.empty((Ncat,Nros))
+fDR = np.empty((Ncat,Nros))
+fRD = np.empty((Ncat,Nros))
+LSE = np.empty((len(edges)-1,Nros))
 # ~corrval = np.empty((len(edges)-1,Ncat))
 # ~pair_rdn = np.empty((len(edges)-1,Ncat))
 
 # ~corrval_lrg_elg = np.empty((len(edges)-1,Ncat))
 
+#-----------------------------------------------------------------------
 
 print('loop starts')
 
-# loop over the catalog
-for i in range(Ncat):
-
-	fits_name = fits_loc2+galtype+const2+str(i)+file_type[1]
-	print(fits_name)
-
-	rdn_cat = FITSCatalog(fits_name)
-
+# loop over the weights
+for w in wgt:
 	if rank == 0:
-		print('catalogs loaded')
-	
-	# slice the randoms
-	valid = (rdn_cat['Z'] > ZMIN)&(rdn_cat['Z'] < ZMAX)&(rdn_cat['rosette_r'] < 1.5)
-	rdn_cat = rdn_cat[valid]
-	
-	if rank == 0:
-		print('redshift sliced')
+		print('new weight')
+		print(w)
 
-	gc.collect()
-
-#-----------------------------------------------------------------------
 	# ~# loop over the rosettes and limit to 1.5 degrees from center
 	for n in range(Nros):
 
 		if rank == 0:
-			print('first rosette')
+			print('new rosette')
+			print(n)
 
-		print(n)
 		sel_ros = (data_cat['rosette_number'] == n)
 		data_cat_ros = data_cat[sel_ros]
-		sel_ros = (rdn_cat['rosette_number'] == n)
-		rdn_cat_ros = rdn_cat[sel_ros]
 
-		# compute 2pcf
-		#---------------
-		#auto 2pcf
-		cf = SurveyData2PCF(mode='1d',data1=data_cat_ros, randoms1=rdn_cat_ros, edges=edges, cosmo=cosmo, ra='RA', dec='DEC',redshift='Z',show_progress=True )
-		if rank == 0:
-			print('first 2pcf computed')
+		# slice the data
+		valid = (data_cat_ros['Z'] > ZMIN)&(data_cat_ros['Z'] < ZMAX)&(data_cat_ros['rosette_r'] < 1.5)
+		data_cat_ros = data_cat_ros[valid]
 
-		rval = cf.corr['r']
-		corrval[:,i,n] = cf.corr['corr']
+		# loop over the catalog
+		for i in range(Ncat):
 
-		rval2 = cf.R1R2['r']
-		pair_rdn[:,i,n] = cf.R1R2['npairs']
+			fits_name = fits_loc2+galtype+const2+str(i)+file_type[1]
 
-# ~#-----------------------------------------------------------------------		
-	# ~# compute 2pcf
-	# ~#---------------
-	#auto 2pcf
-	# ~cf = SurveyData2PCF(mode='1d',data1=data_cat, randoms1=rdn_cat, edges=edges, cosmo=cosmo, ra='RA', dec='DEC',redshift='Z',show_progress=True )
-	# ~if rank == 0:
-		# ~print('first 2pcf computed')
+			rdn_cat = FITSCatalog(fits_name)
+			# ~print("columns = ", rdn_cat.columns) # default Weight,Selection also present
 
+			if rank == 0:
+				print('catalogs loaded')
+				print(fits_name)
+
+			# select the rosette
+			sel_ros_rdn = (rdn_cat['rosette_number'] == n)
+			rdn_cat = rdn_cat[sel_ros_rdn]
+			
+			# slice the randoms
+			valid = (rdn_cat['Z'] > ZMIN)&(rdn_cat['Z'] < ZMAX)&(rdn_cat['rosette_r'] < 1.5)
+			rdn_cat = rdn_cat[valid]
+			
+			if rank == 0:
+				print('redshift sliced')
+
+
+			# compute 2pcf
+			#---------------
+			#auto 2pcf
+			cf = SurveyData2PCF(mode='1d',data1=data_cat_ros, randoms1=rdn_cat, edges=edges, cosmo=cosmo, ra='RA', dec='DEC',redshift='Z', weight=w,show_progress=True )
+
+			if rank == 0:
+				print('first 2pcf computed')
+
+			# ~print(cf.D1D2)
+
+			rval = cf.corr['r']
+			corrval[:,i,n] = cf.corr['corr']
+
+			nonzero = cf.R1R2['npairs'] > 0
+
+			# ~rval2 = cf.R1R2['r']
+			pair_data[:,i,n] = cf.D1D2['wnpairs'][nonzero]
+			pair_rdn[:,i,n] = cf.R1R2['wnpairs'][nonzero]
+			pair_cross1[:,i,n] = cf.D1R2['wnpairs'][nonzero]
+			pair_cross2[:,i,n] = cf.D2R1['wnpairs'][nonzero]
+
+			fDD[i,n] = cf.R1R2.attrs['total_wnpairs']/cf.D1D2.attrs['total_wnpairs']
+			fDR[i,n] = cf.R1R2.attrs['total_wnpairs']/cf.D1R2.attrs['total_wnpairs']
+			fRD[i,n] = cf.R1R2.attrs['total_wnpairs']/cf.D2R1.attrs['total_wnpairs']
+
+			gc.collect()
+
+
+
+		LSE[:,n] = (np.mean(fDD[:,n]*pair_data[:,:,n],axis=1) - np.mean(fDR[:,n]*pair_cross1[:,:,n],axis=1) -np.mean(fRD[:,n]*pair_cross2[:,:,n],axis=1))/np.mean(pair_rdn[:,:,n],axis=1) + 1
 		
-	# ~rval = cf.corr['r']
-	# ~corrval[:,i] = cf.corr['corr']
+		gc.collect()
+		
+	# ~#-----------------------------------------------------------------------		
+		# ~# compute 2pcf
+		# ~#---------------
+		#auto 2pcf
+		# ~cf = SurveyData2PCF(mode='1d',data1=data_cat, randoms1=rdn_cat, edges=edges, cosmo=cosmo, ra='RA', dec='DEC',redshift='Z',show_progress=True )
+		# ~if rank == 0:
+			# ~print('first 2pcf computed')
 
-	# ~rval2 = cf.R1R2['r']
-	# ~pair_rdn[:,i] = cf.R1R2['npairs']
+			
+		# ~rval = cf.corr['r']
+		# ~corrval[:,i] = cf.corr['corr']
 
-
-	#cross 2pcf
-	# ~cf_lrg = SurveyData2PCF(mode='1d',data1=data_cat, randoms1=rdn_cat, edges=edges, cosmo=cosmo, data2=data_cat_lrg, randoms2=rdn_cat_lrg, ra='RA', dec='DEC',redshift='Z',weight='WEIGHT',show_progress=True )
-	# ~cf_qso = SurveyData2PCF(mode='1d',data1=data_cat, randoms1=rdn_cat, edges=edges, cosmo=cosmo, data2=data_cat_qso, randoms2=rdn_cat_qso, ra='RA', dec='DEC',redshift='Z',weight='WEIGHT',show_progress=True )
-	# ~cf_lrg_qso = SurveyData2PCF(mode='1d',data1=data_cat_lrg, randoms1=rdn_cat_lrg, edges=edges, cosmo=cosmo, data2=data_cat_qso, randoms2=rdn_cat_qso, ra='RA', dec='DEC',redshift='Z',weight='WEIGHT',show_progress=True )
-
-	# ~corrval_lrg[:,i] = cf_lrg.corr['corr']
-	# ~corrval_qso[:,i] = cf_qso.corr['corr']
-	# ~corrval_lrg_qso[:,i] = cf_lrg_qso.corr['corr']
-
-
-
-
-	gc.collect()
-
-########################################################################
-# plots
-#---------------
-if galtype == 'ELG':
-	col = 'b'
-elif galtype == 'LRG':
-	col = 'r'
-elif galtype == 'QSO':
-	col = 'g'
-
-if rank == 0:
-	# auto corr
-	plt.figure()
-	
-	for j in range(Ncat):
-		for m in range(Nros):
-			if j == 0 and m ==0:
-				plt.plot(rval, corrval[:,j,m]*rval**2, c=col, label=galtype, alpha=0.5)
-			else:
-				plt.plot(rval, corrval[:,j,m]*rval**2, c=col, alpha=0.5)
-
-	# ~for j in range(Ncat):
-		# ~if j == 0 and m ==0:
-			# ~plt.plot(rval, corrval[:,j]*rval**2, c=col, label=galtype, alpha=0.5)
-		# ~else:
-			# ~plt.plot(rval, corrval[:,j]*rval**2, c=col, alpha=0.5)
+		# ~rval2 = cf.R1R2['r']
+		# ~pair_rdn[:,i] = cf.R1R2['npairs']
 
 
-	# ~plt.plot(rval, np.mean(corrval,axis=1)*rval**2, c='b', label=gal_type[1])
-		plt.errorbar(rval, np.mean(corrval[:,j,:],axis=1)*rval**2, yerr=np.std(corrval[:,j,:],axis=1)*rval**2,fmt = 'o', c='k', ecolor='k')
-	plt.xlabel(r"$r$ $[h^{-1} \mathrm{Mpc}]$", fontsize = 16)
-	plt.ylabel(r"$r^2 \xi \ [h^{-2} \mathrm{Mpc}^2]$", fontsize = 16)
-	plt.title('Redshift '+str(ZMIN)+' < z < '+str(ZMAX), fontsize=16)
-	plt.legend(loc='best', fontsize=16)
-	plt.tick_params(labelsize=16)
-	plt.xlim(0,200)
-	# ~plt.xlim(0,100)
-	# ~plt.ylim(-150,150)
-	plt.show()
-	plt.close()
+		#cross 2pcf
+		# ~cf_lrg = SurveyData2PCF(mode='1d',data1=data_cat, randoms1=rdn_cat, edges=edges, cosmo=cosmo, data2=data_cat_lrg, randoms2=rdn_cat_lrg, ra='RA', dec='DEC',redshift='Z',weight='WEIGHT',show_progress=True )
+		# ~cf_qso = SurveyData2PCF(mode='1d',data1=data_cat, randoms1=rdn_cat, edges=edges, cosmo=cosmo, data2=data_cat_qso, randoms2=rdn_cat_qso, ra='RA', dec='DEC',redshift='Z',weight='WEIGHT',show_progress=True )
+		# ~cf_lrg_qso = SurveyData2PCF(mode='1d',data1=data_cat_lrg, randoms1=rdn_cat_lrg, edges=edges, cosmo=cosmo, data2=data_cat_qso, randoms2=rdn_cat_qso, ra='RA', dec='DEC',redshift='Z',weight='WEIGHT',show_progress=True )
 
-	
+		# ~corrval_lrg[:,i] = cf_lrg.corr['corr']
+		# ~corrval_qso[:,i] = cf_qso.corr['corr']
+		# ~corrval_lrg_qso[:,i] = cf_lrg_qso.corr['corr']
+
+
+		########################################################################
+		# plots
+		#---------------
+		if galtype == 'ELG':
+			col = 'b'
+		elif galtype == 'LRG':
+			col = 'r'
+		elif galtype == 'QSO':
+			col = 'g'
+
+		if rank == 0:
+			# auto corr
+			# ~plt.figure()
+		
+
+			# ~for m in range(Nros):
+				# ~for j in range(Ncat):
+					# ~if j == 0 and m ==0:
+						# ~plt.plot(rval, corrval[:,j,m]*rval**2, c=col, label='Random catalogs', alpha=0.5)
+						# ~plt.plot(rval, pair_data[:,j,m], c='k', alpha=0.5, label='D1D2')
+						# ~plt.plot(rval, pair_rdn[:,j,m], c='b', alpha=0.5, label='R1R2')
+						# ~plt.plot(rval, pair_cross1[:,j,m], c='g', alpha=0.5, label='R1D2')
+						# ~plt.plot(rval, pair_cross2[:,j,m], c='g',linestyle='--', alpha=0.5, label='D1R2')
+
+					# ~else:
+						# ~plt.plot(rval, corrval[:,j,m]*rval**2, c=col, alpha=0.5)
+						# ~plt.plot(rval, pair_data[:,j,m]*rval**2, c='k', alpha=0.5)
+				# ~plt.plot(rval, np.mean(corrval[:,:,m],axis=1)*rval**2, c='c', linestyle=':', label='Average 2PCF')
+				# ~plt.plot(rval, LSE[:,m]*rval**2, c='r', linestyle='--', label='Average LS etimator')
+
+				# ~if m == 0:
+					# ~plt.plot(rval, LSE[:,m]*rval**2, c='b', label='Mean of the random catalogs', alpha=0.3)
+				# ~else:
+					# ~plt.plot(rval, LSE[:,m]*rval**2, c='b', alpha=0.3)
+			plt.plot(rval, np.mean(LSE[:,:],axis=1)*rval**2, label='Mean of rosettes and random catalogs, weight = '+w)
+
+		gc.collect()
+			
+plt.xlabel(r"$r$ $[h^{-1} \mathrm{Mpc}]$", fontsize = 16)
+plt.ylabel(r"$r^2 \xi \ [h^{-2} \mathrm{Mpc}^2]$", fontsize = 16)
+# ~plt.ylabel(r"$\xi \ [h^{-2} \mathrm{Mpc}^2]$", fontsize = 16)
+plt.title(galtype+', '+'Redshift '+str(ZMIN)+' < z < '+str(ZMAX), fontsize=16)
+plt.legend(loc='best', fontsize=16)
+plt.tick_params(labelsize=16)
+plt.xlim(0,200)
+# ~plt.xlim(0,140)
+# ~plt.ylim(-150,150)
+plt.show()
+plt.close()
+
+
+########################################################################	
+########################################################################	
 	# pair count completeness
 	# ~plt.figure()
 	# ~for j in range(Ncat):
