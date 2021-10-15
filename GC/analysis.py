@@ -477,8 +477,8 @@ if version == test:
 tot_age = []
 tot_met = []
 
-for cn in [0,1,22,53]:
-# ~for cn in range(22,69):
+# ~for cn in [0,1,22,53]:
+for cn in range(0,69):
 # ~for cn in list(range(27))+ list(range(28,69)):
 #~ for cn in garr: # 
 	glc = cn
@@ -658,7 +658,7 @@ for cn in [0,1,22,53]:
 	# ~if steps == 0:
 		# ~pass
 	# ~else:
-	slim = 5000
+	slim = 2000
 	steps = slim
 	if steps < slim:
 		pass
@@ -813,47 +813,47 @@ for cn in [0,1,22,53]:
 		
 		Metal_mean = (bm1[np.argmax(m1)] + bm1[np.argmax(m1)+1])/2.
 		
-		# ~with open('/home/david/codes/Analysis/GC/plots/w_tot', 'ab+') as fid_file:
-			# ~np.savetxt(fid_file, h1)
-		# ~fid_file.close()	
-		# ~with open('/home/david/codes/Analysis/GC/plots/renom_tot', 'ab+') as fid_file:
-			# ~np.savetxt(fid_file, h2)
-		# ~fid_file.close()
-		# ~with open('/home/david/codes/Analysis/GC/plots/a_tot', 'ab+') as fid_file:
-			# ~np.savetxt(fid_file, a1)
-		# ~fid_file.close()	
-		# ~with open('/home/david/codes/Analysis/GC/plots/a_renom', 'ab+') as fid_file:
-			# ~np.savetxt(fid_file, a2)
-		# ~fid_file.close()
-		# ~with open('/home/david/codes/Analysis/GC/plots/m_tot', 'ab+') as fid_file:
-			# ~np.savetxt(fid_file, m1)
-		# ~fid_file.close()	
-		# ~with open('/home/david/codes/Analysis/GC/plots/m_renom', 'ab+') as fid_file:
-			# ~np.savetxt(fid_file, m2)
-		# ~fid_file.close()
+		with open('/home/david/codes/Analysis/GC/plots/w_tot', 'ab+') as fid_file:
+			np.savetxt(fid_file, h1)
+		fid_file.close()	
+		with open('/home/david/codes/Analysis/GC/plots/renom_tot', 'ab+') as fid_file:
+			np.savetxt(fid_file, h2)
+		fid_file.close()
+		with open('/home/david/codes/Analysis/GC/plots/a_tot', 'ab+') as fid_file:
+			np.savetxt(fid_file, a1)
+		fid_file.close()	
+		with open('/home/david/codes/Analysis/GC/plots/a_renom', 'ab+') as fid_file:
+			np.savetxt(fid_file, a2)
+		fid_file.close()
+		with open('/home/david/codes/Analysis/GC/plots/m_tot', 'ab+') as fid_file:
+			np.savetxt(fid_file, m1)
+		fid_file.close()	
+		with open('/home/david/codes/Analysis/GC/plots/m_renom', 'ab+') as fid_file:
+			np.savetxt(fid_file, m2)
+		fid_file.close()
 		
 		
-		# ~if Metal_mean <= -1.5:
-			# ~with open('/home/david/codes/Analysis/GC/plots/w_1', 'ab+') as fid_file:
-				# ~np.savetxt(fid_file, h1)
-			# ~fid_file.close()	
-			# ~with open('/home/david/codes/Analysis/GC/plots/renom_1', 'ab+') as fid_file:
-				# ~np.savetxt(fid_file, h2)
-			# ~fid_file.close()
-			# ~with open('/home/david/codes/Analysis/GC_mixing_length/ind_met15.txt', 'a+') as fid_file:
-				# ~fid_file.write(str(glc)+"\n")
-			# ~fid_file.close()
+		if Metal_mean <= -1.5:
+			with open('/home/david/codes/Analysis/GC/plots/w_1', 'ab+') as fid_file:
+				np.savetxt(fid_file, h1)
+			fid_file.close()	
+			with open('/home/david/codes/Analysis/GC/plots/renom_1', 'ab+') as fid_file:
+				np.savetxt(fid_file, h2)
+			fid_file.close()
+			with open('/home/david/codes/Analysis/GC_mixing_length/ind_met15.txt', 'a+') as fid_file:
+				fid_file.write(str(glc)+"\n")
+			fid_file.close()
 			
-		# ~if Metal_mean <= -2:
-			# ~with open('/home/david/codes/Analysis/GC/plots/w_2', 'ab+') as fid_file:
-				# ~np.savetxt(fid_file, h1)
-			# ~fid_file.close()	
-			# ~with open('/home/david/codes/Analysis/GC/plots/renom_2', 'ab+') as fid_file:
-				# ~np.savetxt(fid_file, h2)
-			# ~fid_file.close()	
-			# ~with open('/home/david/codes/Analysis/GC_mixing_length/int_met20.txt', 'a+') as fid_file:
-				# ~fid_file.write(str(glc)+"\n")
-			# ~fid_file.close()	
+		if Metal_mean <= -2:
+			with open('/home/david/codes/Analysis/GC/plots/w_2', 'ab+') as fid_file:
+				np.savetxt(fid_file, h1)
+			fid_file.close()	
+			with open('/home/david/codes/Analysis/GC/plots/renom_2', 'ab+') as fid_file:
+				np.savetxt(fid_file, h2)
+			fid_file.close()	
+			with open('/home/david/codes/Analysis/GC_mixing_length/int_met20.txt', 'a+') as fid_file:
+				fid_file.write(str(glc)+"\n")
+			fid_file.close()	
 			
 
 		nbins = 50
@@ -973,8 +973,8 @@ for cn in [0,1,22,53]:
 			plt.subplots_adjust(hspace=0.2, wspace=0.2, top = 0.95, left = 0.1, right=0.95)
 			for ax in fig.get_axes():
 				ax.tick_params(axis='both', labelsize=10)
-			# ~plt.savefig('/home/david/codes/Analysis/GC/plots/analysis/corner'+'_'+clus_nb+'_'+ version +'_'+str(model)+'.png')
-			plt.show()
+			plt.savefig('/home/david/codes/Analysis/GC/plots/analysis/corner'+'_'+clus_nb+'_'+ version +'_'+str(model)+'.png')
+			# ~plt.show()
 			plt.close()
 		else:
 			fig = corner.corner(data, range=[(np.min(data[:,0]),15.), (np.min(data[:,1]),np.max(data[:,1])),
@@ -995,18 +995,18 @@ for cn in [0,1,22,53]:
 				#~ AAbs_mean, AAbs_high, Afe_low, Afe_mean, Afe_high)
 
 
-		# ~if model == 'dar':
-			# ~with open('/home/david/codes/Analysis/GC/plots/data_'+ version +'_'+str(model)+'.txt', 'a+') as fid_file:
-				# ~fid_file.write('%s %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g\n' % (clus_nb, Age_low, 
-				# ~Age_mean, Age_high, Metal_low, Metal_mean, Metal_high, Distance_low, Distance_mean, Distance_high, AAbs_low,
-				# ~AAbs_mean, AAbs_high, Afe_low, Afe_mean, Afe_high))
-			# ~fid_file.close()
-			# ~with open('/home/david/codes/Analysis/GC/plots/table_'+ version +'_'+str(model)+'.txt', 'a+') as fid_file:
-				# ~fid_file.write('%s & $%.2f^{+%.2f}_{%.2f}$ & $%.2f^{+%.2f}_{%.2f}$ & $%.2f^{+%.2f}_{%.2f}$ & $%.2f^{+%.2f}_{%.2f}$ & $%.2f^{+%.2f}_{%.2f}$\n' % (clus_nb, 
-				# ~Age_mean, (Age_high-Age_mean), (Age_low-Age_mean), Metal_mean, Metal_high-Metal_mean,
-				# ~Metal_low-Metal_mean,  Distance_mean/ 1000., (Distance_high-Distance_mean)/1000., (Distance_low-Distance_mean)/1000., 
-				# ~AAbs_mean, AAbs_high-AAbs_mean, AAbs_low-AAbs_mean, Afe_mean, Afe_high-Afe_mean, Afe_low-Afe_mean))
-			# ~fid_file.close()
+		if model == 'dar':
+			with open('/home/david/codes/Analysis/GC/plots/data_'+ version +'_'+str(model)+'.txt', 'a+') as fid_file:
+				fid_file.write('%s %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g\n' % (clus_nb, Age_low, 
+				Age_mean, Age_high, Metal_low, Metal_mean, Metal_high, Distance_low, Distance_mean, Distance_high, AAbs_low,
+				AAbs_mean, AAbs_high, Afe_low, Afe_mean, Afe_high))
+			fid_file.close()
+			with open('/home/david/codes/Analysis/GC/plots/table_'+ version +'_'+str(model)+'.txt', 'a+') as fid_file:
+				fid_file.write('%s & $%.2f^{+%.2f}_{%.2f}$ & $%.2f^{+%.2f}_{%.2f}$ & $%.2f^{+%.2f}_{%.2f}$ & $%.2f^{+%.2f}_{%.2f}$ & $%.2f^{+%.2f}_{%.2f}$\n' % (clus_nb, 
+				Age_mean, (Age_high-Age_mean), (Age_low-Age_mean), Metal_mean, Metal_high-Metal_mean,
+				Metal_low-Metal_mean,  Distance_mean/ 1000., (Distance_high-Distance_mean)/1000., (Distance_low-Distance_mean)/1000., 
+				AAbs_mean, AAbs_high-AAbs_mean, AAbs_low-AAbs_mean, Afe_mean, Afe_high-Afe_mean, Afe_low-Afe_mean))
+			fid_file.close()
 		# ~else:
 			# ~with open('/home/david/codes/Analysis/GC/plots/data_'+ version +'_'+str(model)+'.txt', 'a+') as fid_file:
 				# ~fid_file.write('%s %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g %.8g\n' % (clus_nb, Age_low, 
@@ -1087,8 +1087,8 @@ for cn in [0,1,22,53]:
 		plt.title(clus_nb+' age = '+str(Age_mean))
 		# ~plt.title('IC4499', fontsize = 16)
 		# ~plt.subplots_adjust(bottom=0.13)
-		# ~plt.savefig('/home/david/codes/Analysis/GC/plots/analysis/fit_'+clus_nb+'_'+ version +'.png')
-		plt.show()
+		plt.savefig('/home/david/codes/Analysis/GC/plots/analysis/fit_'+clus_nb+'_'+ version +'.png')
+		# ~plt.show()
 		plt.close()
 		# ~kill
 

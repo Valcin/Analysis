@@ -68,7 +68,8 @@ if rank == 0:
 
 	# types of weights
 	# ~wgt = ['Weight','WEIGHT','BITWEIGHTS','WEIGHT_ZFAIL']
-	wgt = ['Weight','WEIGHT']
+	# ~wgt = ['Weight','WEIGHT']
+	wgt = ['WEIGHT']
 
 
 	#number of Rosettes

@@ -866,8 +866,8 @@ def lnlike(theta):
 		### compute the likelihood of the MS
 		fmag = interpolate.interp1d(mag_v1, Color_iso1, 'nearest',fill_value="extrapolate")
 		#~ fmag = interpolate.interp1d(mag_v1, Color_iso1, 'cubic')
-		Color_new = fmag(bincenter_ms)
-		lnl = -0.5*np.sum((gauss_mean_ms - Color_new)**2 / (gauss_disp_ms)**2 )
+		Color_new = fmag(bincenter)
+		lnl = -0.5*np.sum((gauss_mean - Color_new)**2 / (gauss_disp)**2 )
 		# ~lnl = -0.5*np.sum((gauss_mean - Color_new)**2 / (gauss_disp/np.sqrt(starnum))**2 )
 
 		# ~fmag_ver1 = interpolate.interp1d(Color_iso1[np.where(mag_v1 > mag_lim2)[0]], mag_v1[np.where(mag_v1 > mag_lim2)[0]], 'nearest',fill_value="extrapolate")	
@@ -1382,15 +1382,9 @@ def way(vgood, cgood, errgood, errgoodv, part=None):
 	if part == 'p1':
 		# ~split = np.min(vgood) + 2
 		split = chunkbot[glc]
-		rangebin1 = split - np.min(vgood)
-		rangebin2 = np.max(vgood) - split
-		nbins1 = int(round(rangebin1/0.2))
-		nbins2 = int(round(rangebin2/0.2))
-		bingood1 = np.linspace(np.min(vgood),split,nbins1)
-		bingood2 = np.linspace(split, np.max(vgood),nbins2)
-		bingood = np.concatenate((bingood1[:-1],bingood2))
-
-		
+		rangebin = np.max(vgood) - np.min(vgood)
+		nbins = int(round(rangebin/0.2))
+		bingood = np.linspace(np.min(vgood),np.max(vgood),nbins)
 
 		centergood = (bingood[:-1] + bingood[1:]) / 2 
 		vcenter = np.zeros(len(centergood))
@@ -1430,7 +1424,7 @@ def way(vgood, cgood, errgood, errgoodv, part=None):
 
 			elif len(ici) > 2:
 
-				if glc in [0,2]:
+				if glc in [0,2,38,41,46,50,62,63,64,65,66,67,68]:
 				# ~# wrt median
 					threshold = 5
 					med = np.median(np.array(cgood)[ici])
@@ -2329,7 +2323,7 @@ elif model == 'dar':
 
 		
 	mag_vy, mag_iy, Color_isoy, eep_firsty = iso_mag(Age, metal, distance, Abs, afe_init)
-	mag_vz, mag_iz, Color_isoz, eep_firstz = iso_mag(Age, metal, distance, Abs-0.05, afe_init)
+	mag_vz, mag_iz, Color_isoz, eep_firstz = iso_mag(Age, metal, distance, Abs-0.0, afe_init)
 	# ~mag_vz, mag_iz, Color_isoz, eep_firstz = iso_mag(np.log10(bf[glc,0]*1e9), bf[glc,1], bf[glc,2], bf[glc,3], afe_min)
 	# ~mag_vz, mag_iz, Color_isoz, eep_firstz = iso_mag(np.log10((bf[glc-1,0])*1e9), bf[glc-1,1]+0.1, bf[glc-1,2], bf[glc-1,3], 0.2)
 
@@ -2651,8 +2645,8 @@ else:
 
 # ~rgb_lim = np.min(photo_v)
 rgb_lim = np.min(mag_vy)
-# ~mag_lim2 = chunkbot[glc]
-mag_lim2 = np.min(mag_vy)+1
+mag_lim2 = chunkbot[glc]
+# ~mag_lim2 = np.min(mag_vy)+1
 mag_lim3 = min(chunkbot[glc] + lim_model, 26)
 # ~mag_lim3 = 26
 
@@ -2771,12 +2765,12 @@ else:
 if glc == 2:
 	col_dr = top_x
 	dr = np.where(colbis > col_dr)[0]
-	vcenter, ccenter, errcenter, sbin, bingood, errcenterv = way(magvbis[dr], colbis[dr], errcolbis[dr], errvbis[dr], part='p2')
+	vcenter, ccenter, errcenter, sbin, bingood, errcenterv = way(magvbis[dr], colbis[dr], errcolbis[dr], errvbis[dr], part='p1')
 else:
 	col_dr = top_x - 0.05
 	dr = np.where(colbis > col_dr)[0]
 	# ~vcenter, ccenter, errcenter, sbin, bingood, errcenterv = way(magvbis, colbis, errcolbis, errvbis)
-	vcenter, ccenter, errcenter, sbin, bingood, errcenterv = way(magvbis[dr], colbis[dr], errcolbis[dr], errvbis[dr], part='p2')
+	vcenter, ccenter, errcenter, sbin, bingood, errcenterv = way(magvbis[dr], colbis[dr], errcolbis[dr], errvbis[dr], part='p1')
 #~ vcenter, ccenter, errcenter, sbin, bingood, rangebinv, errcenterv = way(magvbis, colbis, errcolbis, errvbis)
 
 # ~vcenter, ccenter, errcenter, sbin = angle_correction(vcenter, ccenter, errcenter, sbin)
@@ -2865,25 +2859,16 @@ else:
 	base = np.where((vcenter < np.min(mag_v)))[0]
 # ~#base = np.append(base,np.where((vcenter > chunkbot[glc]-3)&(vcenter < chunkbot[glc]-1))[0])
 base = np.append(base,np.arange(int(rescale[glc,6]),int(rescale[glc,7])+1))
-lg = len(np.where(rescale[glc,:27] < 100)[0])
-for ind in range(8,lg):
+lg = len(np.where(rescale[glc,8:] < 100)[0])
+for ind in range(8,8+lg):
 	base = np.append(base,int(rescale[glc,ind]))
 # base = np.append(base,np.arange(int(rescale[glc,8]),int(rescale[glc,9])+1))
-bincenter_ms = np.delete(bincenter,base)
-gauss_mean_ms = np.delete(gauss_mean,base)
-gauss_disp_ms = np.delete(gauss_disp,base)
-errcenterv_gauss_ms = np.delete(errcenterv_gauss,base)
-starnum_ms = np.delete(starnum,base)
+vcenter_rgb = np.delete(vcenter,base)
+ccenter_rgb = np.delete(ccenter,base)
+errcenter_rgb = np.delete(errcenter,base)
+errcenterv_rgb = np.delete(errcenterv,base)
+sbin_rgb = np.delete(sbin,base)
 
-lg2 = np.where(rescale[glc,27:] < 100)[0]
-base2 = []
-for ind in range(27,27+len(lg2)):
-	base2.append(int(rescale[glc,ind]))
-# base = np.append(base,np.arange(int(rescale[glc,8]),int(rescale[glc,9])+1))
-vcenter_rgb = vcenter[base2]
-ccenter_rgb = ccenter[base2]
-errcenter_rgb = errcenter[base2]
-errcenterv_rgb = errcenterv[base2]
 
 
 #~ ff = np.loadtxt('iso.txt', skiprows = 9)
@@ -2906,17 +2891,17 @@ errcenterv_rgb = errcenterv[base2]
 plt.figure()
 plt.clf()
 # ~plt.plot(Color_iso, mag_v,c='y', alpha=0.5)
-plt.plot(Color_isoy, mag_vy,c='m', alpha=0.5)
+# ~plt.plot(Color_isoy, mag_vy,c='m', alpha=0.5)
 # ~plt.plot(Color_isoz, mag_vz,c='c', alpha=0.5)
 plt.scatter(color,photo_v, marker='.',s=10, color='grey', label='stars')
 # ~plt.scatter(gauss_mean,bincenter, marker='o', s=10, color='r', label=r'$C_i^{data}$', alpha=0.5)
 plt.errorbar(gauss_mean,bincenter, xerr=gauss_disp, c='r', linewidth=2, fmt='.', label=r'$\sigma_i^{data}$', ecolor='k', alpha=0.5)
-plt.errorbar(ccenter,vcenter, xerr=errcenter, linewidth=2, fmt='.', color='c', ecolor='k', label=r'sample for selections of RGB stars')
+plt.errorbar(ccenter,vcenter, xerr=errcenter, linewidth=2, fmt='.', color='b', ecolor='k', label=r'sample for selections of RGB stars')
 # ~plt.errorbar(ccenter, vcenter, xerr=errcenter, yerr=errcenterv, capsize= 2, linewidth=2,fmt = 'none', c='k', alpha=0.5)
 # ~plt.errorbar(ccenter_rgb, vcenter_rgb, xerr=errcenter_rgb,fmt = '.', c='c', ecolor='k', alpha=0.5)
 # ~plt.scatter(ccenter_rgb, vcenter_rgb , marker='o', s=10, color='c')
 for x,y,z in zip(ccenter, vcenter, np.arange(len(ccenter))):
-	plt.text(x+0.2,y, str(z), color='c', ha='left', va='center', fontsize=7)
+	plt.text(x+0.2,y, str(z), color='b', ha='left', va='center', fontsize=7)
 for x,y,z in zip(gauss_mean,bincenter, np.arange(len(gauss_mean))):
 	plt.text(x+0.2,y, str(z), color='r', ha='left', va='center', fontsize=9)
 # ~#~ if model == 'mist':
@@ -2944,7 +2929,7 @@ plt.xlim(-0.5,3)
 # ~plt.ylim(26,10)
 # ~plt.ylim(mag_lim3,np.min(vcenter-0.5))
 # ~plt.ylim(26,np.min(vcenter-0.5))
-plt.ylim(chunkbot[glc]+4,np.min(vcenter-0.5))
+plt.ylim(chunkbot[glc],np.min(vcenter-0.5))
 plt.legend(loc='best', fontsize = 16)
 plt.xlabel('F606W - F814W', fontsize = 16)
 plt.ylabel('F606W', fontsize = 16)
@@ -2957,10 +2942,10 @@ plt.close()
 plt.figure()
 plt.clf()
 plt.scatter(color,photo_v, marker='.',s=10, color='grey', label='stars')
-plt.plot(Color_isoy, mag_vy,c='m', alpha=0.5)
-# ~plt.plot(Color_isoz, mag_vz,c='c', alpha=0.5)
-plt.errorbar(gauss_mean_ms,bincenter_ms, xerr=gauss_disp_ms, c='r', ecolor='k', linewidth=2, fmt='.', alpha=0.5, label='selected mean')
-plt.errorbar(ccenter_rgb, vcenter_rgb, xerr=errcenter_rgb,fmt = '.', c='c', ecolor='k', alpha=0.5, label='selected stars')
+# ~plt.plot(Color_isoy, mag_vy,c='m', alpha=0.5)
+plt.plot(Color_isoz, mag_vz,c='c', alpha=0.5)
+plt.errorbar(gauss_mean,bincenter, xerr=gauss_disp, c='r', ecolor='k', linewidth=2, fmt='.', alpha=0.5, label='selected mean')
+plt.errorbar(ccenter_rgb, vcenter_rgb, xerr=errcenter_rgb,fmt = '.', c='b', ecolor='k', alpha=0.5, label='selected stars')
 plt.tick_params(labelsize=16)
 # ~plt.axvline(col_dr, c='r')
 plt.xlim(-0.5,3)
@@ -3062,7 +3047,7 @@ gc.collect()
 # ~def your_func():
 # ~with get_context("spawn").Pool() as pool:
 # ~sampler = emcee.EnsembleSampler(nwalkers, ndim, lnprob, threads=6, moves=[(emcee.moves.DEMove(), 0.8), (emcee.moves.DESnookerMove(), 0.2),],)
-with Pool() as pool:
+with Pool(6) as pool:
 	sampler = emcee.EnsembleSampler(nwalkers, ndim, lnprob,pool=pool)
 	# ~sampler = emcee.EnsembleSampler(nwalkers, ndim, lnprob,moves=[(emcee.moves.KDEMove()),
     # ~], pool=pool)
@@ -3286,8 +3271,8 @@ with Pool() as pool:
 
 					plt.figure()
 					plt.scatter(color,photo_v, marker='.',s=10, color='grey', label='data')
-					plt.scatter(gauss_mean_ms,bincenter_ms, marker='o', s=30, color='r', label='fit at bin center')
-					plt.errorbar(gauss_mean_ms,bincenter_ms, xerr=gauss_disp_ms, c='k', fmt='none')
+					plt.scatter(gauss_mean,bincenter, marker='o', s=30, color='r', label='fit at bin center')
+					plt.errorbar(gauss_mean,bincenter, xerr=gauss_disp, c='k', fmt='none')
 					plt.errorbar(ccenter_rgb, vcenter_rgb, xerr=errcenter_rgb, yerr=errcenterv_rgb,fmt = 'none', c='k')
 					plt.scatter(ccenter_rgb, vcenter_rgb , marker='o', s=30, color='c', label='selected points')
 					# ~plt.errorbar(ccenter_sgb, vcenter_sgb, yerr=errcenterv_sgb,fmt = 'none', c='k')
