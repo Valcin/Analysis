@@ -167,7 +167,26 @@ class ModelGrid(object):
 
         with tarfile.open(os.path.join(ISOCHRONES, cls.master_tarball_file)) as tar:
             logging.info('Extracting {}...'.format(cls.master_tarball_file))
-            tar.extractall(ISOCHRONES)
+            def is_within_directory(directory, target):
+                
+                abs_directory = os.path.abspath(directory)
+                abs_target = os.path.abspath(target)
+            
+                prefix = os.path.commonprefix([abs_directory, abs_target])
+                
+                return prefix == abs_directory
+            
+            def safe_extract(tar, path=".", members=None, *, numeric_owner=False):
+            
+                for member in tar.getmembers():
+                    member_path = os.path.join(path, member.name)
+                    if not is_within_directory(path, member_path):
+                        raise Exception("Attempted Path Traversal in Tar File")
+            
+                tar.extractall(path, members, numeric_owner=numeric_owner) 
+                
+            
+            safe_extract(tar, ISOCHRONES)
 
     def phot_tarball_url(self, phot):
         url = '{}/{}.tgz'.format(self.extra_url_base, phot)
@@ -183,7 +202,26 @@ class ModelGrid(object):
             download_file(url, phot_tarball)
         with tarfile.open(phot_tarball) as tar:
             logging.info('Extracting {}.tgz...'.format(phot))
-            tar.extractall(self.datadir)
+            def is_within_directory(directory, target):
+                
+                abs_directory = os.path.abspath(directory)
+                abs_target = os.path.abspath(target)
+            
+                prefix = os.path.commonprefix([abs_directory, abs_target])
+                
+                return prefix == abs_directory
+            
+            def safe_extract(tar, path=".", members=None, *, numeric_owner=False):
+            
+                for member in tar.getmembers():
+                    member_path = os.path.join(path, member.name)
+                    if not is_within_directory(path, member_path):
+                        raise Exception("Attempted Path Traversal in Tar File")
+            
+                tar.extractall(path, members, numeric_owner=numeric_owner) 
+                
+            
+            safe_extract(tar, self.datadir)
 
     def df_all(self, phot):
         """Subclasses may want to sort this
